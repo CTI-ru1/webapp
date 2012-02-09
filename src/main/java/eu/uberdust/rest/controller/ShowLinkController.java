@@ -4,6 +4,7 @@ import eu.uberdust.command.LinkCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.LinkNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
+import eu.wisebed.wisedb.controller.LinkCapabilitiesController;
 import eu.wisebed.wisedb.controller.LinkController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Testbed;
@@ -111,10 +112,10 @@ public final class ShowLinkController extends AbstractRestController {
 
         // if at least link or linkInv was found
         if (link != null) {
-            linkCapabilityMap.put(link, link.getCapabilities());
+            linkCapabilityMap.put(link, LinkCapabilitiesController.getInstance().list(link));
         }
         if (linkInv != null) {
-            linkCapabilityMap.put(linkInv, linkInv.getCapabilities());
+            linkCapabilityMap.put(linkInv, LinkCapabilitiesController.getInstance().list(link));
         }
 
         // Prepare data to pass to jsp

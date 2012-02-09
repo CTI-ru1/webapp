@@ -13,12 +13,12 @@
     <properties>
         <!--Properties needed for the Project-->
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
-        <springframework.version>3.0.0.RELEASE</springframework.version>
+        <springframework.version>3.1.0.RELEASE</springframework.version>
         <servlet-api.version>2.5</servlet-api.version>
         <junit.version>4.8.1</junit.version>
         <hsqldb.version>2.0.0</hsqldb.version>
         <mysql.connector.version>5.1.10</mysql.connector.version>
-        <hibernate.version>3.5.6-Final</hibernate.version>
+        <hibernate.version>3.6.0-Final</hibernate.version>
     </properties>
 
     <repositories>

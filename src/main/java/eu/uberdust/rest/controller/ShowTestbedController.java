@@ -115,6 +115,7 @@ public final class ShowTestbedController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException {
+        long start = System.currentTimeMillis();
 
         LOGGER.info("nodeslist cache exists : " + CacheManager.getInstance().cacheExists("nodeslist"));
         if (CacheManager.getInstance().cacheExists("nodeslist")) {
@@ -170,6 +171,7 @@ public final class ShowTestbedController extends AbstractRestController {
         refData.put("links", links);
         refData.put("capabilities", capabilities);
         refData.put("slses", slses);
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         LOGGER.info("return @ " + (System.currentTimeMillis() - millis));
         return new ModelAndView("testbed/show.html", refData);
     }

@@ -17,6 +17,7 @@ import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.uberdust.util.Coordinate;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Testbed;
+import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wiseml.model.setup.Capability;
 import eu.wisebed.wiseml.model.setup.Node;
 import eu.wisebed.wiseml.model.setup.Origin;
@@ -42,6 +43,16 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
      */
     private transient TestbedController testbedManager;
 
+
+    public NodeController getNodeManager() {
+        return nodeManager;
+    }
+
+    public void setNodeManager(NodeController nodeManager) {
+        this.nodeManager = nodeManager;
+    }
+
+    private transient NodeController nodeManager;
     /**
      * Logger.
      */
@@ -127,7 +138,7 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
         LOGGER.info(baseUrl);
 
         // list of nodes
-        final List<Node> nodes = testbed.getSetup().getNodes();
+        final List<Node> nodes = nodeManager.list(testbed);
 
         // make an entry and it
         for (Node node : nodes) {

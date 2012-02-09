@@ -19,3 +19,14 @@ table.readings th{
 .error {
     color:  #ff6666;
 }
+
+
+.footer {
+position: absolute;
+bottom: 0px;
+right: 0px;
+color:grey;
+text-align:right;
+text-decoration:none;
+text-transform:lowercase;
+}
