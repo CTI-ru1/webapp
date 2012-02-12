@@ -6,7 +6,7 @@ import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.*;
 import eu.wisebed.wisedb.model.Testbed;
-import eu.wisebed.wiseml.model.setup.Link;
+import eu.wisebed.wisedb.model.Link;
 import net.sf.ehcache.CacheManager;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;

@@ -8,11 +8,12 @@ import eu.uberdust.rest.exception.InvalidNodeIdException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
+import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
+import eu.wisebed.wisedb.model.Capability;
+import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
-import eu.wisebed.wiseml.model.setup.Capability;
-import eu.wisebed.wiseml.model.setup.Node;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,6 +39,11 @@ public final class ListNodeCapabilitiesController extends AbstractRestController
      * Testbed peristence manager.
      */
     private transient TestbedController testbedManager;
+    private transient NodeCapabilityController nodeCapabilityManager;
+
+    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+        this.nodeCapabilityManager = nodeCapabilityManager;
+    }
 
     /**
      * Logger.
@@ -128,7 +134,7 @@ public final class ListNodeCapabilitiesController extends AbstractRestController
         }
 
         // retrieve capability
-        final List<Capability> capabilities = node.getCapabilities();
+        final List<Capability> capabilities = nodeCapabilityManager.list(node);
 
         response.setContentType("text/plain");
         final Writer output;

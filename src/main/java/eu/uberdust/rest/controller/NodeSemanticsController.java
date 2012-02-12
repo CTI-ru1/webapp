@@ -11,9 +11,8 @@ import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.SemanticController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Semantic;
+import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
-import eu.wisebed.wiseml.model.setup.Node;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,9 +20,6 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.List;
 
 /**
  * Controller class that returns an HTML page containing a list of the readings for a node/capability.
@@ -143,22 +139,22 @@ public final class NodeSemanticsController extends AbstractRestController {
 
 
         // retrieve capability
-        final List<Semantic> semantics = semanticManager.listByNode(node);
-
-        response.setContentType("text/plain");
-        final Writer output;
-        try {
-            output = (response.getWriter());
-
-            for (Semantic semantic : semantics) {
-                output.append(semantic.getSemantic() + "\t");
-                output.append(semantic.getValue() + "\n");
-            }
-            output.flush();
-            output.close();
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+//        final List<Semantic> semantics = semanticManager.listByNode(node);
+//
+//        response.setContentType("text/plain");
+//        final Writer output;
+//        try {
+//            output = (response.getWriter());
+//
+//            for (Semantic semantic : semantics) {
+//                output.append(semantic.getSemantic() + "\t");
+//                output.append(semantic.getValue() + "\n");
+//            }
+//            output.flush();
+//            output.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
         // check type of view requested
         return null;
     }

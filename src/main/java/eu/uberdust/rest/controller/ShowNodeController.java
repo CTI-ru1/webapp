@@ -4,10 +4,11 @@ import eu.uberdust.command.NodeCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
+import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
+import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
-import eu.wisebed.wiseml.model.setup.Node;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,6 +32,12 @@ public final class ShowNodeController extends AbstractRestController {
      * Testbed persistence manager.
      */
     private transient TestbedController testbedManager;
+
+    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+        this.nodeCapabilityManager = nodeCapabilityManager;
+    }
+
+    private transient NodeCapabilityController nodeCapabilityManager;
 
     /**
      * Logger.
@@ -114,7 +121,7 @@ public final class ShowNodeController extends AbstractRestController {
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
         refData.put("node", node);
-        refData.put("capabilities", node.getCapabilities());
+        refData.put("capabilities", nodeCapabilityManager.list(node));
         return new ModelAndView("node/show.html", refData);
     }
 }

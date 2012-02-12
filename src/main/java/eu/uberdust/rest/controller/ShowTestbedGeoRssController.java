@@ -15,12 +15,13 @@ import eu.uberdust.command.TestbedCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.uberdust.util.Coordinate;
-import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Testbed;
+import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wiseml.model.setup.Capability;
-import eu.wisebed.wiseml.model.setup.Node;
-import eu.wisebed.wiseml.model.setup.Origin;
+import eu.wisebed.wisedb.controller.TestbedController;
+import eu.wisebed.wisedb.model.Capability;
+import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.Origin;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -53,6 +54,13 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
     }
 
     private transient NodeController nodeManager;
+
+    private transient NodeCapabilityController nodeCapabilityManager;
+
+    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+        this.nodeCapabilityManager = nodeCapabilityManager;
+    }
+
     /**
      * Logger.
      */
@@ -153,12 +161,12 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
             // set entry's description (HTML list)
             final SyndContent description = new SyndContentImpl();
             final StringBuilder descriptionBuffer = new StringBuilder();
-            descriptionBuffer.append("<p>").append(node.getDescription()).append("</p>");
+            descriptionBuffer.append("<p>").append(nodeManager.getDescription(node)).append("</p>");
             descriptionBuffer.append("<p><a href=\"").append(baseUrl).append("/uberdust/rest/testbed/")
                     .append(testbed.getId()).append("/node/").append(node.getId()).append("/georss").append("\">")
                     .append("GeoRSS feed").append("</a></p>");
             descriptionBuffer.append("<ul>");
-            for (Capability capability : node.getCapabilities()) {
+            for (Capability capability : (List<Capability>) nodeCapabilityManager.list(node)) {
                 descriptionBuffer.append("<li>").append(capability.getName())
                         .append(capability.getName()).append("</li>");
             }
@@ -172,7 +180,14 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
             final GeoRSSModule geoRSSModule = new SimpleModuleImpl();
             if (!(testbed.getSetup().getCoordinateType().equals("Absolute"))) {
                 // convert node position from xyz to long/lat
-                final eu.wisebed.wiseml.model.setup.Position position = node.getPosition();
+                final eu.wisebed.wiseml.model.setup.Position position = new eu.wisebed.wiseml.model.setup.Position();
+                final Origin npos = nodeManager.getOrigin(node);
+                position.setPhi(npos.getPhi());
+                position.setTheta(npos.getTheta());
+                position.setX(npos.getX());
+                position.setY(npos.getY());
+                position.setZ(npos.getZ());
+
                 final Coordinate nodeCoordinate = new Coordinate((double) position.getX(), (double) position.getY(),
                         (double) position.getZ());
                 final Coordinate rotated = Coordinate.rotate(nodeCoordinate, properOrigin.getPhi());
@@ -180,7 +195,7 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
                 final Coordinate nodePosition = Coordinate.xyz2blh(absolute);
                 geoRSSModule.setPosition(new Position(nodePosition.getX(), nodePosition.getY()));
             } else {
-                geoRSSModule.setPosition(new Position(node.getPosition().getX(), node.getPosition().getY()));
+                geoRSSModule.setPosition(new Position(nodeManager.getOrigin(node).getX(), nodeManager.getOrigin(node).getY()));
             }
             entry.getModules().add(geoRSSModule);
             entries.add(entry);

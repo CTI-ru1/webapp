@@ -3,11 +3,11 @@ package eu.uberdust.util;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import eu.wisebed.wisedb.controller.LastNodeReadingController;
-import eu.wisebed.wisedb.model.LastNodeReading;
+import eu.wisebed.wisedb.controller.NodeCapabilityController;
+import eu.wisebed.wisedb.model.Capability;
+import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Semantic;
 import eu.wisebed.wisedb.model.Slse;
-import eu.wisebed.wiseml.model.setup.Capability;
-import eu.wisebed.wiseml.model.setup.Node;
 import org.apache.log4j.Logger;
 
 import java.io.StringReader;
@@ -26,7 +26,14 @@ import java.util.Map;
 public class RdfConverter {
     static RdfConverter instance = null;
     private static LastNodeReadingController lastNodeReadingManager;
+
+    public static void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+        RdfConverter.nodeCapabilityManager = nodeCapabilityManager;
+    }
+
+    private static NodeCapabilityController nodeCapabilityManager;
     protected Map<String, Map<String, Double>> sensorValues;
+
 
     public static RdfConverter getInstance() {
 
@@ -114,7 +121,7 @@ public class RdfConverter {
 
         //capabilities
         boolean first = true;
-        for (final Capability capability : node.getCapabilities()) {
+        for (final Capability capability : (List<Capability>) nodeCapabilityManager.list(node)) {
             if (!first) {
                 rdfOutput.append(";\n");
             }
@@ -171,32 +178,32 @@ public class RdfConverter {
                 "\n");
 
 
-        //Get the nodes that compose the slse
-        final List<Node> nodes = slse.getNodes();
-
-        //iterate the nodes for their readings
-        for (final Node node : nodes) {
-            //get all the capabilities for the node
-            final List<Capability> capabilities = node.getCapabilities();
-
-            if (capabilities != null) {
-                //iterate all capabilities
-                for (final Capability capability : capabilities) {
-                    //get the latest reading for each capability
-                    final LastNodeReading lastReading = lastNodeReadingManager.getByID(node, capability);
-                    if (lastReading == null) {
-                        continue;
-                    }
-                    //aggregate if not the only one
-                    if (sensorValues.containsKey(lastReading.getCapability().getName())) {
-                        Double reading = (sensorValues.get(lastReading.getCapability().getName()) + lastReading.getReading()) / 2;
-                        sensorValues.put(lastReading.getCapability().getName(), reading);
-                    } else {
-                        sensorValues.put(lastReading.getCapability().getName(), lastReading.getReading());
-                    }
-                }
-            }
-        }
+//        //Get the nodes that compose the slse
+//        final List<Node> nodes = slse.getNodes();
+//
+//        //iterate the nodes for their readings
+//        for (final Node node : nodes) {
+//            //get all the capabilities for the node
+//            final List<Capability> capabilities = node.getCapabilities();
+//
+//            if (capabilities != null) {
+//                //iterate all capabilities
+//                for (final Capability capability : capabilities) {
+//                    //get the latest reading for each capability
+//                    final LastNodeReading lastReading = lastNodeReadingManager.getByID(node, capability);
+//                    if (lastReading == null) {
+//                        continue;
+//                    }
+//                    //aggregate if not the only one
+//                    if (sensorValues.containsKey(lastReading.getCapability().getName())) {
+//                        Double reading = (sensorValues.get(lastReading.getCapability().getName()) + lastReading.getReading()) / 2;
+//                        sensorValues.put(lastReading.getCapability().getName(), reading);
+//                    } else {
+//                        sensorValues.put(lastReading.getCapability().getName(), lastReading.getReading());
+//                    }
+//                }
+//            }
+//        }
 
         //Add all aggregated sensor readings to the rdf description
         boolean first = true;

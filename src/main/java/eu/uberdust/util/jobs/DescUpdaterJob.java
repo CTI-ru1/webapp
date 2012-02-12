@@ -2,7 +2,7 @@ package eu.uberdust.util.jobs;
 
 import eu.uberdust.restfullapiclient.RestClient;
 import eu.wisebed.wisedb.controller.CapabilityController;
-import eu.wisebed.wiseml.model.setup.Capability;
+import eu.wisebed.wisedb.model.Capability;
 import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

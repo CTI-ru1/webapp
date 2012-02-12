@@ -1,18 +1,13 @@
 package eu.uberdust.rest.controller;
 
 import com.sun.syndication.io.FeedException;
-import eu.uberdust.command.NodeCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.uberdust.util.RdfConverter;
 import eu.wisebed.wisedb.controller.LastNodeReadingController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.SemanticController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Semantic;
-import eu.wisebed.wisedb.model.Testbed;
-import eu.wisebed.wiseml.model.setup.Node;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,8 +16,6 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
-import java.util.List;
 
 /**
  * Controller class that returns the position of a node in GeoRSS format.
@@ -103,51 +96,51 @@ public final class ShowNodeRdfController extends AbstractRestController {
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
 
-        // set command object
-        final NodeCommand command = (NodeCommand) commandObj;
-
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
-
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-        }
-
-        // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
-        if (testbed == null) {
-            // if no testbed is found throw exception
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
-        }
-
-        // look up node
-        final Node node = nodeManager.getByID(command.getNodeId());
-        if (node == null) {
-            // if no node is found throw exception
-            throw new NodeNotFoundException("Cannot find testbed [" + command.getNodeId() + "].");
-        }
-
-        // current host base URL
-        final String baseUrl = (request.getRequestURL().toString()).replace(request.getRequestURI(), "");
-        LOGGER.info("baseUrl : " + baseUrl);
-
-        RdfConverter.setLastNodeReadingManager(lastNodeReadingManager);
-
-
-        // set up feed and entries
-        response.setContentType("text/plain");
-        final Writer output = (response.getWriter());
-
-
-        final List<Semantic> semanticList = semanticManager.listByNode(node);
-
-        final String rdfString = RdfConverter.getRdf(node, request.getRequestURL().toString(), semanticList);
-
-        output.write(rdfString);
-        output.flush();
-        output.close();
+//        // set command object
+//        final NodeCommand command = (NodeCommand) commandObj;
+//
+//        // a specific testbed is requested by testbed Id
+//        int testbedId;
+//        try {
+//            testbedId = Integer.parseInt(command.getTestbedId());
+//
+//        } catch (NumberFormatException nfe) {
+//            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
+//        }
+//
+//        // look up testbed
+//        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
+//        if (testbed == null) {
+//            // if no testbed is found throw exception
+//            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+//        }
+//
+//        // look up node
+//        final Node node = nodeManager.getByID(command.getNodeId());
+//        if (node == null) {
+//            // if no node is found throw exception
+//            throw new NodeNotFoundException("Cannot find testbed [" + command.getNodeId() + "].");
+//        }
+//
+//        // current host base URL
+//        final String baseUrl = (request.getRequestURL().toString()).replace(request.getRequestURI(), "");
+//        LOGGER.info("baseUrl : " + baseUrl);
+//
+//        RdfConverter.setLastNodeReadingManager(lastNodeReadingManager);
+//
+//
+//        // set up feed and entries
+//        response.setContentType("text/plain");
+//        final Writer output = (response.getWriter());
+//
+//
+//        final List<Semantic> semanticList = semanticManager.listByNode(node);
+//
+//        final String rdfString = RdfConverter.getRdf(node, request.getRequestURL().toString(), semanticList);
+//
+//        output.write(rdfString);
+//        output.flush();
+//        output.close();
 
         return null;
     }

@@ -21,26 +21,26 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="annotatedClasses">
-            <list>
-                <value>eu.wisebed.wisedb.model.Testbed</value>
-                <value>eu.wisebed.wisedb.model.Setup</value>
-                <value>eu.wisebed.wisedb.model.Link</value>
-            </list>
-        </property>
+        <!--<property name="annotatedClasses">-->
+        <!--<list>-->
+        <!--<value>eu.wisebed.wisedb.model.Testbed</value>-->
+        <!--<value>eu.wisebed.wisedb.model.Setup</value>-->
+        <!--<value>eu.wisebed.wisedb.model.Link</value>-->
+        <!--</list>-->
+        <!--</property>-->
         <property name="mappingResources">
             <list>
+                <value>eu/wisebed/wisedb/model/Testbed.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/Setup.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/Node.hbm.xml</value>
-                <!--<value>eu/wisebed/wisedb/model/Link.hbm.xml</value>-->
+                <value>eu/wisebed/wisedb/model/Link.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/Capability.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/LinkReading.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/NodeReading.hbm.xml</value>
-                <!--<value>eu/wisebed/wisedb/model/Setup.hbm.xml</value>-->
-                <!--<value>eu/wisebed/wisedb/model/Testbed.hbm.xml</value>-->
                 <value>eu/wisebed/wisedb/model/LastNodeReading.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/LastLinkReading.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/Slse.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/Semantic.hbm.xml</value>
+                <!--<value>eu/wisebed/wisedb/model/Slse.hbm.xml</value>-->
+                <!--<value>eu/wisebed/wisedb/model/Semantic.hbm.xml</value>-->
             </list>
         </property>
         <!-- Also set of hibernate properties -->
@@ -147,6 +147,22 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
     <bean id="nodeManagerTarget"
           class="eu.wisebed.wisedb.controller.NodeController"
+          parent="abstractManager"
+          factory-method="getInstance"/>
+    <!-- nodeCapabilityManager using the above transaction management proxy -->
+    <bean id="nodeCapabilityManager" parent="proxyTemplate">
+        <property name="target" ref="nodeCapabilityManagerTarget"/>
+    </bean>
+    <bean id="nodeCapabilityManagerTarget"
+          class="eu.wisebed.wisedb.controller.NodeCapabilityController"
+          parent="abstractManager"
+          factory-method="getInstance"/>
+    <!-- nodeCapabilityManager using the above transaction management proxy -->
+    <bean id="linkCapabilityManager" parent="proxyTemplate">
+        <property name="target" ref="linkCapabilityManagerTarget"/>
+    </bean>
+    <bean id="linkCapabilityManagerTarget"
+          class="eu.wisebed.wisedb.controller.LinkCapabilityController"
           parent="abstractManager"
           factory-method="getInstance"/>
 

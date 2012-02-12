@@ -8,16 +8,16 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 
     <!-- Uberdust model definition -->
-    <bean id="Capability" class="eu.wisebed.wiseml.model.setup.Capability"/>
-    <bean id="Position" class="eu.wisebed.wiseml.model.setup.Position"/>
-    <bean id="Node" class="eu.wisebed.wiseml.model.setup.Node"/>
-    <bean id="Link" class="eu.wisebed.wiseml.model.setup.Link"/>
+    <bean id="Capability" class="eu.wisebed.wisedb.model.Capability"/>
+    <bean id="Position" class="eu.wisebed.wisedb.model.Position"/>
+    <bean id="Node" class="eu.wisebed.wisedb.model.Node"/>
+    <bean id="Link" class="eu.wisebed.wisedb.model.Link"/>
     <bean id="NodeReading" class="eu.wisebed.wisedb.model.NodeReading"/>
     <bean id="LinkReading" class="eu.wisebed.wisedb.model.LinkReading"/>
-    <bean id="Setup" class="eu.wisebed.wiseml.model.setup.Setup"/>
+    <bean id="Setup" class="eu.wisebed.wisedb.model.Setup"/>
     <bean id="Testbed" class="eu.wisebed.wisedb.model.Testbed"/>
-    <bean id="Origin" class="eu.wisebed.wiseml.model.setup.Origin"/>
-    <bean id="TimeInfo" class="eu.wisebed.wiseml.model.setup.TimeInfo"/>
+    <bean id="Origin" class="eu.wisebed.wisedb.model.Origin"/>
+    <bean id="TimeInfo" class="eu.wisebed.wisedb.model.TimeInfo"/>
     <bean id="LastNodeReading" class="eu.wisebed.wisedb.model.LastNodeReading"/>
     <bean id="LastLinkReading" class="eu.wisebed.wisedb.model.LastLinkReading"/>
     <bean id="Slse" class="eu.wisebed.wisedb.model.Slse"/>

@@ -16,12 +16,13 @@ import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.uberdust.util.Coordinate;
+import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
+import eu.wisebed.wisedb.model.Capability;
+import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.Origin;
 import eu.wisebed.wisedb.model.Testbed;
-import eu.wisebed.wiseml.model.setup.Capability;
-import eu.wisebed.wiseml.model.setup.Node;
-import eu.wisebed.wiseml.model.setup.Origin;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -48,6 +49,11 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
      * Node persistence manager.
      */
     private transient NodeController nodeManager;
+    private transient NodeCapabilityController nodeCapabilityManager;
+
+    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+        this.nodeCapabilityManager = nodeCapabilityManager;
+    }
 
     /**
      * Logger.
@@ -151,11 +157,11 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
         // set entry's description (HTML list)
         final SyndContent description = new SyndContentImpl();
         final StringBuilder descriptionBuffer = new StringBuilder();
-        descriptionBuffer.append("<p>").append(node.getDescription()).append("</p>");
+        descriptionBuffer.append("<p>").append(nodeManager.getDescription(node)).append("</p>");
         descriptionBuffer.append("<ul>");
-        for (Capability capability : node.getCapabilities()) {
-                descriptionBuffer.append("<li>").append(capability.getName())
-                        .append(capability.getName()).append("</li>");
+        for (Capability capability : (List<Capability>) nodeCapabilityManager.list(node)) {
+            descriptionBuffer.append("<li>").append(capability.getName())
+                    .append(capability.getName()).append("</li>");
         }
         descriptionBuffer.append("</ul>");
         description.setType("text/html");
@@ -173,7 +179,7 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
             final Coordinate properOrigin = Coordinate.blh2xyz(originCoordinate);
 
             // convert node position from xyz to long/lat
-            final eu.wisebed.wiseml.model.setup.Position position = node.getPosition();
+            final eu.wisebed.wiseml.model.setup.Position position = nodeManager.getPosition(node);
             final Coordinate nodeCoordinate = new Coordinate((double) position.getX(), (double) position.getY(),
                     (double) position.getZ());
             final Coordinate rotated = Coordinate.rotate(nodeCoordinate, properOrigin.getPhi());
@@ -181,7 +187,7 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
             final Coordinate nodePosition = Coordinate.xyz2blh(absolute);
             geoRSSModule.setPosition(new Position(nodePosition.getX(), nodePosition.getY()));
         } else {
-            geoRSSModule.setPosition(new Position(node.getPosition().getX(), node.getPosition().getY()));
+            geoRSSModule.setPosition(new Position(nodeManager.getPosition(node).getX(), nodeManager.getPosition(node).getY()));
         }
         entry.getModules().add(geoRSSModule);
         entries.add(entry);

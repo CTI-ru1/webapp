@@ -8,7 +8,7 @@ import eu.uberdust.util.LinkJson;
 import eu.wisebed.wisedb.controller.LinkController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Testbed;
-import eu.wisebed.wiseml.model.setup.Link;
+import eu.wisebed.wisedb.model.Link;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;

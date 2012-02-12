@@ -6,7 +6,7 @@ import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Testbed;
-import eu.wisebed.wiseml.model.setup.Node;
+import eu.wisebed.wisedb.model.Node;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -101,7 +101,7 @@ public final class NodeInsertDescriptionController extends AbstractRestControlle
 
         // update description
         final String description = command.getDescription();
-        node.setDescription(description);
+//        node.setDescription(description);
         nodeManager.add(node);
 
         // make response
