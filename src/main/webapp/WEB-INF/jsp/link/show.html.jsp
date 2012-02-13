@@ -17,6 +17,7 @@
     <title>ÜberDust - Show Link <c:forEach items="${links}" var="link">[<c:out value="${link.source}"/>,<c:out
             value="${link.target}"/>]</c:forEach></title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
+    <%@include file="/googleAnalytics.jsp"%>
 </head>
 <body>
 <%@include file="/header.jsp" %>

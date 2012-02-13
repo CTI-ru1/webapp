@@ -6,17 +6,20 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
-<jsp:useBean id="testbeds" scope="request" class="java.util.ArrayList"/>
-<jsp:useBean id="nodesCount" scope="request" class="java.util.HashMap"/>
-<jsp:useBean id="linksCount" scope="request" class="java.util.HashMap"/>
-<jsp:useBean id="slsesCount" scope="request" class="java.util.HashMap"/>
 <html>
 <head>
     <META NAME="Description" CONTENT="ÜberDust"/>
     <META http-equiv="Content-Language" content="en"/>
     <title>ÜberDust - List Testbeds</title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
+    <%@include file="/googleAnalytics.jsp"%>
 </head>
+
+<jsp:useBean id="testbeds" scope="request" class="java.util.ArrayList"/>
+<jsp:useBean id="nodesCount" scope="request" class="java.util.HashMap"/>
+<jsp:useBean id="linksCount" scope="request" class="java.util.HashMap"/>
+<jsp:useBean id="slsesCount" scope="request" class="java.util.HashMap"/>
+
 <body>
 <%@include file="/header.jsp"%>
 <h1>Welcome to ÜberDust</h1>

@@ -18,6 +18,7 @@
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>ÜberDust - Testbed <c:out value="${testbed.name}"/> status page</title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
+    <%@include file="/googleAnalytics.jsp"%>
 </head>
 <body>
 <%@include file="/header.jsp"%>

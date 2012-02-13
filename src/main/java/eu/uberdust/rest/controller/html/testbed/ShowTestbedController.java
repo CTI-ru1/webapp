@@ -122,7 +122,7 @@ public final class ShowTestbedController extends AbstractRestController {
             throws TestbedNotFoundException, InvalidTestbedIdException {
         long start = System.currentTimeMillis();
 
-        LOGGER.info("nodeslist cache exists : " + CacheManager.getInstance().cacheExists("nodeslist"));
+
         if (CacheManager.getInstance().cacheExists("nodeslist")) {
             LOGGER.info("nodeslist cache size : " + CacheManager.getInstance().getCache("nodeslist").getKeys().size());
         }
@@ -157,7 +157,7 @@ public final class ShowTestbedController extends AbstractRestController {
         long millis = System.currentTimeMillis();
         LOGGER.info("here @ " + (System.currentTimeMillis() - millis));
         // get testbed nodes
-        final List<String> nodes = getNodes(testbed.getId());
+        final List<String> nodes = getNodes(testbedManager.getByID(testbedId).getId());
         LOGGER.info(" nodes @ " + (System.currentTimeMillis() - millis));
         // get testbed links
         final List<Link> links = linkManager.list(testbed);
@@ -178,13 +178,26 @@ public final class ShowTestbedController extends AbstractRestController {
 //        refData.put("slses", slses);
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         LOGGER.info("return @ " + (System.currentTimeMillis() - millis));
+
+
+        if (CacheManager.getInstance().cacheExists("nodeslist")) {
+            LOGGER.info("nodeslist cache size : " + CacheManager.getInstance().getCache("nodeslist").getKeys().size());
+        }
+        String[] caches2 = CacheManager.getInstance().getCacheNames();
+
+        LOGGER.info("TotalCaches : " + caches2.length);
+        for (String cach : caches2) {
+            LOGGER.info("Cache: " + cach + " contains : " + CacheManager.getInstance().getCache(cach).getKeys().size());
+        }
+
+
         return new ModelAndView("testbed/show.html", refData);
     }
 
     @Cacheable(cacheName = "nodeListsCache")
-    List<String> getNodes(int testbedId) {
-        LOGGER.info("getNodes@" + testbedId);
-
-        return nodeManager.listNames(testbedManager.getByID(testbedId));
+    private List<String> getNodes(int id) {
+        return nodeManager.listNames(id);
     }
+
+
 }
