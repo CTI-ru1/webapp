@@ -11,7 +11,7 @@
 <jsp:useBean id="nodes" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="links" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="capabilities" scope="request" class="java.util.ArrayList"/>
-<jsp:useBean id="slses" scope="request" class="java.util.ArrayList"/>
+<!--<jsp:useBean id="slses" scope="request" class="java.util.ArrayList"/>-->
 
 <html>
 <head>
@@ -154,6 +154,7 @@
                 </c:otherwise>
             </c:choose>
         </td>
+
         <td style="vertical-align:top">
             <p>
                 <a href="<c:url value="/rest/testbed/${testbed.id}/capability"/>">Capabilities</a>
@@ -168,7 +169,7 @@
                         <c:forEach items="${capabilities}" var="capability">
                             <tr>
                                 <td>
-                                    <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability}"/>"><c:out value="${capability}"/></a>
+                                    <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>"><c:out value="${capability.name}"/></a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -176,6 +177,8 @@
                 </c:otherwise>
             </c:choose>
         </td>
+
+        <!--
         <td style="vertical-align:top">
             <p>
                 <a href="<c:url value="/rest/testbed/${testbed.id}/slse"/>">Slses</a>
@@ -199,6 +202,7 @@
                 </c:otherwise>
             </c:choose>
         </td>
+        -->
         <td style="vertical-align:top">
             <p>
                 <a href="<c:url value="/rest/testbed/${testbed.id}/inse"/>">Inses</a>

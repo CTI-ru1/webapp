@@ -1,4 +1,4 @@
-package eu.uberdust.rest.controller;
+package eu.uberdust.rest.controller.html.testbed;
 
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Testbed;
@@ -9,12 +9,12 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.Writer;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Controller class that returns a list of testbed in Raw text format.
+ * Controller class that returns a list of testbed in HTML format.
  */
 public final class ListTestbedsController extends AbstractRestController {
 
@@ -26,7 +26,7 @@ public final class ListTestbedsController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(eu.uberdust.rest.controller.html.testbed.ListTestbedsController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListTestbedsController.class);
 
     /**
      * Constructor.
@@ -38,7 +38,7 @@ public final class ListTestbedsController extends AbstractRestController {
         this.setSupportedMethods(new String[]{METHOD_GET});
     }
 
-/**
+    /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
@@ -55,33 +55,26 @@ public final class ListTestbedsController extends AbstractRestController {
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws IOException IO exception.
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors) throws IOException {
-
+                                  final Object commandObj, final BindException errors) {
+        long start = System.currentTimeMillis();
 
         // testbed list
         final List<Testbed> testbeds = testbedManager.list();
+        final Map<String, Long> nodesCount = testbedManager.countNodes();
+        final Map<String, Long> linksCount = testbedManager.countLinks();
+        final Map<String, Long> slsesCount = testbedManager.countSlses();
 
 
-        // write on the HTTP response
-        response.setContentType("text/plain");
-        final Writer textOutput = (response.getWriter());
+        // Prepare data to pass to jsp
+        final Map<String, Object> refData = new HashMap<String, Object>();
 
-
-        // iterate over testbeds
-        for (Testbed testbed : testbeds) {
-            textOutput.write(testbed.getId() + "\t" + testbed.getName() + "\n");
-        }
-
-
-        // flush close output
-        textOutput.flush();
-        textOutput.close();
-
-        return null;
+        refData.put("testbeds", testbeds);
+        refData.put("nodesCount", nodesCount);
+        refData.put("linksCount", linksCount);
+        refData.put("slsesCount", slsesCount);
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+        return new ModelAndView("testbed/list.html", refData);
     }
-
-
 }

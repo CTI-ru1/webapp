@@ -7,8 +7,8 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
-<jsp:useBean id="node" scope="request" class="eu.wisebed.wiseml.model.setup.Node"/>
-<jsp:useBean id="capability" scope="request" class="eu.wisebed.wiseml.model.setup.Capability"/>
+<jsp:useBean id="node" scope="request" class="eu.wisebed.wisedb.model.Node"/>
+<jsp:useBean id="capability" scope="request" class="eu.wisebed.wisedb.model.Capability"/>
 
 <html>
 <%@include file="/header.jsp" %>

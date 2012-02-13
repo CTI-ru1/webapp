@@ -50,16 +50,15 @@
                             <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${lnr.capability.name}"/>"><c:out value="${lnr.capability.name}"/></a>
                         </td>
                         <c:choose>
-                            <c:when test="${util:checkIfDateIsToday(lnr.timestamp)}">
-                                <td>${lnr.timestamp}</td>
-                                <td>${lnr.reading}</td>
+                            <c:when test="${util:checkIfDateIsToday(lnr.lastNodeReading.timestamp)}">
+                                <td>${lnr.lastNodeReading.timestamp}</td>
+                                <td>${lnr.lastNodeReading.reading}</td>
                             </c:when>
                             <c:otherwise>
-                                <td style="color :red">${lnr.timestamp}</td>
-                                <td style="color :red">${lnr.reading}</td>
+                                <td style="color :red">${lnr.lastNodeReading.timestamp}</td>
+                                <td style="color :red">${lnr.lastNodeReading.reading}</td>
                             </c:otherwise>
                         </c:choose>
-                        <td><c:out value="${lnr.node.description}"/></td>
                     </tr>
                 </c:if>
             </c:forEach>
@@ -92,13 +91,13 @@
                             <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${llr.capability.name}"/>"><c:out value="${llr.capability.name}"/></a>
                         </td>
                         <c:choose>
-                            <c:when test="${util:checkIfDateIsToday(llr.timestamp)}">
-                                <td>${llr.timestamp}</td>
-                                <td>${llr.reading}</td>
+                            <c:when test="${util:checkIfDateIsToday(llr.lastLinkReading.timestamp)}">
+                                <td>${llr.lastLinkReading.timestamp}</td>
+                                <td>${llr.lastLinkReading.reading}</td>
                             </c:when>
                             <c:otherwise>
-                                <td style="color :red">${llr.timestamp}</td>
-                                <td style="color :red">${llr.reading}</td>
+                                <td style="color :red">${llr.lastLinkReading.timestamp}</td>
+                                <td style="color :red">${llr.lastLinkReading.reading}</td>
                             </c:otherwise>
                         </c:choose>
                     </tr>

@@ -7,8 +7,8 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
-<jsp:useBean id="node" scope="request" class="eu.wisebed.wiseml.model.setup.Node"/>
-<jsp:useBean id="capabilities" scope="request" class="org.hibernate.collection.PersistentList"/>
+<jsp:useBean id="node" scope="request" class="eu.wisebed.wisedb.model.Node"/>
+<jsp:useBean id="capabilities" scope="request" class="java.util.ArrayList"/>
 
 <html>
 <head>
@@ -35,10 +35,6 @@
         </td>
     </tr>
     <tr>
-        <td>Node Description</td>
-        <td><c:out value="${node.description}"/></td>
-    </tr>
-    <tr>
         <td><a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capabilities" />">Capabilities</a>(<c:out value="${fn:length(capabilities)}"/>)</td>
         <td>
             <table class="readings">
@@ -46,29 +42,29 @@
                 <c:forEach items="${capabilities}" var="capability">
                     <tr>
                         <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>"><c:out
-                                    value="${capability.name}"/></a>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.capability.name}"/>"><c:out
+                                    value="${capability.capability.name}"/></a>
                         </td>
                         <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.name}/html/limit/10"/>">HTML</a>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.capability.name}/html/limit/10"/>">HTML</a>
                         </td>
                         <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.name}/tabdelimited/limit/10"/>">Tab
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.capability.name}/tabdelimited/limit/10"/>">Tab
                                 Delimited</a>
                         </td>
                         <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.name}/json/limit/10"/>">JSON</a>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.capability.name}/json/limit/10"/>">JSON</a>
                         </td>
                         <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.name}/wiseml"/>">WiseML</a>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.capability.name}/wiseml"/>">WiseML</a>
                             <span style="color : red">Not implemented yet</span>
                         </td>
                         <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.name}/latestreading"/>">Latest
-                                Reading</a>(<a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.name}/latestreading/json"/>">JSON</a>)
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.capability.name}/latestreading"/>">Latest
+                                Reading</a>(<a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.capability.name}/latestreading/json"/>">JSON</a>)
                         </td>
                         <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.name}/chart/limit/10"/>">Chart</a>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.capability.name}/chart/limit/10"/>">Chart</a>
                         </td>
                     </tr>
                 </c:forEach>

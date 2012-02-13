@@ -35,10 +35,13 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
                 <value>eu/wisebed/wisedb/model/Node.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/Link.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/Capability.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/NodeCapability.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/LinkCapability.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/LinkReading.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/NodeReading.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/LastNodeReading.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/LastLinkReading.hbm.xml</value>
+
                 <!--<value>eu/wisebed/wisedb/model/Slse.hbm.xml</value>-->
                 <!--<value>eu/wisebed/wisedb/model/Semantic.hbm.xml</value>-->
             </list>

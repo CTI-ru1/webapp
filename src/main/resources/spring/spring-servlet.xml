@@ -155,7 +155,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 
     <!-- List Testbeds HTML Controller -->
-    <bean name="listTestbedsHTMLController" class="eu.uberdust.rest.controller.ListTestbedsHTMLController">
+    <bean name="listTestbedsHTMLController" class="eu.uberdust.rest.controller.html.testbed.ListTestbedsController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="uriPattern" value="/testbed/"/>
@@ -179,14 +179,14 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- List Testbeds Controller -->
-    <bean name="listTestbedsJSONController" class="eu.uberdust.rest.controller.ListTestbedJSONController">
+    <bean name="listTestbedsJSONController" class="eu.uberdust.rest.controller.json.ListTestbedJSONController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="uriPattern" value="/testbed/json"/>
     </bean>
 
     <!-- Show Testbed Controller -->
-    <bean name="showTestbedController" class="eu.uberdust.rest.controller.ShowTestbedController">
+    <bean name="showTestbedController" class="eu.uberdust.rest.controller.html.testbed.ShowTestbedController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -207,11 +207,11 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- Show Testbed Status Controller -->
-    <bean name="showTestbedStatusController" class="eu.uberdust.rest.controller.ShowTestbedStatusController">
+    <bean name="showTestbedStatusController" class="eu.uberdust.rest.controller.html.testbed.ShowTestbedStatusController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
-        <property name="lastNodeReadingManager" ref="lastNodeReadingManager"/>
-        <property name="lastLinkReadingManager" ref="lastLinkReadingManager"/>
+        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
+        <property name="linkCapabilityManager" ref="linkCapabilityManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/status"/>
         <property name="viewNameSelector">
             <bean class="org.springframework.web.servlet.RestViewNameSelector">
@@ -226,7 +226,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- Show Testbed GeoRss Controller -->
-    <bean name="showTestbedGeoRssController" class="eu.uberdust.rest.controller.ShowTestbedGeoRssController">
+    <bean name="showTestbedGeoRssController" class="eu.uberdust.rest.controller.georss.ShowTestbedGeoRssController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -235,19 +235,19 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- Show Testbed KML Controller -->
-    <bean name="showTestbedKmlController" class="eu.uberdust.rest.controller.ShowTestbedKmlController">
+    <bean name="showTestbedKmlController" class="eu.uberdust.rest.controller.klm.ShowTestbedKmlController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="uriPattern" value="/testbed/{testbedId}/kml"/>
     </bean>
 
     <!-- Show Testbed WiseML Controller -->
-    <bean name="showTestbedWiseMlController" class="eu.uberdust.rest.controller.ShowTestbedWiseMlController">
+    <bean name="showTestbedWiseMlController" class="eu.uberdust.rest.controller.wiseml.ShowTestbedWiseMlController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="uriPattern" value="/testbed/{testbedId}/wiseml"/>
     </bean>
 
     <!-- List available Nodes HTML Controller -->
-    <bean name="listNodesHTMLController" class="eu.uberdust.rest.controller.ListNodesHTMLController">
+    <bean name="listNodesHTMLController" class="eu.uberdust.rest.controller.html.node.ListNodesController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -265,7 +265,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- List Available Nodes Raw Text Controller -->
-    <bean name="listNodesController" class="eu.uberdust.rest.controller.ListNodesController">
+    <bean name="listNodesController" class="eu.uberdust.rest.controller.tab.ListNodesController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -273,7 +273,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- List Available Nodes JSON Controller -->
-    <bean name="listNodesJSONController" class="eu.uberdust.rest.controller.ListNodesJSONController">
+    <bean name="listNodesJSONController" class="eu.uberdust.rest.controller.json.ListNodesJSONController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -281,10 +281,11 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- Show Node Controller -->
-    <bean name="showNodeController" class="eu.uberdust.rest.controller.ShowNodeController">
+    <bean name="showNodeController" class="eu.uberdust.rest.controller.html.node.ShowNodeController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
+        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}"/>
         <property name="viewNameSelector">
             <bean class="org.springframework.web.servlet.RestViewNameSelector">
@@ -298,7 +299,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
         </property>
     </bean>
 
-    <bean name="showNodeRdfController" class="eu.uberdust.rest.controller.ShowNodeRdfController">
+    <bean name="showNodeRdfController" class="eu.uberdust.rest.controller.rdf.ShowNodeRdfController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -314,7 +315,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
         <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/semantics"/>
     </bean>
     <!-- Show Node GeoRss Controller -->
-    <bean name="showNodeGeoRssController" class="eu.uberdust.rest.controller.ShowNodeRdfController">
+    <bean name="showNodeGeoRssController" class="eu.uberdust.rest.controller.rdf.ShowNodeRdfController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -322,13 +323,13 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- Show Node KML Controller -->
-    <bean name="showNodeKmlController" class="eu.uberdust.rest.controller.ShowNodeKmlController">
+    <bean name="showNodeKmlController" class="eu.uberdust.rest.controller.klm.ShowNodeKmlController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/kml"/>
     </bean>
 
     <!-- Insert Node Description Controller -->
-    <bean name="nodeInsertDescriptionController" class="eu.uberdust.rest.controller.NodeInsertDescriptionController">
+    <bean name="nodeInsertDescriptionController" class="eu.uberdust.rest.controller.insert.node.NodeInsertDescriptionController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -336,7 +337,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- List available Link HTML Controller -->
-    <bean name="listLinksHTMLController" class="eu.uberdust.rest.controller.ListLinksHTMLController">
+    <bean name="listLinksHTMLController" class="eu.uberdust.rest.controller.html.link.ListLinksController">
         <property name="commandClass" value="eu.uberdust.command.LinkCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkManager" ref="linkManager"/>
@@ -354,7 +355,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- List available Link Raw Text Controller -->
-    <bean name="listLinksController" class="eu.uberdust.rest.controller.ListLinksController">
+    <bean name="listLinksController" class="eu.uberdust.rest.controller.tab.ListLinksController">
         <property name="commandClass" value="eu.uberdust.command.LinkCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkManager" ref="linkManager"/>
@@ -362,7 +363,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- List available Link JSON Controller -->
-    <bean name="listLinksJSONController" class="eu.uberdust.rest.controller.ListLinksJSONController">
+    <bean name="listLinksJSONController" class="eu.uberdust.rest.controller.json.ListLinksJSONController">
         <property name="commandClass" value="eu.uberdust.command.LinkCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkManager" ref="linkManager"/>
@@ -370,7 +371,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- Show Link Controller -->
-    <bean name="showLinkController" class="eu.uberdust.rest.controller.ShowLinkController">
+    <bean name="showLinkController" class="eu.uberdust.rest.controller.html.link.ShowLinkController">
         <property name="commandClass" value="eu.uberdust.command.LinkCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkManager" ref="linkManager"/>
@@ -388,7 +389,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- List available Capabilities HTML Controller -->
-    <bean name="listCapabilitiesHTMLController" class="eu.uberdust.rest.controller.ListCapabilitiesHTMLController">
+    <bean name="listCapabilitiesHTMLController" class="eu.uberdust.rest.controller.html.capability.ListCapabilitiesController">
         <property name="commandClass" value="eu.uberdust.command.CapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
@@ -406,7 +407,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- List Available Capabilities Raw Text Controller -->
-    <bean name="listCapabilitiesController" class="eu.uberdust.rest.controller.ListCapabilitiesController">
+    <bean name="listCapabilitiesController" class="eu.uberdust.rest.controller.tab.ListCapabilitiesController">
         <property name="commandClass" value="eu.uberdust.command.CapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
@@ -414,7 +415,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- List Available Capabilities JSON Controller -->
-    <bean name="listCapabilitiesJSONController" class="eu.uberdust.rest.controller.ListCapabilitiesJSONController">
+    <bean name="listCapabilitiesJSONController" class="eu.uberdust.rest.controller.json.ListCapabilitiesJSONController">
         <property name="commandClass" value="eu.uberdust.command.CapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
@@ -422,7 +423,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- Show Capability Controller -->
-    <bean name="showCapbilityController" class="eu.uberdust.rest.controller.ShowCapabilityController">
+    <bean name="showCapbilityController" class="eu.uberdust.rest.controller.html.capability.ShowCapabilityController">
         <property name="commandClass" value="eu.uberdust.command.CapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
@@ -442,7 +443,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- Latest Capability node readings -->
-    <bean name="capabilityTabDelimitedController" class="eu.uberdust.rest.controller.CapabilityTabDelimitedController">
+    <bean name="capabilityTabDelimitedController" class="eu.uberdust.rest.controller.tab.CapabilityTabDelimitedController">
         <property name="commandClass" value="eu.uberdust.command.CapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
@@ -453,7 +454,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <!-- Insert description of a capability -->
     <bean name="capabilityInsertDescriptionController"
-          class="eu.uberdust.rest.controller.CapabilityInsertDescriptionController">
+          class="eu.uberdust.rest.controller.insert.capability.CapabilityInsertDescriptionController">
         <property name="commandClass" value="eu.uberdust.command.CapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
@@ -463,17 +464,18 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
 
-    <bean name="listNodeCapabilitiesController" class="eu.uberdust.rest.controller.ListNodeCapabilitiesController">
+    <bean name="listNodeCapabilitiesController" class="eu.uberdust.rest.controller.html.node.ListNodeCapabilitiesController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
+        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
         <property name="uriPattern"
                   value="/testbed/{testbedId}/node/{nodeId}/capabilities"/>
     </bean>
 
 
     <!-- Node-Capability Controller for HTML Format -->
-    <bean name="nodeCapabilityHTMLController" class="eu.uberdust.rest.controller.NodeCapabilityHTMLController">
+    <bean name="nodeCapabilityHTMLController" class="eu.uberdust.rest.controller.html.node.showNodeCapabilityController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -495,7 +497,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <!-- Node-Capability Controller for Tab Delimited format -->
     <bean name="nodeCapabilityTabDelimitedController"
-          class="eu.uberdust.rest.controller.NodeCapabilityTabDelimitedController">
+          class="eu.uberdust.rest.controller.tab.NodeCapabilityTabDelimitedController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -506,7 +508,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- Node-Capability Controller for JSON format -->
-    <bean name="nodeCapabilityJsonController" class="eu.uberdust.rest.controller.NodeCapabilityJSONController">
+    <bean name="nodeCapabilityJsonController" class="eu.uberdust.rest.controller.json.NodeCapabilityJSONController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -517,7 +519,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- Node-Capability Controller Chart display -->
-    <bean name="nodeCapabilityChartController" class="eu.uberdust.rest.controller.NodeCapabilityChartController">
+    <bean name="nodeCapabilityChartController" class="eu.uberdust.rest.controller.chart.NodeCapabilityChartController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -537,7 +539,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- Node-Capability WiseML Controller -->
-    <bean name="nodeCapabilityWiseMlController" class="eu.uberdust.rest.controller.NodeCapabilityWiseMlController">
+    <bean name="nodeCapabilityWiseMlController" class="eu.uberdust.rest.controller.wiseml.NodeCapabilityWiseMlController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -549,30 +551,30 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <!-- Node-Capability Last Reading Controller -->
     <bean name="nodeCapabilityLastReadingController"
-          class="eu.uberdust.rest.controller.NodeCapabilityLatestReadingController">
+          class="eu.uberdust.rest.controller.tab.NodeCapabilityLatestReadingController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
-        <property name="lastNodeReadingManager" ref="lastNodeReadingManager"/>
+        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/capability/{capabilityId}/latestreading"/>
     </bean>
 
     <!-- Node-Capability JSON Last Reading Contorller -->
     <bean name="nodeCapabilityJsonLastReadingController"
-          class="eu.uberdust.rest.controller.NodeCapabilityLatestJSONLatestReadingController">
+          class="eu.uberdust.rest.controller.json.NodeCapabilityLatestJSONLatestReadingController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
-        <property name="lastNodeReadingManager" ref="lastNodeReadingManager"/>
+        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
         <property name="uriPattern"
                   value="/testbed/{testbedId}/node/{nodeId}/capability/{capabilityId}/latestreading/json"/>
     </bean>
 
     <!-- Node-Capability Controller Insert Double Reading -->
     <bean name="nodeCapabilityInsertDoubleReadingController"
-          class="eu.uberdust.rest.controller.NodeCapabilityInsertDoubleReadingController">
+          class="eu.uberdust.rest.controller.insert.node.NodeCapabilityInsertDoubleReadingController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityInsertReadingCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeReadingManager" ref="nodeReadingManager"/>
@@ -582,7 +584,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <!-- Node-Capability Controller Insert String Reading -->
     <bean name="nodeCapabilityInsertStringReadingController"
-          class="eu.uberdust.rest.controller.NodeCapabilityInsertStringReadingController">
+          class="eu.uberdust.rest.controller.insert.node.NodeCapabilityInsertStringReadingController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityInsertReadingCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeReadingManager" ref="nodeReadingManager"/>
@@ -592,7 +594,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <!-- Node-Capability Controller Insert Double & String Reading -->
     <bean name="nodeCapabilityInsertReadingController"
-          class="eu.uberdust.rest.controller.NodeCapabilityInsertReadingController">
+          class="eu.uberdust.rest.controller.insert.node.NodeCapabilityInsertReadingController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityInsertReadingCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeReadingManager" ref="nodeReadingManager"/>
@@ -603,7 +605,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <!-- Link-Capability Controller Insert Double Reading -->
     <bean name="linkCapabilityInsertDoubleReadingController"
-          class="eu.uberdust.rest.controller.LinkCapabilityInsertDoubleReadingController">
+          class="eu.uberdust.rest.controller.insert.link.LinkCapabilityInsertDoubleReadingController">
         <property name="commandClass" value="eu.uberdust.command.LinkCapabilityInsertReadingCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkReadingManager" ref="linkReadingManager"/>
@@ -613,7 +615,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <!-- Link-Capability Controller Insert String Reading -->
     <bean name="linkCapabilityInsertStringReadingController"
-          class="eu.uberdust.rest.controller.LinkCapabilityInsertStringReadingController">
+          class="eu.uberdust.rest.controller.insert.link.LinkCapabilityInsertStringReadingController">
         <property name="commandClass" value="eu.uberdust.command.LinkCapabilityInsertReadingCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkReadingManager" ref="linkReadingManager"/>
@@ -623,7 +625,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <!-- Link-Capability Controller Insert Reading -->
     <bean name="linkCapabilityInsertReadingController"
-          class="eu.uberdust.rest.controller.LinkCapabilityInsertReadingController">
+          class="eu.uberdust.rest.controller.insert.link.LinkCapabilityInsertReadingController">
         <property name="commandClass" value="eu.uberdust.command.LinkCapabilityInsertReadingCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkReadingManager" ref="linkReadingManager"/>
@@ -633,7 +635,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <!-- Slse Controllers -->
     <bean name="showSlseController"
-          class="eu.uberdust.rest.controller.ShowSlseController">
+          class="eu.uberdust.rest.controller.html.slse.ShowSlseController">
         <property name="commandClass" value="eu.uberdust.command.SlseCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="slseManager" ref="slseManager"/>
@@ -687,7 +689,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <bean name="showSlseRdfController"
-          class="eu.uberdust.rest.controller.ShowSlseRdfController">
+          class="eu.uberdust.rest.controller.rdf.ShowSlseRdfController">
         <property name="commandClass" value="eu.uberdust.command.SlseCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -698,7 +700,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     </bean>
 
     <!-- List available Capabilities HTML Controller -->
-    <bean name="listSlsesHTMLController" class="eu.uberdust.rest.controller.ListSlsesHTMLController">
+    <bean name="listSlsesHTMLController" class="eu.uberdust.rest.controller.html.slse.ListSlsesController">
         <property name="commandClass" value="eu.uberdust.command.SlseCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="slseManager" ref="slseManager"/>

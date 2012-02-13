@@ -149,7 +149,7 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
                 } else if (readingType.equals(STRING_READING)) {
                     stringReadingValue = messageParts[6];
                 } else if (readingType.equals(BOTH_READING)) {
-                    readingValue =  Double.parseDouble(messageParts[6]);
+                    readingValue = Double.parseDouble(messageParts[6]);
                     stringReadingValue = messageParts[7];
                 }
 
@@ -157,7 +157,7 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
                     UberLogger.getInstance().log(Long.parseLong(messageParts[4]), "T24");
                 }
 
-                nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, readingValue , stringReadingValue ,
+                nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, readingValue, stringReadingValue,
                         new Date(timestamp));
                 message = new StringBuilder().append("Inserted for Node(").append(nodeId).append(") Capability(")
                         .append(capabilityId).append(") Testbed(").append(testbedId).append(") : [")
@@ -177,11 +177,11 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
                 } else if (readingType.equals(STRING_READING)) {
                     stringReadingValue = messageParts[7];
                 } else if (readingType.equals(BOTH_READING)) {
-                    readingValue =  Double.parseDouble(messageParts[7]);
+                    readingValue = Double.parseDouble(messageParts[7]);
                     stringReadingValue = messageParts[8];
                 }
                 linkReadingManager.insertReading(sourceNodeId, targetNodeId, capabilityId, testbedId, readingValue,
-                        stringReadingValue, null, new Date(timestamp));
+                        stringReadingValue, new Date(timestamp));
                 message = new StringBuilder().append("Inserted for Link[").append(sourceNodeId).append(",")
                         .append(targetNodeId).append("] Capability(").append(capabilityId).append(") Testbed(")
                         .append(testbedId).append(") : [").append(timestamp).append(",").append(readingValue)
@@ -189,7 +189,8 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
             }
         } catch (Exception e) {
             message = "Exception OCCURED. ERROR";
-            LOGGER.error(e);
+            LOGGER.fatal(e);
+            e.printStackTrace();
         } finally {
             LOGGER.info("Sending " + message);
             // After message is set return it to client.
@@ -201,9 +202,10 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
             UberLogger.getInstance().log(Long.parseLong(messageParts[4]), "T25");
         }
 
-        LOGGER.info("MEMSTAT_1: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory() + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
+        //LOGGER.info("MEMSTAT_1: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory() + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
+        LOGGER.info("MEMSTAT_2: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024 + " memory used!");
         /*Runtime.getRuntime().gc();
-        LOGGER.info("MEMSTAT_2: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory() + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");*/
+LOGGER.info("MEMSTAT_2: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory() + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");*/
 
     }
 

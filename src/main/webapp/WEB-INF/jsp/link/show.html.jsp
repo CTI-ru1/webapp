@@ -59,8 +59,8 @@
                     <c:forEach items="${link.value}" var="capability">
                         <tr>
                             <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>"><c:out
-                                        value="${capability.name}"/></a>
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.capability.name}"/>"><c:out
+                                        value="${capability.capability.name}"/></a>
                             </td>
                             <td>
                                 <!-- TODO add stuff from next page -->

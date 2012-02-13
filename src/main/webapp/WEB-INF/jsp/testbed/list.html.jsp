@@ -39,7 +39,7 @@
                     </td>
                     <td>Nodes (<c:out value="${nodesCount[testbed.name]}"/>)</td>
                     <td>Links (<c:out value="${linksCount[testbed.name]}"/>)</td>
-                    <td>Slses (<c:out value="${slsesCount[testbed.name]}"/>)</td>
+                    <!--<td>Slses (<c:out value="${slsesCount[testbed.name]}"/>)</td>-->
                 </tr>
             </c:forEach>
             </tbody>

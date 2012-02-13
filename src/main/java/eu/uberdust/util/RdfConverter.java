@@ -4,8 +4,8 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import eu.wisebed.wisedb.controller.LastNodeReadingController;
 import eu.wisebed.wisedb.controller.NodeCapabilityController;
-import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.NodeCapability;
 import eu.wisebed.wisedb.model.Semantic;
 import eu.wisebed.wisedb.model.Slse;
 import org.apache.log4j.Logger;
@@ -121,7 +121,7 @@ public class RdfConverter {
 
         //capabilities
         boolean first = true;
-        for (final Capability capability : (List<Capability>) nodeCapabilityManager.list(node)) {
+        for (final NodeCapability capability : (List<NodeCapability>) nodeCapabilityManager.list(node)) {
             if (!first) {
                 rdfOutput.append(";\n");
             }
@@ -129,8 +129,7 @@ public class RdfConverter {
             rdfOutput.append("" +
                     " ssn:attachedSystem [\n" +
                     "  a ssn:Sensor ;\n" +
-                    "  ssn:observedProperty <" + capability.getDescription() + "> ; \n" +
-                    "  dul:hasValue \"" + lastNodeReadingManager.getByID(node, capability).getReading() + "\";\n"
+                    "  ssn:observedProperty <" + capability.getCapability().getDescription() + "> ; \n"
             );
             if (locatedin != null) {
                 // rdfOutput.append("\t\tssn:featureOfInterest :" + locatedin.getValue() + " ;\n");
