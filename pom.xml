@@ -306,6 +306,7 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -340,7 +341,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
+            -->
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>maven-replacer-plugin</artifactId>
