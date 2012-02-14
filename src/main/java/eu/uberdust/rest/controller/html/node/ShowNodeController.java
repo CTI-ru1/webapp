@@ -88,6 +88,8 @@ public final class ShowNodeController extends AbstractRestController {
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, NodeNotFoundException {
 
+        long start = System.currentTimeMillis();
+
         LOGGER.info("Remote address: " + request.getRemoteAddr());
         LOGGER.info("Remote host: " + request.getRemoteHost());
 
@@ -122,6 +124,8 @@ public final class ShowNodeController extends AbstractRestController {
         refData.put("testbed", testbed);
         refData.put("node", node);
         refData.put("capabilities", nodeCapabilityManager.list(node));
+
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         return new ModelAndView("node/show.html", refData);
     }
 }

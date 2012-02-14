@@ -80,6 +80,7 @@ public final class ListLinksController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException {
+        long start = System.currentTimeMillis();
 
         // get command
         final LinkCommand command = (LinkCommand) commandObj;
@@ -106,6 +107,8 @@ public final class ListLinksController extends AbstractRestController {
 
         refData.put("testbed", testbed);
         refData.put("links", links);
+
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         return new ModelAndView("link/list.html", refData);
     }
 }

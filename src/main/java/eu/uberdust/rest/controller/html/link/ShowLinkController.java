@@ -74,6 +74,7 @@ public final class ShowLinkController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, LinkNotFoundException {
+        long start = System.currentTimeMillis();
 
         LOGGER.info("Remote address: " + request.getRemoteAddr());
         LOGGER.info("Remote host: " + request.getRemoteHost());
@@ -123,6 +124,8 @@ public final class ShowLinkController extends AbstractRestController {
 
         refData.put("testbed", testbed);
         refData.put("linkCapabilityMap", linkCapabilityMap);
+
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         return new ModelAndView("link/show.html", refData);
     }
 }

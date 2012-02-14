@@ -78,7 +78,7 @@ public final class ListNodesController extends AbstractRestController {
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
-            throws TestbedNotFoundException, InvalidTestbedIdException {
+            throws TestbedNotFoundException, InvalidTestbedIdException, IOException {
 
         // get command object
         final NodeCommand command = (NodeCommand) commandObj;
@@ -100,31 +100,18 @@ public final class ListNodesController extends AbstractRestController {
         // get testbed's nodes
         final List<String> nodes = nodeManager.listNames(testbed);
 
-        final String url = request.getRequestURL().toString();
-
         // write on the HTTP response
         response.setContentType("text/plain");
         Writer textOutput = null;
-        try {
-            textOutput = (response.getWriter());
 
-            // iterate over nodes
-            for (String node : nodes) {
-                textOutput.write(node + "\n");
-            }
+        textOutput = (response.getWriter());
 
-        } catch (IOException e) {
-            LOGGER.debug(e.getStackTrace());
-        } finally {
-            // flush close output
-            try {
-                textOutput.flush();
-                textOutput.close();
-            } catch (IOException e) {
-                LOGGER.debug(e.getStackTrace());
-            }
-
+        // iterate over nodes
+        for (String node : nodes) {
+            textOutput.write(node + "\n");
         }
+        textOutput.flush();
+        textOutput.close();
 
         return null;
 

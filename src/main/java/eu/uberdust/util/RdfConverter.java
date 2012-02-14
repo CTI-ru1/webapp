@@ -7,7 +7,6 @@ import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.NodeCapability;
 import eu.wisebed.wisedb.model.Semantic;
-import eu.wisebed.wisedb.model.Slse;
 import org.apache.log4j.Logger;
 
 import java.io.StringReader;
@@ -152,86 +151,12 @@ public class RdfConverter {
         return output.toString();  //To change body of created methods use File | Settings | File Templates.
     }
 
-    public static String encode(String in) {
-        in = in.replaceAll("_", "\\_U");
-        in = in.replaceAll("/", "\\_S");
-        in = in.replaceAll(":", "\\_C");
+    public static String encode(final String in) {
+        String input = in;
+        input = input.replaceAll("_", "\\_U");
+        input = in.replaceAll("/", "\\_S");
+        input = in.replaceAll(":", "\\_C");
         return in;
     }
 
-    public static String getSlseRdf(final Slse slse, final String uri) {
-
-        //map to host all latest sensor readings for the slse
-        final Map<String, Double> sensorValues = new HashMap<String, Double>();
-
-        final StringBuilder rdfOutput = new StringBuilder();
-        //headers
-        rdfOutput.append("@prefix dul: <http://www.loa-cnr.it/ontologies/DUL.owl#> .\n" +
-                "@prefix ssn: <http://purl.oclc.org/NET/ssnx/ssn#> .\n" +
-                "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n" +
-                "@prefix sweet: <http://sweet.jpl.nasa.gov/2.2/sweetAll.owl#> .\n" +
-                "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n" +
-                "@prefix : <http://spitfire.ibr.cs.tu-bs.de/static/ontology.owl#> .\n" +
-                "\n" +
-                "<#>\n" +
-                "\n");
-
-
-//        //Get the nodes that compose the slse
-//        final List<Node> nodes = slse.getNodes();
-//
-//        //iterate the nodes for their readings
-//        for (final Node node : nodes) {
-//            //get all the capabilities for the node
-//            final List<Capability> capabilities = node.getCapabilities();
-//
-//            if (capabilities != null) {
-//                //iterate all capabilities
-//                for (final Capability capability : capabilities) {
-//                    //get the latest reading for each capability
-//                    final LastNodeReading lastReading = lastNodeReadingManager.getByID(node, capability);
-//                    if (lastReading == null) {
-//                        continue;
-//                    }
-//                    //aggregate if not the only one
-//                    if (sensorValues.containsKey(lastReading.getCapability().getName())) {
-//                        Double reading = (sensorValues.get(lastReading.getCapability().getName()) + lastReading.getReading()) / 2;
-//                        sensorValues.put(lastReading.getCapability().getName(), reading);
-//                    } else {
-//                        sensorValues.put(lastReading.getCapability().getName(), lastReading.getReading());
-//                    }
-//                }
-//            }
-//        }
-
-        //Add all aggregated sensor readings to the rdf description
-        boolean first = true;
-        for (final String sensor : sensorValues.keySet()) {
-            //for formating
-            if (!first) {
-                rdfOutput.append(";\n");
-            }
-            first = false;
-            //check if the sensor has a value
-            if (sensorValues.get(sensor) != null) {
-                rdfOutput.append("" +
-                        "\tssn:attachedSystem [\n" +
-                        "\t\ta ssn:Sensor ;\n" +
-                        "\t\tssn:observedProperty :" + RdfConverter.getInstance().map(sensor) + " ;\n" +
-                        "\t\tdul:hasValue \"" + sensorValues.get(sensor) + "\";\n");
-                rdfOutput.append("\t\t]");
-            }
-        }
-        rdfOutput.append(".");
-
-
-        //JENA modeling
-        final Model m = ModelFactory.createDefaultModel();
-        final StringReader stringReader = new StringReader(rdfOutput.toString());
-        m.read(stringReader, uri, "N3");
-        final StringWriter output = new StringWriter();
-        m.write(output);
-
-        return output.toString();  //To change body of created methods u
-    }
 }

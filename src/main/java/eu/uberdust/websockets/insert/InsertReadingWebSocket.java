@@ -28,7 +28,7 @@ public final class InsertReadingWebSocket implements Controller {
     /**
      * Insert Reading Web Socket Listener.
      */
-    private InsertReadingWebSocketListener insertReadingWebSocketListener;
+    private transient InsertReadingWebSocketListener insertReadingWebSocketListener;
 
     /**
      * Default Constructor.

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Validates the initial HTTP request and  dispatches a new WebSocket connection.
@@ -32,7 +33,7 @@ public class LastReadingWebSocket
     /**
      * A HashMap<CapabilityID:NodeID>.
      */
-    private final HashMap<String, CustomWebSocketListener> listeners;
+    private final transient Map<String, CustomWebSocketListener> listeners;
 
     /**
      * Default Constructor.
@@ -51,7 +52,7 @@ public class LastReadingWebSocket
      * @throws IOException
      */
     @Override
-    public ModelAndView handleRequest(HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws Exception {
+    public ModelAndView handleRequest(final HttpServletRequest servletRequest, final HttpServletResponse servletResponse) throws Exception {
         LOGGER.info("handleRequest");
 
         servletRequest.getSession().setMaxInactiveInterval(Integer.MAX_VALUE);
@@ -91,7 +92,7 @@ public class LastReadingWebSocket
     }
 
     @Override
-    public void service(ServletRequest servletRequest, ServletResponse servletResponse) throws ServletException, IOException {
+    public void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws ServletException, IOException {
         LOGGER.info("service");
         try {
             handleRequest((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);

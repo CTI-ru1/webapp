@@ -7,7 +7,6 @@ import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.LinkController;
 import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.SlseController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Link;
@@ -48,13 +47,6 @@ public final class ShowTestbedController extends AbstractRestController {
      * Node persistence manager.
      */
     private transient NodeController nodeManager;
-
-    private transient SlseController slseManager;
-
-    public void setSlseManager(SlseController slseManager) {
-        this.slseManager = slseManager;
-    }
-
     /**
      * Logger.
      */
@@ -165,8 +157,7 @@ public final class ShowTestbedController extends AbstractRestController {
         // get testbed capabilities
         final List<Capability> capabilities = capabilityManager.list(testbed);
         LOGGER.info(" capabilities @ " + (System.currentTimeMillis() - millis));
-//        final List<String> slses = slseManager.listNames(testbed);
-//        LOGGER.info("slses @ " + (System.currentTimeMillis() - millis));
+
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
 
@@ -175,7 +166,6 @@ public final class ShowTestbedController extends AbstractRestController {
         refData.put("nodes", nodes);
         refData.put("links", links);
         refData.put("capabilities", capabilities);
-//        refData.put("slses", slses);
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         LOGGER.info("return @ " + (System.currentTimeMillis() - millis));
 

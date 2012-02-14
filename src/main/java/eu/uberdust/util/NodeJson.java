@@ -8,7 +8,7 @@ public final class NodeJson {
     /**
      * Node's id.
      */
-    private String nodeId;
+    private transient String nodeId;
 
     /**
      * Constructor.
@@ -19,6 +19,7 @@ public final class NodeJson {
 
     /**
      * Constructor.
+     *
      * @param nodeId node's id.
      */
     public NodeJson(final String nodeId) {
@@ -27,6 +28,7 @@ public final class NodeJson {
 
     /**
      * Returns node's id.
+     *
      * @return node's id.
      */
     public String getId() {
@@ -34,8 +36,9 @@ public final class NodeJson {
     }
 
     /**
-     * Sets node's id.
-     * @param id node's id
+     * Sets node's nodeId.
+     *
+     * @param nodeId node's nodeId
      */
     public void setId(final String nodeId) {
         this.nodeId = nodeId;

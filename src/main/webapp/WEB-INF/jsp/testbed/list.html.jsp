@@ -18,7 +18,6 @@
 <jsp:useBean id="testbeds" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="nodesCount" scope="request" class="java.util.HashMap"/>
 <jsp:useBean id="linksCount" scope="request" class="java.util.HashMap"/>
-<jsp:useBean id="slsesCount" scope="request" class="java.util.HashMap"/>
 
 <body>
 <%@include file="/header.jsp"%>

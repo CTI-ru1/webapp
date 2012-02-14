@@ -11,7 +11,6 @@
 <jsp:useBean id="nodes" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="links" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="capabilities" scope="request" class="java.util.ArrayList"/>
-<!--<jsp:useBean id="slses" scope="request" class="java.util.ArrayList"/>-->
 
 <html>
 <head>
@@ -179,31 +178,6 @@
             </c:choose>
         </td>
 
-        <!--
-        <td style="vertical-align:top">
-            <p>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/slse"/>">Slses</a>
-                (<a href="<c:url value="/rest/testbed/${testbed.id}/slse/raw"/>">raw</a>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/createslse"/>">create</a>)
-            </p>
-            <c:choose>
-                <c:when test="${slses == null || fn:length(slses) == 0 }">
-                    <p style="color : red">No slses found for <c:out value="${testbed.name}"/></p>
-                </c:when>
-                <c:otherwise>
-                    <table>
-                        <c:forEach items="${slses}" var="slse">
-                            <tr>
-                                <td>
-                                    <a href="<c:url value="/rest/testbed/${testbed.id}/slse/${slse}/"/>"><c:out value="${slse}"/></a>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </table>
-                </c:otherwise>
-            </c:choose>
-        </td>
-        -->
         <td style="vertical-align:top">
             <p>
                 <a href="<c:url value="/rest/testbed/${testbed.id}/inse"/>">Inses</a>

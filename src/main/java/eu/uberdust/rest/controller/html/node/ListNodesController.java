@@ -79,6 +79,7 @@ public final class ListNodesController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException {
+        long start = System.currentTimeMillis();
 
         // get command object
         final NodeCommand command = (NodeCommand) commandObj;
@@ -106,6 +107,8 @@ public final class ListNodesController extends AbstractRestController {
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
         refData.put("nodes", nodes);
+
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         return new ModelAndView("node/list.html", refData);
 
     }

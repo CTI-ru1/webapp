@@ -12,10 +12,10 @@ import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.NodeReadingController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.NodeReading;
-import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.NodeReading;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * Controller class that returns an HTML page containing a list of the readings for a node/capability.
  */
-public final class showNodeCapabilityController extends AbstractRestController {
+public final class ShowNodeCapabilityController extends AbstractRestController {
 
     /**
      * Node peristence manager.
@@ -55,12 +55,12 @@ public final class showNodeCapabilityController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(showNodeCapabilityController.class);
+    private static final Logger LOGGER = Logger.getLogger(ShowNodeCapabilityController.class);
 
     /**
      * Constructor.
      */
-    public showNodeCapabilityController() {
+    public ShowNodeCapabilityController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -123,6 +123,7 @@ public final class showNodeCapabilityController extends AbstractRestController {
                                   final Object commandObj, final BindException errors)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
+        long start = System.currentTimeMillis();
 
         LOGGER.info("Remote address: " + request.getRemoteAddr());
         LOGGER.info("Remote host: " + request.getRemoteHost());
@@ -190,6 +191,7 @@ public final class showNodeCapabilityController extends AbstractRestController {
         refData.put("testbedId", command.getTestbedId());
         refData.put("readings", nodeReadings);
 
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         // check type of view requested
         return new ModelAndView("nodecapability/readings.html", refData);
     }

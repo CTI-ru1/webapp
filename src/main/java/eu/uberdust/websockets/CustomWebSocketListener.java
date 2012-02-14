@@ -31,17 +31,17 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
     /**
      * A List with the connected users.
      */
-    private final List<WebSocketContext> users = new ArrayList<WebSocketContext>();
+    private final transient List<WebSocketContext> users = new ArrayList<WebSocketContext>();
 
     /**
      * The Node id..
      */
-    private final String nodeID;
+    private final transient String nodeID;
 
     /**
      * The capaility id.
      */
-    private final String capabilityID;
+    private final transient String capabilityID;
 
     /**
      * Constructor.
@@ -53,7 +53,7 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
         super();
         this.nodeID = nodeID;
         this.capabilityID = capabilityID;
-        String thisProtocol = new StringBuilder().append(nodeID).append(":").append(capabilityID).toString();
+//        String thisProtocol = new StringBuilder().append(nodeID).append(":").append(capabilityID).toString();
 
     }
 
@@ -67,13 +67,13 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
     }
 
     @Override
-    public void onReadBinary(final WebSocketContext context, final InputStream is) throws IOException {
-        super.onReadBinary(context, is);
+    public void onReadBinary(final WebSocketContext context, final InputStream inputStream) throws IOException {
+        super.onReadBinary(context, inputStream);
     }
 
     @Override
-    public void onReadText(final WebSocketContext context, final Reader is) throws IOException {
-        super.onReadText(context, is);
+    public void onReadText(final WebSocketContext context, final Reader reader) throws IOException {
+        super.onReadText(context, reader);
     }
 
     @Override

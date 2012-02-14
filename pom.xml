@@ -483,6 +483,7 @@
                         <ruleset>rulesets/sunsecure.xml</ruleset>
                         <ruleset>rulesets/unusedcode.xml</ruleset>
                     </rulesets>
+
                 </configuration>
             </plugin>
             <plugin>

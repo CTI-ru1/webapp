@@ -11,9 +11,9 @@ import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -153,7 +153,7 @@ public final class NodeCapabilityChartController extends AbstractRestController 
         // check if limit is provided
         Integer limit = null;
         if (command.getReadingsLimit() != null) {
-            limit = new Integer(command.getReadingsLimit());
+            limit = Integer.valueOf(command.getReadingsLimit());
         }
 
         // Prepare data to pass to jsp

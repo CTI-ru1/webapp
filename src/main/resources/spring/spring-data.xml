@@ -196,14 +196,6 @@
           class="eu.wisebed.wisedb.controller.CapabilityController"
           parent="abstractManager"
           factory-method="getInstance"/>
-    <!-- slseManager using the above transaction managment proxy -->
-    <bean id="slseManager" parent="proxyTemplate">
-        <property name="target" ref="slseManagerTarget"/>
-    </bean>
-    <bean id="slseManagerTarget"
-          class="eu.wisebed.wisedb.controller.SlseController"
-          parent="abstractManager"
-          factory-method="getInstance"/>
 
     <bean id="semanticManager" parent="proxyTemplate">
         <property name="target" ref="semanticManagerTarget"/>

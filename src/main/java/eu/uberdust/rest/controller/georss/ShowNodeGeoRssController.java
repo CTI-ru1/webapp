@@ -50,11 +50,11 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
      * Node persistence manager.
      */
     private transient NodeController nodeManager;
-    private transient NodeCapabilityController nodeCapabilityManager;
 
-    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
-        this.nodeCapabilityManager = nodeCapabilityManager;
-    }
+    /**
+     * NodeCapability persistence manager.
+     */
+    private transient NodeCapabilityController nodeCapabilityManager;
 
     /**
      * Logger.
@@ -87,6 +87,15 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
      */
     public void setNodeManager(final NodeController nodeManager) {
         this.nodeManager = nodeManager;
+    }
+
+    /**
+     * Sets nodeCapability persistence manager.
+     *
+     * @param nodeCapabilityManager nodeCapability persistence manager.
+     */
+    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
+        this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
     /**
@@ -171,7 +180,9 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
 
         // set the GeoRSS module and add it
         final GeoRSSModule geoRSSModule = new SimpleModuleImpl();
-        if (!(testbed.getSetup().getCoordinateType().equals("Absolute"))) {
+        if (testbed.getSetup().getCoordinateType().equals("Absolute")) {
+            geoRSSModule.setPosition(new Position(nodeManager.getPosition(node).getX(), nodeManager.getPosition(node).getY()));
+        } else {
 
             // convert testbed origin from long/lat position to xyz if needed
             final Origin origin = testbed.getSetup().getOrigin();
@@ -187,8 +198,7 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
             final Coordinate absolute = Coordinate.absolute(properOrigin, rotated);
             final Coordinate nodePosition = Coordinate.xyz2blh(absolute);
             geoRSSModule.setPosition(new Position(nodePosition.getX(), nodePosition.getY()));
-        } else {
-            geoRSSModule.setPosition(new Position(nodeManager.getPosition(node).getX(), nodeManager.getPosition(node).getY()));
+
         }
         entry.getModules().add(geoRSSModule);
         entries.add(entry);

@@ -54,12 +54,12 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
     /**
      * NodeReading persistence manager.
      */
-    private NodeReadingController nodeReadingManager;
+    private transient NodeReadingController nodeReadingManager;
 
     /**
      * LinkReading persistence manager.
      */
-    private LinkReadingController linkReadingManager;
+    private transient LinkReadingController linkReadingManager;
 
 
     /**
@@ -116,13 +116,13 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
     /**
      * On read binary.
      *
-     * @param context WebSocketContext instance.
-     * @param is      InputStream instance.
+     * @param context     WebSocketContext instance.
+     * @param inputStream InputStream instance.
      * @throws IOException IOException exception.
      */
-    public void onReadBinary(final WebSocketContext context, final InputStream is) throws IOException {
+    public void onReadBinary(final WebSocketContext context, final InputStream inputStream) throws IOException {
         final StringWriter writer = new StringWriter();
-        IOUtils.copy(is, writer, "UTF-8");
+        IOUtils.copy(inputStream, writer, "UTF-8");
         final String receivedMessage = writer.toString();
         writer.close();
         LOGGER.info("onReadBinary(): " + receivedMessage);
@@ -143,21 +143,21 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
                 final long timestamp = Long.parseLong(messageParts[4]);
                 final String readingType = messageParts[5];
                 Double readingValue = null;
-                String stringReadingValue = null;
+                String stringReading = null;
                 if (readingType.equals(DOUBLE_READING)) {
                     readingValue = Double.parseDouble(messageParts[6]);
                 } else if (readingType.equals(STRING_READING)) {
-                    stringReadingValue = messageParts[6];
+                    stringReading = messageParts[6];
                 } else if (readingType.equals(BOTH_READING)) {
                     readingValue = Double.parseDouble(messageParts[6]);
-                    stringReadingValue = messageParts[7];
+                    stringReading = messageParts[7];
                 }
 
                 if (receivedMessage.contains("1ccd")) {
                     UberLogger.getInstance().log(Long.parseLong(messageParts[4]), "T24");
                 }
 
-                nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, readingValue, stringReadingValue,
+                nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, readingValue, stringReading,
                         new Date(timestamp));
                 message = new StringBuilder().append("Inserted for Node(").append(nodeId).append(") Capability(")
                         .append(capabilityId).append(") Testbed(").append(testbedId).append(") : [")
@@ -171,17 +171,17 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
                 final long timestamp = Long.parseLong(messageParts[5]);
                 final String readingType = messageParts[6];
                 Double readingValue = null;
-                String stringReadingValue = null;
+                String stringReading = null;
                 if (readingType.equals(DOUBLE_READING)) {
                     readingValue = Double.parseDouble(messageParts[7]);
                 } else if (readingType.equals(STRING_READING)) {
-                    stringReadingValue = messageParts[7];
+                    stringReading = messageParts[7];
                 } else if (readingType.equals(BOTH_READING)) {
                     readingValue = Double.parseDouble(messageParts[7]);
-                    stringReadingValue = messageParts[8];
+                    stringReading = messageParts[8];
                 }
                 linkReadingManager.insertReading(sourceNodeId, targetNodeId, capabilityId, testbedId, readingValue,
-                        stringReadingValue, new Date(timestamp));
+                        stringReading, new Date(timestamp));
                 message = new StringBuilder().append("Inserted for Link[").append(sourceNodeId).append(",")
                         .append(targetNodeId).append("] Capability(").append(capabilityId).append(") Testbed(")
                         .append(testbedId).append(") : [").append(timestamp).append(",").append(readingValue)
@@ -190,13 +190,12 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
         } catch (Exception e) {
             message = "Exception OCCURED. ERROR";
             LOGGER.fatal(e);
-            e.printStackTrace();
         } finally {
             LOGGER.info("Sending " + message);
-            // After message is set return it to client.
-            final PrintWriter pw = context.startTextMessage();
-            pw.print(message);
-            pw.close();
+            // After message inputStream set return it to client.
+            final PrintWriter printWriter = context.startTextMessage();
+            printWriter.print(message);
+            printWriter.close();
         }
         if (receivedMessage.contains("1ccd")) {
             UberLogger.getInstance().log(Long.parseLong(messageParts[4]), "T25");
@@ -213,19 +212,19 @@ LOGGER.info("MEMSTAT_2: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.g
      * On read text.
      *
      * @param context WebSocketContext instance.
-     * @param is      InputStream instance.
+     * @param reader  InputStream instance.
      * @throws IOException IOException exception.
      */
-    public void onReadText(final WebSocketContext context, final Reader is) throws IOException {
-        char[] arr = new char[1024]; // 1K at a time
-        StringBuffer buf = new StringBuffer();
+    public void onReadText(final WebSocketContext context, final Reader reader) throws IOException {
+        final char[] arr = new char[1024]; // 1K at a time
+        final StringBuffer buf = new StringBuffer();
         int numChars;
 
-        while ((numChars = is.read(arr, 0, arr.length)) > 0) {
+        while ((numChars = reader.read(arr, 0, arr.length)) > 0) {
             buf.append(arr, 0, numChars);
         }
         LOGGER.info("onReadText() : " + buf.toString());
-        super.onReadText(context, is);
+        super.onReadText(context, reader);
     }
 
     /**

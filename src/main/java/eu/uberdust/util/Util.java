@@ -12,17 +12,17 @@ public abstract class Util {
     /**
      * Milliseconds per minute.
      */
-    private static final long MILLISECS_PER_MINUTE = 60 * 1000;
+    private static final long MILLIS_PER_MINUTE = 60 * 1000;
 
     /**
      * Milliseconds per hour.
      */
-    private static final long MILLISECS_PER_HOUR = 60 * MILLISECS_PER_MINUTE;
+    private static final long MILLIS_PER_HOUR = 60 * MILLIS_PER_MINUTE;
 
     /**
      * Milliseconds per day.
      */
-    private static final long MILLISECS_PER_DAY = 24 * MILLISECS_PER_HOUR;
+    private static final long MILLIS_PER_DAY = 24 * MILLIS_PER_HOUR;
 
 
     /**
@@ -42,7 +42,7 @@ public abstract class Util {
 
         final long nowL = now.getTimeInMillis() + now.getTimeZone().getOffset(now.getTimeInMillis());
         final long thenL = then.getTimeInMillis() + then.getTimeZone().getOffset(then.getTimeInMillis());
-        final long diff = (nowL - thenL) / MILLISECS_PER_DAY;
+        final long diff = (nowL - thenL) / MILLIS_PER_DAY;
         return (diff == 0);
     }
 }

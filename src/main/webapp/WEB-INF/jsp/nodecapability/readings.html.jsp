@@ -39,6 +39,9 @@
                     <td align="center">
                         <c:out value="${reading.reading}"/>
                     </td>
+                    <td align="center">
+                        <c:out value="${reading.stringReading}"/>
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>

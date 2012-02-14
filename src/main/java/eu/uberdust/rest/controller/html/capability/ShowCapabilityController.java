@@ -114,6 +114,7 @@ public final class ShowCapabilityController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, CapabilityNotFoundException {
+        long start = System.currentTimeMillis();
 
         LOGGER.info("Remote address: " + request.getRemoteAddr());
         LOGGER.info("Remote host: " + request.getRemoteHost());
@@ -152,6 +153,8 @@ public final class ShowCapabilityController extends AbstractRestController {
         refData.put("capability", capability);
         refData.put("nodes", nodes);
         refData.put("links", links);
+
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         return new ModelAndView("capability/show.html", refData);
     }
 }
