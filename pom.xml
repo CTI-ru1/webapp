@@ -477,7 +477,7 @@
                         <ruleset>rulesets/logging-jakarta-commons.xml</ruleset>
                         <ruleset>rulesets/logging-java.xml</ruleset>
                         <ruleset>rulesets/migrating.xml</ruleset>
-                        <ruleset>rulesets/naming.xml</ruleset>
+                        <ruleset>./rulesets/naming.xml</ruleset>
                         <ruleset>rulesets/optimizations.xml</ruleset>
                         <ruleset>rulesets/strictexception.xml</ruleset>
                         <ruleset>rulesets/strings.xml</ruleset>
