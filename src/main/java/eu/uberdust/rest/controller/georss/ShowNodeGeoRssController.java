@@ -1,28 +1,15 @@
 package eu.uberdust.rest.controller.georss;
 
-import com.sun.syndication.feed.module.georss.GeoRSSModule;
-import com.sun.syndication.feed.module.georss.SimpleModuleImpl;
-import com.sun.syndication.feed.module.georss.geometries.Position;
-import com.sun.syndication.feed.synd.SyndContent;
-import com.sun.syndication.feed.synd.SyndContentImpl;
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndEntryImpl;
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.feed.synd.SyndFeedImpl;
 import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.SyndFeedOutput;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.rest.controller.rdf.ShowNodeRdfController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.uberdust.util.Coordinate;
 import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
-import eu.wisebed.wisedb.model.NodeCapability;
-import eu.wisebed.wisedb.model.Origin;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -32,9 +19,7 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.Writer;
 
 /**
  * Controller class that returns the position of a node in GeoRSS format.
@@ -146,69 +131,20 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
 
         // current host base URL
         final String baseUrl = (request.getRequestURL().toString()).replace(request.getRequestURI(), "");
+
+        final String syndEntryLink = new StringBuilder().append(baseUrl).append("/uberdust/rest/testbed/")
+                .append(testbed.getId()).append("/node/").append(node.getId()).toString();
         LOGGER.info("baseUrl : " + baseUrl);
 
         // set up feed and entries
         response.setContentType("application/xml; charset=UTF-8");
-        final SyndFeed feed = new SyndFeedImpl();
-        feed.setFeedType("rss_2.0");
-        feed.setTitle(node.getId() + " GeoRSS feed");
-        feed.setLink(request.getRequestURL().toString());
-        feed.setDescription(testbed.getDescription());
-        final List<SyndEntry> entries = new ArrayList<SyndEntry>();
 
-        // set entry's title,link and publishing date
-        final SyndEntry entry = new SyndEntryImpl();
-        entry.setTitle(node.getId());
-        entry.setLink(new StringBuilder().append(baseUrl).append("/uberdust/rest/testbed/")
-                .append(testbed.getId()).append("/node/").append(node.getId()).toString());
-        entry.setPublishedDate(new Date());
+        final String feed = NodeController.getInstance().getGeooRssFeed(node, request.getRequestURL().toString(), syndEntryLink);
 
-        // set entry's description (HTML list)
-        final SyndContent description = new SyndContentImpl();
-        final StringBuilder descriptionBuffer = new StringBuilder();
-        descriptionBuffer.append("<p>").append(nodeManager.getDescription(node)).append("</p>");
-        descriptionBuffer.append("<ul>");
-        for (NodeCapability capability : (List<NodeCapability>) nodeCapabilityManager.list(node)) {
-            descriptionBuffer.append("<li>").append(capability.getCapability().getName())
-                    .append(capability.getCapability().getName()).append("</li>");
-        }
-        descriptionBuffer.append("</ul>");
-        description.setType("text/html");
-        description.setValue(descriptionBuffer.toString());
-        entry.setDescription(description);
-
-        // set the GeoRSS module and add it
-        final GeoRSSModule geoRSSModule = new SimpleModuleImpl();
-        if (testbed.getSetup().getCoordinateType().equals("Absolute")) {
-            geoRSSModule.setPosition(new Position(nodeManager.getPosition(node).getX(), nodeManager.getPosition(node).getY()));
-        } else {
-
-            // convert testbed origin from long/lat position to xyz if needed
-            final Origin origin = testbed.getSetup().getOrigin();
-            final Coordinate originCoordinate = new Coordinate((double) origin.getX(), (double) origin.getY(),
-                    (double) origin.getZ(), (double) origin.getPhi(), (double) origin.getTheta());
-            final Coordinate properOrigin = Coordinate.blh2xyz(originCoordinate);
-
-            // convert node position from xyz to long/lat
-            final eu.wisebed.wiseml.model.setup.Position position = nodeManager.getPosition(node);
-            final Coordinate nodeCoordinate = new Coordinate((double) position.getX(), (double) position.getY(),
-                    (double) position.getZ());
-            final Coordinate rotated = Coordinate.rotate(nodeCoordinate, properOrigin.getPhi());
-            final Coordinate absolute = Coordinate.absolute(properOrigin, rotated);
-            final Coordinate nodePosition = Coordinate.xyz2blh(absolute);
-            geoRSSModule.setPosition(new Position(nodePosition.getX(), nodePosition.getY()));
-
-        }
-        entry.getModules().add(geoRSSModule);
-        entries.add(entry);
-
-        // add entries to feed
-        feed.setEntries(entries);
-
-        // the feed output goes to response
-        final SyndFeedOutput output = new SyndFeedOutput();
-        output.output(feed, response.getWriter());
+        final Writer textOutput = (response.getWriter());
+        response.getWriter().append(feed);
+        textOutput.flush();
+        textOutput.close();
 
         return null;
     }

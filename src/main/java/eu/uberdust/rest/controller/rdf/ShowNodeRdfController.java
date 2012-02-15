@@ -6,7 +6,6 @@ import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.LastNodeReadingController;
 import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.SemanticController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -33,11 +32,6 @@ public final class ShowNodeRdfController extends AbstractRestController {
     private transient NodeController nodeManager;
 
     private transient LastNodeReadingController lastNodeReadingManager;
-    private transient SemanticController semanticManager;
-
-    public void setSemanticManager(SemanticController semanticManager) {
-        this.semanticManager = semanticManager;
-    }
 
     /**
      * Logger.

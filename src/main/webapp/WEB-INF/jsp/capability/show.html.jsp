@@ -37,58 +37,55 @@
         </td>
     </tr>
     <tr>
-        <td>Capability Description</td>
+        <td>Capability Semantic Description</td>
         <td><c:out value="${capability.description}"/></td>
     </tr>
-    <c:if test="${nodes != null && fn:length(nodes) != 0}">
-        <tr>
-            <td>Nodes(<c:out value="${fn:length(nodes)}"/>)</td>
+    <tr>
+    <th>
+        List All Readings for the capability in:
+    </th>
+    </tr>
+    <tr>
             <td>
-                <table>
-                    <tbody>
-                    <c:forEach items="${nodes}" var="node">
-                        <tr>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}"/>"><c:out
-                                        value="${node.id}"/></a>
-                            </td>
-                            <td>
-                                <!-- TODO add stuff from next page -->
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}/tabdelimited"/>">Tab
+                    Delimited Format</a>
             </td>
-        </tr>
+    </tr>
+    <tr>
+    <c:if test="${nodes != null && fn:length(nodes) != 0}">
+        <td>
+            <table>
+                <tr>
+                    <th>Nodes(<c:out value="${fn:length(nodes)}"/>)</th>
+                </tr>
+                <c:forEach items="${nodes}" var="node">
+                    <tr>
+                        <td>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.id}"/>"><c:out
+                                    value="${node.id}"/></a>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </td>
     </c:if>
     <c:if test="${links != null && fn:length(links) != 0}">
-        <tr>
-            <td>Links(<c:out value="${fn:length(links)}"/>)</td>
-            <td>
-                <table>
-                    <tbody>
-                    <c:forEach items="${links}" var="link">
-                        <tr>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source}/${link.target}"/>"><c:out
-                                        value="[${link.source},${link.target}]"/></a>
-                            </td>
-                            <td>
-                                <!-- TODO add stuff from next page -->
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </c:if>
-    <tr>
         <td>
-            <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}/tabdelimited"/>">Tab
-                Delimited Format</a>
+            <table>
+                <tr>
+                    <th>Links(<c:out value="${fn:length(links)}"/>)</th>
+                </tr>
+                <c:forEach items="${links}" var="link">
+                    <tr>
+                        <td>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source}/${link.target}"/>">
+                                <c:out value="[${link.source},${link.target}]"/></a>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
         </td>
+    </c:if>
     </tr>
     </tbody>
 </table>

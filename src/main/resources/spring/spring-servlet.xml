@@ -50,7 +50,6 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
                 <prop key="GET /testbed/*/node/*/georss">showNodeGeoRssController</prop>
                 <prop key="GET /testbed/*/node/*/kml">showNodeKmlController</prop>
                 <prop key="GET /testbed/*/node/*/rdf">showNodeRdfController</prop>
-                <prop key="GET /testbed/*/node/*/semantics">showNodeSemanticsController</prop>
                 <prop key="GET /testbed/*/node/*/insert/description/*/">nodeInsertDescriptionController</prop>
 
                 <!-- Link Related Controllers -->
@@ -307,16 +306,8 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
-        <property name="semanticManager" ref="semanticManager"/>
         <property name="lastNodeReadingManager" ref="lastNodeReadingManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/rdf"/>
-    </bean>
-    <bean name="showNodeSemanticsController" class="eu.uberdust.rest.controller.NodeSemanticsController">
-        <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
-        <property name="testbedManager" ref="testbedManager"/>
-        <property name="nodeManager" ref="nodeManager"/>
-        <property name="semanticManager" ref="semanticManager"/>
-        <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/semantics"/>
     </bean>
     <!-- Show Node GeoRss Controller -->
     <bean name="showNodeGeoRssController" class="eu.uberdust.rest.controller.georss.ShowNodeGeoRssController">
