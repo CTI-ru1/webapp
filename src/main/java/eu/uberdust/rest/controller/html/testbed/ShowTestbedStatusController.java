@@ -64,11 +64,11 @@ public final class ShowTestbedStatusController extends AbstractRestController {
         this.testbedManager = testbedManager;
     }
 
-    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
-    public void setLinkCapabilityManager(LinkCapabilityController linkCapabilityManager) {
+    public void setLinkCapabilityManager(final LinkCapabilityController linkCapabilityManager) {
         this.linkCapabilityManager = linkCapabilityManager;
     }
 
@@ -98,7 +98,6 @@ public final class ShowTestbedStatusController extends AbstractRestController {
         int testbedId;
         try {
             testbedId = Integer.parseInt(command.getTestbedId());
-
         } catch (NumberFormatException nfe) {
             throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
         }
@@ -109,12 +108,19 @@ public final class ShowTestbedStatusController extends AbstractRestController {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
+        LOGGER.info("got testbed " + testbed);
+
+        if (nodeCapabilityManager == null) {
+            LOGGER.error("nodeCapabilityManager==null");
+        }
 
         // get a list of node last readings from testbed
         final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed);
+        LOGGER.info("got nodeCapabilities");
 
         // get a list of link statistics from testbed
         final List<LinkCapability> linkCapabilities = linkCapabilityManager.list(testbed);
+        LOGGER.info("got linkCapabilities");
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
@@ -123,6 +129,7 @@ public final class ShowTestbedStatusController extends AbstractRestController {
         refData.put("lastLinkReadings", linkCapabilities);
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+        LOGGER.info("prepared map");
 
         return new ModelAndView("testbed/status.html", refData);
     }

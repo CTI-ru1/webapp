@@ -163,15 +163,16 @@ public final class CapabilityTabDelimitedController extends AbstractRestControll
             } else {
                 // get lastest link readings
                 for (LastLinkReading llr : lastLinkReadings) {
-                    textOutput.write("[" + llr.getLinkCapability().getLink().getSource() + " -> " + llr.getLinkCapability().getLink().getTarget() + "]\t"
-                            + llr.getTimestamp().getTime() + "\t" + llr.getReading() + "\n");
+                    textOutput.write("[" + llr.getLinkCapability().getLink().getSource() + " -> "
+                            + llr.getLinkCapability().getLink().getTarget() + "]\t" + llr.getTimestamp().getTime()
+                            + "\t" + llr.getReading() + "\t" + llr.getStringReading() + "\n");
                 }
             }
         } else {
             // get lastest node readings
             for (LastNodeReading lnr : lastNodeReadings) {
                 textOutput.write(lnr.getNodeCapability().getNode().getId() + "\t" + lnr.getTimestamp().getTime()
-                        + "\t" + lnr.getReading() + "\n");
+                        + "\t" + lnr.getReading() + "\t" + lnr.getStringReading() + "\n");
             }
         }
 

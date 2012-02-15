@@ -168,7 +168,7 @@
           class="eu.wisebed.wisedb.controller.NodeCapabilityController"
           parent="abstractManager"
           factory-method="getInstance"/>
-    <!-- nodeCapabilityManager using the above transaction management proxy -->
+    <!-- linkCapabilityManager using the above transaction management proxy -->
     <bean id="linkCapabilityManager" parent="proxyTemplate">
         <property name="target" ref="linkCapabilityManagerTarget"/>
     </bean>
