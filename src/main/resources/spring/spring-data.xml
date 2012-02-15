@@ -41,8 +41,6 @@
                 <value>eu/wisebed/wisedb/model/LastNodeReading.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/LastLinkReading.hbm.xml</value>
 
-                <!--<value>eu/wisebed/wisedb/model/Slse.hbm.xml</value>-->
-                <!--<value>eu/wisebed/wisedb/model/Semantic.hbm.xml</value>-->
             </list>
         </property>
         <!-- Also set of hibernate properties -->
@@ -196,15 +194,6 @@
           class="eu.wisebed.wisedb.controller.CapabilityController"
           parent="abstractManager"
           factory-method="getInstance"/>
-
-    <bean id="semanticManager" parent="proxyTemplate">
-        <property name="target" ref="semanticManagerTarget"/>
-    </bean>
-    <bean id="semanticManagerTarget"
-          class="eu.wisebed.wisedb.controller.SemanticController"
-          parent="abstractManager"
-          factory-method="getInstance"/>
-
 
     <!-- nodeReadingManager using the above transaction management proxy -->
     <bean id="nodeReadingManager" parent="proxyTemplate">
