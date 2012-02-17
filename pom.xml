@@ -18,7 +18,6 @@
         <junit.version>4.8.1</junit.version>
         <hsqldb.version>2.0.0</hsqldb.version>
         <mysql.connector.version>5.1.10</mysql.connector.version>
-        <hibernate.version>3.5.6-Final</hibernate.version>
     </properties>
 
     <repositories>
@@ -99,14 +98,13 @@
             <name>Caucho</name>
             <url>http://caucho.com/m2-snapshot</url>
         </pluginRepository>
-
     </pluginRepositories>
 
     <dependencies>
         <dependency>
-            <groupId>ichatz</groupId>
-            <artifactId>wiseml</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <groupId>uberdust</groupId>
+            <artifactId>wisedb</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>uberdust</groupId>
@@ -232,12 +230,12 @@
         <dependency>
             <groupId>rome</groupId>
             <artifactId>rome</artifactId>
-            <version>1.0RC2</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.sun.georss-rome</groupId>
+            <groupId>org.geonames</groupId>
             <artifactId>georss-rome</artifactId>
-            <version>0.9.7</version>
+            <version>0.9.8</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -307,40 +305,40 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <phase>deploy</phase>
-                        <configuration>
-                            <target>
-                                <scp file="${project.build.directory}/${project.groupId}.war"
-                                     todir="uberdust@carrot.cti.gr:~/webapps/"
-                                     keyfile="${user.home}/.ssh/id_rsa"
-                                     trust="true" verbose="true" port="22"
-                                     passphrase=""/>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.ant</groupId>
-                        <artifactId>ant-jsch</artifactId>
-                        <version>1.7.1</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>com.jcraft</groupId>
-                        <artifactId>jsch</artifactId>
-                        <version>0.1.38</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-antrun-plugin</artifactId>-->
+            <!--<version>1.6</version>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<phase>deploy</phase>-->
+            <!--<configuration>-->
+            <!--<target>-->
+            <!--<scp file="${project.build.directory}/${project.groupId}.war"-->
+            <!--todir="uberdust@carrot.cti.gr:~/webapps/"-->
+            <!--keyfile="${user.home}/.ssh/id_rsa"-->
+            <!--trust="true" verbose="true" port="22"-->
+            <!--passphrase=""/>-->
+            <!--</target>-->
+            <!--</configuration>-->
+            <!--<goals>-->
+            <!--<goal>run</goal>-->
+            <!--</goals>-->
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--<dependencies>-->
+            <!--<dependency>-->
+            <!--<groupId>org.apache.ant</groupId>-->
+            <!--<artifactId>ant-jsch</artifactId>-->
+            <!--<version>1.7.1</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+            <!--<groupId>com.jcraft</groupId>-->
+            <!--<artifactId>jsch</artifactId>-->
+            <!--<version>0.1.38</version>-->
+            <!--</dependency>-->
+            <!--</dependencies>-->
+            <!--</plugin>-->
 
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
@@ -434,7 +432,17 @@
                     <encoding>utf-8</encoding>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>com.caucho</groupId>
+                <artifactId>resin-maven-plugin</artifactId>
+                <version>4.0-SNAPSHOT</version>
+                <configuration>
+                    <server>gold.cti.gr</server>
+                    <port>8081</port>
+                    <user>uberdeploy</user>
+                    <password>${RESIN_PASS}</password>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

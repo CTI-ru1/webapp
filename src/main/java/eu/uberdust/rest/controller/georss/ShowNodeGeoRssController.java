@@ -139,7 +139,7 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
         // set up feed and entries
         response.setContentType("application/xml; charset=UTF-8");
 
-        final String feed = NodeController.getInstance().getGeooRssFeed(node, request.getRequestURL().toString(), syndEntryLink);
+        final String feed = nodeManager.getGeooRssFeed(node, request.getRequestURL().toString(), syndEntryLink);
 
         final Writer textOutput = (response.getWriter());
         response.getWriter().append(feed);
