@@ -106,7 +106,7 @@ public final class ListCapabilitiesJSONController extends AbstractRestController
         }
 
         // get testbed's capabilities
-        final List<Capability> capabilities = capabilityManager.list(testbed);
+        final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
 
         // json list
         final List<CapabilityJson> capabilityJsons = new ArrayList<CapabilityJson>();

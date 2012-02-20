@@ -104,7 +104,7 @@ public final class ListLinksJSONController extends AbstractRestController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        final List<Link> links = linkManager.list(testbed);
+        final List<Link> links = linkManager.list(testbed.getSetup());
         final List<LinkJson> linkJsons = new ArrayList<LinkJson>();
 
         // iterate over testbeds

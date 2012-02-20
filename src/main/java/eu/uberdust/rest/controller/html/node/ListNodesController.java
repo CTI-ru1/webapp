@@ -99,7 +99,7 @@ public final class ListNodesController extends AbstractRestController {
         }
 
         // get testbed's nodes
-        final List<String> nodes = nodeManager.listNames(testbed);
+        final List<String> nodes = nodeManager.listNames(testbed.getSetup());
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();

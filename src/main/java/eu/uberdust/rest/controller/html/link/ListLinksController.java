@@ -100,7 +100,7 @@ public final class ListLinksController extends AbstractRestController {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
-        final List<Link> links = linkManager.list(testbed);
+        final List<Link> links = linkManager.list(testbed.getSetup());
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();

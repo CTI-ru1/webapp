@@ -101,7 +101,7 @@ public final class ListLinksController extends AbstractRestController {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
-        final List<Link> links = linkManager.list(testbed);
+        final List<Link> links = linkManager.list(testbed.getSetup());
 
         // write on the HTTP response
         response.setContentType("text/plain");

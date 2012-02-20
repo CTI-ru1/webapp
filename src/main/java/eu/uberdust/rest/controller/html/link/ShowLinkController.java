@@ -36,6 +36,12 @@ public final class ShowLinkController extends AbstractRestController {
      */
     private transient TestbedController testbedManager;
 
+    private transient LinkCapabilityController linkCapabilityManager;
+
+    public void setLinkCapabilityManager(final LinkCapabilityController linkCapabilityManager) {
+        this.linkCapabilityManager = linkCapabilityManager;
+    }
+
     /**
      * Logger.
      */
@@ -113,10 +119,10 @@ public final class ShowLinkController extends AbstractRestController {
 
         // if at least link or linkInv was found
         if (link != null) {
-            linkCapabilityMap.put(link, LinkCapabilityController.getInstance().list(link));
+            linkCapabilityMap.put(link, linkCapabilityManager.list(link));
         }
         if (linkInv != null) {
-            linkCapabilityMap.put(linkInv, LinkCapabilityController.getInstance().list(link));
+            linkCapabilityMap.put(linkInv, linkCapabilityManager.list(link));
         }
 
         // Prepare data to pass to jsp

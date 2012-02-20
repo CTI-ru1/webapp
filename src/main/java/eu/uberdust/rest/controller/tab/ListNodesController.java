@@ -98,7 +98,7 @@ public final class ListNodesController extends AbstractRestController {
         }
 
         // get testbed's nodes
-        final List<String> nodes = nodeManager.listNames(testbed);
+        final List<String> nodes = nodeManager.listNames(testbed.getSetup());
 
         // write on the HTTP response
         response.setContentType("text/plain");

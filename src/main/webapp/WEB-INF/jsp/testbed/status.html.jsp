@@ -56,31 +56,31 @@
                                     <c:when test="${util:checkIfDateIsToday(lnr.lastNodeReading.timestamp)}">
                                         <td>${lnr.lastNodeReading.timestamp}</td>
                                        <c:if test="${lnr.lastNodeReading.reading != null}">
-                                           <td>${lnr.lastNodeReading.reading}</td>
+                                           <td class="reading">${lnr.lastNodeReading.reading}</td>
                                        </c:if>
                                        <c:if test="${lnr.lastNodeReading.reading == null}">
-                                           <td></td>
+                                           <td class="reading"></td>
                                        </c:if>
                                        <c:if test="${lnr.lastNodeReading.stringReading != null}">
-                                            <td>${lnr.lastNodeReading.stringReading}</td>
+                                            <td class="reading">${lnr.lastNodeReading.stringReading}</td>
                                         </c:if>
                                         <c:if test="${lnr.lastNodeReading.stringReading == null}">
-                                            <td></td>
+                                            <td class="reading"></td>
                                        </c:if>
                                     </c:when>
                                     <c:otherwise>
                                         <td style="color :red">${lnr.lastNodeReading.timestamp}</td>
                                         <c:if test="${lnr.lastNodeReading.reading != null}">
-                                           <td style="color :red">${lnr.lastNodeReading.reading}</td>
+                                           <td class="reading" style="color :red">${lnr.lastNodeReading.reading}</td>
                                         </c:if>
                                         <c:if test="${lnr.lastNodeReading.reading == null}">
-                                           <td style="color :red"></td>
+                                           <td class="reading" style="color :red"></td>
                                         </c:if>
                                         <c:if test="${lnr.lastNodeReading.stringReading != null}">
-                                            <td style="color :red">${lnr.lastNodeReading.stringReading}</td>
+                                            <td class="reading" style="color :red">${lnr.lastNodeReading.stringReading}</td>
                                         </c:if>
                                         <c:if test="${lnr.lastNodeReading.stringReading == null}">
-                                            <td style="color :red"></td>
+                                            <td class="reading" style="color :red"></td>
                                        </c:if>
                                     </c:otherwise>
                                 </c:choose>

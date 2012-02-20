@@ -372,6 +372,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
         <property name="commandClass" value="eu.uberdust.command.LinkCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkManager" ref="linkManager"/>
+        <property name="linkCapabilityManager" ref="linkCapabilityManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/link/{sourceId}/{targetId}"/>
         <property name="viewNameSelector">
             <bean class="org.springframework.web.servlet.RestViewNameSelector">

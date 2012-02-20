@@ -102,7 +102,7 @@ public final class ListCapabilitiesController extends AbstractRestController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
         // get testbed's capabilities
-        final List<Capability> capabilities = capabilityManager.list(testbed);
+        final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();

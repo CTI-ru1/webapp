@@ -115,11 +115,11 @@ public final class ShowTestbedStatusController extends AbstractRestController {
         }
 
         // get a list of node last readings from testbed
-        final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed);
+        final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
         LOGGER.info("got nodeCapabilities");
 
         // get a list of link statistics from testbed
-        final List<LinkCapability> linkCapabilities = linkCapabilityManager.list(testbed);
+        final List<LinkCapability> linkCapabilities = linkCapabilityManager.list(testbed.getSetup());
         LOGGER.info("got linkCapabilities");
 
         // Prepare data to pass to jsp

@@ -118,7 +118,7 @@ public final class ShowTestbedRoomsController extends AbstractRestController {
 
 
         // get a list of node last readings from testbed
-        List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed, capability);
+        List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup(), capability);
 
         final Map<String, Integer> uniqueRooms = new HashMap<String, Integer>();
 

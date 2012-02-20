@@ -144,8 +144,8 @@ public final class ShowCapabilityController extends AbstractRestController {
         }
 
         // get testbed nodes only
-        final List<Node> nodes = nodeManager.list(testbed, capability);
-        final List<Link> links = linkManager.list(testbed, capability);
+        final List<Node> nodes = nodeManager.list(testbed.getSetup(), capability);
+        final List<Link> links = linkManager.list(testbed.getSetup(), capability);
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();

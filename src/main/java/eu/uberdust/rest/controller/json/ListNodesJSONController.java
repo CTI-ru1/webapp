@@ -103,7 +103,7 @@ public final class ListNodesJSONController extends AbstractRestController {
         }
 
         // get testbed's nodes
-        final List<Node> nodes = nodeManager.list(testbed);
+        final List<Node> nodes = nodeManager.list(testbed.getSetup());
 
         // json list
         final List<NodeJson> nodeJsons = new ArrayList<NodeJson>();

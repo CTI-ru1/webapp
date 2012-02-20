@@ -117,10 +117,10 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
         // set up feed and entries
         response.setContentType("application/xml; charset=UTF-8");
 
-        final String feed = testbedManager.getGeoRssFeed(testbed,baseUrl, request.getRequestURL().toString(), syndEntryLink);
+//        final String feed = testbedManager.getGeoRssFeed(testbed,baseUrl, request.getRequestURL().toString(), syndEntryLink);
 
         final Writer textOutput = (response.getWriter());
-        response.getWriter().append(feed);
+//        response.getWriter().append(feed);
         textOutput.flush();
         textOutput.close();
 

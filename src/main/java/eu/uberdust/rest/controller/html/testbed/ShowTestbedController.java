@@ -1,6 +1,5 @@
 package eu.uberdust.rest.controller.html.testbed;
 
-import com.googlecode.ehcache.annotations.Cacheable;
 import eu.uberdust.command.TestbedCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -146,16 +145,17 @@ public final class ShowTestbedController extends AbstractRestController {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
+
         long millis = System.currentTimeMillis();
         LOGGER.info("here @ " + (System.currentTimeMillis() - millis));
         // get testbed nodes
-        final List<String> nodes = getNodes(testbedManager.getByID(testbedId).getId());
+        final List<String> nodes = nodeManager.listNames(testbed.getSetup());
         LOGGER.info(" nodes @ " + (System.currentTimeMillis() - millis));
         // get testbed links
-        final List<Link> links = linkManager.list(testbed);
+        final List<Link> links = linkManager.list(testbed.getSetup());
         LOGGER.info(" links @ " + (System.currentTimeMillis() - millis));
         // get testbed capabilities
-        final List<Capability> capabilities = capabilityManager.list(testbed);
+        final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
         LOGGER.info(" capabilities @ " + (System.currentTimeMillis() - millis));
 
         // Prepare data to pass to jsp
@@ -182,11 +182,6 @@ public final class ShowTestbedController extends AbstractRestController {
 
 
         return new ModelAndView("testbed/show.html", refData);
-    }
-
-    @Cacheable(cacheName = "nodeListsCache")
-    private List<String> getNodes(int id) {
-        return nodeManager.listNames(id);
     }
 
 

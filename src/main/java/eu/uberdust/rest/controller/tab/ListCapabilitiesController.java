@@ -103,7 +103,7 @@ public final class ListCapabilitiesController extends AbstractRestController {
         }
 
         // get testbed's capabilities
-        final List<Capability> capabilities = capabilityManager.list(testbed);
+        final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
 
         // write on the HTTP response
         response.setContentType("text/plain");
