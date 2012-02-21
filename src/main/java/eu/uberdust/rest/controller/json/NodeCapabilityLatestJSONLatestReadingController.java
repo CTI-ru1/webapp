@@ -163,7 +163,7 @@ public final class NodeCapabilityLatestJSONLatestReadingController extends Abstr
         final ReadingJson readingJson = new ReadingJson(lnr.getTimestamp().getTime(), lnr.getReading());
         final List<ReadingJson> readingJsons = new ArrayList<ReadingJson>();
         readingJsons.add(readingJson);
-        final NodeReadingJson nodeReadingInJson = new NodeReadingJson(lnr.getNodeCapability().getNode().getId(),
+        final NodeReadingJson nodeReadingInJson = new NodeReadingJson(lnr.getNodeCapability().getNode().getName(),
                 lnr.getNodeCapability().getCapability().getName(), readingJsons);
 
         // write on the HTTP response

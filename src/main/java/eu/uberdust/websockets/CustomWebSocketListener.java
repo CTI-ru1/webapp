@@ -108,10 +108,10 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
     @Override
     public void update(final NodeReading lastReading) {
         LOGGER.info("Update");
-        if (lastReading.getCapability().getNode().getId().contains("1ccd")) {
+        if (lastReading.getCapability().getNode().getName().contains("1ccd")) {
             UberLogger.getInstance().log(lastReading.getTimestamp().getTime(), "T51");
         }
-        if (lastReading.getCapability().getNode().getId().equals(nodeID) &&
+        if (lastReading.getCapability().getNode().getName().equals(nodeID) &&
                 lastReading.getCapability().getCapability().getName().equals(capabilityID)) {
             final String response = new StringBuilder().append(lastReading.getTimestamp().getTime()).append("\t").append(lastReading.getReading()).toString();
             LOGGER.info(response);
@@ -125,7 +125,7 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
                 }
             }
         }
-        if (lastReading.getCapability().getNode().getId().contains("1ccd")) {
+        if (lastReading.getCapability().getNode().getName().contains("1ccd")) {
             UberLogger.getInstance().log(lastReading.getTimestamp().getTime(), "T52");
         }
     }

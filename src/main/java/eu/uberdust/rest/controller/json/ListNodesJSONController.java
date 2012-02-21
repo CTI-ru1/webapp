@@ -111,7 +111,7 @@ public final class ListNodesJSONController extends AbstractRestController {
 
         // iterate over testbeds
         for (Node node : nodes) {
-            NodeJson nodeJson = new NodeJson(node.getId());
+            NodeJson nodeJson = new NodeJson(node.getName());
             nodeJsons.add(nodeJson);
         }
 

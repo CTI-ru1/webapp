@@ -109,7 +109,7 @@ public final class ListLinksJSONController extends AbstractRestController {
 
         // iterate over testbeds
         for (Link link : links) {
-            LinkJson linkJson = new LinkJson(link.getSource(),link.getTarget());
+            LinkJson linkJson = new LinkJson(link.getSource().getName(),link.getTarget().getName());
             linkJsons.add(linkJson);
         }
 

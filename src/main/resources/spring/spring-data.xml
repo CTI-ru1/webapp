@@ -2,17 +2,12 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
-       xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-            http://www.springframework.org/schema/aop
-            http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
             http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
-            http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd
-            http://www.directwebremoting.org/schema/spring-dwr
-            http://directwebremoting.org/schema/spring-dwr-2.0.xsd">
+            http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
+
     <!-- Data Source setup -->
     <bean id="dataSource"
           class="org.apache.commons.dbcp.BasicDataSource">
@@ -27,26 +22,47 @@
 
     <!-- Session Factory setup with hbm mappings in place -->
     <bean id="sessionFactory"
-          class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
 
-        <!--</property>-->
-        <property name="mappingResources">
-            <list>
-                <value>eu/wisebed/wisedb/model/Testbed.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/Setup.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/Node.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/Link.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/Capability.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/NodeCapability.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/LinkCapability.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/LinkReading.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/NodeReading.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/LastNodeReading.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/LastLinkReading.hbm.xml</value>
+        <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
 
+        <property name="annotatedClasses">
+            <list>
+                <value>eu.wisebed.wisedb.model.Testbed</value>
+                <value>eu.wisebed.wisedb.model.Setup</value>
+                <value>eu.wisebed.wisedb.model.Capability</value>
+                <value>eu.wisebed.wisedb.model.Node</value>
+                <value>eu.wisebed.wisedb.model.Link</value>
+                <value>eu.wisebed.wisedb.model.NodeCapability</value>
+                <value>eu.wisebed.wisedb.model.LinkCapability</value>
+                <value>eu.wisebed.wisedb.model.NodeReading</value>
+                <value>eu.wisebed.wisedb.model.LinkReading</value>
+                <value>eu.wisebed.wisedb.model.LastNodeReading</value>
+                <value>eu.wisebed.wisedb.model.LastLinkReading</value>
             </list>
+
+
         </property>
+
+
+        <!--</property>-->
+        <!--<property name="mappingResources">-->
+        <!--<list>-->
+        <!--<value>eu/wisebed/wisedb/model/Testbed.hbm.xml</value>-->
+        <!--<value>eu/wisebed/wisedb/model/Setup.hbm.xml</value>-->
+        <!--<value>eu/wisebed/wisedb/model/Node.hbm.xml</value>-->
+        <!--<value>eu/wisebed/wisedb/model/Link.hbm.xml</value>-->
+        <!--<value>eu/wisebed/wisedb/model/Capability.hbm.xml</value>-->
+        <!--<value>eu/wisebed/wisedb/model/NodeCapability.hbm.xml</value>-->
+        <!--<value>eu/wisebed/wisedb/model/LinkCapability.hbm.xml</value>-->
+        <!--<value>eu/wisebed/wisedb/model/LinkReading.hbm.xml</value>-->
+        <!--<value>eu/wisebed/wisedb/model/NodeReading.hbm.xml</value>-->
+        <!--<value>eu/wisebed/wisedb/model/LastNodeReading.hbm.xml</value>-->
+        <!--<value>eu/wisebed/wisedb/model/LastLinkReading.hbm.xml</value>-->
+
+        <!--</list>-->
+        <!--</property>-->
         <!-- Also set of hibernate properties -->
         <property name="hibernateProperties">
             <props>
@@ -139,8 +155,9 @@
     </bean>
     <bean id="testbedManagerTarget"
           class="eu.wisebed.wisedb.controller.TestbedControllerImpl"
-          parent="abstractManager"
-          factory-method="getInstance"/>
+          factory-method="getInstance">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
     <!-- setupManager using the above transaction management proxy -->
     <bean id="setupManager" parent="proxyTemplate">
@@ -234,6 +251,5 @@
     <bean id="lastNodeReadingConsumer"
           class="eu.wisebed.wisedb.listeners.LastNodeReadingConsumer"
           factory-method="getInstance"/>
-
 
 </beans>

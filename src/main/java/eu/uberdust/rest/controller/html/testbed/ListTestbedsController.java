@@ -62,8 +62,12 @@ public final class ListTestbedsController extends AbstractRestController {
 
         // testbed list
         final List<Testbed> testbeds = testbedManager.list();
+
+        LOGGER.info(testbeds.size());
         final Map<String, Long> nodesCount = testbedManager.countNodes();
+        LOGGER.info(nodesCount.size());
         final Map<String, Long> linksCount = testbedManager.countLinks();
+        LOGGER.info(linksCount.size());
 
 
         // Prepare data to pass to jsp
