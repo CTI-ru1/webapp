@@ -13,6 +13,8 @@
     <bean id="Link" class="eu.wisebed.wisedb.model.Link"/>
     <bean id="NodeReading" class="eu.wisebed.wisedb.model.NodeReading"/>
     <bean id="LinkReading" class="eu.wisebed.wisedb.model.LinkReading"/>
+    <bean id="NodeCapability" class="eu.wisebed.wisedb.model.NodeCapability"/>
+    <bean id="LinkCapability" class="eu.wisebed.wisedb.model.LinkCapability"/>
     <bean id="Setup" class="eu.wisebed.wisedb.model.Setup"/>
     <bean id="Testbed" class="eu.wisebed.wisedb.model.Testbed"/>
     <bean id="Origin" class="eu.wisebed.wisedb.model.Origin"/>
