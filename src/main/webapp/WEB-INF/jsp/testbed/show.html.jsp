@@ -123,7 +123,7 @@
                         <c:forEach items="${nodes}" var="node">
                             <tr>
                                 <td>
-                                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node}"/>"><c:out value="${node}"/></a>
+                                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}"/>"><c:out value="${node.name}"/></a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -135,7 +135,8 @@
         <td style="vertical-align:top">
             <p>
                 <a href="<c:url value="/rest/testbed/${testbed.id}/link"/>">Links</a>
-                (<a href="<c:url value="/rest/testbed/${testbed.id}/link/raw"/>">raw</a>)
+                (<a href="<c:url value="/rest/testbed/${testbed.id}/link/raw"/>">raw</a>,
+                <a href="<c:url value="/rest/testbed/${testbed.id}/link/json"/>">json</a>)
             </p>
             <c:choose>
                 <c:when test="${links == null || fn:length(links) == 0 }">
@@ -146,7 +147,7 @@
                         <c:forEach items="${links}" var="link">
                             <tr>
                                 <td>
-                                    <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source}/${link.target}"/>"><c:out value="${link.source},${link.target}"/></a>
+                                    <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>"><c:out value="${link.source.name},${link.target.name}"/></a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -158,7 +159,8 @@
         <td style="vertical-align:top">
             <p>
                 <a href="<c:url value="/rest/testbed/${testbed.id}/capability"/>">Capabilities</a>
-                (<a href="<c:url value="/rest/testbed/${testbed.id}/capability/raw"/>">raw</a>)
+                (<a href="<c:url value="/rest/testbed/${testbed.id}/capability/raw"/>">raw</a>,
+                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/json"/>">json</a>)
             </p>
             <c:choose>
                 <c:when test="${capabilities == null || fn:length(capabilities) == 0 }">

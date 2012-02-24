@@ -1,14 +1,14 @@
 package eu.uberdust.rest.controller.json;
 
-import com.google.gson.Gson;
 import eu.uberdust.command.NodeCommand;
+import eu.uberdust.formatter.JsonFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.uberdust.util.NodeJson;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,15 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Controller class that returns a list of links for a given testbed in JSON format.
  */
-public final class ListNodesJSONController extends AbstractRestController {
+public final class ListNodesController extends AbstractRestController {
 
-     /**
+    /**
      * Testbed persistence manager.
      */
     private transient TestbedController testbedManager;
@@ -39,12 +38,12 @@ public final class ListNodesJSONController extends AbstractRestController {
     /**
      * Logger persistence manager.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListNodesJSONController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListNodesController.class);
 
     /**
      * Constructor.
      */
-    public ListNodesJSONController() {
+    public ListNodesController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -77,8 +76,10 @@ public final class ListNodesJSONController extends AbstractRestController {
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException an InvalidTestbedIdException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  an TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                     an InvalidTestbedIdException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                     an TestbedNotFoundException exception.
      * @throws IOException IO exception.
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
@@ -105,28 +106,16 @@ public final class ListNodesJSONController extends AbstractRestController {
         // get testbed's nodes
         final List<Node> nodes = nodeManager.list(testbed.getSetup());
 
-        // json list
-        final List<NodeJson> nodeJsons = new ArrayList<NodeJson>();
-
-
-        // iterate over testbeds
-        for (Node node : nodes) {
-            NodeJson nodeJson = new NodeJson(node.getName());
-            nodeJsons.add(nodeJson);
-        }
-
         // write on the HTTP response
         response.setContentType("text/json");
-        final Writer jsonOutput = (response.getWriter());
-
-        // init GSON
-        final Gson gson = new Gson();
-        gson.toJson(nodeJsons, nodeJsons.getClass(), jsonOutput);
-
-        jsonOutput.flush();
-        jsonOutput.close();
-
-
+        final Writer textOutput = (response.getWriter());
+        try {
+            textOutput.append(JsonFormatter.getInstance().formatNodes(nodes));
+        } catch (NotImplementedException e) {
+            textOutput.append("not implemented exception");
+        }
+        textOutput.flush();
+        textOutput.close();
         return null;
     }
 }

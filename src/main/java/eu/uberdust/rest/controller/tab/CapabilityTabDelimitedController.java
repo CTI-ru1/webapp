@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.tab;
 
 import eu.uberdust.command.CapabilityCommand;
+import eu.uberdust.formatter.TextFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -149,32 +151,18 @@ public final class CapabilityTabDelimitedController extends AbstractRestControll
         // write on the HTTP response
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
-
-        // get latest node readings
-        final List<LastNodeReading> lastNodeReadings = lastNodeReadingManager.getByCapability(testbed.getSetup(), capability);
-        if (lastNodeReadings == null || lastNodeReadings.isEmpty()) {
-            // if not last node readings are found for this capability and testbed check for last link readings
+        try {
+            final List<LastNodeReading> lastNodeReadings = lastNodeReadingManager.getByCapability(testbed.getSetup(), capability);
             final List<LastLinkReading> lastLinkReadings = lastLinkReadingManager.getByCapability(testbed.getSetup(), capability);
-            if (lastLinkReadings == null || lastLinkReadings.isEmpty()) {
-                // if not found return nothing
-                textOutput.flush();
-                textOutput.close();
-                return null;
-            } else {
-                // get lastest link readings
-                for (LastLinkReading llr : lastLinkReadings) {
-                    textOutput.write("[" + llr.getLinkCapability().getLink().getSource() + " -> "
-                            + llr.getLinkCapability().getLink().getTarget() + "]\t" + llr.getTimestamp().getTime()
-                            + "\t" + llr.getReading() + "\t" + llr.getStringReading() + "\n");
-                }
+            try {
+                textOutput.append(TextFormatter.getInstance().formatLastReadings(lastNodeReadings, lastLinkReadings));
+            } catch (NotImplementedException e) {
+                textOutput.append("not implemented exception");
             }
-        } else {
-            // get lastest node readings
-            for (LastNodeReading lnr : lastNodeReadings) {
-                textOutput.write(lnr.getNodeCapability().getNode().getId() + "\t" + lnr.getTimestamp().getTime()
-                        + "\t" + lnr.getReading() + "\t" + lnr.getStringReading() + "\n");
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
 
         // flush close output
         textOutput.flush();

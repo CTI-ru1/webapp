@@ -110,7 +110,7 @@ public final class ListLinksController extends AbstractRestController {
 
         // iterate over testbeds
         for (Link link : links) {
-            textOutput.write("[" + link.getSource() + "," + link.getTarget() + "]\n");
+            textOutput.write("[" + link.getSource().getName() + "," + link.getTarget().getName() + "]\n");
         }
 
         // flush close output

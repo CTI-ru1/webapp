@@ -91,7 +91,7 @@ public final class NodeInsertDescriptionController extends AbstractRestControlle
 
         // look up node
         final String nodeId = command.getNodeId();
-        Node node = nodeManager.getByID(nodeId);
+        Node node = nodeManager.getByName(nodeId);
         if (node == null) {
             // if no node is found create it and store it.
             node = new Node();

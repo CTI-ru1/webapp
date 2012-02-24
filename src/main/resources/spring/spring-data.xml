@@ -18,48 +18,26 @@
     </bean>
 
     <!-- Session Factory setup with hbm mappings in place -->
-    <bean id="sessionFactory" class="eu.uberdust.rest.controller.AnnotationSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <!--<property name="configLocation">-->
-            <!--<value>/WEB-INF/hibernate.cfg.xml</value>-->
-        <!--</property>-->
-        <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
-
-        <!--<property name="packagesToScan" value="eu.wisebed.wisedb.model"/>-->
-        <property name="annotatedClasses">
-            <list>
-                <value>eu.wisebed.wisedb.model.Testbed</value>
-                <value>eu.wisebed.wisedb.model.Setup</value>
-                <value>eu.wisebed.wisedb.model.Capability</value>
-                <value>eu.wisebed.wisedb.model.Node</value>
-                <value>eu.wisebed.wisedb.model.Link</value>
-                <value>eu.wisebed.wisedb.model.NodeCapability</value>
-                <value>eu.wisebed.wisedb.model.LinkCapability</value>
-                <value>eu.wisebed.wisedb.model.NodeReading</value>
-                <value>eu.wisebed.wisedb.model.LinkReading</value>
-                <value>eu.wisebed.wisedb.model.LastNodeReading</value>
-                <value>eu.wisebed.wisedb.model.LastLinkReading</value>
-            </list>
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
         </property>
 
-
-        <!--</property>-->
-        <!--<property name="mappingResources">-->
-        <!--<list>-->
-        <!--<value>eu/wisebed/wisedb/model/Testbed.hbm.xml</value>-->
-        <!--<value>eu/wisebed/wisedb/model/Setup.hbm.xml</value>-->
-        <!--<value>eu/wisebed/wisedb/model/Node.hbm.xml</value>-->
-        <!--<value>eu/wisebed/wisedb/model/Link.hbm.xml</value>-->
-        <!--<value>eu/wisebed/wisedb/model/Capability.hbm.xml</value>-->
-        <!--<value>eu/wisebed/wisedb/model/NodeCapability.hbm.xml</value>-->
-        <!--<value>eu/wisebed/wisedb/model/LinkCapability.hbm.xml</value>-->
-        <!--<value>eu/wisebed/wisedb/model/LinkReading.hbm.xml</value>-->
-        <!--<value>eu/wisebed/wisedb/model/NodeReading.hbm.xml</value>-->
-        <!--<value>eu/wisebed/wisedb/model/LastNodeReading.hbm.xml</value>-->
-        <!--<value>eu/wisebed/wisedb/model/LastLinkReading.hbm.xml</value>-->
-
-        <!--</list>-->
-        <!--</property>-->
+        <property name="mappingResources">
+            <list>
+                <value>eu/wisebed/wisedb/model/Testbed.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/Setup.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/Node.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/Link.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/Capability.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/NodeCapability.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/LinkCapability.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/LinkReading.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/NodeReading.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/LastNodeReading.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/LastLinkReading.hbm.xml</value>
+            </list>
+        </property>
         <!-- Also set of hibernate properties -->
         <property name="hibernateProperties">
             <props>
@@ -92,6 +70,22 @@
                 <prop key="format_sql">false</prop>
             </props>
         </property>
+
+        <!--<property name="annotatedClasses">-->
+        <!--<list>-->
+        <!--<value>eu.wisebed.wisedb.model.Testbed</value>-->
+        <!--<value>eu.wisebed.wisedb.model.Setup</value>-->
+        <!--<value>eu.wisebed.wisedb.model.Capability</value>-->
+        <!--<value>eu.wisebed.wisedb.model.Node</value>-->
+        <!--<value>eu.wisebed.wisedb.model.Link</value>-->
+        <!--<value>eu.wisebed.wisedb.model.NodeCapability</value>-->
+        <!--<value>eu.wisebed.wisedb.model.LinkCapability</value>-->
+        <!--<value>eu.wisebed.wisedb.model.NodeReading</value>-->
+        <!--<value>eu.wisebed.wisedb.model.LinkReading</value>-->
+        <!--<value>eu.wisebed.wisedb.model.LastNodeReading</value>-->
+        <!--<value>eu.wisebed.wisedb.model.LastLinkReading</value>-->
+        <!--</list>-->
+        <!--</property>-->
 
         <property name="eventListeners">
             <map>

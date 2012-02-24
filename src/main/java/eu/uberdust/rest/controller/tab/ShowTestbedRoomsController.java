@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.tab;
 
 import eu.uberdust.command.TestbedCommand;
+import eu.uberdust.formatter.TextFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
@@ -18,9 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Controller class that returns the status page for the nodes and links of a testbed.
@@ -94,45 +94,42 @@ public final class ShowTestbedRoomsController extends AbstractRestController {
         LOGGER.info("Remote address: " + request.getRemoteAddr());
         LOGGER.info("Remote host: " + request.getRemoteHost());
         try {
-        // set command object
-        final TestbedCommand command = (TestbedCommand) commandObj;
+            // set command object
+            final TestbedCommand command = (TestbedCommand) commandObj;
 
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
+            // a specific testbed is requested by testbed Id
+            int testbedId;
+            try {
+                testbedId = Integer.parseInt(command.getTestbedId());
 
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-        }
-
-
-        // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
-        if (testbed == null) {
-            // if no testbed is found throw exception
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
-        }
-
-        final Capability capability = capabilityManager.getByID("room");
+            } catch (NumberFormatException nfe) {
+                throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
+            }
 
 
-        // get a list of node last readings from testbed
-        List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup(), capability);
+            // look up testbed
+            final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
+            if (testbed == null) {
+                // if no testbed is found throw exception
+                throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+            }
 
-        final Map<String, Integer> uniqueRooms = new HashMap<String, Integer>();
+            final Capability capability = capabilityManager.getByID("room");
 
-        for (final NodeCapability nodeCapability : nodeCapabilities) {
-            uniqueRooms.put(nodeCapability.getLastNodeReading().getStringReading(), 1);
-        }
+
+            // get a list of node last readings from testbed
+            List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup(), capability);
+
 
             // write on the HTTP response
             response.setContentType("text/plain");
             final Writer textOutput = (response.getWriter());
-            for (String room : uniqueRooms.keySet()) {
-
-                textOutput.write(room + "\n");
+            try {
+                textOutput.append(TextFormatter.getInstance().formatUniqueLastNodeReadings(nodeCapabilities));
+            } catch (NotImplementedException e) {
+                textOutput.append("not implemented exception");
             }
+
             textOutput.flush();
             textOutput.close();
         } catch (IOException e) {

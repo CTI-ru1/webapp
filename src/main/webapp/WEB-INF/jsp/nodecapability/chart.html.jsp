@@ -24,7 +24,7 @@
         function requestData() {
             $.ajax({
                 url: 'http://${pageContext.request.serverName}:${pageContext.request.serverPort}'
-                    .concat('<c:url value="/rest/testbed/${testbed.id}/node/${node.id}/capability/${capability.name}/json"/>')
+                    .concat('<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.name}/json"/>')
                     <c:if test="${requestScope.limit != null}">.concat('/limit/<c:out value="${requestScope.limit}"/>')</c:if>,
                 success: function(json, textStatus, xhr) {
                     var readings = json['readings'];
@@ -57,7 +57,7 @@
                     text: 'Readings Chart Testbed : '
                             .concat('<c:out value="${testbed.name}"/>')
                             .concat(' Node : ')
-                            .concat('<c:out value="${node.id}"/>')
+                            .concat('<c:out value="${node.name}"/>')
                             .concat(' Capability : ')
                             .concat('<c:out value="${capability.name}"/>')
                 },
@@ -95,7 +95,7 @@
         });
     </script>
 
-    <title>ÜberDust - Readings Chart Testbed: <c:out value="${testbed.name}"/> <c:out value="${node.id}"/> , Capability
+    <title>ÜberDust - Readings Chart Testbed: <c:out value="${testbed.name}"/> <c:out value="${node.name}"/> , Capability
         : <c:out value="${capability.name}"/></title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
 </head>

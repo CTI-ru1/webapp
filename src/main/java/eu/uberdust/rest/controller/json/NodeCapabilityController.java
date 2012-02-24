@@ -1,7 +1,8 @@
 package eu.uberdust.rest.controller.json;
 
-import com.google.gson.Gson;
 import eu.uberdust.command.NodeCapabilityCommand;
+import eu.uberdust.formatter.JsonFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
 import eu.uberdust.rest.exception.InvalidCapabilityNameException;
 import eu.uberdust.rest.exception.InvalidLimitException;
@@ -9,8 +10,6 @@ import eu.uberdust.rest.exception.InvalidNodeIdException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.uberdust.util.NodeReadingJson;
-import eu.uberdust.util.ReadingJson;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.NodeReadingController;
@@ -28,13 +27,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Controller class for returning a list of readings for a node/capability pair in JSON format.
  */
-public final class NodeCapabilityJSONController extends AbstractRestController {
+public final class NodeCapabilityController extends AbstractRestController {
 
     /**
      * NodeController persistence manager.
@@ -60,12 +58,12 @@ public final class NodeCapabilityJSONController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityJSONController.class);
+    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityController.class);
 
     /**
      * Constructor.
      */
-    public NodeCapabilityJSONController() {
+    public NodeCapabilityController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -164,7 +162,7 @@ public final class NodeCapabilityJSONController extends AbstractRestController {
 
         // retrieve node
         final String nodeId = command.getNodeId();
-        final Node node = nodeManager.getByID(nodeId);
+        final Node node = nodeManager.getByName(nodeId);
         if (node == null) {
             throw new NodeNotFoundException("Cannot find node [" + command.getNodeId() + "]");
         }
@@ -191,24 +189,16 @@ public final class NodeCapabilityJSONController extends AbstractRestController {
             nodeReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
         }
 
-        // convert results to JSON format
-        final List<ReadingJson> readingJsons = new ArrayList<ReadingJson>();
-        for (NodeReading nodeReading : nodeReadings) {
-            readingJsons.add(new ReadingJson(nodeReading.getTimestamp().getTime(), nodeReading.getReading()));
-        }
-        final NodeReadingJson nodeReadingInJson = new NodeReadingJson(nodeId, capabilityId, readingJsons);
-
         // write on the HTTP response
         response.setContentType("text/json");
-        final Writer jsonOutput = (response.getWriter());
-
-        // init GSON
-        final Gson gson = new Gson();
-        gson.toJson(nodeReadingInJson, nodeReadingInJson.getClass(), jsonOutput);
-
-        jsonOutput.flush();
-        jsonOutput.close();
-
+        final Writer textOutput = (response.getWriter());
+        try {
+            textOutput.append(JsonFormatter.getInstance().formatNodeReadings(nodeReadings));
+        } catch (NotImplementedException e) {
+            textOutput.append("not implemented exception");
+        }
+        textOutput.flush();
+        textOutput.close();
         return null;
     }
 }

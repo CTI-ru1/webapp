@@ -14,8 +14,8 @@
     <META NAME="Description" CONTENT="ÜberDust"/>
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>ÜberDust - Show Link <c:forEach items="${links}" var="link">[<c:out value="${link.source}"/>,<c:out
-            value="${link.target}"/>]</c:forEach></title>
+    <title>ÜberDust - Show Link <c:forEach items="${links}" var="link">[<c:out value="${link.source.name}"/>,<c:out
+            value="${link.target.name}"/>]</c:forEach></title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
     <%@include file="/googleAnalytics.jsp"%>
 </head>
@@ -29,27 +29,27 @@
             <td>
                 /<a href="<c:url value="/rest/testbed"/>">testbeds</a>/
                 <a href="<c:url value="/rest/testbed/${testbed.id}"/>">testbed</a>/
-                <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.key.source}/${link.key.target}"/>">link</a>
+                <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.key.source.name}/${link.key.target.name}"/>">link</a>
             </td>
         </tr>
         <tr>
             <td>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.key.source}/${link.key.target}"/>"><c:out
-                        value="${link.key.source},${link.key.target}"/></a>
+                <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.key.source.name}/${link.key.target.name}"/>"><c:out
+                        value="${link.key.source.name},${link.key.target.name}"/></a>
             </td>
         </tr>
         <tr>
             <td>Source ID</td>
             <td>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${link.key.source}"/>"><c:out
-                        value="${link.key.source}"/></a>
+                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${link.key.source.name}"/>"><c:out
+                        value="${link.key.source.name}"/></a>
             </td>
         </tr>
         <tr>
             <td>Target ID</td>
             <td>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${link.key.target}"/>"><c:out
-                        value="${link.key.target}"/></a>
+                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${link.key.target.name}"/>"><c:out
+                        value="${link.key.target.name}"/></a>
             </td>
         </tr>
         <tr>

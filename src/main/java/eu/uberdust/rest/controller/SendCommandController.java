@@ -81,7 +81,7 @@ public final class SendCommandController extends AbstractRestController {
 
 
         // look for destination node
-        final Node destinationNode = nodeManager.getByID(command.getDestination());
+        final Node destinationNode = nodeManager.getByName(command.getDestination());
         if (destinationNode == null) {
             throw new NodeNotFoundException("Destination Node [" + command.getDestination() + "] is not stored.");
         }

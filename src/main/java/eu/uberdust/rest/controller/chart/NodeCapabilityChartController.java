@@ -1,7 +1,7 @@
 package eu.uberdust.rest.controller.chart;
 
 import eu.uberdust.command.NodeCapabilityCommand;
-import eu.uberdust.rest.controller.json.NodeCapabilityJSONController;
+import eu.uberdust.rest.controller.json.NodeCapabilityController;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
 import eu.uberdust.rest.exception.InvalidCapabilityNameException;
 import eu.uberdust.rest.exception.InvalidNodeIdException;
@@ -47,7 +47,7 @@ public final class NodeCapabilityChartController extends AbstractRestController 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityJSONController.class);
+    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityController.class);
 
     /**
      * Constructor.
@@ -139,7 +139,7 @@ public final class NodeCapabilityChartController extends AbstractRestController 
         }
 
         // retrieve node
-        final Node node = nodeManager.getByID(command.getNodeId());
+        final Node node = nodeManager.getByName(command.getNodeId());
         if (node == null) {
             throw new NodeNotFoundException("Cannot find node [" + command.getNodeId() + "]");
         }

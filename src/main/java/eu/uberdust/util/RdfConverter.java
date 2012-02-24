@@ -6,7 +6,6 @@ import eu.wisebed.wisedb.controller.LastNodeReadingController;
 import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.NodeCapability;
-import eu.wisebed.wisedb.model.Semantic;
 import org.apache.log4j.Logger;
 
 import java.io.StringReader;
@@ -75,7 +74,7 @@ public class RdfConverter {
         return (String) rdfMapping.get(key);
     }
 
-    public static String getRdf(final Node node, final String uri, final List<Semantic> semanticList) {
+    public static String getRdf(final Node node, final String uri) {
 
         final StringBuilder rdfOutput = new StringBuilder();
         //headers
@@ -108,16 +107,6 @@ public class RdfConverter {
 //        rdfOutput.append("@prefix ns5: <http://purl.oclc.org/NET/ssnx/ssn#>.").append("\n");
 //        rdfOutput.append("\n").append("<#>").append("\n").append("\n");
 
-        Semantic locatedin = null;
-        for (final Semantic semantic : semanticList) {
-            rdfOutput.append("\t " + semantic.getSemantic() + " :" + semantic.getValue() + " ;\n");
-            if (semantic.getSemantic().equals(":locatedIn")) {
-                locatedin = semantic;
-            }
-
-        }
-
-
         //capabilities
         boolean first = true;
         for (final NodeCapability capability : (List<NodeCapability>) nodeCapabilityManager.list(node)) {
@@ -130,9 +119,6 @@ public class RdfConverter {
                     "  a ssn:Sensor ;\n" +
                     "  ssn:observedProperty <" + capability.getCapability().getDescription() + "> ; \n"
             );
-            if (locatedin != null) {
-                // rdfOutput.append("\t\tssn:featureOfInterest :" + locatedin.getValue() + " ;\n");
-            }
             rdfOutput.append("\t\t]");
         }
         rdfOutput.append(".");

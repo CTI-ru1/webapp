@@ -18,7 +18,7 @@
         <junit.version>4.8.1</junit.version>
         <hsqldb.version>2.0.0</hsqldb.version>
         <mysql.connector.version>5.1.10</mysql.connector.version>
-        <hibernate.version>3.6.9.Final</hibernate.version>
+        <hibernate.version>3.5.6-Final</hibernate.version>
         <ehcacheVersion>2.4.1</ehcacheVersion>
     </properties>
 
@@ -49,6 +49,7 @@
             </snapshots>
             <layout>default</layout>
         </repository>
+
 
         <repository>
             <id>jboss-public-repository-group</id>
@@ -84,6 +85,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+
     </repositories>
 
     <pluginRepositories>
@@ -115,6 +117,11 @@
         <dependency>
             <groupId>uberdust</groupId>
             <artifactId>wisedb</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>uberdust</groupId>
+            <artifactId>formatters</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -248,6 +255,8 @@
             <artifactId>gson</artifactId>
             <version>1.7.1</version>
         </dependency>
+        <!-- Hibernate framework -->
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -260,21 +269,7 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate</artifactId>
-            <version>3.2.1.ga</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-annotations</artifactId>
-            <version>3.2.0.ga</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-            <version>1.0</version>
-        </dependency>
+
         <dependency>
             <groupId>com.googlecode.ehcache-spring-annotations</groupId>
             <artifactId>ehcache-spring-annotations</artifactId>

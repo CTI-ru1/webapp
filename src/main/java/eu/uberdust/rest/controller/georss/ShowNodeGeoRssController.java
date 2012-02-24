@@ -2,6 +2,8 @@ package eu.uberdust.rest.controller.georss;
 
 import com.sun.syndication.io.FeedException;
 import eu.uberdust.command.NodeCommand;
+import eu.uberdust.formatter.GeoRssFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.controller.rdf.ShowNodeRdfController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
@@ -10,6 +12,7 @@ import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.Position;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -35,11 +38,6 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
      * Node persistence manager.
      */
     private transient NodeController nodeManager;
-
-    /**
-     * NodeCapability persistence manager.
-     */
-    private transient NodeCapabilityController nodeCapabilityManager;
 
     /**
      * Logger.
@@ -80,7 +78,6 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
      * @param nodeCapabilityManager nodeCapability persistence manager.
      */
     public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
-        this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
     /**
@@ -123,7 +120,7 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
         }
 
         // look up node
-        final Node node = nodeManager.getByID(command.getNodeId());
+        final Node node = nodeManager.getByName(command.getNodeId());
         if (node == null) {
             // if no node is found throw exception
             throw new NodeNotFoundException("Cannot find testbed [" + command.getNodeId() + "].");
@@ -134,15 +131,25 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
 
         final String syndEntryLink = new StringBuilder().append(baseUrl).append("/uberdust/rest/testbed/")
                 .append(testbed.getId()).append("/node/").append(node.getId()).toString();
-        LOGGER.info("baseUrl : " + baseUrl);
+
+        final String description = nodeManager.getDescription(node);
+        final Position nodePos = nodeManager.getPosition(node);
+        String output = "";
+        try {
+            output = GeoRssFormatter.getInstance().describeNode(node,
+                    request.getRequestURL().toString(),
+                    request.getRequestURI().toString(),
+                    description, nodePos);
+        } catch (NotImplementedException e) {
+            output = e.getMessage();
+        }
+
 
         // set up feed and entries
         response.setContentType("application/xml; charset=UTF-8");
 
-//        final String feed = nodeManager.getGeooRssFeed(node, request.getRequestURL().toString(), syndEntryLink);
-
         final Writer textOutput = (response.getWriter());
-//        response.getWriter().append(feed);
+        response.getWriter().append(output);
         textOutput.flush();
         textOutput.close();
 

@@ -2,11 +2,16 @@ package eu.uberdust.rest.controller.georss;
 
 import com.sun.syndication.io.FeedException;
 import eu.uberdust.command.TestbedCommand;
+import eu.uberdust.formatter.GeoRssFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
+import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.NodeCapability;
+import eu.wisebed.wisedb.model.Origin;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -17,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller class that returns the setup of a testbed in GeoRSS format.
@@ -106,21 +114,33 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        // current host base URL
-        final String baseUrl = (request.getRequestURL().toString()).replace(request.getRequestURI(), "");
+        final List<Node> nodes = nodeManager.list(testbed.getSetup());
+        final Map<Node, String> descriptionMap = new HashMap<Node, String>();
+        final Map<Node, List<NodeCapability>> capabilityMap = new HashMap<Node, List<NodeCapability>>();
+        final Map<Node, Origin> originMap = new HashMap<Node, Origin>();
+        for (final Node node : nodes) {
+            descriptionMap.put(node, nodeManager.getDescription(node));
+            capabilityMap.put(node, nodeCapabilityManager.list(node));
+            originMap.put(node, nodeManager.getOrigin(node));
+        }
 
-        final String syndEntryLink = new StringBuilder().append(baseUrl).append("/uberdust/rest/testbed/")
-                .append(testbed.getId()).toString();
-        LOGGER.info("baseUrl : " + baseUrl);
+        String output = "";
+
+        try {
+            output = GeoRssFormatter.getInstance().describeTestbed(testbed,
+                    request.getRequestURL().toString(),
+                    request.getRequestURI(),
+                    nodes, descriptionMap, capabilityMap, originMap);
+        } catch (NotImplementedException e) {
+            output = e.getMessage();
+        }
 
 
         // set up feed and entries
         response.setContentType("application/xml; charset=UTF-8");
 
-//        final String feed = testbedManager.getGeoRssFeed(testbed,baseUrl, request.getRequestURL().toString(), syndEntryLink);
-
         final Writer textOutput = (response.getWriter());
-//        response.getWriter().append(feed);
+        response.getWriter().append(output);
         textOutput.flush();
         textOutput.close();
 

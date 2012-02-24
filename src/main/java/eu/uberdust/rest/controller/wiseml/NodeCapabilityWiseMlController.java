@@ -157,7 +157,7 @@ public final class NodeCapabilityWiseMlController extends AbstractRestController
         }
 
         // retrieve node
-        final Node node = nodeManager.getByID(command.getNodeId());
+        final Node node = nodeManager.getByName(command.getNodeId());
         if (node == null) {
             throw new NodeNotFoundException("Cannot find node [" + command.getNodeId() + "]");
         }

@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.tab;
 
 import eu.uberdust.command.NodeCapabilityCommand;
+import eu.uberdust.formatter.TextFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
 import eu.uberdust.rest.exception.InvalidCapabilityNameException;
 import eu.uberdust.rest.exception.InvalidNodeIdException;
@@ -150,7 +152,7 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
         }
 
         // retrieve node
-        final Node node = nodeManager.getByID(command.getNodeId());
+        final Node node = nodeManager.getByName(command.getNodeId());
         if (node == null) {
             throw new NodeNotFoundException("Cannot find node [" + command.getNodeId() + "]");
         }
@@ -165,12 +167,10 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
 
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
-        if (lnr == null) {
-            // if no rows found
-            textOutput.write("error");
-        } else {
-            // if a last node reading row is found
-            textOutput.write(lnr.getTimestamp().getTime() + "\t" + lnr.getReading() + "\n");
+        try {
+            textOutput.append(TextFormatter.getInstance().formatNodeReading(lnr));
+        } catch (NotImplementedException e) {
+            textOutput.append("not implemented exception");
         }
         textOutput.flush();
         textOutput.close();

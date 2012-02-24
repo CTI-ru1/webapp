@@ -1,14 +1,14 @@
 package eu.uberdust.rest.controller.json;
 
-import com.google.gson.Gson;
 import eu.uberdust.command.LinkCommand;
+import eu.uberdust.formatter.JsonFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.uberdust.util.LinkJson;
 import eu.wisebed.wisedb.controller.LinkController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.Link;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,15 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Controller class that returns a list of links for a given testbed in JSON format.
  */
-public final class ListLinksJSONController extends AbstractRestController {
+public final class ListLinksController extends AbstractRestController {
 
-/**
+    /**
      * Testbed persistence manager.
      */
     private transient TestbedController testbedManager;
@@ -39,12 +38,12 @@ public final class ListLinksJSONController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListLinksJSONController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListLinksController.class);
 
     /**
      * Constructor.
      */
-    public ListLinksJSONController() {
+    public ListLinksController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -77,8 +76,10 @@ public final class ListLinksJSONController extends AbstractRestController {
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException an InvalidTestbedIdException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  an TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                             an InvalidTestbedIdException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                             an TestbedNotFoundException exception.
      * @throws java.io.IOException IO Exception.
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
@@ -105,26 +106,17 @@ public final class ListLinksJSONController extends AbstractRestController {
         }
 
         final List<Link> links = linkManager.list(testbed.getSetup());
-        final List<LinkJson> linkJsons = new ArrayList<LinkJson>();
-
-        // iterate over testbeds
-        for (Link link : links) {
-            LinkJson linkJson = new LinkJson(link.getSource().getName(),link.getTarget().getName());
-            linkJsons.add(linkJson);
-        }
 
         // write on the HTTP response
         response.setContentType("text/json");
-        final Writer jsonOutput = (response.getWriter());
-
-        // init GSON
-        final Gson gson = new Gson();
-        gson.toJson(linkJsons, linkJsons.getClass(), jsonOutput);
-
-        jsonOutput.flush();
-        jsonOutput.close();
-
-
+        final Writer textOutput = (response.getWriter());
+        try {
+            textOutput.append(JsonFormatter.getInstance().formatLinks(links));
+        } catch (NotImplementedException e) {
+            textOutput.append("not implemented exception");
+        }
+        textOutput.flush();
+        textOutput.close();
         return null;
     }
 }

@@ -9,8 +9,8 @@ import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Link;
+import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
-import net.sf.ehcache.CacheManager;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -113,20 +113,6 @@ public final class ShowTestbedController extends AbstractRestController {
             throws TestbedNotFoundException, InvalidTestbedIdException {
         long start = System.currentTimeMillis();
 
-
-        if (CacheManager.getInstance().cacheExists("nodeslist")) {
-            LOGGER.info("nodeslist cache size : " + CacheManager.getInstance().getCache("nodeslist").getKeys().size());
-        }
-        String[] caches = CacheManager.getInstance().getCacheNames();
-
-        LOGGER.info("TotalCaches : " + caches.length);
-        for (String cach : caches) {
-            LOGGER.info("Cache: " + cach + " contains : " + CacheManager.getInstance().getCache(cach).getKeys().size());
-        }
-
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
-
         // set command object
         final TestbedCommand command = (TestbedCommand) commandObj;
 
@@ -149,7 +135,7 @@ public final class ShowTestbedController extends AbstractRestController {
         long millis = System.currentTimeMillis();
         LOGGER.info("here @ " + (System.currentTimeMillis() - millis));
         // get testbed nodes
-        final List<String> nodes = nodeManager.listNames(testbed.getSetup());
+        final List<Node> nodes = nodeManager.list(testbed.getSetup());
         LOGGER.info(" nodes @ " + (System.currentTimeMillis() - millis));
         // get testbed links
         final List<Link> links = linkManager.list(testbed.getSetup());
@@ -168,18 +154,6 @@ public final class ShowTestbedController extends AbstractRestController {
         refData.put("capabilities", capabilities);
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         LOGGER.info("return @ " + (System.currentTimeMillis() - millis));
-
-
-        if (CacheManager.getInstance().cacheExists("nodeslist")) {
-            LOGGER.info("nodeslist cache size : " + CacheManager.getInstance().getCache("nodeslist").getKeys().size());
-        }
-        String[] caches2 = CacheManager.getInstance().getCacheNames();
-
-        LOGGER.info("TotalCaches : " + caches2.length);
-        for (String cach : caches2) {
-            LOGGER.info("Cache: " + cach + " contains : " + CacheManager.getInstance().getCache(cach).getKeys().size());
-        }
-
 
         return new ModelAndView("testbed/show.html", refData);
     }

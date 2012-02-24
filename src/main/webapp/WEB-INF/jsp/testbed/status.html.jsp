@@ -45,7 +45,7 @@
                 <c:if test="${lnr != null}">
                     <tr>
                         <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${lnr.node.id}"/>"><c:out value="${lnr.node.id}"/></a>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${lnr.node.name}"/>"><c:out value="${lnr.node.name}"/></a>
                         </td>
                         <td>
                             <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${lnr.capability.name}"/>"><c:out value="${lnr.capability.name}"/></a>
@@ -113,7 +113,7 @@
                 <c:if test="${llr != null}">
                     <tr>
                         <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/link/${llr.link.source}/${llr.link.target}"/>"><c:out value="[${llr.link.source},${llr.link.target}]"/></a>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/link/${llr.link.source.name}/${llr.link.target.name}"/>"><c:out value="[${llr.link.source.name},${llr.link.target.name}]"/></a>
                         </td>
                         <td>
                             <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${llr.capability.name}"/>"><c:out value="${llr.capability.name}"/></a>

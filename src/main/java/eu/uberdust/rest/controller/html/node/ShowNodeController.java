@@ -111,7 +111,7 @@ public final class ShowNodeController extends AbstractRestController {
         }
 
         // look up node
-        final Node node = nodeManager.getByID(command.getNodeId());
+        final Node node = nodeManager.getByName(command.getNodeId());
         if (node == null) {
             // if no testbed is found throw exception
             throw new NodeNotFoundException("Cannot find testbed [" + command.getNodeId() + "].");

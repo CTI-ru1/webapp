@@ -173,7 +173,7 @@
     </bean>
 
     <!-- List Testbeds Controller -->
-    <bean name="listTestbedsJSONController" class="eu.uberdust.rest.controller.json.ListTestbedJSONController">
+    <bean name="listTestbedsJSONController" class="eu.uberdust.rest.controller.json.ListTestbedController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="uriPattern" value="/testbed/json"/>
@@ -287,7 +287,7 @@
     </bean>
 
     <!-- List Available Nodes JSON Controller -->
-    <bean name="listNodesJSONController" class="eu.uberdust.rest.controller.json.ListNodesJSONController">
+    <bean name="listNodesJSONController" class="eu.uberdust.rest.controller.json.ListNodesController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -371,7 +371,7 @@
     </bean>
 
     <!-- List available Link JSON Controller -->
-    <bean name="listLinksJSONController" class="eu.uberdust.rest.controller.json.ListLinksJSONController">
+    <bean name="listLinksJSONController" class="eu.uberdust.rest.controller.json.ListLinksController">
         <property name="commandClass" value="eu.uberdust.command.LinkCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkManager" ref="linkManager"/>
@@ -425,7 +425,7 @@
     </bean>
 
     <!-- List Available Capabilities JSON Controller -->
-    <bean name="listCapabilitiesJSONController" class="eu.uberdust.rest.controller.json.ListCapabilitiesJSONController">
+    <bean name="listCapabilitiesJSONController" class="eu.uberdust.rest.controller.json.ListCapabilitiesController">
         <property name="commandClass" value="eu.uberdust.command.CapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
@@ -521,7 +521,7 @@
     </bean>
 
     <!-- Node-Capability Controller for JSON format -->
-    <bean name="nodeCapabilityJsonController" class="eu.uberdust.rest.controller.json.NodeCapabilityJSONController">
+    <bean name="nodeCapabilityJsonController" class="eu.uberdust.rest.controller.json.NodeCapabilityController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -576,7 +576,7 @@
 
     <!-- Node-Capability JSON Last Reading Contorller -->
     <bean name="nodeCapabilityJsonLastReadingController"
-          class="eu.uberdust.rest.controller.json.NodeCapabilityLatestJSONLatestReadingController">
+          class="eu.uberdust.rest.controller.json.NodeCapabilityLastReadingController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>

@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.json;
 
 import eu.uberdust.command.TestbedCommand;
+import eu.uberdust.formatter.JsonFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
@@ -10,9 +12,6 @@ import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.NodeCapability;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractRestController;
@@ -21,9 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Controller class that returns the status page for the nodes and links of a testbed.
@@ -123,32 +120,13 @@ public final class ShowTestbedRoomsController extends AbstractRestController {
             // get a list of node last readings from testbed
             List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup(), capability);
 
-            final Map<String, Integer> uniqueReadings = new HashMap<String, Integer>();
-
-            for (final NodeCapability nodeCapability : nodeCapabilities) {
-                uniqueReadings.put(nodeCapability.getLastNodeReading().getStringReading(), 1);
-            }
-
-            final JSONObject json = new JSONObject();
-
-            try {
-                json.put("capability", "rooms");
-
-                final JSONArray jsonArray = new JSONArray();
-
-                // write on the HTTP response
-                for (final String room : uniqueReadings.keySet()) {
-                    jsonArray.put(room);
-                }
-
-                json.put("stringReadings", jsonArray);
-            } catch (JSONException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-
             response.setContentType("text/json");
             final Writer textOutput = (response.getWriter());
-            textOutput.append(json.toString());
+            try {
+                textOutput.append(JsonFormatter.getInstance().formatUniqueLastNodeReadings(nodeCapabilities));
+            } catch (NotImplementedException e) {
+                textOutput.append("not implemented exception");
+            }
             textOutput.flush();
             textOutput.close();
         } catch (IOException e) {

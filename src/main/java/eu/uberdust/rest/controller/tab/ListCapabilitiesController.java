@@ -1,12 +1,14 @@
 package eu.uberdust.rest.controller.tab;
 
 import eu.uberdust.command.CapabilityCommand;
+import eu.uberdust.formatter.TextFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.Capability;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -75,8 +77,10 @@ public final class ListCapabilitiesController extends AbstractRestController {
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException an InvalidTestbedIdException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  an TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                     an InvalidTestbedIdException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                     an TestbedNotFoundException exception.
      * @throws IOException IO exception.
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
@@ -109,10 +113,10 @@ public final class ListCapabilitiesController extends AbstractRestController {
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
 
-
-        // iterate over testbeds
-        for (Capability capability : capabilities) {
-            textOutput.write(capability.getName() + "\n");
+        try {
+            textOutput.write(TextFormatter.getInstance().formatCapabilities(capabilities));
+        } catch (NotImplementedException e) {
+            textOutput.append("not implemented exception");
         }
 
         // flush close output

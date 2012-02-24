@@ -1,8 +1,8 @@
 package eu.uberdust.rest.controller.json;
 
-import com.google.gson.Gson;
+import eu.uberdust.formatter.JsonFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.controller.html.testbed.ListTestbedsController;
-import eu.uberdust.util.TestbedJson;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
@@ -14,13 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Controller class that returns a list of testbed in JSON format.
  */
-public final class ListTestbedJSONController extends AbstractRestController {
+public final class ListTestbedController extends AbstractRestController {
 
     /**
      * Testbed persistence manager.
@@ -35,7 +34,7 @@ public final class ListTestbedJSONController extends AbstractRestController {
     /**
      * Constructor.
      */
-    public ListTestbedJSONController() {
+    public ListTestbedController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -65,26 +64,16 @@ public final class ListTestbedJSONController extends AbstractRestController {
         // testbed list
         final List<Testbed> testbeds = testbedManager.list();
 
-        // json list
-        final List<TestbedJson> testbedJsons = new ArrayList<TestbedJson>();
-
-
-        // iterate over testbeds
-        for (Testbed testbed : testbeds) {
-            TestbedJson testbedJson = new TestbedJson(testbed.getId(),testbed.getName());
-            testbedJsons.add(testbedJson);
-        }
-
         // write on the HTTP response
         response.setContentType("text/json");
-        final Writer jsonOutput = (response.getWriter());
-
-        // init GSON
-        final Gson gson = new Gson();
-        gson.toJson(testbedJsons, testbedJsons.getClass(), jsonOutput);
-
-        jsonOutput.flush();
-        jsonOutput.close();
+        final Writer textOutput = (response.getWriter());
+        try {
+            textOutput.append(JsonFormatter.getInstance().formatTestbeds(testbeds));
+        } catch (NotImplementedException e) {
+            textOutput.append("not implemented exception");
+        }
+        textOutput.flush();
+        textOutput.close();
 
         return null;
     }

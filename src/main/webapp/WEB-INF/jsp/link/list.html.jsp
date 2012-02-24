@@ -42,8 +42,8 @@
             <c:forEach items="${links}" var="link">
                 <tr>
                     <td>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source}/${link.target}"/>"><c:out
-                                value="${link.source},${link.target}"/></a>
+                        <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>"><c:out
+                                value="${link.source.name},${link.target.name}"/></a>
                     </td>
                 </tr>
             </c:forEach>

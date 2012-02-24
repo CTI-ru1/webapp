@@ -1,14 +1,14 @@
 package eu.uberdust.rest.controller.json;
 
-import com.google.gson.Gson;
 import eu.uberdust.command.CapabilityCommand;
+import eu.uberdust.formatter.JsonFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.uberdust.util.CapabilityJson;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.Capability;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,15 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Controller class that returns a list of capabilities for a given testbed in JSON format.
  */
-public final class ListCapabilitiesJSONController extends AbstractRestController {
+public final class ListCapabilitiesController extends AbstractRestController {
 
-     /**
+    /**
      * Testbed persistence manager.
      */
     private transient TestbedController testbedManager;
@@ -39,12 +38,12 @@ public final class ListCapabilitiesJSONController extends AbstractRestController
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListCapabilitiesJSONController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListCapabilitiesController.class);
 
     /**
      * Constructor.
      */
-    public ListCapabilitiesJSONController() {
+    public ListCapabilitiesController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -78,8 +77,10 @@ public final class ListCapabilitiesJSONController extends AbstractRestController
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException an InvalidTestbedIdException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  an TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                     an InvalidTestbedIdException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                     an TestbedNotFoundException exception.
      * @throws IOException IO exception.
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
@@ -108,26 +109,16 @@ public final class ListCapabilitiesJSONController extends AbstractRestController
         // get testbed's capabilities
         final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
 
-        // json list
-        final List<CapabilityJson> capabilityJsons = new ArrayList<CapabilityJson>();
-
-
-        // iterate over testbeds
-        for (Capability capability : capabilities) {
-            CapabilityJson capabilityJson = new CapabilityJson(capability.getName());
-            capabilityJsons.add(capabilityJson);
-        }
-
         // write on the HTTP response
         response.setContentType("text/json");
-        final Writer jsonOutput = (response.getWriter());
-
-        // init GSON
-        final Gson gson = new Gson();
-        gson.toJson(capabilityJsons, capabilityJsons.getClass(), jsonOutput);
-
-        jsonOutput.flush();
-        jsonOutput.close();
+        final Writer textOutput = (response.getWriter());
+        try {
+            textOutput.append(JsonFormatter.getInstance().formatCapabilities(capabilities));
+        } catch (NotImplementedException e) {
+            textOutput.append("not implemented exception");
+        }
+        textOutput.flush();
+        textOutput.close();
 
 
         return null;

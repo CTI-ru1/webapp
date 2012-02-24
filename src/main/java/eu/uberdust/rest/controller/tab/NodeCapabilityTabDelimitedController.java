@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.tab;
 
 import eu.uberdust.command.NodeCapabilityCommand;
+import eu.uberdust.formatter.TextFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
 import eu.uberdust.rest.exception.InvalidCapabilityNameException;
 import eu.uberdust.rest.exception.InvalidLimitException;
@@ -12,10 +14,10 @@ import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.NodeReadingController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.NodeReading;
-import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.NodeReading;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -159,7 +161,7 @@ public final class NodeCapabilityTabDelimitedController extends AbstractRestCont
         }
 
         // retrieve node
-        final Node node = nodeManager.getByID(command.getNodeId());
+        final Node node = nodeManager.getByName(command.getNodeId());
         if (node == null) {
             throw new NodeNotFoundException("Cannot find node [" + command.getNodeId() + "]");
         }
@@ -188,9 +190,13 @@ public final class NodeCapabilityTabDelimitedController extends AbstractRestCont
         // write on the HTTP response
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
-        for (NodeReading reading : nodeReadings) {
-            textOutput.write(reading.getTimestamp().getTime() + "\t" + reading.getReading() + "\n");
+
+        try {
+            textOutput.append(TextFormatter.getInstance().formatNodeReadings(nodeReadings));
+        } catch (NotImplementedException e) {
+            textOutput.append("not implemented exception");
         }
+
         textOutput.flush();
         textOutput.close();
 
