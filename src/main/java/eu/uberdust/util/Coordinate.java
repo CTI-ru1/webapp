@@ -32,17 +32,17 @@ public final class Coordinate implements Serializable {
     /**
      * X cartesian axis.
      */
-    private Double x;
+    private Double xPos;
 
     /**
      * Y cartesian axis.
      */
-    private Double y;
+    private Double yPos;
 
     /**
      * Z cartesian axis.
      */
-    private Double z;
+    private Double zPos;
 
     /**
      * Phi angle.
@@ -64,10 +64,10 @@ public final class Coordinate implements Serializable {
     /**
      * Constructor.
      */
-    public Coordinate(final Double x, final Double y, final Double z, final Double phi, final Double theta) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Coordinate(final Double xPos, final Double yPos, final Double zPos, final Double phi, final Double theta) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.zPos = zPos;
         this.phi = phi;
         this.theta = theta;
     }
@@ -75,10 +75,10 @@ public final class Coordinate implements Serializable {
     /**
      * Constructor.
      */
-    public Coordinate(final Double x, final Double y, final Double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Coordinate(final Double xPos, final Double yPos, final Double zPos) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.zPos = zPos;
         this.phi = 0.0;
         this.theta = 0.0;
     }
@@ -89,16 +89,16 @@ public final class Coordinate implements Serializable {
      * @return x
      */
     public Double getX() {
-        return x;
+        return xPos;
     }
 
     /**
-     * Sets x.
+     * Sets xPos.
      *
-     * @param x x
+     * @param xPos xPos
      */
-    public void setX(final Double x) {
-        this.x = x;
+    public void setX(final Double xPos) {
+        this.xPos = xPos;
     }
 
     /**
@@ -107,16 +107,16 @@ public final class Coordinate implements Serializable {
      * @return y.
      */
     public Double getY() {
-        return y;
+        return yPos;
     }
 
     /**
-     * Sets y.
+     * Sets yPos.
      *
-     * @param y y.
+     * @param yPos yPos.
      */
-    public void setY(final Double y) {
-        this.y = y;
+    public void setY(final Double yPos) {
+        this.yPos = yPos;
     }
 
     /**
@@ -125,16 +125,16 @@ public final class Coordinate implements Serializable {
      * @return z.
      */
     public Double getZ() {
-        return z;
+        return zPos;
     }
 
     /**
-     * Sets z.
+     * Sets zPos.
      *
-     * @param z z.
+     * @param zPos zPos.
      */
-    public void setZ(final Double z) {
-        this.z = z;
+    public void setZ(final Double zPos) {
+        this.zPos = zPos;
     }
 
     /**
@@ -179,7 +179,7 @@ public final class Coordinate implements Serializable {
      * @return string representation of coordinate.
      */
     public String toString() {
-        return "x=" + x + ", y=" + y + ", z=" + z + ((phi == null) ? ("") : (", phi=" + phi))
+        return "x=" + xPos + ", y=" + yPos + ", z=" + zPos + ((phi == null) ? ("") : (", phi=" + phi))
                 + ((theta == null) ? ("") : (", theta=" + theta));
     }
 
@@ -219,9 +219,9 @@ public final class Coordinate implements Serializable {
         final Double rad = Math.toRadians(phi);
         final Double cos = Math.cos(rad);
         final Double sin = Math.sin(rad);
-        final Double x = coordinate.getX() * cos - coordinate.getY() * sin;
-        final Double y = coordinate.getY() * cos + coordinate.getX() * sin;
-        return new Coordinate(x, y, coordinate.getZ(), coordinate.getPhi(), coordinate.getTheta());
+        final Double xPos = coordinate.getX() * cos - coordinate.getY() * sin;
+        final Double yPos = coordinate.getY() * cos + coordinate.getX() * sin;
+        return new Coordinate(xPos, yPos, coordinate.getZ(), coordinate.getPhi(), coordinate.getTheta());
     }
 
     /**
@@ -232,9 +232,9 @@ public final class Coordinate implements Serializable {
      * @return absolute cooordinates.
      */
     public static Coordinate absolute(final Coordinate origin, final Coordinate coordinate) {
-        final Double y = coordinate.getY() + origin.getY();
-        final Double x = coordinate.getX() + origin.getX();
-        return new Coordinate(x, y, origin.getZ(), origin.getPhi(), origin.getTheta());
+        final Double yPos = coordinate.getY() + origin.getY();
+        final Double xPos = coordinate.getX() + origin.getX();
+        return new Coordinate(xPos, yPos, origin.getZ(), origin.getPhi(), origin.getTheta());
     }
 
     /**
@@ -246,29 +246,30 @@ public final class Coordinate implements Serializable {
      * @return The geographic coordinate.
      */
     public static Coordinate xyz2blh(final Coordinate coordinate) {
-        final double x = coordinate.getX();
-        final double y = coordinate.getY();
-        final double z = coordinate.getZ();
+        final double xPos = coordinate.getX();
+        final double yPos = coordinate.getY();
+        final double zPos = coordinate.getZ();
 
         final double roh = 180.0 / Math.PI;
 
-        final double e0 = (WGS84_A * WGS84_A) - (WGS84_B * WGS84_B);
-        final double e1 = Math.sqrt(e0 / (WGS84_A * WGS84_A));
-        final double e2 = Math.sqrt(e0 / (WGS84_B * WGS84_B));
+        final double e0Param = (WGS84_A * WGS84_A) - (WGS84_B * WGS84_B);
+        final double e1Param = Math.sqrt(e0Param / (WGS84_A * WGS84_A));
+        final double e2Param = Math.sqrt(e0Param / (WGS84_B * WGS84_B));
 
-        final double p = Math.sqrt((x * x) + (y * y));
+        final double sqrt = Math.sqrt((xPos * xPos) + (yPos * yPos));
 
-        final double theta = Math.atan((z * WGS84_A) / (p * WGS84_B));
+        final double theta = Math.atan((zPos * WGS84_A) / (sqrt * WGS84_B));
 
-        final double l = Math.atan(y / x) * roh;
-        final double b = Math.atan((z + (e2 * e2 * WGS84_B * Math.pow(Math.sin(theta), 3))) / (p - (e1 * e1 * WGS84_A * Math.pow(Math.cos(theta), 3))));
+        final double lParam = Math.atan(yPos / xPos) * roh;
+        final double bParam = Math.atan((zPos + (e2Param * e2Param * WGS84_B * Math.pow(Math.sin(theta), 3)))
+                / (sqrt - (e1Param * e1Param * WGS84_A * Math.pow(Math.cos(theta), 3))));
 
-        final double eta2 = e2 * e2 * Math.pow(Math.cos(b), 2);
-        final double v = Math.sqrt(1.0 + eta2);
-        final double n = WGS84_C / v;
+        final double eta2 = e2Param * e2Param * Math.pow(Math.cos(bParam), 2);
+        final double sqrt1 = Math.sqrt(1.0 + eta2);
+        final double nParam = WGS84_C / sqrt1;
 
-        final double h = (p / Math.cos(b)) - n;
-        return new Coordinate(b * roh, l, h, coordinate.getPhi(), coordinate.getTheta());
+        final double hParam = (sqrt / Math.cos(bParam)) - nParam;
+        return new Coordinate(bParam * roh, lParam, hParam, coordinate.getPhi(), coordinate.getTheta());
     }
 
     /**
@@ -281,19 +282,19 @@ public final class Coordinate implements Serializable {
     public static Coordinate blh2xyz(final Coordinate coordinate) {
         final double roh = Math.PI / 180.0;
 
-        final double e = Math.sqrt(((WGS84_A * WGS84_A) - (WGS84_B * WGS84_B)) / (WGS84_B * WGS84_B));
+        final double sqrt = Math.sqrt(((WGS84_A * WGS84_A) - (WGS84_B * WGS84_B)) / (WGS84_B * WGS84_B));
 
-        final double b = coordinate.getX() * roh;
-        final double l = coordinate.getY() * roh;
+        final double bParam = coordinate.getX() * roh;
+        final double lParam = coordinate.getY() * roh;
 
-        final double eta2 = e * e * Math.pow(Math.cos(b), 2);
-        final double v = Math.sqrt(1.0 + eta2);
-        final double n = WGS84_C / v;
+        final double eta2 = sqrt * sqrt * Math.pow(Math.cos(bParam), 2);
+        final double sqrt1 = Math.sqrt(1.0 + eta2);
+        final double nParam = WGS84_C / sqrt1;
 
-        final double h = coordinate.getZ();
-        final double x = (n + h) * Math.cos(b) * Math.cos(l);
-        final double y = (n + h) * Math.cos(b) * Math.sin(l);
-        final double z = (Math.pow(WGS84_B / WGS84_A, 2) * n + h) * Math.sin(b);
-        return new Coordinate(x, y, z, coordinate.getPhi(), coordinate.getTheta());
+        final double hParam = coordinate.getZ();
+        final double xParam = (nParam + hParam) * Math.cos(bParam) * Math.cos(lParam);
+        final double yParam = (nParam + hParam) * Math.cos(bParam) * Math.sin(lParam);
+        final double zParam = (Math.pow(WGS84_B / WGS84_A, 2) * nParam + hParam) * Math.sin(bParam);
+        return new Coordinate(xParam, yParam, zParam, coordinate.getPhi(), coordinate.getTheta());
     }
 }

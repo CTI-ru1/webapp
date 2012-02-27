@@ -52,7 +52,7 @@ public class LastReadingWebSocket
      * @throws IOException
      */
     @Override
-    public ModelAndView handleRequest(final HttpServletRequest servletRequest, final HttpServletResponse servletResponse) throws Exception {
+    public final ModelAndView handleRequest(final HttpServletRequest servletRequest, final HttpServletResponse servletResponse) throws Exception {
         LOGGER.info("handleRequest");
 
         servletRequest.getSession().setMaxInactiveInterval(Integer.MAX_VALUE);
@@ -63,9 +63,6 @@ public class LastReadingWebSocket
         final String protocol = servletRequest.getHeader("Sec-WebSocket-Protocol");
         LOGGER.info(protocol);
 
-        /**
-         * TODO: FIX this check.
-         */
         if (protocol == null) {
             servletResponse.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
             return null;
@@ -92,7 +89,7 @@ public class LastReadingWebSocket
     }
 
     @Override
-    public void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws ServletException, IOException {
+    public final void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws ServletException, IOException {
         LOGGER.info("service");
         try {
             handleRequest((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);

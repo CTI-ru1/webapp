@@ -30,7 +30,7 @@ public class LinkCapabilityCommand extends TestbedCommand {
      *
      * @return the target id of the link.
      */
-    public String getTargetId() {
+    public final String getTargetId() {
         return targetId;
     }
 
@@ -39,7 +39,7 @@ public class LinkCapabilityCommand extends TestbedCommand {
      *
      * @param targetId target id of the link.
      */
-    public void setTargetId(final String targetId) {
+    public final void setTargetId(final String targetId) {
         this.targetId = targetId;
     }
 
@@ -48,7 +48,7 @@ public class LinkCapabilityCommand extends TestbedCommand {
      *
      * @return the source id of the link.
      */
-    public String getSourceId() {
+    public final String getSourceId() {
         return sourceId;
     }
 
@@ -57,7 +57,7 @@ public class LinkCapabilityCommand extends TestbedCommand {
      *
      * @param sourceId source id of the link.
      */
-    public void setSourceId(final String sourceId) {
+    public final void setSourceId(final String sourceId) {
         this.sourceId = sourceId;
     }
 
@@ -66,7 +66,7 @@ public class LinkCapabilityCommand extends TestbedCommand {
      *
      * @return the Id of capability.
      */
-    public String getCapabilityId() {
+    public final String getCapabilityId() {
         return capabilityId;
     }
 
@@ -75,7 +75,7 @@ public class LinkCapabilityCommand extends TestbedCommand {
      *
      * @param capabilityId the ID of capability.
      */
-    public void setCapabilityId(final String capabilityId) {
+    public final void setCapabilityId(final String capabilityId) {
         this.capabilityId = capabilityId;
     }
 
@@ -84,7 +84,7 @@ public class LinkCapabilityCommand extends TestbedCommand {
      *
      * @return the readingsLimit of readings.
      */
-    public String getReadingsLimit() {
+    public final String getReadingsLimit() {
         return readingsLimit;
     }
 
@@ -92,7 +92,7 @@ public class LinkCapabilityCommand extends TestbedCommand {
      * Sets the readingsLimit.
      * @param readingsLimit the readingsLimit of readings
      */
-    public void setReadingsLimit(final String readingsLimit) {
+    public final void setReadingsLimit(final String readingsLimit) {
         this.readingsLimit = readingsLimit;
     }
 }

@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller;
 
+import com.google.protobuf.ByteString;
 import eu.uberdust.command.DestinationPayloadCommand;
 import eu.uberdust.controller.protobuf.CommandProtocol;
 import eu.uberdust.rest.exception.NodeNotFoundException;

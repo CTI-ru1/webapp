@@ -26,7 +26,7 @@ public class CapabilityJson {
      * Returns capability name.
      * @return capability name.
      */
-    public String getCapabilityName() {
+    public final String getCapabilityName() {
         return capabilityName;
     }
 
@@ -34,7 +34,7 @@ public class CapabilityJson {
      * Sets capability name
      * @param capabilityName capability name.
      */
-    public void setCapabilityName(final String capabilityName) {
+    public final void setCapabilityName(final String capabilityName) {
         this.capabilityName = capabilityName;
     }
 }

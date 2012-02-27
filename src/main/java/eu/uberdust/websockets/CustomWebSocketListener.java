@@ -58,7 +58,7 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
     }
 
     @Override
-    public void onStart(final WebSocketContext context) throws IOException {
+    public final void onStart(final WebSocketContext context) throws IOException {
         super.onStart(context);
         LOGGER.info("onStart");
         users.add(context);
@@ -67,17 +67,17 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
     }
 
     @Override
-    public void onReadBinary(final WebSocketContext context, final InputStream inputStream) throws IOException {
+    public final void onReadBinary(final WebSocketContext context, final InputStream inputStream) throws IOException {
         super.onReadBinary(context, inputStream);
     }
 
     @Override
-    public void onReadText(final WebSocketContext context, final Reader reader) throws IOException {
+    public final void onReadText(final WebSocketContext context, final Reader reader) throws IOException {
         super.onReadText(context, reader);
     }
 
     @Override
-    public void onClose(final WebSocketContext context) throws IOException {
+    public final void onClose(final WebSocketContext context) throws IOException {
         super.onClose(context);
         LOGGER.info("onClose");
         users.remove(context);
@@ -88,7 +88,7 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
     }
 
     @Override
-    public void onDisconnect(final WebSocketContext context) throws IOException {
+    public final void onDisconnect(final WebSocketContext context) throws IOException {
         super.onDisconnect(context);
         LOGGER.info("onDisconnect");
         users.remove(context);
@@ -100,19 +100,19 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
     }
 
     @Override
-    public void onTimeout(final WebSocketContext context) throws IOException {
+    public final void onTimeout(final WebSocketContext context) throws IOException {
         super.onTimeout(context);
         LOGGER.info("onTimeout");
     }
 
     @Override
-    public void update(final NodeReading lastReading) {
+    public final void update(final NodeReading lastReading) {
         LOGGER.info("Update");
         if (lastReading.getCapability().getNode().getName().contains("1ccd")) {
             UberLogger.getInstance().log(lastReading.getTimestamp().getTime(), "T51");
         }
-        if (lastReading.getCapability().getNode().getName().equals(nodeID) &&
-                lastReading.getCapability().getCapability().getName().equals(capabilityID)) {
+        if (lastReading.getCapability().getNode().getName().equals(nodeID)
+                && lastReading.getCapability().getCapability().getName().equals(capabilityID)) {
             final String response = new StringBuilder().append(lastReading.getTimestamp().getTime()).append("\t").append(lastReading.getReading()).toString();
             LOGGER.info(response);
             for (final WebSocketContext user : users) {

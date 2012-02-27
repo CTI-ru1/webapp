@@ -129,7 +129,7 @@ public final class NodeCapabilityLastReadingController extends AbstractRestContr
         try {
             testbedId = Integer.parseInt(command.getTestbedId());
         } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.");
+            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
         }
 
         // look up testbed

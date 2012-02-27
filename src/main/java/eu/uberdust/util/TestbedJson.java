@@ -24,16 +24,18 @@ public final class TestbedJson {
 
     /**
      * Constructor.
-     * @param testbedId testbed id.
+     *
+     * @param testbedId   testbed id.
      * @param testbedName testbed name.
      */
-    public TestbedJson(final int testbedId,final String testbedName) {
+    public TestbedJson(final int testbedId, final String testbedName) {
         this.testbedId = testbedId;
         this.testbedName = testbedName;
     }
 
     /**
      * Returns testbed id.
+     *
      * @return testbed id.
      */
     public int getTestbedId() {
@@ -42,6 +44,7 @@ public final class TestbedJson {
 
     /**
      * Sets testbed id
+     *
      * @param testbedId testbed id.
      */
     public void setTestbedId(final int testbedId) {
@@ -50,6 +53,7 @@ public final class TestbedJson {
 
     /**
      * Returns testbed name.
+     *
      * @return testbed name.
      */
     public String getTestbedName() {
@@ -58,6 +62,7 @@ public final class TestbedJson {
 
     /**
      * Sets testbed name.
+     *
      * @param testbedName testbed name.
      */
     public void setTestbedName(final String testbedName) {

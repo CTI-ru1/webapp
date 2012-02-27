@@ -118,9 +118,9 @@ public final class NodeCapabilityInsertDoubleReadingController extends AbstractR
 
         // insert reading
         try {
-            nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, reading,null, timestamp);
+            nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, reading, null, timestamp);
         } catch (UnknownTestbedException e) {
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].",e);
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].", e);
         }
 
         // make response
@@ -134,7 +134,8 @@ public final class NodeCapabilityInsertDoubleReadingController extends AbstractR
             UberLogger.getInstance().log(timestamp.getTime(), "T25");
         }
 
-        LOGGER.info("MEMSTAT_3: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory() + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
+        LOGGER.info("MEMSTAT_3: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
+                + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
 
         return null;
     }

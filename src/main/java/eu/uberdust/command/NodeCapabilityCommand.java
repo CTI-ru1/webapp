@@ -26,7 +26,7 @@ public class NodeCapabilityCommand extends TestbedCommand {
      *
      * @return the Node ID.
      */
-    public String getNodeId() {
+    public final String getNodeId() {
         return nodeId;
     }
 
@@ -35,7 +35,7 @@ public class NodeCapabilityCommand extends TestbedCommand {
      *
      * @param nodeId the ID of the node.
      */
-    public void setNodeId(final String nodeId) {
+    public final void setNodeId(final String nodeId) {
         this.nodeId = nodeId;
     }
 
@@ -44,7 +44,7 @@ public class NodeCapabilityCommand extends TestbedCommand {
      *
      * @return the Id of capability.
      */
-    public String getCapabilityId() {
+    public final String getCapabilityId() {
         return capabilityId;
     }
 
@@ -53,7 +53,7 @@ public class NodeCapabilityCommand extends TestbedCommand {
      *
      * @param capabilityId the ID of capability.
      */
-    public void setCapabilityId(final String capabilityId) {
+    public final void setCapabilityId(final String capabilityId) {
         this.capabilityId = capabilityId;
     }
 
@@ -62,7 +62,7 @@ public class NodeCapabilityCommand extends TestbedCommand {
      *
      * @return the readingsLimit of readings.
      */
-    public String getReadingsLimit() {
+    public final String getReadingsLimit() {
         return readingsLimit;
     }
 
@@ -70,7 +70,7 @@ public class NodeCapabilityCommand extends TestbedCommand {
      * Sets the readingsLimit.
      * @param readingsLimit the readingsLimit of readings
      */
-    public void setReadingsLimit(final String readingsLimit) {
+    public final void setReadingsLimit(final String readingsLimit) {
         this.readingsLimit = readingsLimit;
     }
 }

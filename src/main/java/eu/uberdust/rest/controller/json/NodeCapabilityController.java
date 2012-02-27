@@ -126,7 +126,8 @@ public final class NodeCapabilityController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
-            TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, IOException, InvalidLimitException {
+            TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException,
+            IOException, InvalidLimitException {
 
         LOGGER.info("nodeCapabilityController(...)");
 

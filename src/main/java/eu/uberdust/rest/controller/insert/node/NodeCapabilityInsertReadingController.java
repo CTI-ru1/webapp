@@ -51,7 +51,7 @@ public class NodeCapabilityInsertReadingController extends AbstractRestControlle
      *
      * @param nodeReadingManager NodeReading persistence manager.
      */
-    public void setNodeReadingManager(final NodeReadingController nodeReadingManager) {
+    public final void setNodeReadingManager(final NodeReadingController nodeReadingManager) {
         this.nodeReadingManager = nodeReadingManager;
     }
 
@@ -60,7 +60,7 @@ public class NodeCapabilityInsertReadingController extends AbstractRestControlle
      *
      * @param testbedManager Testbed persistence manager.
      */
-    public void setTestbedManager(final TestbedController testbedManager) {
+    public final void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
 
@@ -72,11 +72,13 @@ public class NodeCapabilityInsertReadingController extends AbstractRestControlle
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  testbed not found exception.
-     * @throws java.io.IOException               IO exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                             invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                             testbed not found exception.
+     * @throws java.io.IOException IO exception.
      */
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
+    protected final ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
 
@@ -118,7 +120,7 @@ public class NodeCapabilityInsertReadingController extends AbstractRestControlle
         try {
             nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, doubleReading, stringReading, timestamp);
         } catch (UnknownTestbedException e) {
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].",e);
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].", e);
         }
 
         // make response
@@ -132,7 +134,8 @@ public class NodeCapabilityInsertReadingController extends AbstractRestControlle
             UberLogger.getInstance().log(timestamp.getTime(), "T25");
         }
 
-        LOGGER.info("MEMSTAT_3: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory() + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
+        LOGGER.info("MEMSTAT_3: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
+                + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
 
         return null;
     }

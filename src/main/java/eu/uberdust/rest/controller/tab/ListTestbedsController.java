@@ -28,7 +28,7 @@ public final class ListTestbedsController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(eu.uberdust.rest.controller.html.testbed.ListTestbedsController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListTestbedsController.class);
 
     /**
      * Constructor.

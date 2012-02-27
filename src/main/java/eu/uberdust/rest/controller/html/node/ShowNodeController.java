@@ -88,7 +88,7 @@ public final class ShowNodeController extends AbstractRestController {
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, NodeNotFoundException {
 
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
 
         LOGGER.info("showNodeController(...)");
 

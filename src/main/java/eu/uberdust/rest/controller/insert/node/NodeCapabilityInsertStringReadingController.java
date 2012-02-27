@@ -72,9 +72,11 @@ public final class NodeCapabilityInsertStringReadingController extends AbstractR
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  testbed not found exception.
-     * @throws java.io.IOException               IO exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                             invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                             testbed not found exception.
+     * @throws java.io.IOException IO exception.
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
@@ -117,7 +119,7 @@ public final class NodeCapabilityInsertStringReadingController extends AbstractR
         try {
             nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, null, reading, timestamp);
         } catch (UnknownTestbedException e) {
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].",e);
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].", e);
         }
 
         // make response
@@ -131,7 +133,8 @@ public final class NodeCapabilityInsertStringReadingController extends AbstractR
             UberLogger.getInstance().log(timestamp.getTime(), "T25");
         }
 
-        LOGGER.info("MEMSTAT_3: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory() + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
+        LOGGER.info("MEMSTAT_3: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
+                + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
 
         return null;
     }

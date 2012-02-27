@@ -18,6 +18,7 @@ public final class CapabilityNotFoundException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param throwable throwable.
      */
     public CapabilityNotFoundException(final Throwable throwable) {
@@ -26,6 +27,7 @@ public final class CapabilityNotFoundException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param message message.
      */
     public CapabilityNotFoundException(final String message) {
@@ -34,10 +36,11 @@ public final class CapabilityNotFoundException extends Exception {
 
     /**
      * Constructor.
-     * @param message message.
+     *
+     * @param message   message.
      * @param throwable throwable.
      */
     public CapabilityNotFoundException(final String message, final Throwable throwable) {
-        super(message,throwable);
+        super(message, throwable);
     }
 }

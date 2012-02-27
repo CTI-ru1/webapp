@@ -139,8 +139,8 @@
 
     <!-- Insert Reading Controller WebSocket -->
     <bean name="insertReadingWebSocketController" class="eu.uberdust.websockets.insert.InsertReadingWebSocket">
-        <property name="insertReadingWebSocketListener">
-            <bean class="eu.uberdust.websockets.insert.InsertReadingWebSocketListener" factory-method="getInstance">
+        <property name="insertReadingWSListener">
+            <bean class="eu.uberdust.websockets.insert.InsertReadingWSListener" factory-method="getInstance">
                 <property name="nodeReadingManager" ref="nodeReadingManager"/>
                 <property name="linkReadingManager" ref="linkReadingManager"/>
             </bean>
@@ -325,7 +325,6 @@
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
-        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/georss"/>
     </bean>
 

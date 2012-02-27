@@ -15,7 +15,7 @@ public class TestbedCommand {
      *
      * @return testbed id
      */
-    public String getTestbedId() {
+    public final String getTestbedId() {
         return testbedId;
     }
 
@@ -24,7 +24,7 @@ public class TestbedCommand {
      *
      * @param testbedId a testbed id.
      */
-    public void setTestbedId(final String testbedId) {
+    public final void setTestbedId(final String testbedId) {
         this.testbedId = testbedId;
     }
 }

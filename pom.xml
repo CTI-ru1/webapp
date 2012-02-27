@@ -241,20 +241,11 @@
             <version>1.2.14</version>
         </dependency>
         <dependency>
-            <groupId>rome</groupId>
-            <artifactId>rome</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.geonames</groupId>
             <artifactId>georss-rome</artifactId>
             <version>0.9.8</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>1.7.1</version>
-        </dependency>
+
         <!-- Hibernate framework -->
 
         <dependency>

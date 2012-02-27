@@ -28,7 +28,7 @@ public final class InsertReadingWebSocket implements Controller {
     /**
      * Insert Reading Web Socket Listener.
      */
-    private transient InsertReadingWebSocketListener insertReadingWebSocketListener;
+    private transient InsertReadingWSListener insertReadingWSListener;
 
     /**
      * Default Constructor.
@@ -39,10 +39,10 @@ public final class InsertReadingWebSocket implements Controller {
 
     /**
      * Sets the web socket listener.
-     * @param insertReadingWebSocketListener insert reading web socket listener.
+     * @param insertReadingWSListener insert reading web socket listener.
      */
-    public void setInsertReadingWebSocketListener(final InsertReadingWebSocketListener insertReadingWebSocketListener) {
-        this.insertReadingWebSocketListener = insertReadingWebSocketListener;
+    public void setInsertReadingWSListener(final InsertReadingWSListener insertReadingWSListener) {
+        this.insertReadingWSListener = insertReadingWSListener;
     }
 
 
@@ -75,7 +75,7 @@ public final class InsertReadingWebSocket implements Controller {
         servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
 
         final WebSocketServletRequest wsRequest = (WebSocketServletRequest) servletRequest;
-        wsRequest.startWebSocket(insertReadingWebSocketListener);
+        wsRequest.startWebSocket(insertReadingWSListener);
 
         return null;
     }

@@ -4,7 +4,6 @@ import com.sun.syndication.io.FeedException;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.formatter.GeoRssFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
-import eu.uberdust.rest.controller.json.NodeCapabilityController;
 import eu.uberdust.rest.controller.rdf.ShowNodeRdfController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
@@ -39,8 +38,6 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
      */
     private transient NodeController nodeManager;
 
-    private transient NodeCapabilityController nodeCapabilityManager;
-
     /**
      * Logger.
      */
@@ -72,16 +69,6 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
     public void setNodeManager(final NodeController nodeManager) {
         this.nodeManager = nodeManager;
     }
-
-    /**
-     * Sets node capability persistence manager.
-     *
-     * @param nodeCapabilityManager nodeCapability persistence manager.
-     */
-    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
-        this.nodeCapabilityManager = nodeCapabilityManager;
-    }
-
 
     /**
      * Handle request and return the appropriate response.
@@ -131,9 +118,6 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
             throw new NodeNotFoundException("Cannot find testbed [" + command.getNodeId() + "].");
         }
 
-        // current host base URL
-        final String baseUrl = (request.getRequestURL().toString()).replace(request.getRequestURI(), "");
-
         final String description = nodeManager.getDescription(node);
         final Position nodePos = nodeManager.getPosition(node);
         String output = "";
@@ -145,7 +129,6 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
         } catch (NotImplementedException e) {
             output = e.getMessage();
         }
-
 
         // set up feed and entries
         response.setContentType("application/xml; charset=UTF-8");

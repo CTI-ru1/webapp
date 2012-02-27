@@ -18,17 +18,17 @@ import java.util.Date;
 /**
  * Insert Reading Web Socket Listener.
  */
-public final class InsertReadingWebSocketListener extends AbstractWebSocketListener {
+public final class InsertReadingWSListener extends AbstractWebSocketListener {
 
     /**
      * Static Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(InsertReadingWebSocketListener.class);
+    private static final Logger LOGGER = Logger.getLogger(InsertReadingWSListener.class);
 
     /**
      * Singleton instance.
      */
-    private static InsertReadingWebSocketListener ourInstance = null;
+    private static InsertReadingWSListener ourInstance = null;
 
     /**
      * Delimiter.
@@ -65,7 +65,7 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
     /**
      * Constructor.
      */
-    private InsertReadingWebSocketListener() {
+    private InsertReadingWSListener() {
         // empty constructor
     }
 
@@ -74,11 +74,11 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
      *
      * @return singleton instance.
      */
-    public static InsertReadingWebSocketListener getInstance() {
-        synchronized (InsertReadingWebSocketListener.class) {
+    public static InsertReadingWSListener getInstance() {
+        synchronized (InsertReadingWSListener.class) {
 
             if (ourInstance == null) {
-                ourInstance = new InsertReadingWebSocketListener();
+                ourInstance = new InsertReadingWSListener();
             }
             return ourInstance;
         }
@@ -201,10 +201,13 @@ public final class InsertReadingWebSocketListener extends AbstractWebSocketListe
             UberLogger.getInstance().log(Long.parseLong(messageParts[4]), "T25");
         }
 
-        //LOGGER.info("MEMSTAT_1: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory() + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
-        LOGGER.info("MEMSTAT_2: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024 + " memory used!");
-        /*Runtime.getRuntime().gc();
-LOGGER.info("MEMSTAT_2: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory() + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");*/
+        //LOGGER.info("MEMSTAT_1: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
+        // + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
+        LOGGER.info("MEMSTAT_2: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
+                / 1024 / 1024 + " memory used!");
+        //Runtime.getRuntime().gc();
+        //LOGGER.info("MEMSTAT_2: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
+        // + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
 
     }
 

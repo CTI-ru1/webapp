@@ -7,7 +7,7 @@ import java.util.GregorianCalendar;
 /**
  * Utility abstract class.
  */
-public abstract class Util {
+public class Util {
 
     /**
      * Milliseconds per minute.

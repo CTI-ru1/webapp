@@ -41,7 +41,7 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
         return nodeManager;
     }
 
-    public void setNodeManager(NodeController nodeManager) {
+    public void setNodeManager(final NodeController nodeManager) {
         this.nodeManager = nodeManager;
     }
 

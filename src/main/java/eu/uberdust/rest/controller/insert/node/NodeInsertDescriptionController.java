@@ -110,8 +110,9 @@ public final class NodeInsertDescriptionController extends AbstractRestControlle
         // make response
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
-        textOutput.write("Desciption \"" + description + "\" inserted for Node(" + node.getId() + ")"
-                + ") Testbed(" + testbed.getId() + "). OK");
+        textOutput.write(new StringBuilder().append("Desciption \"").append(description)
+                .append("\" inserted for Node(").append(node.getId()).append(")").append(") Testbed(")
+                .append(testbed.getId()).append("). OK").toString());
         textOutput.flush();
         textOutput.close();
 

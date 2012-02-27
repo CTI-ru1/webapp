@@ -151,10 +151,10 @@ public final class CapabilityTabDelimitedController extends AbstractRestControll
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
 
-        final List<LastNodeReading> lastNodeReadings = lastNodeReadingManager.getByCapability(testbed.getSetup(), capability);
-        final List<LastLinkReading> lastLinkReadings = lastLinkReadingManager.getByCapability(testbed.getSetup(), capability);
+        final List<LastNodeReading> lnrs = lastNodeReadingManager.getByCapability(testbed.getSetup(), capability);
+        final List<LastLinkReading> llrs = lastLinkReadingManager.getByCapability(testbed.getSetup(), capability);
         try {
-            textOutput.append(TextFormatter.getInstance().formatLastReadings(lastNodeReadings, lastLinkReadings));
+            textOutput.append(TextFormatter.getInstance().formatLastReadings(lnrs, llrs));
         } catch (NotImplementedException e) {
             textOutput.append("not implemented exception");
         }

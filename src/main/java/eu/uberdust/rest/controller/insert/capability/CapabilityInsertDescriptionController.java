@@ -58,8 +58,8 @@ public final class CapabilityInsertDescriptionController extends AbstractRestCon
      * @param errors     BindException exception.
      * @return response http servlet response.
      * @throws InvalidTestbedIdException an invalid testbed id exception.
-     * @throws TestbedNotFoundException testbed not found exception.
-     * @throws java.io.IOException IO exception.
+     * @throws TestbedNotFoundException  testbed not found exception.
+     * @throws java.io.IOException       IO exception.
      */
     @Override
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
