@@ -58,7 +58,10 @@ public final class ListTestbedsController extends AbstractRestController {
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) {
-        long start = System.currentTimeMillis();
+
+        LOGGER.info("listTestbedsController(...)");
+
+        final long start = System.currentTimeMillis();
 
         // testbed list
         final List<Testbed> testbeds = testbedManager.list();

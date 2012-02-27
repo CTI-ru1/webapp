@@ -81,7 +81,10 @@ public final class ListCapabilitiesController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException {
-        long start = System.currentTimeMillis();
+
+        LOGGER.info("listCapabilitiesController(...)");
+
+        final long start = System.currentTimeMillis();
 
         // get command
         final CapabilityCommand command = (CapabilityCommand) commandObj;
@@ -106,10 +109,11 @@ public final class ListCapabilitiesController extends AbstractRestController {
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
+
         refData.put("testbed", testbed);
         refData.put("capabilities", capabilities);
-
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+
         return new ModelAndView("capability/list.html", refData);
     }
 }

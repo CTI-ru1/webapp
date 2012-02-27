@@ -47,7 +47,7 @@ public final class NodeCommand extends TestbedCommand {
      *
      * @param description node's description.
      */
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 }

@@ -123,10 +123,10 @@ public final class ShowNodeCapabilityController extends AbstractRestController {
                                   final Object commandObj, final BindException errors)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
-        long start = System.currentTimeMillis();
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
+        LOGGER.info("showNodeCapabilityController(...)");
+
+        final long start = System.currentTimeMillis();
 
         // set commandNode object
         final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;

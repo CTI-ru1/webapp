@@ -48,6 +48,7 @@ public final class NodeInsertDescriptionController extends AbstractRestControlle
 
     /**
      * Sets testbed persistence manager.
+     *
      * @param testbedManager testbed persistence manager.
      */
     public void setTestbedManager(final TestbedController testbedManager) {
@@ -63,13 +64,15 @@ public final class NodeInsertDescriptionController extends AbstractRestControlle
      * @param errors     BindException exception.
      * @return response http servlet response.
      * @throws InvalidTestbedIdException an invalid testbed id exception.
-     * @throws TestbedNotFoundException testbed not found exception.
-     * @throws IOException IO exception.
+     * @throws TestbedNotFoundException  testbed not found exception.
+     * @throws IOException               IO exception.
      */
     @Override
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) throws InvalidTestbedIdException,
             TestbedNotFoundException, IOException {
+
+        LOGGER.info("nodeInsertDescriptionController(...)");
 
         // set commandNode object
         final NodeCommand command = (NodeCommand) commandObj;

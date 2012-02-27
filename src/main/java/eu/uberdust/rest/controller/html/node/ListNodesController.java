@@ -80,7 +80,10 @@ public final class ListNodesController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException {
-        long start = System.currentTimeMillis();
+
+        LOGGER.info("listNodesController(...)");
+
+        final long start = System.currentTimeMillis();
 
         // get command object
         final NodeCommand command = (NodeCommand) commandObj;

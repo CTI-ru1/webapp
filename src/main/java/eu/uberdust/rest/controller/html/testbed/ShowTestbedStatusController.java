@@ -86,10 +86,10 @@ public final class ShowTestbedStatusController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException {
-        long start = System.currentTimeMillis();
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
+        LOGGER.info("showTestbedStatusController(...)");
+
+        final long start = System.currentTimeMillis();
 
         // set command object
         final TestbedCommand command = (TestbedCommand) commandObj;

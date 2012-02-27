@@ -39,6 +39,9 @@ public final class ShowTestbedWiseMlController extends AbstractRestController {
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) {
+
+        LOGGER.info("showTestbedWisemlController(...)");
+
         return null; //TODO make this controller
     }
 }

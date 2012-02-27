@@ -128,8 +128,7 @@ public final class NodeCapabilityController extends AbstractRestController {
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
             TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, IOException, InvalidLimitException {
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
+        LOGGER.info("nodeCapabilityController(...)");
 
         // set commandNode object
         final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;
@@ -148,7 +147,6 @@ public final class NodeCapabilityController extends AbstractRestController {
         int testbedId;
         try {
             testbedId = Integer.parseInt(command.getTestbedId());
-
         } catch (NumberFormatException nfe) {
             throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
         }

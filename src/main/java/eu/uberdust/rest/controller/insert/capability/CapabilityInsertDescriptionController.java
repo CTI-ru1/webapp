@@ -24,12 +24,12 @@ public final class CapabilityInsertDescriptionController extends AbstractRestCon
     /**
      * Testbed persistence manager.
      */
-    private TestbedController testbedManager;
+    private transient TestbedController testbedManager;
 
     /**
      * Capability persistence manager.
      */
-    private CapabilityController capabilityManager;
+    private transient CapabilityController capabilityManager;
 
     /**
      * Sets testbed persistence manager.

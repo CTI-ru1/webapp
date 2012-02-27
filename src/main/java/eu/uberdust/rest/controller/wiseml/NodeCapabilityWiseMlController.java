@@ -124,8 +124,7 @@ public final class NodeCapabilityWiseMlController extends AbstractRestController
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
             TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, InvalidLimitException {
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
+        LOGGER.info("nodeCapabilityWisemlController(...)");
 
         // set commandNode object
         final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;

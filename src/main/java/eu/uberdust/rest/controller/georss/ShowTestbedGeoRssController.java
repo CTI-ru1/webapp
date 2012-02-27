@@ -49,7 +49,7 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
 
     private transient NodeCapabilityController nodeCapabilityManager;
 
-    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
@@ -94,6 +94,8 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException {
+
+        LOGGER.info("showTestbedGeoRssController(...)");
 
         // set command object
         final TestbedCommand command = (TestbedCommand) commandObj;

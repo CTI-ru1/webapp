@@ -94,7 +94,7 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
         this.capabilityManager = capabilityManager;
     }
 
-    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 

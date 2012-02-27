@@ -61,6 +61,7 @@ public final class ListTestbedController extends AbstractRestController {
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) throws IOException {
+        LOGGER.info("listTestbedController(...)");
         // testbed list
         final List<Testbed> testbeds = testbedManager.list();
 

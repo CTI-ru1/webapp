@@ -66,11 +66,11 @@ public final class ShowTestbedRoomsController extends AbstractRestController {
         this.testbedManager = testbedManager;
     }
 
-    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
-    public void setCapabilityManager(CapabilityController capabilityManager) {
+    public void setCapabilityManager(final CapabilityController capabilityManager) {
         this.capabilityManager = capabilityManager;
     }
 
@@ -118,7 +118,7 @@ public final class ShowTestbedRoomsController extends AbstractRestController {
 
 
             // get a list of node last readings from testbed
-            List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup(), capability);
+            final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup(), capability);
 
 
             // write on the HTTP response

@@ -76,15 +76,14 @@ public final class ListNodesController extends AbstractRestController {
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *                     an InvalidTestbedIdException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *                     an TestbedNotFoundException exception.
-     * @throws IOException IO exception.
+     * @throws InvalidTestbedIdException an {@link InvalidTestbedIdException} exception.
+     * @throws TestbedNotFoundException  an {@link TestbedNotFoundException} exception.
+     * @throws IOException               IO exception.
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException {
+        LOGGER.info("listNodesController(...)");
 
         // get command object
         final NodeCommand command = (NodeCommand) commandObj;
@@ -103,7 +102,7 @@ public final class ListNodesController extends AbstractRestController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        // get testbed's nodes
+        // get Testbed nodes
         final List<Node> nodes = nodeManager.list(testbed.getSetup());
 
         // write on the HTTP response

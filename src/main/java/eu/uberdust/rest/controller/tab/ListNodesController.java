@@ -81,6 +81,8 @@ public final class ListNodesController extends AbstractRestController {
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException {
 
+        LOGGER.info("listNodesController(...)");
+
         // get command object
         final NodeCommand command = (NodeCommand) commandObj;
 

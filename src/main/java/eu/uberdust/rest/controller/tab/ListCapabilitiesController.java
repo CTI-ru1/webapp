@@ -87,6 +87,8 @@ public final class ListCapabilitiesController extends AbstractRestController {
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
 
+        LOGGER.info("listCapabilitiesController(...)");
+
         // get command
         final CapabilityCommand command = (CapabilityCommand) commandObj;
 

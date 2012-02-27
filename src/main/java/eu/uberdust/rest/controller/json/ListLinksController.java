@@ -76,15 +76,14 @@ public final class ListLinksController extends AbstractRestController {
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *                             an InvalidTestbedIdException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *                             an TestbedNotFoundException exception.
-     * @throws java.io.IOException IO Exception.
+     * @throws InvalidTestbedIdException an {@link InvalidTestbedIdException} exception.
+     * @throws TestbedNotFoundException  an {@link TestbedNotFoundException} exception.
+     * @throws java.io.IOException       IO Exception.
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
+        LOGGER.info("listLinksController(...)");
 
         // get command
         final LinkCommand command = (LinkCommand) commandObj;

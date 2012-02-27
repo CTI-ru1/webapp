@@ -166,7 +166,7 @@
     </bean>
 
     <!-- List Testbeds Raw Text controller -->
-    <bean name="listTestbedsController" class="eu.uberdust.rest.controller.ListTestbedsController">
+    <bean name="listTestbedsController" class="eu.uberdust.rest.controller.tab.ListTestbedsController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="uriPattern" value="/testbed/raw"/>
@@ -249,7 +249,7 @@
     </bean>
 
     <!-- Show Testbed KML Controller -->
-    <bean name="showTestbedKmlController" class="eu.uberdust.rest.controller.klm.ShowTestbedKmlController">
+    <bean name="showTestbedKmlController" class="eu.uberdust.rest.controller.kml.ShowTestbedKmlController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="uriPattern" value="/testbed/{testbedId}/kml"/>
     </bean>
@@ -330,7 +330,7 @@
     </bean>
 
     <!-- Show Node KML Controller -->
-    <bean name="showNodeKmlController" class="eu.uberdust.rest.controller.klm.ShowNodeKmlController">
+    <bean name="showNodeKmlController" class="eu.uberdust.rest.controller.kml.ShowNodeKmlController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/kml"/>
     </bean>
@@ -476,11 +476,11 @@
 
 
     <bean name="listNodeCapabilitiesController"
-          class="eu.uberdust.rest.controller.html.node.ListNodeCapabilitiesController">
+          class="eu.uberdust.rest.controller.tab.ListNodeCapabilitiesController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
-        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
+        <property name="nodeCapabilityManager" ref="capabilityManager"/>
         <property name="uriPattern"
                   value="/testbed/{testbedId}/node/{nodeId}/capabilities"/>
     </bean>

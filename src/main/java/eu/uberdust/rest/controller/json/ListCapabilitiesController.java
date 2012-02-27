@@ -26,12 +26,12 @@ import java.util.List;
 public final class ListCapabilitiesController extends AbstractRestController {
 
     /**
-     * Testbed persistence manager.
+     * {@link Testbed} persistence manager.
      */
     private transient TestbedController testbedManager;
 
     /**
-     * Capability persistence manager.
+     * {@link Capability} persistence manager.
      */
     private transient CapabilityController capabilityManager;
 
@@ -77,15 +77,14 @@ public final class ListCapabilitiesController extends AbstractRestController {
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *                     an InvalidTestbedIdException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *                     an TestbedNotFoundException exception.
-     * @throws IOException IO exception.
+     * @throws InvalidTestbedIdException an {@link InvalidTestbedIdException} exception.
+     * @throws TestbedNotFoundException  an {@link TestbedNotFoundException} exception.
+     * @throws IOException               IO exception.
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
+        LOGGER.info("listCapabilitiesController(...)");
 
         // get command
         final CapabilityCommand command = (CapabilityCommand) commandObj;
@@ -106,7 +105,7 @@ public final class ListCapabilitiesController extends AbstractRestController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        // get testbed's capabilities
+        // get Testbed capabilities
         final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
 
         // write on the HTTP response
@@ -119,7 +118,6 @@ public final class ListCapabilitiesController extends AbstractRestController {
         }
         textOutput.flush();
         textOutput.close();
-
 
         return null;
     }

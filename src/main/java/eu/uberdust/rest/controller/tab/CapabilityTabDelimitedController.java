@@ -119,8 +119,7 @@ public final class CapabilityTabDelimitedController extends AbstractRestControll
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException {
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
+        LOGGER.info("CapabilityTabDelimitedController(...)");
 
         // set command object
         final CapabilityCommand command = (CapabilityCommand) commandObj;
@@ -151,18 +150,14 @@ public final class CapabilityTabDelimitedController extends AbstractRestControll
         // write on the HTTP response
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
-        try {
-            final List<LastNodeReading> lastNodeReadings = lastNodeReadingManager.getByCapability(testbed.getSetup(), capability);
-            final List<LastLinkReading> lastLinkReadings = lastLinkReadingManager.getByCapability(testbed.getSetup(), capability);
-            try {
-                textOutput.append(TextFormatter.getInstance().formatLastReadings(lastNodeReadings, lastLinkReadings));
-            } catch (NotImplementedException e) {
-                textOutput.append("not implemented exception");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
+        final List<LastNodeReading> lastNodeReadings = lastNodeReadingManager.getByCapability(testbed.getSetup(), capability);
+        final List<LastLinkReading> lastLinkReadings = lastLinkReadingManager.getByCapability(testbed.getSetup(), capability);
+        try {
+            textOutput.append(TextFormatter.getInstance().formatLastReadings(lastNodeReadings, lastLinkReadings));
+        } catch (NotImplementedException e) {
+            textOutput.append("not implemented exception");
+        }
 
         // flush close output
         textOutput.flush();

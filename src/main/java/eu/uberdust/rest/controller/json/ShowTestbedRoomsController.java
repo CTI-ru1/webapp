@@ -66,11 +66,11 @@ public final class ShowTestbedRoomsController extends AbstractRestController {
         this.testbedManager = testbedManager;
     }
 
-    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
-    public void setCapabilityManager(CapabilityController capabilityManager) {
+    public void setCapabilityManager(final CapabilityController capabilityManager) {
         this.capabilityManager = capabilityManager;
     }
 
@@ -91,8 +91,8 @@ public final class ShowTestbedRoomsController extends AbstractRestController {
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException {
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
+        LOGGER.info("showTestbedRoomsController(...)");
+
         try {
             // set command object
             final TestbedCommand command = (TestbedCommand) commandObj;
@@ -118,7 +118,7 @@ public final class ShowTestbedRoomsController extends AbstractRestController {
 
 
             // get a list of node last readings from testbed
-            List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup(), capability);
+            final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup(), capability);
 
             response.setContentType("text/json");
             final Writer textOutput = (response.getWriter());

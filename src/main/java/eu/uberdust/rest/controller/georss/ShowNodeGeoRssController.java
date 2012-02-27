@@ -4,11 +4,11 @@ import com.sun.syndication.io.FeedException;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.formatter.GeoRssFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.controller.json.NodeCapabilityController;
 import eu.uberdust.rest.controller.rdf.ShowNodeRdfController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
@@ -39,6 +39,8 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
      */
     private transient NodeController nodeManager;
 
+    private transient NodeCapabilityController nodeCapabilityManager;
+
     /**
      * Logger.
      */
@@ -49,7 +51,6 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
      */
     public ShowNodeGeoRssController() {
         super();
-
         // Make sure to set which method this controller will support.
         this.setSupportedMethods(new String[]{METHOD_GET});
     }
@@ -73,12 +74,14 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
     }
 
     /**
-     * Sets nodeCapability persistence manager.
+     * Sets node capability persistence manager.
      *
      * @param nodeCapabilityManager nodeCapability persistence manager.
      */
     public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
+        this.nodeCapabilityManager = nodeCapabilityManager;
     }
+
 
     /**
      * Handle request and return the appropriate response.
@@ -99,6 +102,8 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
                                   final Object commandObj, final BindException errors)
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
+
+        LOGGER.info("showNodeGeoRssController(...)");
 
         // set command object
         final NodeCommand command = (NodeCommand) commandObj;
@@ -128,9 +133,6 @@ public final class ShowNodeGeoRssController extends AbstractRestController {
 
         // current host base URL
         final String baseUrl = (request.getRequestURL().toString()).replace(request.getRequestURI(), "");
-
-        final String syndEntryLink = new StringBuilder().append(baseUrl).append("/uberdust/rest/testbed/")
-                .append(testbed.getId()).append("/node/").append(node.getId()).toString();
 
         final String description = nodeManager.getDescription(node);
         final Position nodePos = nodeManager.getPosition(node);

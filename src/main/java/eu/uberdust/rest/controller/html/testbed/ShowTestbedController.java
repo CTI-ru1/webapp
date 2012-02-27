@@ -111,7 +111,10 @@ public final class ShowTestbedController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException {
-        long start = System.currentTimeMillis();
+
+        LOGGER.info("showTestbedController(...)");
+
+        final long start = System.currentTimeMillis();
 
         // set command object
         final TestbedCommand command = (TestbedCommand) commandObj;
@@ -132,17 +135,13 @@ public final class ShowTestbedController extends AbstractRestController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        long millis = System.currentTimeMillis();
-        LOGGER.info("here @ " + (System.currentTimeMillis() - millis));
+
         // get testbed nodes
         final List<Node> nodes = nodeManager.list(testbed.getSetup());
-        LOGGER.info(" nodes @ " + (System.currentTimeMillis() - millis));
         // get testbed links
         final List<Link> links = linkManager.list(testbed.getSetup());
-        LOGGER.info(" links @ " + (System.currentTimeMillis() - millis));
         // get testbed capabilities
         final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
-        LOGGER.info(" capabilities @ " + (System.currentTimeMillis() - millis));
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
@@ -153,7 +152,6 @@ public final class ShowTestbedController extends AbstractRestController {
         refData.put("links", links);
         refData.put("capabilities", capabilities);
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
-        LOGGER.info("return @ " + (System.currentTimeMillis() - millis));
 
         return new ModelAndView("testbed/show.html", refData);
     }

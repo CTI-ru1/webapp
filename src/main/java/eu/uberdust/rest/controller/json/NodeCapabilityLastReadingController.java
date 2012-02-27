@@ -84,7 +84,7 @@ public final class NodeCapabilityLastReadingController extends AbstractRestContr
         this.capabilityManager = capabilityManager;
     }
 
-    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
@@ -109,8 +109,7 @@ public final class NodeCapabilityLastReadingController extends AbstractRestContr
             throws InvalidTestbedIdException, TestbedNotFoundException, NodeNotFoundException,
             CapabilityNotFoundException, InvalidCapabilityNameException, InvalidNodeIdException, IOException {
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
+        LOGGER.info("nodeCapabilityLastReadingController(...)");
 
         // set commandNode object
         final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;
@@ -129,7 +128,6 @@ public final class NodeCapabilityLastReadingController extends AbstractRestContr
         int testbedId;
         try {
             testbedId = Integer.parseInt(command.getTestbedId());
-
         } catch (NumberFormatException nfe) {
             throw new InvalidTestbedIdException("Testbed IDs have number format.");
         }

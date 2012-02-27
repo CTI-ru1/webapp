@@ -1,4 +1,4 @@
-package eu.uberdust.rest.controller.klm;
+package eu.uberdust.rest.controller.kml;
 
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -39,6 +39,7 @@ public final class ShowTestbedKmlController extends AbstractRestController {
      */
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) {
+        LOGGER.info("showTestbedKmlController(...)");
         return null; // TODO make this controller
     }
 }

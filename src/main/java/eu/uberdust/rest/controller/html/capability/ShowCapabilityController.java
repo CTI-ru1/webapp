@@ -114,10 +114,10 @@ public final class ShowCapabilityController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, CapabilityNotFoundException {
-        long start = System.currentTimeMillis();
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
+        LOGGER.info("showCapabilityController(...)");
+
+        final long start = System.currentTimeMillis();
 
         // set command object
         final CapabilityCommand command = (CapabilityCommand) commandObj;
@@ -149,12 +149,13 @@ public final class ShowCapabilityController extends AbstractRestController {
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
+
         refData.put("testbed", testbed);
         refData.put("capability", capability);
         refData.put("nodes", nodes);
         refData.put("links", links);
-
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+
         return new ModelAndView("capability/show.html", refData);
     }
 }

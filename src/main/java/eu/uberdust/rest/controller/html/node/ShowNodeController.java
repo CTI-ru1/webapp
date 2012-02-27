@@ -33,7 +33,7 @@ public final class ShowNodeController extends AbstractRestController {
      */
     private transient TestbedController testbedManager;
 
-    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
@@ -90,8 +90,7 @@ public final class ShowNodeController extends AbstractRestController {
 
         long start = System.currentTimeMillis();
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
+        LOGGER.info("showNodeController(...)");
 
         // set command object
         final NodeCommand command = (NodeCommand) commandObj;

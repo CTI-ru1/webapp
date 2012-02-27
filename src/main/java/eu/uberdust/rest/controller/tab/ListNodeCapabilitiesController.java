@@ -1,6 +1,8 @@
-package eu.uberdust.rest.controller.html.node;
+package eu.uberdust.rest.controller.tab;
 
 import eu.uberdust.command.NodeCommand;
+import eu.uberdust.formatter.TextFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
 import eu.uberdust.rest.exception.InvalidCapabilityNameException;
 import eu.uberdust.rest.exception.InvalidLimitException;
@@ -8,11 +10,11 @@ import eu.uberdust.rest.exception.InvalidNodeIdException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.NodeCapabilityController;
+import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
+import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Node;
-import eu.wisebed.wisedb.model.NodeCapability;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -39,10 +41,11 @@ public final class ListNodeCapabilitiesController extends AbstractRestController
      * Testbed peristence manager.
      */
     private transient TestbedController testbedManager;
-    private transient NodeCapabilityController nodeCapabilityManager;
 
-    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
-        this.nodeCapabilityManager = nodeCapabilityManager;
+    private transient CapabilityController capabilityManager;
+
+    public void setCapabilityManager(final CapabilityController capabilityManager) {
+        this.capabilityManager = capabilityManager;
     }
 
     /**
@@ -99,8 +102,7 @@ public final class ListNodeCapabilitiesController extends AbstractRestController
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
+        LOGGER.info("listNodeCapabilitiesController(...)");
 
         // set commandNode object
         final NodeCommand command = (NodeCommand) commandObj;
@@ -109,7 +111,6 @@ public final class ListNodeCapabilitiesController extends AbstractRestController
         if (command.getNodeId() == null || command.getNodeId().isEmpty()) {
             throw new InvalidNodeIdException("Must provide node id");
         }
-
 
         // a specific testbed is requested by testbed Id
         int testbedId;
@@ -134,20 +135,19 @@ public final class ListNodeCapabilitiesController extends AbstractRestController
         }
 
         // retrieve capability
-        final List<NodeCapability> capabilities = nodeCapabilityManager.list(node);
+        final List<Capability> capabilities = capabilityManager.list(node);
 
         response.setContentType("text/plain");
         final Writer output;
         try {
             output = (response.getWriter());
-
-            for (NodeCapability capability : capabilities) {
-                output.append(capability.getCapability().getName() + "\n");
-            }
+            output.append(TextFormatter.getInstance().formatCapabilities(capabilities));
             output.flush();
             output.close();
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            LOGGER.fatal(e);
         }
         // check type of view requested
         return null;

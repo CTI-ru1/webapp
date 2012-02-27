@@ -90,6 +90,8 @@ public final class ShowNodeRdfController extends AbstractRestController {
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
 
+        LOGGER.info("showNodeRdfController(...)");
+
 //        // set command object
 //        final NodeCommand command = (NodeCommand) commandObj;
 //

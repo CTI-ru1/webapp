@@ -1,5 +1,7 @@
-package eu.uberdust.rest.controller;
+package eu.uberdust.rest.controller.tab;
 
+import eu.uberdust.formatter.TextFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
@@ -38,7 +40,7 @@ public final class ListTestbedsController extends AbstractRestController {
         this.setSupportedMethods(new String[]{METHOD_GET});
     }
 
-/**
+    /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
@@ -60,6 +62,8 @@ public final class ListTestbedsController extends AbstractRestController {
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) throws IOException {
 
+        LOGGER.info("listTestbedsController(...)");
+
 
         // testbed list
         final List<Testbed> testbeds = testbedManager.list();
@@ -69,12 +73,11 @@ public final class ListTestbedsController extends AbstractRestController {
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
 
-
-        // iterate over testbeds
-        for (Testbed testbed : testbeds) {
-            textOutput.write(testbed.getId() + "\t" + testbed.getName() + "\n");
+        try {
+            textOutput.append(TextFormatter.getInstance().formatTestbeds(testbeds));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
         }
-
 
         // flush close output
         textOutput.flush();
