@@ -479,9 +479,7 @@
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
-        <property name="nodeCapabilityManager" ref="capabilityManager"/>
-        <property name="uriPattern"
-                  value="/testbed/{testbedId}/node/{nodeId}/capabilities"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/capabilities"/>
     </bean>
 
 
