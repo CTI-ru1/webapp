@@ -7,7 +7,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
-<jsp:useBean id="nodes" scope="request" class="java.util.ArrayList"/>
+<jsp:useBean id="text" scope="request" class="java.lang.String"/>
 
 
 <html>
@@ -28,34 +28,7 @@
     <a href="<c:url value="/rest/testbed/${testbed.id}/node"/>">testbed nodes</a>
 </p>
 
-
-<c:choose>
-    <c:when test="${nodes != null || fn:length(nodes) != 0}">
-        <table>
-            <tbody>
-            <tr>
-                <td>Nodes</td>
-                <td>(<c:out value="${fn:length(nodes)}"/>)</td>
-            </tr>
-            </tbody>
-        </table>
-        <table>
-            <tbody>
-            <c:forEach items="${nodes}" var="node">
-                <tr>
-                    <td>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}"/>"><c:out
-                                value="${node.name}"/></a>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </c:when>
-    <c:otherwise>
-        <p style="color : red">No nodes found for testbed <c:out value="${testbed.name}"/></p>
-    </c:otherwise>
-</c:choose>
+<c:out value="${text}" escapeXml="false" />
 
 <%@include file="/footer.jsp" %>
 </body>

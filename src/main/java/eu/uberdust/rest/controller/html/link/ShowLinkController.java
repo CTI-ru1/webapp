@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.html.link;
 
 import eu.uberdust.command.LinkCommand;
+import eu.uberdust.formatter.HtmlFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.LinkNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -66,9 +68,9 @@ public final class ShowLinkController extends AbstractRestController {
     }
 
     /**
-     * Handle request and return the appropriate response.
+     * Handle req and return the appropriate response.
      *
-     * @param request    http servlet request.
+     * @param req        http servlet req.
      * @param response   http servlet response.
      * @param commandObj command object
      * @param errors     BindException exception.
@@ -77,11 +79,13 @@ public final class ShowLinkController extends AbstractRestController {
      * @throws TestbedNotFoundException  TestbedNotFoundException exception.
      * @throws LinkNotFoundException     LinkNotFoundException exception.
      */
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
+    protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, LinkNotFoundException {
 
         LOGGER.info("showLinkController(...)");
+
+        HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 
         final long start = System.currentTimeMillis();
 
@@ -116,20 +120,23 @@ public final class ShowLinkController extends AbstractRestController {
             throw new LinkNotFoundException("Cannot find link [" + command.getSourceId() + "," + command.getTargetId()
                     + "] or the inverse link [" + command.getTargetId() + "," + command.getSourceId() + "]");
         }
-
-        // if at least link or linkInv was found
-        if (link != null) {
-            linkCapabilityMap.put(link, linkCapabilityManager.list(link));
-        }
-        if (linkInv != null) {
-            linkCapabilityMap.put(linkInv, linkCapabilityManager.list(link));
-        }
+        List<LinkCapability> linkCapabilities = linkCapabilityManager.list(link);
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
 
         refData.put("testbed", testbed);
-        refData.put("linkCapabilityMap", linkCapabilityMap);
+        refData.put("link", link);
+        try {
+            refData.put("text", HtmlFormatter.getInstance().formatLink(link));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
+        }
+        try {
+            refData.put("linkCapabilities", HtmlFormatter.getInstance().formatLinkCapabilities(linkCapabilities));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
+        }
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
 
         return new ModelAndView("link/show.html", refData);

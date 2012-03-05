@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.html.node;
 
 import eu.uberdust.command.NodeCommand;
+import eu.uberdust.formatter.HtmlFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -10,6 +12,7 @@ import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractRestController;
@@ -73,9 +76,9 @@ public final class ShowNodeController extends AbstractRestController {
     }
 
     /**
-     * Handle request and return the appropriate response.
+     * Handle req and return the appropriate response.
      *
-     * @param request    http servlet request.
+     * @param req        http servlet req.
      * @param response   http servlet response.
      * @param commandObj command object.
      * @param errors     BindException errors.
@@ -84,13 +87,15 @@ public final class ShowNodeController extends AbstractRestController {
      * @throws TestbedNotFoundException  TestbedNotFoundException exception.
      * @throws NodeNotFoundException     NodeNotFoundException exception.
      */
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
+    protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, NodeNotFoundException {
 
         final long start = System.currentTimeMillis();
 
         LOGGER.info("showNodeController(...)");
+
+        HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 
         // set command object
         final NodeCommand command = (NodeCommand) commandObj;
@@ -109,6 +114,9 @@ public final class ShowNodeController extends AbstractRestController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
+//        LOGGER.info(CacheManager.getInstance().getCache("testCache").getKeys().size());
+        integerToString(5);
+
         // look up node
         final Node node = nodeManager.getByName(command.getNodeId());
         if (node == null) {
@@ -122,9 +130,24 @@ public final class ShowNodeController extends AbstractRestController {
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
         refData.put("node", node);
-        refData.put("capabilities", nodeCapabilityManager.list(node));
+        try {
+            refData.put("text", HtmlFormatter.getInstance().formatNode(node));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
+        }
+        try {
+            refData.put("nodeCapabilities", HtmlFormatter.getInstance().describeNodeCapabilities(nodeCapabilityManager.list(node)));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
+        }
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         return new ModelAndView("node/show.html", refData);
+    }
+
+    @Cacheable("testCache1")
+    public String integerToString(final int integer) {
+        LOGGER.info("heere");
+        return Integer.toString(integer);
     }
 }

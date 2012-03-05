@@ -8,7 +8,8 @@
 
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
 <jsp:useBean id="node" scope="request" class="eu.wisebed.wisedb.model.Node"/>
-<jsp:useBean id="capabilities" scope="request" class="java.util.ArrayList"/>
+<jsp:useBean id="text" scope="request" class="java.lang.String"/>
+<jsp:useBean id="nodeCapabilities" scope="request" class="java.lang.String"/>
 
 <html>
 <head>
@@ -27,82 +28,10 @@
     <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}"/>">node</a>
 </p>
 
-<table>
-    <tbody>
-    <tr>
-        <td>Node ID</td>
-        <td>
-            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}"/>"><c:out value="${node.name}"/></a>
-        </td>
-    </tr>
-    <tr>
-        <td><a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capabilities" />">Capabilities</a>(<c:out value="${fn:length(capabilities)}"/>)</td>
-        <td>
-            <table class="readings">
-                <tbody>
-                <c:forEach items="${capabilities}" var="capability">
-                    <tr>
-                        <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.capability.name}"/>"><c:out
-                                    value="${capability.capability.name}"/></a>
-                        </td>
-                        <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/html/limit/10"/>">HTML</a>
-                        </td>
-                        <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/tabdelimited/limit/10"/>">Tab
-                                Delimited</a>
-                        </td>
-                        <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/json/limit/10"/>">JSON</a>
-                        </td>
-                        <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/wiseml"/>">WiseML</a>
-                            <span style="color : red">Not implemented yet</span>
-                        </td>
-                        <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/latestreading"/>">Latest
-                                Reading</a>(<a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/latestreading/json"/>">JSON</a>)
-                        </td>
-                        <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/chart/limit/10"/>">Chart</a>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>GeoRSS Feed</td>
-        <td>
-            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/georss"/>">GeoRSS Feed</a>
-            (<a href="http://maps.google.com/maps?q=<c:url value="${baseURL}/rest/testbed/${testbed.id}/node/${node.name}/georss"/>">View
-            On Google Maps</a>)
-        </td>
-    </tr>
-    <tr>
-        <td>KML Feed</td>
-        <td>
-            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/kml"/>">KML feed</a>
-            (<a href="http://maps.google.com/maps?q=<c:url value="${baseURL}/rest/testbed/${testbed.id}/node/${node.name}/kml"/>">View
-            On Google Maps</a>)
-            <span style="color : red">Not implemented yet</span>
-        </td>
-    </tr>
-     <tr>
-            <td>Rdf description</td>
-            <td>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/rdf"/>">
-                    <img src="http://www.mkbergman.com/wp-content/themes/ai3/images/2009Posts/090326_rdf_200.png" width="20px">
-                    Rdf description
-                </a>
+<c:out value="${text}" escapeXml="false" />
 
+<c:out value="${nodeCapabilities}" escapeXml="false" />
 
-            </td>
-        </tr>
-    </tbody>
-</table>
 <%@include file="/footer.jsp" %>
 </body>
 </html>

@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    <cache:annotation-driven cache-manager="cacheManager"/>
+
+    <!-- generic cache manager -->
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean class="org.springframework.cache.concurrent.ConcurrentCacheFactoryBean" name="default" />
+                <bean class="org.springframework.cache.concurrent.ConcurrentCacheFactoryBean" name="formatNode"/>
+                <bean class="org.springframework.cache.concurrent.ConcurrentCacheFactoryBean" name="testCache1"/>
+            </set>
+        </property>
+    </bean>
+
 
     <!-- Data Source setup -->
     <bean id="dataSource"
@@ -17,11 +30,13 @@
         <property name="validationQuery" value="select 1"/>
     </bean>
 
+
     <!-- Session Factory setup with hbm mappings in place -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
         <property name="dataSource">
             <ref bean="dataSource"/>
         </property>
+
 
         <property name="mappingResources">
             <list>
@@ -48,14 +63,14 @@
                 <prop key="hibernate.connection.autoReconnect">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">${wisedb.hibernate.hbm2ddl.auto}</prop>
                 <prop key="hibernate.jdbc.batch_size">0</prop>
-                <prop key="hibernate.cache.use_second_level_cache">false</prop>
-                <prop key="hibernate.cache.use_query_cache">false</prop>
+                <!--enable second level caching and query caching-->
+                <!--<prop key="hibernate.cache.use_second_level_cache">true</prop>-->
+                <!--<prop key="hibernate.cache.use_query_cache">false</prop>-->
+                <prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+
                 <!--<prop key="hibernate.cache.region.factory_class">-->
                 <!--net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory-->
                 <!--</prop>-->
-                <prop key="hibernate.cache.region.factory_class">
-                    net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory
-                </prop>
 
                 <prop key="hibernate.connection.pool_size">10</prop>
                 <!--<prop key="hibernate.c3p0.acquire_increment">3</prop>
@@ -70,22 +85,22 @@
                 <prop key="format_sql">false</prop>
             </props>
         </property>
-
-        <!--<property name="annotatedClasses">-->
-        <!--<list>-->
-        <!--<value>eu.wisebed.wisedb.model.Testbed</value>-->
-        <!--<value>eu.wisebed.wisedb.model.Setup</value>-->
-        <!--<value>eu.wisebed.wisedb.model.Capability</value>-->
-        <!--<value>eu.wisebed.wisedb.model.Node</value>-->
-        <!--<value>eu.wisebed.wisedb.model.Link</value>-->
-        <!--<value>eu.wisebed.wisedb.model.NodeCapability</value>-->
-        <!--<value>eu.wisebed.wisedb.model.LinkCapability</value>-->
-        <!--<value>eu.wisebed.wisedb.model.NodeReading</value>-->
-        <!--<value>eu.wisebed.wisedb.model.LinkReading</value>-->
-        <!--<value>eu.wisebed.wisedb.model.LastNodeReading</value>-->
-        <!--<value>eu.wisebed.wisedb.model.LastLinkReading</value>-->
-        <!--</list>-->
-        <!--</property>-->
+        <!--
+        <property name="annotatedClasses">
+            <list>
+                <value>eu.wisebed.wisedb.model.Testbed</value>
+                <value>eu.wisebed.wisedb.model.Setup</value>
+                <value>eu.wisebed.wisedb.model.Capability</value>
+                <value>eu.wisebed.wisedb.model.Node</value>
+                <value>eu.wisebed.wisedb.model.Link</value>
+                <value>eu.wisebed.wisedb.model.NodeCapability</value>
+                <value>eu.wisebed.wisedb.model.LinkCapability</value>
+                <value>eu.wisebed.wisedb.model.NodeReading</value>
+                <value>eu.wisebed.wisedb.model.LinkReading</value>
+                <value>eu.wisebed.wisedb.model.LastNodeReading</value>
+                <value>eu.wisebed.wisedb.model.LastLinkReading</value>
+            </list>
+        </property>-->
 
         <property name="eventListeners">
             <map>
@@ -97,12 +112,6 @@
 
     </bean>
 
-
-    <!--<ehcache:annotation-driven cache-manager="ehCacheManager"/>-->
-    <!---->
-    <!--<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">-->
-    <!--<property name="configLocation" value="classpath:ehcache.xml"/>-->
-    <!--</bean>-->
 
     <!-- injecting a hibernate interceptor to session factory -->
     <bean id="hibernateInterceptor"

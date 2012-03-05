@@ -54,7 +54,7 @@
                 <prop key="GET /testbed/*/node/*/insert/description/*/">nodeInsertDescriptionController</prop>
 
                 <!-- Link Related Controllers -->
-                <prop key="GET /testbed/*/link/html">listLinksHTMLController</prop>
+                <prop key="GET /testbed/*/link">listLinksHTMLController</prop>
                 <prop key="GET /testbed/*/link/raw">listLinksController</prop>
                 <prop key="GET /testbed/*/link/json">listLinksJSONController</prop>
                 <prop key="GET /testbed/*/link/*/*">showLinkController</prop>
@@ -71,6 +71,7 @@
                 <!-- Node/Capability Controllers for readings -->
                 <prop key="GET /testbed/*/node/*/capabilities">listNodeCapabilitiesController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/html">nodeCapabilityHTMLController</prop>
+                <prop key="GET /testbed/*/node/*/capability/*/live">nodeCapabilityLiveController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/html/limit/*">nodeCapabilityHTMLController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/tabdelimited">nodeCapabilityTabDelimitedController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/tabdelimited/limit/*">nodeCapabilityTabDelimitedController
@@ -207,16 +208,6 @@
         <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
         <property name="linkCapabilityManager" ref="linkCapabilityManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/status"/>
-        <property name="viewNameSelector">
-            <bean class="org.springframework.web.servlet.RestViewNameSelector">
-                <property name="defaultViewName" value="testbed/status.html"/>
-                <property name="views">
-                    <map>
-                        <entry key="text/html" value="testbed/status.html"/>
-                    </map>
-                </property>
-            </bean>
-        </property>
     </bean>
 
     <!-- Show Testbed Rooms Controller -->
@@ -348,17 +339,7 @@
         <property name="commandClass" value="eu.uberdust.command.LinkCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkManager" ref="linkManager"/>
-        <property name="uriPattern" value="/testbed/{testbedId}/link/html"/>
-        <property name="viewNameSelector">
-            <bean class="org.springframework.web.servlet.RestViewNameSelector">
-                <property name="defaultViewName" value="link/list.html"/>
-                <property name="views">
-                    <map>
-                        <entry key="text/html" value="link/list.html"/>
-                    </map>
-                </property>
-            </bean>
-        </property>
+        <property name="uriPattern" value="/testbed/{testbedId}/link"/>
     </bean>
 
     <!-- List available Link Raw Text Controller -->
@@ -503,6 +484,14 @@
                 </property>
             </bean>
         </property>
+    </bean>
+
+    <!-- Node-Capability Controller for HTML Format -->
+    <bean name="nodeCapabilityLiveController"
+          class="eu.uberdust.rest.controller.LiveNodeCapabilityController">
+        <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
+        <property name="uriPattern"
+                  value="/testbed/{testbedId}/node/{nodeId}/capability/{capabilityId}/live"/>
     </bean>
 
     <!-- Node-Capability Controller for Tab Delimited format -->

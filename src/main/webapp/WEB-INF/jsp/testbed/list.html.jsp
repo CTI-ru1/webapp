@@ -15,42 +15,13 @@
     <%@include file="/googleAnalytics.jsp"%>
 </head>
 
-<jsp:useBean id="testbeds" scope="request" class="java.util.ArrayList"/>
-<jsp:useBean id="nodesCount" scope="request" class="java.util.HashMap"/>
-<jsp:useBean id="linksCount" scope="request" class="java.util.HashMap"/>
+<jsp:useBean id="text" scope="request" class="java.lang.String"/>
 
 <body>
 <%@include file="/header.jsp"%>
 <h1>Welcome to ÜberDust</h1>
-<c:choose>
-    <c:when test="${testbeds !=null && fn:length(testbeds)!=0}">
-        <table>
-            <tbody>
-            <tr>
-                <td>Available Testbeds : (<c:out value="${fn:length(testbeds)}"/>)</td>
-            </tr>
-            </tbody>
-        </table>
-        <table>
-            <tbody>
-            <c:forEach items="${testbeds}" var="testbed">
-                <tr>
-                    <td><c:out value="${testbed.id}"/></td>
-                    <td>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}"/>"><c:out value="${testbed.name}"/></a>
-                    </td>
-                    <td>Nodes (<c:out value="${nodesCount[testbed.name]}"/>)</td>
-                    <td>Links (<c:out value="${linksCount[testbed.name]}"/>)</td>
-                    <!--<td>Slses (<c:out value="${slsesCount[testbed.name]}"/>)</td>-->
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </c:when>
-    <c:otherwise>
-        <p style="color : red"> No testbeds available</p>
-    </c:otherwise>
-</c:choose>
+
+<c:out value="${text}" escapeXml="false" />
 
 <%@include file="/footer.jsp"%>
 </body>

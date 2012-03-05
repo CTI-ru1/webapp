@@ -112,7 +112,7 @@ public final class ListCapabilitiesController extends AbstractRestController {
         response.setContentType("text/json");
         final Writer textOutput = (response.getWriter());
         try {
-            textOutput.append(JsonFormatter.getInstance().formatCapabilities(capabilities));
+            textOutput.append(JsonFormatter.getInstance().formatCapabilities(testbed, capabilities));
         } catch (NotImplementedException e) {
             textOutput.append("not implemented exception");
         }
@@ -121,4 +121,5 @@ public final class ListCapabilitiesController extends AbstractRestController {
 
         return null;
     }
+
 }

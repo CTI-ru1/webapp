@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller class that returns a list of testbed in JSON format.
@@ -64,12 +65,14 @@ public final class ListTestbedController extends AbstractRestController {
         LOGGER.info("listTestbedController(...)");
         // testbed list
         final List<Testbed> testbeds = testbedManager.list();
+        final Map<String, Long> nodesCount = testbedManager.countNodes();
+        final Map<String, Long> linksCount = testbedManager.countLinks();
 
         // write on the HTTP response
         response.setContentType("text/json");
         final Writer textOutput = (response.getWriter());
         try {
-            textOutput.append(JsonFormatter.getInstance().formatTestbeds(testbeds));
+            textOutput.append(JsonFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount));
         } catch (NotImplementedException e) {
             textOutput.append("not implemented exception");
         }

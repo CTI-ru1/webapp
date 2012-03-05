@@ -1,3 +1,8 @@
+#information td
+{
+    text-align:right;
+}
+
 table.readings {
     border: medium outset gray;
     border-spacing : 5px;

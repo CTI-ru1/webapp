@@ -5,7 +5,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<jsp:useBean id="readings" scope="request" class="java.util.ArrayList"/>
+<jsp:useBean id="text" scope="request" class="java.lang.String"/>
 
 <html>
 <head>
@@ -19,35 +19,9 @@
 
 <body>
 <%@include file="/header.jsp" %>
-<c:choose>
-    <c:when test="${fn:length(readings) == 0}">
-        <h2> No readings found </h2>
-    </c:when>
-    <c:otherwise>
-        <table id="information">
-            <thead>
-            <tr>
-            <th>Timestamp</th>
-            <th>Readings(<c:out value="${fn:length(readings)}"/>)</th>
-            </thead>
-            <tbody>
-            <c:forEach items="${readings}" var="reading">
-                <tr>
-                    <td>
-                        <c:out value="${reading.timestamp}"/>
-                    </td>
-                    <td align="center">
-                        <c:out value="${reading.reading}"/>
-                    </td>
-                    <td align="center">
-                        <c:out value="${reading.stringReading}"/>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </c:otherwise>
-</c:choose>
+
+<c:out value="${text}" escapeXml="false" />
+
 <%@include file="/footer.jsp" %>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package eu.uberdust.rest.controller.html.node;
 
 import eu.uberdust.command.NodeCapabilityCommand;
+import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
 import eu.uberdust.rest.exception.InvalidCapabilityNameException;
 import eu.uberdust.rest.exception.InvalidLimitException;
@@ -106,7 +107,7 @@ public final class ShowNodeCapabilityController extends AbstractRestController {
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param request    http servlet request.
+     * @param req    http servlet req.
      * @param response   http servlet response.
      * @param commandObj command object.
      * @param errors     BindException exception.
@@ -119,12 +120,14 @@ public final class ShowNodeCapabilityController extends AbstractRestController {
      * @throws CapabilityNotFoundException    capability not found exception.
      * @throws InvalidLimitException          invalid limit exception.
      */
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
+    protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
 
         LOGGER.info("showNodeCapabilityController(...)");
+
+        HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 
         final long start = System.currentTimeMillis();
 
@@ -189,7 +192,7 @@ public final class ShowNodeCapabilityController extends AbstractRestController {
 
         // else put thisNode instance in refData and return index view
         refData.put("testbedId", command.getTestbedId());
-        refData.put("readings", nodeReadings);
+        refData.put("text", HtmlFormatter.getInstance().formatNodeReadings(nodeReadings));
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         // check type of view requested

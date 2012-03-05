@@ -141,7 +141,7 @@ public final class ListNodeCapabilitiesController extends AbstractRestController
         final Writer output;
         try {
             output = (response.getWriter());
-            output.append(TextFormatter.getInstance().formatCapabilities(capabilities));
+            output.append(TextFormatter.getInstance().formatCapabilities(testbed,capabilities));
             output.flush();
             output.close();
         } catch (NotImplementedException e) {

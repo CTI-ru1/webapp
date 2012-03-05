@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.html.capability;
 
 import eu.uberdust.command.CapabilityCommand;
+import eu.uberdust.formatter.HtmlFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -102,7 +104,7 @@ public final class ShowCapabilityController extends AbstractRestController {
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param request    http servlet request.
+     * @param req    http servlet req.
      * @param response   http servlet response.
      * @param commandObj command object.
      * @param errors     BindException excetion.
@@ -111,11 +113,13 @@ public final class ShowCapabilityController extends AbstractRestController {
      * @throws TestbedNotFoundException    TestbedNotFoundException exception.
      * @throws CapabilityNotFoundException CapabilityNotFoundExcetion.
      */
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
+    protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, CapabilityNotFoundException {
 
         LOGGER.info("showCapabilityController(...)");
+
+        HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 
         final long start = System.currentTimeMillis();
 
@@ -152,8 +156,21 @@ public final class ShowCapabilityController extends AbstractRestController {
 
         refData.put("testbed", testbed);
         refData.put("capability", capability);
-        refData.put("nodes", nodes);
-        refData.put("links", links);
+        try {
+            refData.put("capabilityText", HtmlFormatter.getInstance().formatCapability(testbed, capability));
+        } catch (final NotImplementedException e) {
+            LOGGER.error(e);
+        }
+        try {
+            refData.put("nodes", HtmlFormatter.getInstance().formatNodes(nodes));
+        } catch (final NotImplementedException e) {
+            LOGGER.error(e);
+        }
+        try {
+            refData.put("links", HtmlFormatter.getInstance().formatLinks(links));
+        } catch (final NotImplementedException e) {
+            LOGGER.error(e);
+        }
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
 
         return new ModelAndView("capability/show.html", refData);

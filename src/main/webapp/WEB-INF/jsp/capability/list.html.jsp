@@ -7,7 +7,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
-<jsp:useBean id="capabilities" scope="request" class="java.util.ArrayList"/>
+<jsp:useBean id="text" scope="request" class="java.lang.String"/>
 
 <html>
 <head>
@@ -25,29 +25,7 @@
     <a href="<c:url value="/rest/testbed/${testbed.id}"/>">testbed</a>/
     <a href="<c:url value="/rest/testbed/${testbed.id}/capability"/>">testbed capabilities</a>
 </p>
-<c:choose>
-    <c:when test="${capabilities != null || fn:length(capabilities) != 0}">
-        <table>
-            <tr>
-                <td>Capabilities</td>
-                <td>(<c:out value="${fn:length(capabilities)}"/>)</td>
-            </tr>
-        </table>
-        <table>
-            <c:forEach items="${capabilities}" var="capability">
-                <tr>
-                    <td>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>"><c:out
-                                value="${capability.name}"/></a>
-                    </td>
-                </tr>
-            </c:forEach>
-        </table>
-    </c:when>
-    <c:otherwise>
-        <p style="color : red">No capabilities found for testbed <c:out value="${testbed.name}"/></p>
-    </c:otherwise>
-</c:choose>
+<c:out value="${text}" escapeXml="false" />
 <%@include file="/footer.jsp" %>
 </body>
 </html>

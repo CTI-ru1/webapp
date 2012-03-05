@@ -2,12 +2,14 @@ package eu.uberdust.rest.controller.tab;
 
 
 import eu.uberdust.command.LinkCommand;
+import eu.uberdust.formatter.TextFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.LinkController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.Link;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -112,10 +114,10 @@ public final class ListLinksController extends AbstractRestController {
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
 
-
-        // iterate over testbeds
-        for (Link link : links) {
-            textOutput.write("[" + link.getSource().getName() + "," + link.getTarget().getName() + "]\n");
+        try {
+            textOutput.append(TextFormatter.getInstance().formatLinks(links));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
         }
 
         // flush close output

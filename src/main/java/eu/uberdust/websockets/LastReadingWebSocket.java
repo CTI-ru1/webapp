@@ -60,8 +60,10 @@ public class LastReadingWebSocket
         * Process the handshake, selecting the protocol to be used.
         * The protocol is Defined by: NodeID:capabilityID
         */
-        final String protocol = servletRequest.getHeader("Sec-WebSocket-Protocol");
+        final String protocol = decode(servletRequest.getHeader("Sec-WebSocket-Protocol"));
+
         LOGGER.info(protocol);
+
 
         if (protocol == null) {
             servletResponse.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
@@ -86,6 +88,17 @@ public class LastReadingWebSocket
         wsRequest.startWebSocket(thisListener);
 
         return null;
+    }
+
+    private String decode(final String header) {
+        String decodedProtocol = header;
+        if (header.contains(".")) {
+            decodedProtocol = decodedProtocol.replaceAll("\\.", "@");
+        }
+        if (header.contains("-")) {
+            decodedProtocol = decodedProtocol.replaceAll("-", ":");
+        }
+        return decodedProtocol;
     }
 
     @Override

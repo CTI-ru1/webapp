@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.html.node;
 
 import eu.uberdust.command.NodeCommand;
+import eu.uberdust.formatter.HtmlFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeController;
@@ -69,7 +71,7 @@ public final class ListNodesController extends AbstractRestController {
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param request    http servlet request.
+     * @param req        http servlet req.
      * @param response   http servlet response.
      * @param commandObj command object.
      * @param errors     BindException exception.
@@ -77,11 +79,13 @@ public final class ListNodesController extends AbstractRestController {
      * @throws InvalidTestbedIdException an InvalidTestbedIdException exception.
      * @throws TestbedNotFoundException  an TestbedNotFoundException exception.
      */
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
+    protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException {
 
         LOGGER.info("listNodesController(...)");
+
+        HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 
         final long start = System.currentTimeMillis();
 
@@ -110,7 +114,11 @@ public final class ListNodesController extends AbstractRestController {
 
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
-        refData.put("nodes", nodes);
+        try {
+            refData.put("text", HtmlFormatter.getInstance().formatNodes(nodes));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
+        }
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         return new ModelAndView("node/list.html", refData);

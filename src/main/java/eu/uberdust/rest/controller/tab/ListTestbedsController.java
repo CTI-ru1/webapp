@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller class that returns a list of testbed in Raw text format.
@@ -67,6 +68,8 @@ public final class ListTestbedsController extends AbstractRestController {
 
         // testbed list
         final List<Testbed> testbeds = testbedManager.list();
+        final Map<String, Long> nodesCount = testbedManager.countNodes();
+        final Map<String, Long> linksCount = testbedManager.countLinks();
 
 
         // write on the HTTP response
@@ -74,7 +77,7 @@ public final class ListTestbedsController extends AbstractRestController {
         final Writer textOutput = (response.getWriter());
 
         try {
-            textOutput.append(TextFormatter.getInstance().formatTestbeds(testbeds));
+            textOutput.append(TextFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount));
         } catch (NotImplementedException e) {
             LOGGER.error(e);
         }

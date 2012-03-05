@@ -8,8 +8,9 @@
 
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
 <jsp:useBean id="capability" scope="request" class="eu.wisebed.wisedb.model.Capability"/>
-<jsp:useBean id="nodes" scope="request" class="java.util.ArrayList"/>
-<jsp:useBean id="links" scope="request" class="java.util.ArrayList"/>
+<jsp:useBean id="capabilityText" scope="request" class="java.lang.String"/>
+<jsp:useBean id="nodes" scope="request" class="java.lang.String"/>
+<jsp:useBean id="links" scope="request" class="java.lang.String"/>
 
 <html>
 <head>
@@ -27,68 +28,11 @@
     <a href="<c:url value="/rest/testbed/${testbed.id}"/>">testbed</a>/
     <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>">capability</a>
 </p>
-<table>
-    <tbody>
-    <tr>
-        <td>Capability ID</td>
-        <td>
-            <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>"><c:out
-                    value="${capability.name}"/></a>
-        </td>
-    </tr>
-    <tr>
-        <td>Capability Semantic Description</td>
-        <td><c:out value="${capability.description}"/></td>
-    </tr>
-    <tr>
-    <th>
-        List All Readings for the capability in:
-    </th>
-    </tr>
-    <tr>
-            <td>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}/tabdelimited"/>">Tab
-                    Delimited Format</a>
-            </td>
-    </tr>
-    <tr>
-    <c:if test="${nodes != null && fn:length(nodes) != 0}">
-        <td>
-            <table>
-                <tr>
-                    <th>Nodes(<c:out value="${fn:length(nodes)}"/>)</th>
-                </tr>
-                <c:forEach items="${nodes}" var="node">
-                    <tr>
-                        <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}"/>"><c:out
-                                    value="${node.name}"/></a>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </table>
-        </td>
-    </c:if>
-    <c:if test="${links != null && fn:length(links) != 0}">
-        <td>
-            <table>
-                <tr>
-                    <th>Links(<c:out value="${fn:length(links)}"/>)</th>
-                </tr>
-                <c:forEach items="${links}" var="link">
-                    <tr>
-                        <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>">
-                                <c:out value="[${link.source.name},${link.target.name}]"/></a>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </table>
-        </td>
-    </c:if>
-    </tr>
-    </tbody>
-</table>
+
+<c:out value="${capabilityText}" escapeXml="false" />
+<c:out value="${nodes}" escapeXml="false" />
+<c:out value="${links}" escapeXml="false" />
+
 <%@include file="/footer.jsp" %>
 </body>
 </html>

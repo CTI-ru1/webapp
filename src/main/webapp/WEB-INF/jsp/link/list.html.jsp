@@ -7,7 +7,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
-<jsp:useBean id="links" scope="request" class="java.util.ArrayList"/>
+<jsp:useBean id="text" scope="request" class="java.lang.String"/>
 
 
 <html>
@@ -27,33 +27,9 @@
     <a href="<c:url value="/rest/testbed/${testbed.id}"/>">testbed</a>/
     <a href="<c:url value="/rest/testbed/${testbed.id}/link"/>">testbed links</a>
 </p>
-<c:choose>
-    <c:when test="${links != null || fn:length(links) != 0}">
-        <table>
-            <tbody>
-            <tr>
-                <td>Links</td>
-                <td>(<c:out value="${fn:length(links)}"/>)</td>
-            </tr>
-            </tbody>
-        </table>
-        <table>
-            <tbody>
-            <c:forEach items="${links}" var="link">
-                <tr>
-                    <td>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>"><c:out
-                                value="${link.source.name},${link.target.name}"/></a>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </c:when>
-    <c:otherwise>
-        <p style="color : red">No links found for testbed <c:out value="${testbed.name}"/></p>
-    </c:otherwise>
-</c:choose>
+
+<c:out value="${text}" escapeXml="false" />
+
 <%@include file="/footer.jsp" %>
 </body>
 </html>

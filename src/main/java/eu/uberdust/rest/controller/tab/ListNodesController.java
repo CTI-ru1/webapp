@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.tab;
 
 import eu.uberdust.command.NodeCommand;
+import eu.uberdust.formatter.TextFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeController;
@@ -109,10 +111,12 @@ public final class ListNodesController extends AbstractRestController {
 
         textOutput = (response.getWriter());
 
-        // iterate over nodes
-        for (Node node : nodes) {
-            textOutput.write(node.getName() + "\n");
+        try {
+            textOutput.append(TextFormatter.getInstance().formatNodes(nodes));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
         }
+
         textOutput.flush();
         textOutput.close();
 

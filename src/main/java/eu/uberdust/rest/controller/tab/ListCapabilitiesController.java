@@ -116,7 +116,7 @@ public final class ListCapabilitiesController extends AbstractRestController {
         final Writer textOutput = (response.getWriter());
 
         try {
-            textOutput.write(TextFormatter.getInstance().formatCapabilities(capabilities));
+            textOutput.write(TextFormatter.getInstance().formatCapabilities(testbed,capabilities));
         } catch (NotImplementedException e) {
             textOutput.append("not implemented exception");
         }

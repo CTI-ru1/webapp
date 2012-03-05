@@ -1,12 +1,14 @@
 package eu.uberdust.rest.controller.html.link;
 
 import eu.uberdust.command.LinkCommand;
+import eu.uberdust.formatter.HtmlFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.LinkController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.Link;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -69,7 +71,7 @@ public final class ListLinksController extends AbstractRestController {
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param request    http servlet request.
+     * @param req        http servlet req.
      * @param response   http servlet response.
      * @param commandObj command object.
      * @param errors     BindException exception.
@@ -77,11 +79,13 @@ public final class ListLinksController extends AbstractRestController {
      * @throws InvalidTestbedIdException an InvalidTestbedIdException exception.
      * @throws TestbedNotFoundException  an TestbedNotFoundException exception.
      */
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
+    protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException {
 
         LOGGER.info("listLinksController(...)");
+
+        HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 
         final long start = System.currentTimeMillis();
 
@@ -109,7 +113,11 @@ public final class ListLinksController extends AbstractRestController {
         final Map<String, Object> refData = new HashMap<String, Object>();
 
         refData.put("testbed", testbed);
-        refData.put("links", links);
+        try {
+            refData.put("text", HtmlFormatter.getInstance().formatLinks(links));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
+        }
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
 
         return new ModelAndView("link/list.html", refData);

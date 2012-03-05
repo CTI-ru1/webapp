@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.html.testbed;
 
 import eu.uberdust.command.TestbedCommand;
+import eu.uberdust.formatter.HtmlFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
@@ -11,6 +13,7 @@ import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Link;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
+import net.sf.ehcache.CacheManager;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -98,9 +101,9 @@ public final class ShowTestbedController extends AbstractRestController {
     }
 
     /**
-     * Handle request and return the appropriate response.
+     * Handle req and return the appropriate response.
      *
-     * @param request    http servlet request.
+     * @param req        http servlet req.
      * @param response   http servlet response.
      * @param commandObj command object.
      * @param errors     a BindException exception.
@@ -108,11 +111,19 @@ public final class ShowTestbedController extends AbstractRestController {
      * @throws TestbedNotFoundException  a TestbedNotFoundException exception.
      * @throws InvalidTestbedIdException a InvalidTestbedException exception.
      */
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
+    protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException {
 
         LOGGER.info("showTestbedController(...)");
+
+        LOGGER.info("net.sf.ehcache.CacheManager:" + CacheManager.getInstance().getCacheNames().length);
+        for (String cache : CacheManager.getInstance().getCacheNames()) {
+            LOGGER.info("Cache : " + cache + " elements " + CacheManager.getInstance().getCache(cache).getKeys().size());
+        }
+
+
+        HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 
         final long start = System.currentTimeMillis();
 
@@ -148,9 +159,11 @@ public final class ShowTestbedController extends AbstractRestController {
 
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
-        refData.put("nodes", nodes);
-        refData.put("links", links);
-        refData.put("capabilities", capabilities);
+        try {
+            refData.put("text", HtmlFormatter.getInstance().showTestbed(testbed, nodes, links, capabilities));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
+        }
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
 
         return new ModelAndView("testbed/show.html", refData);
