@@ -1,7 +1,7 @@
 package eu.uberdust.rest.controller.json;
 
 import eu.uberdust.command.TestbedCommand;
-import eu.uberdust.formatter.TextFormatter;
+import eu.uberdust.formatter.JsonFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * Controller class that returns the status page for the nodes and links of a testbed.
@@ -122,17 +121,15 @@ public final class ShowTestbedStatusController extends AbstractRestController {
             final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
 
             // write on the HTTP response
-            response.setContentType("text/plain");
-            response.addHeader("Content-Encoding", "gzip");
+            response.setContentType("text/json");
+
             final Writer textOutput;
             try {
                 textOutput = (response.getWriter());
 
                 try {
-                    final String responseStr = TextFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
-
-                    GZIPOutputStream gzipstream = new GZIPOutputStream(response.getOutputStream());
-                    gzipstream.write(responseStr.getBytes(), 0, responseStr.getBytes().length);
+                    final String responseStr = JsonFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
+                    textOutput.append(responseStr);
 
                 } catch (NotImplementedException e) {
                     textOutput.append("not implemented exception");

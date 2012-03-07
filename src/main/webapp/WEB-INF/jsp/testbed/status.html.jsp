@@ -8,7 +8,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
-<jsp:useBean id="lastNodeReadings" scope="request" class="java.util.ArrayList"/>
+<jsp:useBean id="lastNodeReadings" scope="request" class="java.lang.String"/>
 <jsp:useBean id="lastLinkReadings" scope="request" class="java.util.ArrayList"/>
 
 <html>
@@ -29,75 +29,7 @@
     <a href="<c:url value="/rest/testbed/${testbed.id}/status"/>">status</a>
 </p>
 
-<c:choose>
-    <c:when test="${lastNodeReadings != null}">
-        <h2>Nodes</h2>
-        <table>
-            <thead>
-            <th>Node</th>
-            <th>Capability</th>
-            <th>Timestamp</th>
-            <th>Double Reading</th>
-            <th>String Reading</th>
-            </thead>
-            <tbody>
-            <c:forEach items="${lastNodeReadings}" var="lnr">
-                <c:if test="${lnr != null}">
-                    <c:if test="${ lnr.capability.name!='x' && lnr.capability.name!='y' && lnr.capability.name!='z' && lnr.capability.name!='phi' && lnr.capability.name!='theta' && lnr.capability.name!='room'&& lnr.capability.name!='description' }">
-                        <tr>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${lnr.node.name}"/>"><c:out value="${lnr.node.name}"/></a>
-                            </td>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${lnr.capability.name}"/>"><c:out value="${lnr.capability.name}"/></a>
-                            </td>
-                            <c:if test="${lnr.lastNodeReading != null}">
-                                <c:if test="${lnr.lastNodeReading.timestamp != null}">
-                                    <c:choose>
-                                        <c:when test="${util:checkIfDateIsToday(lnr.lastNodeReading.timestamp)}">
-                                            <td>${lnr.lastNodeReading.timestamp}</td>
-                                           <c:if test="${lnr.lastNodeReading.reading != null}">
-                                               <td class="reading">${lnr.lastNodeReading.reading}</td>
-                                           </c:if>
-                                           <c:if test="${lnr.lastNodeReading.reading == null}">
-                                               <td class="reading"></td>
-                                           </c:if>
-                                           <c:if test="${lnr.lastNodeReading.stringReading != null}">
-                                                <td class="reading">${lnr.lastNodeReading.stringReading}</td>
-                                            </c:if>
-                                            <c:if test="${lnr.lastNodeReading.stringReading == null}">
-                                                <td class="reading"></td>
-                                           </c:if>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <td style="color :red">${lnr.lastNodeReading.timestamp}</td>
-                                            <c:if test="${lnr.lastNodeReading.reading != null}">
-                                               <td class="reading" style="color :red">${lnr.lastNodeReading.reading}</td>
-                                            </c:if>
-                                            <c:if test="${lnr.lastNodeReading.reading == null}">
-                                               <td class="reading" style="color :red"></td>
-                                            </c:if>
-                                            <c:if test="${lnr.lastNodeReading.stringReading != null}">
-                                                <td class="reading" style="color :red">${lnr.lastNodeReading.stringReading}</td>
-                                            </c:if>
-                                            <c:if test="${lnr.lastNodeReading.stringReading == null}">
-                                                <td class="reading" style="color :red"></td>
-                                           </c:if>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:if>
-                            </c:if>
-                        </tr>
-                    </c:if>
-                </c:if>
-            </c:forEach>
-            </tbody>
-        </table>
-    </c:when>
-    <c:otherwise>
-        <p style="color :red"> No node status available</p>
-    </c:otherwise>
-</c:choose>
+<c:out value="${lastNodeReadings}" escapeXml="false" />
 
 <c:choose>
     <c:when test="${lastLinkReadings != null}">

@@ -1,6 +1,8 @@
 package eu.uberdust.rest.controller.html.testbed;
 
 import eu.uberdust.command.TestbedCommand;
+import eu.uberdust.formatter.HtmlFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.LinkCapabilityController;
@@ -113,24 +115,39 @@ public final class ShowTestbedStatusController extends AbstractRestController {
         if (nodeCapabilityManager == null) {
             LOGGER.error("nodeCapabilityManager==null");
         }
+        try {
 
-        // get a list of node last readings from testbed
-        final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
-        LOGGER.info("got nodeCapabilities");
+            // get a list of node last readings from testbed
+            final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
+            LOGGER.info("got nodeCapabilities");
 
-        // get a list of link statistics from testbed
-        final List<LinkCapability> linkCapabilities = linkCapabilityManager.list(testbed.getSetup());
-        LOGGER.info("got linkCapabilities");
+            try {
+                final String nodeCaps = HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
+            } catch (NotImplementedException e) {
 
-        // Prepare data to pass to jsp
-        final Map<String, Object> refData = new HashMap<String, Object>();
-        refData.put("testbed", testbed);
-        refData.put("lastNodeReadings", nodeCapabilities);
-        refData.put("lastLinkReadings", linkCapabilities);
+            }
 
-        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
-        LOGGER.info("prepared map");
+            // get a list of link statistics from testbed
+            final List<LinkCapability> linkCapabilities = linkCapabilityManager.list(testbed.getSetup());
+            LOGGER.info("got linkCapabilities");
 
-        return new ModelAndView("testbed/status.html", refData);
+            // Prepare data to pass to jsp
+            final Map<String, Object> refData = new HashMap<String, Object>();
+            refData.put("testbed", testbed);
+            try {
+                refData.put("lastNodeReadings", HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities));
+            } catch (NotImplementedException e) {
+                LOGGER.error(e);
+            }
+            refData.put("lastLinkReadings", linkCapabilities);
+
+            refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+            LOGGER.info("prepared map");
+
+            return new ModelAndView("testbed/status.html", refData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

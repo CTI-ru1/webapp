@@ -91,14 +91,18 @@ public class LastReadingWebSocket
     }
 
     private String decode(final String header) {
-        String decodedProtocol = header;
-        if (header.contains(".")) {
-            decodedProtocol = decodedProtocol.replaceAll("\\.", "@");
+        if (header == null) {
+            return null;
+        } else {
+            String decodedProtocol = header;
+            if (header.contains(".")) {
+                decodedProtocol = decodedProtocol.replaceAll("\\.", "@");
+            }
+            if (header.contains("-")) {
+                decodedProtocol = decodedProtocol.replaceAll("-", ":");
+            }
+            return decodedProtocol;
         }
-        if (header.contains("-")) {
-            decodedProtocol = decodedProtocol.replaceAll("-", ":");
-        }
-        return decodedProtocol;
     }
 
     @Override
@@ -108,6 +112,7 @@ public class LastReadingWebSocket
             handleRequest((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
         } catch (Exception ex) {
             LOGGER.fatal(ex);
+            ex.printStackTrace();
         }
     }
 }

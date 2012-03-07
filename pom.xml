@@ -13,10 +13,11 @@
     <properties>
         <!--Properties needed for the Project-->
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
-        <springframework.version>3.1.0.M1</springframework.version>
+        <springframework.version>3.1.0.RELEASE</springframework.version>
         <servlet-api.version>2.5</servlet-api.version>
         <junit.version>4.8.1</junit.version>
         <hsqldb.version>2.0.0</hsqldb.version>
+        <hibernate.version>3.5.6-Final</hibernate.version>
         <mysql.connector.version>5.1.10</mysql.connector.version>
 
     </properties>
@@ -113,14 +114,22 @@
     </pluginRepositories>
 
     <dependencies>
-
-        <!-- database related dependencies -->
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>3.6.9.Final</version>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>uberdust</groupId>
+            <artifactId>Cache</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-annotations</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <!-- database related dependencies -->
         <dependency>
             <groupId>uberdust</groupId>
             <artifactId>wisedb</artifactId>
@@ -242,11 +251,6 @@
             <artifactId>log4j</artifactId>
             <version>1.2.14</version>
         </dependency>
-        <dependency>
-            <groupId>org.geonames</groupId>
-            <artifactId>georss-rome</artifactId>
-            <version>0.9.8</version>
-        </dependency>
 
         <dependency>
             <groupId>org.infinispan</groupId>
@@ -294,7 +298,11 @@
             <artifactId>json-jena</artifactId>
             <version>1.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.6.11</version>
+        </dependency>
 
     </dependencies>
 
@@ -446,6 +454,34 @@
                 <version>2.4.2</version>
                 <configuration>
                     <encoding>utf-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <source>1.6</source>
+                            <target>1.6</target>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <weaveDependencies>
+                        <dependency>
+                            <groupId>uberdust</groupId>
+                            <artifactId>Cache</artifactId>
+                        </dependency>
+                        <weaveDependency>
+                            <groupId>org.aspectj</groupId>
+                            <artifactId>aspectjrt</artifactId>
+                        </weaveDependency>
+                    </weaveDependencies>
                 </configuration>
             </plugin>
         </plugins>

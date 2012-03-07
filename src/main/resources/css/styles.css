@@ -3,6 +3,11 @@
     text-align:right;
 }
 
+.outdated
+{
+    background-color: #FFBBBC;
+}
+
 table.readings {
     border: medium outset gray;
     border-spacing : 5px;

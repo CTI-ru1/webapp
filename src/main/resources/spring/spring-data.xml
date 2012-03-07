@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:cache="http://www.springframework.org/schema/cache"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
-
-    <cache:annotation-driven cache-manager="cacheManager"/>
-
-    <!-- generic cache manager -->
-    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
-        <property name="caches">
-            <set>
-                <bean class="org.springframework.cache.concurrent.ConcurrentCacheFactoryBean" name="default" />
-                <bean class="org.springframework.cache.concurrent.ConcurrentCacheFactoryBean" name="formatNode"/>
-                <bean class="org.springframework.cache.concurrent.ConcurrentCacheFactoryBean" name="testCache1"/>
-            </set>
-        </property>
-    </bean>
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
     <!-- Data Source setup -->

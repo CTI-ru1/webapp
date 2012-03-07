@@ -37,6 +37,8 @@
                 <prop key="GET /testbed/json">listTestbedsJSONController</prop>
                 <prop key="GET /testbed/*">showTestbedController</prop>
                 <prop key="GET /testbed/*/status">showTestbedStatusController</prop>
+                <prop key="GET /testbed/*/status/raw">showRawTestbedStatusController</prop>
+                <prop key="GET /testbed/*/status/json">showJsonTestbedStatusController</prop>
                 <prop key="GET /testbed/*/rooms">showTestbedRoomsController</prop>
                 <prop key="GET /testbed/*/rooms/json">showTestbedRoomsJSONController</prop>
                 <prop key="GET /testbed/*/georss">showTestbedGeoRssController</prop>
@@ -208,6 +210,22 @@
         <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
         <property name="linkCapabilityManager" ref="linkCapabilityManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/status"/>
+    </bean>
+    <bean name="showRawTestbedStatusController"
+          class="eu.uberdust.rest.controller.tab.ShowTestbedStatusController">
+        <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
+        <property name="linkCapabilityManager" ref="linkCapabilityManager"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/status/raw"/>
+    </bean>
+    <bean name="showJsonTestbedStatusController"
+          class="eu.uberdust.rest.controller.json.ShowTestbedStatusController">
+        <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
+        <property name="linkCapabilityManager" ref="linkCapabilityManager"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/status/json"/>
     </bean>
 
     <!-- Show Testbed Rooms Controller -->
