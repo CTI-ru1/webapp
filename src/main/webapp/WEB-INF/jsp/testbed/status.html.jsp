@@ -9,7 +9,7 @@
 
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
 <jsp:useBean id="lastNodeReadings" scope="request" class="java.lang.String"/>
-<jsp:useBean id="lastLinkReadings" scope="request" class="java.util.ArrayList"/>
+<jsp:useBean id="lastLinkReadings" scope="request" class="java.lang.String"/>
 
 <html>
 <head>
@@ -31,73 +31,9 @@
 
 <c:out value="${lastNodeReadings}" escapeXml="false" />
 
-<c:choose>
-    <c:when test="${lastLinkReadings != null}">
-        <h2>Links</h2>
-        <table>
-            <thead>
-                <th>Link</th>
-                <th>Capability</th>
-                <th>Timestamp</th>
-                <th>Double Reading</th>
-                <th>String Reading</th>
-            </thead>
-            <tbody>
-            <c:forEach items="${lastLinkReadings}" var="llr">
-                <c:if test="${llr != null}">
-                    <tr>
-                        <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/link/${llr.link.source.name}/${llr.link.target.name}"/>"><c:out value="[${llr.link.source.name},${llr.link.target.name}]"/></a>
-                        </td>
-                        <td>
-                            <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${llr.capability.name}"/>"><c:out value="${llr.capability.name}"/></a>
-                        </td>
-                        <c:if test="${llr.lastLinkReading != null}">
-                            <c:if test="${llr.lastLinkReading.timestamp != null}">
-                                <c:choose>
-                                    <c:when test="${util:checkIfDateIsToday(llr.lastLinkReading.timestamp)}">
-                                        <td>${llr.lastLinkReading.timestamp}</td>
-                                       <c:if test="${llr.lastLinkReading.reading != null}">
-                                           <td>${llr.lastLinkReading.reading}</td>
-                                       </c:if>
-                                       <c:if test="${llr.lastLinkReading.reading == null}">
-                                           <td></td>
-                                       </c:if>
-                                       <c:if test="${llr.lastLinkReading.stringReading != null}">
-                                            <td>${llr.lastLinkReading.stringReading}</td>
-                                        </c:if>
-                                        <c:if test="${llr.lastLinkReading.stringReading == null}">
-                                            <td></td>
-                                       </c:if>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td style="color :red">${llr.lastLinkReading.timestamp}</td>
-                                        <c:if test="${llr.lastLinkReading.reading != null}">
-                                           <td style="color :red">${llr.lastLinkReading.reading}</td>
-                                        </c:if>
-                                        <c:if test="${llr.lastLinkReading.reading == null}">
-                                           <td style="color :red"></td>
-                                        </c:if>
-                                        <c:if test="${llr.lastLinkReading.stringReading != null}">
-                                            <td style="color :red">${llr.lastLinkReading.stringReading}</td>
-                                        </c:if>
-                                        <c:if test="${llr.lastLinkReading.stringReading == null}">
-                                            <td style="color :red"></td>
-                                       </c:if>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:if>
-                        </c:if>
-                    </tr>
-                </c:if>
-            </c:forEach>
-            </tbody>
-        </table>
-    </c:when>
-    <c:otherwise>
-        <p style="color :red"> No link status available</p>
-    </c:otherwise>
-</c:choose>
+<c:out value="${lastLinkReadings}" escapeXml="false" />
+
+
 <%@include file="/footer.jsp"%>
 </body>
 </html>

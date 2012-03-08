@@ -115,39 +115,41 @@ public final class ShowTestbedStatusController extends AbstractRestController {
         if (nodeCapabilityManager == null) {
             LOGGER.error("nodeCapabilityManager==null");
         }
+
+
+        // get a list of node last readings from testbed
+        final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
+
+
         try {
+            final String nodeCaps = HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
+        } catch (NotImplementedException e) {
 
-            // get a list of node last readings from testbed
-            final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
-            LOGGER.info("got nodeCapabilities");
-
-            try {
-                final String nodeCaps = HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
-            } catch (NotImplementedException e) {
-
-            }
-
-            // get a list of link statistics from testbed
-            final List<LinkCapability> linkCapabilities = linkCapabilityManager.list(testbed.getSetup());
-            LOGGER.info("got linkCapabilities");
-
-            // Prepare data to pass to jsp
-            final Map<String, Object> refData = new HashMap<String, Object>();
-            refData.put("testbed", testbed);
-            try {
-                refData.put("lastNodeReadings", HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities));
-            } catch (NotImplementedException e) {
-                LOGGER.error(e);
-            }
-            refData.put("lastLinkReadings", linkCapabilities);
-
-            refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
-            LOGGER.info("prepared map");
-
-            return new ModelAndView("testbed/status.html", refData);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return null;
+
+        // get a list of link statistics from testbed
+        final List<LinkCapability> linkCapabilities = linkCapabilityManager.list(testbed.getSetup());
+
+
+        // Prepare data to pass to jsp
+        final Map<String, Object> refData = new HashMap<String, Object>();
+        refData.put("testbed", testbed);
+        try {
+            refData.put("lastNodeReadings", HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
+        }
+        try {
+            refData.put("lastLinkReadings", HtmlFormatter.getInstance().formatLastLinkReadings(linkCapabilities));
+        } catch (NotImplementedException e) {
+            LOGGER.error(e);
+        }
+
+
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+        LOGGER.info("prepared map");
+
+        return new ModelAndView("testbed/status.html", refData);
+
     }
 }

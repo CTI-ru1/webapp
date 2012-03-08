@@ -91,62 +91,60 @@ public final class ShowTestbedStatusController extends AbstractRestController {
             throws InvalidTestbedIdException, TestbedNotFoundException {
 
         LOGGER.info("showTestbedStatusController(...)");
+
+        final long start = System.currentTimeMillis();
+
+        // set command object
+        final TestbedCommand command = (TestbedCommand) commandObj;
+
+        // a specific testbed is requested by testbed Id
+        int testbedId;
         try {
-            final long start = System.currentTimeMillis();
+            testbedId = Integer.parseInt(command.getTestbedId());
+        } catch (NumberFormatException nfe) {
+            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
+        }
 
-            // set command object
-            final TestbedCommand command = (TestbedCommand) commandObj;
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+        LOGGER.info("got testbed " + testbed);
 
-            // a specific testbed is requested by testbed Id
-            int testbedId;
-            try {
-                testbedId = Integer.parseInt(command.getTestbedId());
-            } catch (NumberFormatException nfe) {
-                throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-            }
+        if (nodeCapabilityManager == null) {
+            LOGGER.error("nodeCapabilityManager==null");
+        }
 
-            // look up testbed
-            final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
-            if (testbed == null) {
-                // if no testbed is found throw exception
-                throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
-            }
-            LOGGER.info("got testbed " + testbed);
+        // get a list of node last readings from testbed
+        final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
 
-            if (nodeCapabilityManager == null) {
-                LOGGER.error("nodeCapabilityManager==null");
-            }
-
-            // get a list of node last readings from testbed
-            final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
-
-            // write on the HTTP response
-            response.setContentType("text/plain");
+        // write on the HTTP response
+        response.setContentType("text/plain");
 //            response.addHeader("Content-Encoding", "gzip");
-            final Writer textOutput;
-            try {
-                textOutput = (response.getWriter());
+        final Writer textOutput;
+        try {
+            textOutput = (response.getWriter());
 
-                try {
-                    final String responseStr = TextFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
+            try {
+                final String responseStr = TextFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
 
 //                    GZIPOutputStream gzipstream = new GZIPOutputStream(response.getOutputStream());
 //                    gzipstream.write(responseStr.getBytes(), 0, responseStr.getBytes().length);
-                    textOutput.append(responseStr);
+                textOutput.append(responseStr);
 
-                } catch (NotImplementedException e) {
-                    textOutput.append("not implemented exception");
-                }
-
-
-                textOutput.flush();
-                textOutput.close();
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (NotImplementedException e) {
+                textOutput.append("not implemented exception");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+
+            textOutput.flush();
+            textOutput.close();
+        } catch (IOException e) {
+            LOGGER.error(e);
         }
+
         return null;
     }
 }

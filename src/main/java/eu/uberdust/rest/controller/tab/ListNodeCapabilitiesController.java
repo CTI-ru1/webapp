@@ -10,11 +10,12 @@ import eu.uberdust.rest.exception.InvalidNodeIdException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.CapabilityController;
+import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.NodeCapability;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,9 +44,9 @@ public final class ListNodeCapabilitiesController extends AbstractRestController
      */
     private transient TestbedController testbedManager;
 
-    private transient CapabilityController capabilityManager;
+    private transient NodeCapabilityController capabilityManager;
 
-    public void setCapabilityManager(final CapabilityController capabilityManager) {
+    public void setNodeCapabilityManager(final NodeCapabilityController capabilityManager) {
         this.capabilityManager = capabilityManager;
     }
 
@@ -103,53 +105,61 @@ public final class ListNodeCapabilitiesController extends AbstractRestController
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
 
         LOGGER.info("listNodeCapabilitiesController(...)");
-
-        // set commandNode object
-        final NodeCommand command = (NodeCommand) commandObj;
-
-        // check node id
-        if (command.getNodeId() == null || command.getNodeId().isEmpty()) {
-            throw new InvalidNodeIdException("Must provide node id");
-        }
-
-        // a specific testbed is requested by testbed Id
-        int testbedId;
         try {
-            testbedId = Integer.parseInt(command.getTestbedId());
+            // set commandNode object
+            final NodeCommand command = (NodeCommand) commandObj;
 
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
+            // check node id
+            if (command.getNodeId() == null || command.getNodeId().isEmpty()) {
+                throw new InvalidNodeIdException("Must provide node id");
+            }
+
+            // a specific testbed is requested by testbed Id
+            int testbedId;
+            try {
+                testbedId = Integer.parseInt(command.getTestbedId());
+
+            } catch (NumberFormatException nfe) {
+                throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
+            }
+
+            // look up testbed
+            final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
+            if (testbed == null) {
+                // if no testbed is found throw exception
+                throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+            }
+
+            // retrieve node
+            final Node node = nodeManager.getByName(command.getNodeId());
+            if (node == null) {
+                throw new NodeNotFoundException("Cannot find node [" + command.getNodeId() + "]");
+            }
+
+            // retrieve capability
+            final List<Capability> capabilities = new ArrayList<Capability>();
+            for (final NodeCapability capability : capabilityManager.list(node)) {
+                capabilities.add(capability.getCapability());
+            }
+
+            response.setContentType("text/plain");
+            final Writer output;
+            try {
+                output = (response.getWriter());
+                output.append(TextFormatter.getInstance().formatCapabilities(testbed, capabilities));
+                output.flush();
+                output.close();
+            } catch (NotImplementedException e) {
+                LOGGER.error(e);
+            } catch (IOException e) {
+                LOGGER.fatal(e);
+            }
+            // check type of view requested
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
-        if (testbed == null) {
-            // if no testbed is found throw exception
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
-        }
-
-        // retrieve node
-        final Node node = nodeManager.getByName(command.getNodeId());
-        if (node == null) {
-            throw new NodeNotFoundException("Cannot find node [" + command.getNodeId() + "]");
-        }
-
-        // retrieve capability
-        final List<Capability> capabilities = capabilityManager.list(node);
-
-        response.setContentType("text/plain");
-        final Writer output;
-        try {
-            output = (response.getWriter());
-            output.append(TextFormatter.getInstance().formatCapabilities(testbed,capabilities));
-            output.flush();
-            output.close();
-        } catch (NotImplementedException e) {
-            LOGGER.error(e);
-        } catch (IOException e) {
-            LOGGER.fatal(e);
-        }
-        // check type of view requested
         return null;
     }
+
 }
