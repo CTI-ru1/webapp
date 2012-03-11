@@ -1,8 +1,7 @@
 package eu.uberdust.rest.controller;
 
-import com.google.protobuf.ByteString;
+import eu.uberdust.util.CommandDispatcher;
 import eu.uberdust.command.DestinationPayloadCommand;
-import eu.uberdust.controller.protobuf.CommandProtocol;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.uberlogger.UberLogger;
 import eu.wisebed.wisedb.controller.NodeController;
@@ -15,9 +14,7 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
-import java.net.Socket;
 
 /**
  * Controller class for sending a message with certain payload to a destination.
@@ -87,26 +84,8 @@ public final class SendCommandController extends AbstractRestController {
             throw new NodeNotFoundException("Destination Node [" + command.getDestination() + "] is not stored.");
         }
 
-        if (command.getDestination().contains("494")) {
-            UberLogger.getInstance().log(nodeId, "T82");
-        }
-        // prepare socket for connection and writer
-        final Socket kkSocket = new Socket("gold.cti.gr", 4444);
-        final PrintWriter out = new PrintWriter(kkSocket.getOutputStream(), true);
+        CommandDispatcher.getInstance().sendCommand(destinationNode.getSetup().getId(), command.getDestination(), command.getPayload());
 
-        // build command and send it through the socket stream
-        final CommandProtocol.Command cmd = CommandProtocol.Command.newBuilder()
-                .setDestination(command.getDestination())
-                .setPayload(command.getPayload())
-                .build();
-        cmd.writeTo(kkSocket.getOutputStream());
-
-        // close stream after command execution
-        out.close();
-        kkSocket.close();
-        if (command.getDestination().contains("494")) {
-            UberLogger.getInstance().log(nodeId, "T83");
-        }
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
         textOutput.write("OK . Destination : " + command.getDestination() + "\nPayload : " + command.getPayload());

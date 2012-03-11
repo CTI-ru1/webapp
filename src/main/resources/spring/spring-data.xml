@@ -49,8 +49,8 @@
                 <prop key="hibernate.hbm2ddl.auto">${wisedb.hibernate.hbm2ddl.auto}</prop>
                 <prop key="hibernate.jdbc.batch_size">0</prop>
                 <!--enable second level caching and query caching-->
-                <!--<prop key="hibernate.cache.use_second_level_cache">true</prop>-->
-                <!--<prop key="hibernate.cache.use_query_cache">false</prop>-->
+                <prop key="hibernate.cache.use_second_level_cache">false</prop>
+                <prop key="hibernate.cache.use_query_cache">false</prop>
                 <prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
 
                 <!--<prop key="hibernate.cache.region.factory_class">-->

@@ -131,6 +131,7 @@
             <props>
                 <prop key="/lastreading.ws">lastReadingWebSocketController</prop>
                 <prop key="/insertreading.ws">insertReadingWebSocketController</prop>
+                <prop key="/testbedcontroller.ws">sendCommandWebSocketController</prop>
             </props>
         </property>
     </bean>
@@ -148,6 +149,9 @@
                 <property name="linkReadingManager" ref="linkReadingManager"/>
             </bean>
         </property>
+    </bean>
+    <!-- Insert Reading Controller WebSocket -->
+    <bean name="sendCommandWebSocketController" class="eu.uberdust.websockets.SendCommandWebSocket">
     </bean>
 
 
