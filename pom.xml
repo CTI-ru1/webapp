@@ -147,6 +147,11 @@
         </dependency>
         <dependency>
             <groupId>uberdust</groupId>
+            <artifactId>WebSocketsLibrary</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>uberdust</groupId>
             <artifactId>UberLogger</artifactId>
             <version>1.0</version>
         </dependency>
@@ -303,7 +308,11 @@
             <artifactId>aspectjrt</artifactId>
             <version>1.6.11</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.4.1</version>
+        </dependency>
     </dependencies>
 
     <build>

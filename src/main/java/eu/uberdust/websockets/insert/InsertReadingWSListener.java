@@ -2,7 +2,6 @@ package eu.uberdust.websockets.insert;
 
 import com.caucho.websocket.AbstractWebSocketListener;
 import com.caucho.websocket.WebSocketContext;
-import eu.uberdust.uberlogger.UberLogger;
 import eu.wisebed.wisedb.controller.LinkReadingController;
 import eu.wisebed.wisedb.controller.NodeReadingController;
 import org.apache.commons.io.IOUtils;
@@ -121,6 +120,7 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
      * @throws IOException IOException exception.
      */
     public void onReadBinary(final WebSocketContext context, final InputStream inputStream) throws IOException {
+
         final StringWriter writer = new StringWriter();
         IOUtils.copy(inputStream, writer, "UTF-8");
         final String receivedMessage = writer.toString();
@@ -131,9 +131,6 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
         final int testbedId = Integer.parseInt(messageParts[1]);
         String message = "Neither Node nor Link reading. ERROR";
 
-        if (receivedMessage.contains("1ccd")) {
-            UberLogger.getInstance().log(Long.parseLong(messageParts[4]), "T23");
-        }
 
         try {
             if (classOfReading.contains("NodeReading")) {
@@ -153,9 +150,6 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
                     stringReading = messageParts[7];
                 }
 
-                if (receivedMessage.contains("1ccd")) {
-                    UberLogger.getInstance().log(Long.parseLong(messageParts[4]), "T24");
-                }
 
                 nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, readingValue, stringReading,
                         new Date(timestamp));
@@ -188,7 +182,7 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
                         .append("]. OK").toString();
             }
         } catch (Exception e) {
-            message = "Exception OCCURED. ERROR";
+            message = "Exception OCCURED. ERROR " + e.getMessage();
             LOGGER.fatal(e);
         } finally {
             LOGGER.info("Sending " + message);
@@ -197,14 +191,12 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
             printWriter.print(message);
             printWriter.close();
         }
-        if (receivedMessage.contains("1ccd")) {
-            UberLogger.getInstance().log(Long.parseLong(messageParts[4]), "T25");
-        }
+
 
         //LOGGER.info("MEMSTAT_1: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
         // + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
-        LOGGER.info("MEMSTAT_2: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())
-                / 1024 / 1024 + " memory used!");
+        final long mBytes = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
+        LOGGER.info("Memory Usage: " + mBytes + " MB");
         //Runtime.getRuntime().gc();
         //LOGGER.info("MEMSTAT_2: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
         // + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");

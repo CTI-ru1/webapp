@@ -2,11 +2,12 @@ package eu.uberdust.websockets;
 
 import com.caucho.websocket.AbstractWebSocketListener;
 import com.caucho.websocket.WebSocketContext;
+import eu.uberdust.communication.protobuf.Message;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,13 +98,15 @@ public class SendCommandWSListener extends AbstractWebSocketListener {
 
     public final void update(final String nodeId, final String command) {
         LOGGER.info("Update");
+        Message.Control message = Message.Control.newBuilder().setDestination(nodeId).setPayload(command).build();
         for (final WebSocketContext user : users) {
             try {
-                final PrintWriter thisWriter = user.startTextMessage();
-                thisWriter.println(nodeId + "@" + command);
-                thisWriter.close();
-            } catch (final IOException e) {
-                LOGGER.error(e);
+                final OutputStream response = user.startBinaryMessage();
+                response.write(message.toByteArray());
+                response.flush();
+                response.close();
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
         }
     }
