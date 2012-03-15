@@ -11,7 +11,7 @@ import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.NodeCapability;
-import eu.wisebed.wisedb.model.Origin;
+import eu.wisebed.wisedb.model.Position;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -119,11 +119,11 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
         final List<Node> nodes = nodeManager.list(testbed.getSetup());
         final Map<Node, String> descriptionMap = new HashMap<Node, String>();
         final Map<Node, List<NodeCapability>> capabilityMap = new HashMap<Node, List<NodeCapability>>();
-        final Map<Node, Origin> originMap = new HashMap<Node, Origin>();
+        final Map<Node, Position> originMap = new HashMap<Node, Position>();
         for (final Node node : nodes) {
             descriptionMap.put(node, nodeManager.getDescription(node));
             capabilityMap.put(node, nodeCapabilityManager.list(node));
-            originMap.put(node, nodeManager.getOrigin(node));
+            originMap.put(node, nodeManager.getPosition(node));
         }
 
         String output = "";

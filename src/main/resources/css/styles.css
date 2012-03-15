@@ -3,25 +3,30 @@
     text-align:right;
 }
 
+.firstrow{
+}
+
+.uptodate{
+}
+
 .outdated
 {
     background-color: #FFBBBC;
 }
 
 table.readings {
-    border: medium outset gray;
-    border-spacing : 5px;
-    border-collapse: collapse;
+    border: 0px;
 }
 
 table.readings td{
-    border: medium outset gray;
-    padding: 5px;
+    padding: 0px;
 }
 
+td.reading {
+    text-align:left;
+}
 table.readings th{
-    border: medium outset gray;
-    padding: 5px;
+    padding: 0px;
 }
 
 .error {
