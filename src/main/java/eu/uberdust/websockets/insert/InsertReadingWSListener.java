@@ -2,16 +2,15 @@ package eu.uberdust.websockets.insert;
 
 import com.caucho.websocket.AbstractWebSocketListener;
 import com.caucho.websocket.WebSocketContext;
+import eu.uberdust.communication.protobuf.Message;
 import eu.wisebed.wisedb.controller.LinkReadingController;
 import eu.wisebed.wisedb.controller.NodeReadingController;
-import org.apache.commons.io.IOUtils;
+import eu.wisebed.wisedb.exception.UnknownTestbedException;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.util.Date;
 
 /**
@@ -28,27 +27,6 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
      * Singleton instance.
      */
     private static InsertReadingWSListener ourInstance = null;
-
-    /**
-     * Delimiter.
-     */
-    private static final String DELIMITER = "@";
-
-    /**
-     * Double Reading type.
-     */
-    private static final String DOUBLE_READING = "D";
-
-    /**
-     * String Reading type.
-     */
-    private static final String STRING_READING = "S";
-
-    /**
-     * Both reading type.
-     */
-    private static final String BOTH_READING = "B";
-
 
     /**
      * NodeReading persistence manager.
@@ -120,87 +98,60 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
      * @throws IOException IOException exception.
      */
     public void onReadBinary(final WebSocketContext context, final InputStream inputStream) throws IOException {
+        LOGGER.info("New Message Reveived");
 
-        final StringWriter writer = new StringWriter();
-        IOUtils.copy(inputStream, writer, "UTF-8");
-        final String receivedMessage = writer.toString();
-        writer.close();
-        LOGGER.info("onReadBinary(): " + receivedMessage);
-        final String[] messageParts = receivedMessage.split(DELIMITER);
-        final String classOfReading = messageParts[0];
-        final int testbedId = Integer.parseInt(messageParts[1]);
-        String message = "Neither Node nor Link reading. ERROR";
+        final Message.Envelope envelope = Message.Envelope.parseFrom(inputStream);
 
+        if (envelope.getType().equals(Message.Envelope.Type.NODE_READINGS)) {
+            LOGGER.info("New NodeReading");
+            final Message.NodeReadings nodeReadings = envelope.getNodeReadings();
+            for (Message.NodeReadings.Reading reading : nodeReadings.getReadingList()) {
+                final String nodeId = reading.getNode();
+                final String capabilityId = reading.getCapability();
+                /**
+                 * Todo : Get Testbed Id from db;
+                 */
+                final int testbedId = 1;
+                final long timestamp = reading.getTimestamp();
+                final double readingValue = reading.getDoubleReading();
+                final String stringReading = reading.getStringReading();
 
-        try {
-            if (classOfReading.contains("NodeReading")) {
-                // node reading incoming
-                final String nodeId = messageParts[2];
-                final String capabilityId = messageParts[3];
-                final long timestamp = Long.parseLong(messageParts[4]);
-                final String readingType = messageParts[5];
-                Double readingValue = null;
-                String stringReading = null;
-                if (readingType.equals(DOUBLE_READING)) {
-                    readingValue = Double.parseDouble(messageParts[6]);
-                } else if (readingType.equals(STRING_READING)) {
-                    stringReading = messageParts[6];
-                } else if (readingType.equals(BOTH_READING)) {
-                    readingValue = Double.parseDouble(messageParts[6]);
-                    stringReading = messageParts[7];
+                try {
+                    nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, readingValue, stringReading,
+                            new Date(timestamp));
+                } catch (final UnknownTestbedException e) {
+                    LOGGER.error("Uknown Testebed with id: " + testbedId, e);
                 }
-
-
-                nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, readingValue, stringReading,
-                        new Date(timestamp));
-                message = new StringBuilder().append("Inserted for Node(").append(nodeId).append(") Capability(")
-                        .append(capabilityId).append(") Testbed(").append(testbedId).append(") : [")
-                        .append(timestamp).append(",").append(readingValue).append("]. OK").toString();
-
-            } else if (classOfReading.contains("LinkReading")) {
-                // link reading incoming
-                final String sourceNodeId = messageParts[2];
-                final String targetNodeId = messageParts[3];
-                final String capabilityId = messageParts[4];
-                final long timestamp = Long.parseLong(messageParts[5]);
-                final String readingType = messageParts[6];
-                Double readingValue = null;
-                String stringReading = null;
-                if (readingType.equals(DOUBLE_READING)) {
-                    readingValue = Double.parseDouble(messageParts[7]);
-                } else if (readingType.equals(STRING_READING)) {
-                    stringReading = messageParts[7];
-                } else if (readingType.equals(BOTH_READING)) {
-                    readingValue = Double.parseDouble(messageParts[7]);
-                    stringReading = messageParts[8];
-                }
-                linkReadingManager.insertReading(sourceNodeId, targetNodeId, capabilityId, testbedId, readingValue,
-                        stringReading, new Date(timestamp));
-                message = new StringBuilder().append("Inserted for Link[").append(sourceNodeId).append(",")
-                        .append(targetNodeId).append("] Capability(").append(capabilityId).append(") Testbed(")
-                        .append(testbedId).append(") : [").append(timestamp).append(",").append(readingValue)
-                        .append("]. OK").toString();
             }
-        } catch (Exception e) {
-            message = "Exception OCCURED. ERROR " + e.getMessage();
-            LOGGER.fatal(e);
-        } finally {
-            LOGGER.info("Sending " + message);
-            // After message inputStream set return it to client.
-            final PrintWriter printWriter = context.startTextMessage();
-            printWriter.print(message);
-            printWriter.close();
+
+        } else if (envelope.getType().equals(Message.Envelope.Type.LINK_READINGS)) {
+            final Message.LinkReadings linkReadings = envelope.getLinkReadings();
+            for (Message.LinkReadings.Reading reading : linkReadings.getReadingList()) {
+                final String sourceNodeId = reading.getSource();
+                final String targetNodeId = reading.getTarget();
+                final String capabilityId = reading.getCapability();
+                /**
+                 * Todo : Get Testbed Id from db;
+                 */
+                final int testbedId = 1;
+                final long timestamp = reading.getTimestamp();
+                final double readingValue = reading.getDoubleReading();
+                final String stringReading = reading.getStringReading();
+
+                try {
+                    linkReadingManager.insertReading(sourceNodeId, targetNodeId, capabilityId, testbedId, readingValue,
+                    stringReading, new Date(timestamp));
+                } catch (final UnknownTestbedException e) {
+                    LOGGER.error("Uknown Testebed with id: " + testbedId, e);
+                }
+            }
+        } else {
+            LOGGER.error("Received unsupported Envelope Type");
         }
 
 
-        //LOGGER.info("MEMSTAT_1: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
-        // + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
         final long mBytes = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
         LOGGER.info("Memory Usage: " + mBytes + " MB");
-        //Runtime.getRuntime().gc();
-        //LOGGER.info("MEMSTAT_2: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
-        // + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
-
     }
 
     /**
