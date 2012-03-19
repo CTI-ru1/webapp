@@ -3,7 +3,6 @@ package eu.uberdust.rest.controller;
 import eu.uberdust.util.CommandDispatcher;
 import eu.uberdust.command.DestinationPayloadCommand;
 import eu.uberdust.rest.exception.NodeNotFoundException;
-import eu.uberdust.uberlogger.UberLogger;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.model.Node;
 import org.apache.log4j.Logger;
@@ -73,11 +72,6 @@ public final class SendCommandController extends AbstractRestController {
         final String payload = command.getPayload().replaceAll(",", "");
         final String nodeId = payload.substring(3);
 
-        if (command.getDestination().contains("494")) {
-            UberLogger.getInstance().log(nodeId, "T81");
-        }
-
-
         // look for destination node
         final Node destinationNode = nodeManager.getByName(command.getDestination());
         if (destinationNode == null) {
@@ -89,9 +83,6 @@ public final class SendCommandController extends AbstractRestController {
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
         textOutput.write("OK . Destination : " + command.getDestination() + "\nPayload : " + command.getPayload());
-        if (command.getDestination().contains("494")) {
-            UberLogger.getInstance().log(nodeId, "T84");
-        }
         return null;
 
     }

@@ -3,7 +3,6 @@ package eu.uberdust.rest.controller.insert.node;
 import eu.uberdust.command.NodeCapabilityInsertReadingCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.uberdust.uberlogger.UberLogger;
 import eu.wisebed.wisedb.controller.NodeReadingController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.exception.UnknownTestbedException;
@@ -87,9 +86,6 @@ public final class NodeCapabilityInsertStringReadingController extends AbstractR
         // set commandNode object
         final NodeCapabilityInsertReadingCommand command = (NodeCapabilityInsertReadingCommand) commandObj;
 
-        if (command.getNodeId().contains("1ccd")) {
-            UberLogger.getInstance().log(Long.parseLong(command.getTimestamp()), "T23");
-        }
         // a specific testbed is requested by testbed Id
         int testbedId;
         try {
@@ -111,9 +107,6 @@ public final class NodeCapabilityInsertStringReadingController extends AbstractR
         final String reading = command.getStringReading();
         final String nodeId = command.getNodeId();
         final String capabilityId = command.getCapabilityId();
-        if (nodeId.contains("1ccd")) {
-            UberLogger.getInstance().log(timestamp.getTime(), "T24");
-        }
 
         // insert reading
         try {
@@ -129,9 +122,6 @@ public final class NodeCapabilityInsertStringReadingController extends AbstractR
                 + ") Testbed(" + testbed.getName() + ") : " + reading + ". OK");
         textOutput.flush();
         textOutput.close();
-        if (command.getNodeId().contains("1ccd")) {
-            UberLogger.getInstance().log(timestamp.getTime(), "T25");
-        }
 
         LOGGER.info("MEMSTAT_3: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
                 + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");
