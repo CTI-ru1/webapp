@@ -72,6 +72,7 @@
 
                 <!-- Node/Capability Controllers for readings -->
                 <prop key="GET /testbed/*/node/*/capabilities">listNodeCapabilitiesController</prop>
+                <prop key="GET /testbed/*/node/*/capabilities/json">listNodeCapabilitiesJSONController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/html">nodeCapabilityHTMLController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/live">nodeCapabilityLiveController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/html/limit/*">nodeCapabilityHTMLController</prop>
@@ -479,6 +480,15 @@
 
     <bean name="listNodeCapabilitiesController"
           class="eu.uberdust.rest.controller.tab.ListNodeCapabilitiesController">
+        <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeManager" ref="nodeManager"/>
+        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/capabilities"/>
+    </bean>
+
+    <bean name="listNodeCapabilitiesJSONController"
+          class="eu.uberdust.rest.controller.json.ListNodeCapabilitiesController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
