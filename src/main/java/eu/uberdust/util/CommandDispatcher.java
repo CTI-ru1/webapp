@@ -1,6 +1,6 @@
 package eu.uberdust.util;
 
-import eu.uberdust.websockets.SendCommandWSListener;
+import eu.uberdust.websockets.commands.CommandWSListener;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -22,10 +22,10 @@ public class CommandDispatcher {
     /**
      * A HashMap<CapabilityID:NodeID>.
      */
-    private final transient List<SendCommandWSListener> listeners;
+    private final transient List<CommandWSListener> listeners;
 
     public CommandDispatcher() {
-        listeners = new ArrayList<SendCommandWSListener>();
+        listeners = new ArrayList<CommandWSListener>();
     }
 
     public synchronized static CommandDispatcher getInstance() {
@@ -38,7 +38,7 @@ public class CommandDispatcher {
 
     public void sendCommand(int id, final String destination, final String byteString) {
         LOGGER.info("Sending command to {" + destination + "} :" + byteString);
-        for (SendCommandWSListener listener : listeners) {
+        for (CommandWSListener listener : listeners) {
             LOGGER.info("Sending command to Listener");
             if (listener.getTestbedId() == id) {
                 listener.update(destination, byteString);
@@ -46,7 +46,7 @@ public class CommandDispatcher {
         }
     }
 
-    public void add(SendCommandWSListener thisListener) {
+    public void add(CommandWSListener thisListener) {
         listeners.add(thisListener);
     }
 }

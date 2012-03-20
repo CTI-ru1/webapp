@@ -1,4 +1,4 @@
-package eu.uberdust.websockets;
+package eu.uberdust.websockets.commands;
 
 import com.caucho.websocket.WebSocketServletRequest;
 import eu.uberdust.util.CommandDispatcher;
@@ -17,14 +17,14 @@ import java.io.IOException;
 /**
  * Validates the initial HTTP request and  dispatches a new WebSocket connection.
  */
-public class SendCommandWebSocket
+public class CommandPublisherWebSocket
         extends GenericServlet
         implements Controller {
 
     /**
      * Static Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(SendCommandWebSocket.class);
+    private static final Logger LOGGER = Logger.getLogger(CommandPublisherWebSocket.class);
 
     public static final String DELIMITER = "@";
     private static final long serialVersionUID = 2111855028625803019L;
@@ -32,7 +32,7 @@ public class SendCommandWebSocket
     /**
      * Default Constructor.
      */
-    public SendCommandWebSocket() {
+    public CommandPublisherWebSocket() {
         super();
     }
 
@@ -63,10 +63,10 @@ public class SendCommandWebSocket
             return null;
         }
 
-        final SendCommandWSListener thisListener;
+        final CommandWSListener thisListener;
         if (protocol.split(DELIMITER)[0].equals("TESTBEDCONTROLLER")) {
 
-            thisListener = new SendCommandWSListener(protocol.split(DELIMITER)[1]);
+            thisListener = new CommandWSListener(protocol.split(DELIMITER)[1]);
 
             LOGGER.info("new TESTBEDCONTROLLER");
             CommandDispatcher.getInstance().add(thisListener);

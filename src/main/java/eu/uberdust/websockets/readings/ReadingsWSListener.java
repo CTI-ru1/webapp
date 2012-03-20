@@ -1,8 +1,10 @@
-package eu.uberdust.websockets;
+package eu.uberdust.websockets.readings;
 
 import com.caucho.websocket.AbstractWebSocketListener;
 import com.caucho.websocket.WebSocketContext;
 import eu.uberdust.communication.protobuf.Message;
+import eu.wisebed.wisedb.listeners.AbstractNodeReadingListener;
+import eu.wisebed.wisedb.model.NodeReading;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -15,34 +17,42 @@ import java.util.List;
 /**
  * Created by IntelliJ IDEA.
  * User: akribopo
- * Date: 11/8/11
- * Time: 12:00 AM
+ * Date: 3/20/12
+ * Time: 1:07 AM
  * To change this template use File | Settings | File Templates.
  */
-public class SendCommandWSListener extends AbstractWebSocketListener {
+public class ReadingsWSListener extends AbstractWebSocketListener implements AbstractNodeReadingListener {
 
     /**
      * Static Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(SendCommandWSListener.class);
+    private static final Logger LOGGER = Logger.getLogger(ReadingsWSListener.class);
 
     /**
      * A List with the connected users.
      */
     private final transient List<WebSocketContext> users = new ArrayList<WebSocketContext>();
 
-    private int testbedId;
+    /**
+     * The Node id..
+     */
+    private final transient String nodeID;
 
-    public int getTestbedId() {
-        return testbedId;
-    }
+    /**
+     * The capaility id.
+     */
+    private final transient String capabilityID;
 
     /**
      * Constructor.
+     *
+     * @param nodeID       the node ID.
+     * @param capabilityID the capability ID.
      */
-    public SendCommandWSListener(final String testbed) {
+    public ReadingsWSListener(final String nodeID, final String capabilityID) {
         super();
-        testbedId = Integer.parseInt(testbed);
+        this.nodeID = nodeID;
+        this.capabilityID = capabilityID;
 //        String thisProtocol = new StringBuilder().append(nodeID).append(":").append(capabilityID).toString();
 
     }
@@ -50,7 +60,7 @@ public class SendCommandWSListener extends AbstractWebSocketListener {
     @Override
     public final void onStart(final WebSocketContext context) throws IOException {
         super.onStart(context);
-        LOGGER.info("onStart-SendCommand");
+        LOGGER.info("onStart");
         users.add(context);
         LOGGER.info(users.size());
         context.setTimeout(-1);
@@ -95,18 +105,39 @@ public class SendCommandWSListener extends AbstractWebSocketListener {
         LOGGER.info("onTimeout");
     }
 
-
-    public final void update(final String nodeId, final String command) {
+    @Override
+    public final void update(final NodeReading lastReading) {
         LOGGER.info("Update");
-        Message.Control message = Message.Control.newBuilder().setDestination(nodeId).setPayload(command).build();
-        for (final WebSocketContext user : users) {
-            try {
-                final OutputStream response = user.startBinaryMessage();
-                response.write(message.toByteArray());
-                response.flush();
-                response.close();
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+
+        if (lastReading.getCapability().getNode().getName().equals(nodeID)
+                && lastReading.getCapability().getCapability().getName().equals(capabilityID)) {
+
+
+            final Message.NodeReadings.Reading reading = Message.NodeReadings.Reading.newBuilder()
+                    .setNode(lastReading.getCapability().getNode().getName())
+                    .setCapability(lastReading.getCapability().getCapability().getName())
+                    .setTimestamp(lastReading.getTimestamp().getTime())
+                    .setDoubleReading(lastReading.getReading())
+                    .setStringReading(lastReading.getStringReading()).build();
+
+            final Message.NodeReadings readings = Message.NodeReadings.newBuilder().addReading(reading).build();
+
+            final Message.Envelope envelope = Message.Envelope.newBuilder()
+                    .setNodeReadings(readings)
+                    .setType(Message.Envelope.Type.NODE_READINGS)
+                    .build();
+
+            LOGGER.info(envelope);
+            for (final WebSocketContext user : users) {
+                try {
+                    final OutputStream thisWriter = user.startBinaryMessage();
+                    thisWriter.write(envelope.toByteArray());
+                    thisWriter.flush();
+                    thisWriter.close();
+
+                } catch (final IOException e) {
+                    LOGGER.error(e);
+                }
             }
         }
     }

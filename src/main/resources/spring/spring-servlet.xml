@@ -152,7 +152,7 @@
         </property>
     </bean>
     <!-- Insert Reading Controller WebSocket -->
-    <bean name="sendCommandWebSocketController" class="eu.uberdust.websockets.SendCommandWebSocket">
+    <bean name="sendCommandWebSocketController" class="eu.uberdust.websockets.commands.CommandPublisherWebSocket">
     </bean>
 
 
