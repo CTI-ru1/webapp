@@ -1,4 +1,4 @@
-package eu.uberdust.websockets;
+package eu.uberdust.websockets.readings;
 
 import com.caucho.websocket.AbstractWebSocketListener;
 import com.caucho.websocket.WebSocketContext;
@@ -17,16 +17,16 @@ import java.util.List;
 /**
  * Created by IntelliJ IDEA.
  * User: akribopo
- * Date: 11/8/11
- * Time: 12:00 AM
+ * Date: 3/20/12
+ * Time: 5:11 PM
  * To change this template use File | Settings | File Templates.
  */
-public class CustomWebSocketListener extends AbstractWebSocketListener implements AbstractNodeReadingListener {
+public class LastReadingWSListener extends AbstractWebSocketListener implements AbstractNodeReadingListener {
 
     /**
      * Static Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(CustomWebSocketListener.class);
+    private static final Logger LOGGER = Logger.getLogger(LastReadingWSListener.class);
 
     /**
      * A List with the connected users.
@@ -49,7 +49,7 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
      * @param nodeID       the node ID.
      * @param capabilityID the capability ID.
      */
-    public CustomWebSocketListener(final String nodeID, final String capabilityID) {
+    public LastReadingWSListener(final String nodeID, final String capabilityID) {
         super();
         this.nodeID = nodeID;
         this.capabilityID = capabilityID;
@@ -111,9 +111,8 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
 
         if (lastReading.getCapability().getNode().getName().equals(nodeID)
                 && lastReading.getCapability().getCapability().getName().equals(capabilityID)) {
-//            final String response = new StringBuilder().append(lastReading.getTimestamp().getTime()).append("\t").append(lastReading.getReading()).toString();
 
-            Message.NodeReadings.Reading reading = Message.NodeReadings.Reading.newBuilder()
+            final Message.NodeReadings.Reading reading = Message.NodeReadings.Reading.newBuilder()
                     .setNode(lastReading.getCapability().getNode().getName())
                     .setCapability(lastReading.getCapability().getCapability().getName())
                     .setTimestamp(lastReading.getTimestamp().getTime())
@@ -137,3 +136,4 @@ public class CustomWebSocketListener extends AbstractWebSocketListener implement
 
     }
 }
+

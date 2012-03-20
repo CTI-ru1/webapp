@@ -1,5 +1,6 @@
 package eu.uberdust.util;
 
+import eu.uberdust.communication.protobuf.Message;
 import eu.uberdust.websockets.commands.CommandWSListener;
 import org.apache.log4j.Logger;
 
@@ -35,13 +36,20 @@ public class CommandDispatcher {
         return instance;
     }
 
-
     public void sendCommand(int id, final String destination, final String byteString) {
         LOGGER.info("Sending command to {" + destination + "} :" + byteString);
+        final Message.Envelope envelope = Message.Envelope.newBuilder()
+                .setType(Message.Envelope.Type.CONTROL)
+                .setControl(Message.Control
+                        .newBuilder()
+                        .setDestination(destination)
+                        .setPayload(byteString).build())
+                .build();
+
         for (CommandWSListener listener : listeners) {
             LOGGER.info("Sending command to Listener");
             if (listener.getTestbedId() == id) {
-                listener.update(destination, byteString);
+                listener.update(envelope);
             }
         }
     }

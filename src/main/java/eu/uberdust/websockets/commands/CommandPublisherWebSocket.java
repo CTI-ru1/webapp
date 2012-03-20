@@ -1,6 +1,7 @@
 package eu.uberdust.websockets.commands;
 
 import com.caucho.websocket.WebSocketServletRequest;
+import eu.uberdust.communication.websocket.WSIdentifiers;
 import eu.uberdust.util.CommandDispatcher;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,7 +27,6 @@ public class CommandPublisherWebSocket
      */
     private static final Logger LOGGER = Logger.getLogger(CommandPublisherWebSocket.class);
 
-    public static final String DELIMITER = "@";
     private static final long serialVersionUID = 2111855028625803019L;
 
     /**
@@ -64,9 +64,9 @@ public class CommandPublisherWebSocket
         }
 
         final CommandWSListener thisListener;
-        if (protocol.split(DELIMITER)[0].equals("TESTBEDCONTROLLER")) {
+        if (protocol.split(WSIdentifiers.DELIMITER)[0].equals(WSIdentifiers.COMMAND_PROTOCOL)) {
 
-            thisListener = new CommandWSListener(protocol.split(DELIMITER)[1]);
+            thisListener = new CommandWSListener(protocol.split(WSIdentifiers.DELIMITER)[1]);
 
             LOGGER.info("new TESTBEDCONTROLLER");
             CommandDispatcher.getInstance().add(thisListener);

@@ -39,12 +39,12 @@ public class CommandWSListener extends AbstractWebSocketListener {
 
     /**
      * Constructor.
+     *
+     * @param testbed the testbed id
      */
     public CommandWSListener(final String testbed) {
         super();
         testbedId = Integer.parseInt(testbed);
-//        String thisProtocol = new StringBuilder().append(nodeID).append(":").append(capabilityID).toString();
-
     }
 
     @Override
@@ -96,17 +96,16 @@ public class CommandWSListener extends AbstractWebSocketListener {
     }
 
 
-    public final void update(final String nodeId, final String command) {
+    public final void update(final Message.Envelope envelope) {
         LOGGER.info("Update");
-        Message.Control message = Message.Control.newBuilder().setDestination(nodeId).setPayload(command).build();
         for (final WebSocketContext user : registeredTestbeds) {
             try {
                 final OutputStream response = user.startBinaryMessage();
-                response.write(message.toByteArray());
+                response.write(envelope.toByteArray());
                 response.flush();
                 response.close();
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (final IOException e) {
+                LOGGER.error(e);
             }
         }
     }

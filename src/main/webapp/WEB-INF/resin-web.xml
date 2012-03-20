@@ -1,12 +1,21 @@
 <web-app xmlns="http://caucho.com/ns/resin">
 
-    <!-- WebSocket servlets-->
-    <servlet servlet-name="lastreading.ws"
-             servlet-class="eu.uberdust.websockets.LastReadingWebSocket"/>
+    <!-- WebSocket servlets
+    <servlet servlet-name="readings.ws"
+             servlet-class="eu.uberdust.websockets.readings.ReadingsWebSocket"/>
 
-    <!--WebSocket servlet mappings-->
-    <servlet-mapping url-pattern="lastreading.ws"
-                     servlet-name="lastreading.ws"/>
+    &lt;!&ndash;WebSocket servlet mappings&ndash;&gt;
+    <servlet-mapping url-pattern="readings.ws"
+                     servlet-name="readings.ws"/>
+-->
+        <!-- WebSocket servlets
+    <servlet servlet-name="testbedcontroller.ws"
+             servlet-class="eu.uberdust.websockets.commands.CommandPublisherWebSocket"/>
+
+    &lt;!&ndash;WebSocket servlet mappings&ndash;&gt;
+    <servlet-mapping url-pattern="testbedcontroller.ws"
+                     servlet-name="testbedcontroller.ws"/>
+-->
 
 </web-app>
 

@@ -1,4 +1,4 @@
-package eu.uberdust.websockets.insert;
+package eu.uberdust.websockets.readings;
 
 import com.caucho.websocket.AbstractWebSocketListener;
 import com.caucho.websocket.WebSocketContext;
@@ -140,7 +140,7 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
 
                 try {
                     linkReadingManager.insertReading(sourceNodeId, targetNodeId, capabilityId, testbedId, readingValue,
-                    stringReading, new Date(timestamp));
+                            stringReading, new Date(timestamp));
                 } catch (final UnknownTestbedException e) {
                     LOGGER.error("Uknown Testebed with id: " + testbedId, e);
                 }

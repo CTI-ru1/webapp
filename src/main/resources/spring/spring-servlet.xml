@@ -130,22 +130,16 @@
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <props>
-                <prop key="/lastreading.ws">lastReadingWebSocketController</prop>
-                <prop key="/insertreading.ws">insertReadingWebSocketController</prop>
+                <prop key="/readings.ws">insertReadingWebSocketController</prop>
                 <prop key="/testbedcontroller.ws">sendCommandWebSocketController</prop>
             </props>
         </property>
     </bean>
 
-
-    <!-- Last Reading Controller WebSocket -->
-    <bean name="lastReadingWebSocketController" class="eu.uberdust.websockets.LastReadingWebSocket">
-    </bean>
-
     <!-- Insert Reading Controller WebSocket -->
-    <bean name="insertReadingWebSocketController" class="eu.uberdust.websockets.insert.InsertReadingWebSocket">
-        <property name="insertReadingWSListener">
-            <bean class="eu.uberdust.websockets.insert.InsertReadingWSListener" factory-method="getInstance">
+    <bean name="insertReadingWebSocketController" class="eu.uberdust.websockets.readings.ReadingsWebSocket">
+         <property name="insertReadingWSListener">
+           <bean class="eu.uberdust.websockets.readings.InsertReadingWSListener" factory-method="getInstance">
                 <property name="nodeReadingManager" ref="nodeReadingManager"/>
                 <property name="linkReadingManager" ref="linkReadingManager"/>
             </bean>
