@@ -7,7 +7,6 @@ import eu.wisebed.wisedb.listeners.AbstractNodeReadingListener;
 import eu.wisebed.wisedb.model.NodeReading;
 import org.apache.log4j.Logger;
 
-import javax.persistence.TupleElement;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -113,14 +112,17 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
         if (lastReading.getCapability().getNode().getName().equals(nodeID)
                 && lastReading.getCapability().getCapability().getName().equals(capabilityID)) {
 
-            final Message.NodeReadings.Reading reading = Message.NodeReadings.Reading.newBuilder()
+            final Message.NodeReadings.Reading.Builder reading = Message.NodeReadings.Reading.newBuilder()
                     .setNode(lastReading.getCapability().getNode().getName())
                     .setCapability(lastReading.getCapability().getCapability().getName())
-                    .setTimestamp(lastReading.getTimestamp().getTime())
-                    .setDoubleReading(lastReading.getReading())
-                    .setStringReading(lastReading.getStringReading()).build();
+                    .setTimestamp(lastReading.getTimestamp().getTime());
+            if (lastReading.getReading() != null) {
+                reading.setDoubleReading(lastReading.getReading());
+            } else {
+                reading.setStringReading(lastReading.getStringReading());
+            }
 
-            final Message.NodeReadings readings = Message.NodeReadings.newBuilder().addReading(reading).build();
+            final Message.NodeReadings readings = Message.NodeReadings.newBuilder().addReading(reading.build()).build();
             final Message.Envelope envelope = Message.Envelope.newBuilder()
                     .setType(Message.Envelope.Type.NODE_READINGS)
                     .setNodeReadings(readings)

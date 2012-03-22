@@ -14,9 +14,9 @@ function connect(hostname,node,capability){
 
     clearMessages();
 
-    var host = "ws://"+hostname+"/lastreading.ws";
+    var host = "ws://"+hostname+"/readings.ws";
 
-    var protocol = node+"@"+capability;
+    var protocol = "SUB@"+node+"@"+capability;
     var encodedProtocol="";
     for (var i=0;i<protocol.length;i++){
         if (protocol[i]=="@"){
