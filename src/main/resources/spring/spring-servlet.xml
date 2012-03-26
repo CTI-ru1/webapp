@@ -49,7 +49,7 @@
                 <prop key="GET /testbed/*/node">listNodesHTMLController</prop>
                 <prop key="GET /testbed/*/node/raw">listNodesController</prop>
                 <prop key="GET /testbed/*/node/json">listNodesJSONController</prop>
-                <prop key="GET /testbed/*/node/*">showNodeController</prop>
+                <prop key="GET /testbed/*/node/*/">showNodeController</prop>
                 <prop key="GET /testbed/*/node/*/georss">showNodeGeoRssController</prop>
                 <prop key="GET /testbed/*/node/*/kml">showNodeKmlController</prop>
                 <prop key="GET /testbed/*/node/*/rdf">showNodeRdfController</prop>
@@ -308,7 +308,7 @@
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
         <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
-        <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/"/>
         <property name="viewNameSelector">
             <bean class="org.springframework.web.servlet.RestViewNameSelector">
                 <property name="defaultViewName" value="node/show.html"/>
