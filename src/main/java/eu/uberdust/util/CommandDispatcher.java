@@ -2,6 +2,7 @@ package eu.uberdust.util;
 
 import eu.uberdust.communication.protobuf.Message;
 import eu.uberdust.websockets.commands.CommandWSListener;
+import eu.wisebed.wisedb.model.NodeReading;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -49,6 +50,42 @@ public class CommandDispatcher {
         for (CommandWSListener listener : listeners) {
             LOGGER.info("Sending command to Listener");
             if (listener.getTestbedId() == id) {
+                listener.update(envelope);
+            }
+        }
+    }
+
+    public void sendCommand(final NodeReading nodeReading) {
+        if (!nodeReading.getCapability().getNode().getName().contains("virtual")) return;
+
+        LOGGER.info("Sending command for " + nodeReading);
+
+        final Message.Envelope envelope;
+        if (nodeReading.getReading() != null) {
+            envelope = Message.Envelope.newBuilder()
+                    .setType(Message.Envelope.Type.CONTROL)
+                    .setControl(Message.Control
+                            .newBuilder()
+                            .setDestination(nodeReading.getCapability().getNode().getName())
+                            .setCapability(nodeReading.getCapability().getCapability().getName())
+                            .setLastValue(nodeReading.getReading().toString()).build())
+                    .build();
+        } else {
+            envelope = Message.Envelope.newBuilder()
+                    .setType(Message.Envelope.Type.CONTROL)
+                    .setControl(Message.Control
+                            .newBuilder()
+                            .setDestination(nodeReading.getCapability().getNode().getName())
+                            .setCapability(nodeReading.getCapability().getCapability().getName())
+                            .setLastValue(nodeReading.getStringReading()).build())
+                    .build();
+        }
+
+        int testbedId = nodeReading.getCapability().getNode().getSetup().getId();
+
+        for (CommandWSListener listener : listeners) {
+            LOGGER.info("Sending command to Listener");
+            if (listener.getTestbedId() == testbedId) {
                 listener.update(envelope);
             }
         }

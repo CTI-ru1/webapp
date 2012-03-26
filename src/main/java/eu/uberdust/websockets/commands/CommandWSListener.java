@@ -3,6 +3,8 @@ package eu.uberdust.websockets.commands;
 import com.caucho.websocket.AbstractWebSocketListener;
 import com.caucho.websocket.WebSocketContext;
 import eu.uberdust.communication.protobuf.Message;
+import eu.wisebed.wisedb.listeners.AbstractNodeReadingListener;
+import eu.wisebed.wisedb.model.NodeReading;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -19,7 +21,7 @@ import java.util.List;
  * Time: 12:00 AM
  * To change this template use File | Settings | File Templates.
  */
-public class CommandWSListener extends AbstractWebSocketListener {
+public class CommandWSListener extends AbstractWebSocketListener implements AbstractNodeReadingListener {
 
     /**
      * Static Logger.
@@ -108,5 +110,10 @@ public class CommandWSListener extends AbstractWebSocketListener {
                 LOGGER.error(e);
             }
         }
+    }
+
+    @Override
+    public void update(final NodeReading nodeReading) {
+
     }
 }

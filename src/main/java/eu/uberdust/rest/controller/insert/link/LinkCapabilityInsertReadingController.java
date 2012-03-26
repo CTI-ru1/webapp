@@ -6,7 +6,6 @@ import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.LinkReadingController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.exception.UnknownTestbedException;
-import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -87,22 +86,6 @@ public final class LinkCapabilityInsertReadingController extends AbstractRestCon
         // set command object object
         final LinkCapabilityInsertReadingCommand command = (LinkCapabilityInsertReadingCommand) commandObj;
 
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
-
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-        }
-
-        // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
-        if (testbed == null) {
-            // if no testbed is found throw exception
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
-        }
-
         // parse reading and timestamp
         final Date timestamp = new Date(Long.parseLong(command.getTimestamp()));
         final Double doubleReading = new Double(command.getReading());
@@ -113,17 +96,18 @@ public final class LinkCapabilityInsertReadingController extends AbstractRestCon
 
         // insert reading
         try {
-            linkReadingManager.insertReading(sourceId, targetId, capabilityId, testbedId, doubleReading, stringReading,
+            linkReadingManager.insertReading(sourceId, targetId, capabilityId, doubleReading, stringReading,
                     timestamp);
         } catch (UnknownTestbedException e) {
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].", e);
+            throw new TestbedNotFoundException(
+                    "Cannot find testbed to assosiate with nodes: " + sourceId + "," + targetId + "].", e);
         }
 
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
         textOutput.write("Inserted for Link [" + command.getSourceId() + "," + command.getTargetId()
                 + "] Capability(" + command.getCapabilityId()
-                + ") Testbed(" + testbed.getName() + ") : [" + doubleReading + "," + stringReading + "]. OK");
+                + ") : [" + doubleReading + "," + stringReading + "]. OK");
         textOutput.flush();
         textOutput.close();
 

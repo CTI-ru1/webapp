@@ -3,9 +3,11 @@ package eu.uberdust.rest.controller.insert.node;
 import eu.uberdust.command.NodeCapabilityInsertReadingCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
+import eu.uberdust.util.CommandDispatcher;
 import eu.wisebed.wisedb.controller.NodeReadingController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.exception.UnknownTestbedException;
+import eu.wisebed.wisedb.model.NodeReading;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -110,8 +112,9 @@ public final class NodeCapabilityInsertDoubleReadingController extends AbstractR
         final String capabilityId = command.getCapabilityId();
 
         // insert reading
+        NodeReading addedReading;
         try {
-            nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, reading, null, timestamp);
+            addedReading = nodeReadingManager.insertReading(nodeId, capabilityId, reading, null, timestamp);
         } catch (UnknownTestbedException e) {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].", e);
         }
@@ -120,9 +123,12 @@ public final class NodeCapabilityInsertDoubleReadingController extends AbstractR
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
         textOutput.write("Inserted for Node(" + command.getNodeId() + ") Capability(" + command.getCapabilityId()
-                + ") Testbed(" + testbed.getName() + ") : " + reading + ". OK");
+                + ") : " + reading + ". OK");
         textOutput.flush();
         textOutput.close();
+
+        LOGGER.info("adding the " + addedReading);
+        CommandDispatcher.getInstance().sendCommand(addedReading);
 
         LOGGER.info("MEMSTAT_3: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
                 + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");

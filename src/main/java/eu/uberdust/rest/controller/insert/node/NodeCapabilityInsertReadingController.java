@@ -111,7 +111,7 @@ public class NodeCapabilityInsertReadingController extends AbstractRestControlle
 
         // insert reading
         try {
-            nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, doubleReading, stringReading, timestamp);
+            nodeReadingManager.insertReading(nodeId, capabilityId, doubleReading, stringReading, timestamp);
         } catch (UnknownTestbedException e) {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].", e);
         }
@@ -120,7 +120,7 @@ public class NodeCapabilityInsertReadingController extends AbstractRestControlle
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
         textOutput.write("Inserted for Node(" + command.getNodeId() + ") Capability(" + command.getCapabilityId()
-                + ") Testbed(" + testbed.getName() + ") : [" + doubleReading + "," + stringReading + "]. OK");
+                + ") : [" + doubleReading + "," + stringReading + "]. OK");
         textOutput.flush();
         textOutput.close();
 

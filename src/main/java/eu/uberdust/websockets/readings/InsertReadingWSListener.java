@@ -108,19 +108,15 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
             for (Message.NodeReadings.Reading reading : nodeReadings.getReadingList()) {
                 final String nodeId = reading.getNode();
                 final String capabilityId = reading.getCapability();
-                /**
-                 * Todo : Get Testbed Id from db;
-                 */
-                final int testbedId = 1;
                 final long timestamp = reading.getTimestamp();
                 final double readingValue = reading.getDoubleReading();
                 final String stringReading = reading.getStringReading();
 
                 try {
-                    nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, readingValue, stringReading,
+                    nodeReadingManager.insertReading(nodeId, capabilityId, readingValue, stringReading,
                             new Date(timestamp));
                 } catch (final UnknownTestbedException e) {
-                    LOGGER.error("Uknown Testebed with id: " + testbedId, e);
+                    LOGGER.error("Uknown Testebed to associate with node based on prefix: " + nodeId, e);
                 }
             }
 
@@ -130,19 +126,16 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
                 final String sourceNodeId = reading.getSource();
                 final String targetNodeId = reading.getTarget();
                 final String capabilityId = reading.getCapability();
-                /**
-                 * Todo : Get Testbed Id from db;
-                 */
-                final int testbedId = 1;
                 final long timestamp = reading.getTimestamp();
                 final double readingValue = reading.getDoubleReading();
                 final String stringReading = reading.getStringReading();
 
                 try {
-                    linkReadingManager.insertReading(sourceNodeId, targetNodeId, capabilityId, testbedId, readingValue,
+                    linkReadingManager.insertReading(sourceNodeId, targetNodeId, capabilityId, readingValue,
                             stringReading, new Date(timestamp));
                 } catch (final UnknownTestbedException e) {
-                    LOGGER.error("Uknown Testebed with id: " + testbedId, e);
+                    LOGGER.error("Uknown Testebed to associate with nodes based on prefix: "
+                            + sourceNodeId + "," + targetNodeId, e);
                 }
             }
         } else {

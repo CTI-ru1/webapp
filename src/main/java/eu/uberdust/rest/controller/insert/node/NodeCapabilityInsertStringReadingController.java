@@ -110,7 +110,7 @@ public final class NodeCapabilityInsertStringReadingController extends AbstractR
 
         // insert reading
         try {
-            nodeReadingManager.insertReading(nodeId, capabilityId, testbedId, null, reading, timestamp);
+            nodeReadingManager.insertReading(nodeId, capabilityId, null, reading, timestamp);
         } catch (UnknownTestbedException e) {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].", e);
         }
@@ -119,7 +119,7 @@ public final class NodeCapabilityInsertStringReadingController extends AbstractR
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
         textOutput.write("Inserted for Node(" + command.getNodeId() + ") Capability(" + command.getCapabilityId()
-                + ") Testbed(" + testbed.getName() + ") : " + reading + ". OK");
+                + ") : " + reading + ". OK");
         textOutput.flush();
         textOutput.close();
 
