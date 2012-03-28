@@ -3,7 +3,6 @@ package eu.uberdust.rest.controller.insert.node;
 import eu.uberdust.command.NodeCapabilityInsertReadingCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.uberdust.util.CommandDispatcher;
 import eu.wisebed.wisedb.controller.NodeReadingController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.exception.UnknownTestbedException;
@@ -126,9 +125,6 @@ public final class NodeCapabilityInsertDoubleReadingController extends AbstractR
                 + ") : " + reading + ". OK");
         textOutput.flush();
         textOutput.close();
-
-        LOGGER.info("adding the " + addedReading);
-        CommandDispatcher.getInstance().sendCommand(addedReading);
 
         LOGGER.info("MEMSTAT_3: " + Runtime.getRuntime().totalMemory() + ":" + Runtime.getRuntime().freeMemory()
                 + " -- " + Runtime.getRuntime().freeMemory() * 100 / Runtime.getRuntime().totalMemory() + "% free mem");

@@ -2,6 +2,8 @@ package eu.uberdust.util;
 
 import eu.uberdust.communication.protobuf.Message;
 import eu.uberdust.websockets.commands.CommandWSListener;
+import eu.wisebed.wisedb.listeners.AbstractNodeReadingListener;
+import eu.wisebed.wisedb.listeners.LastNodeReadingConsumer;
 import eu.wisebed.wisedb.model.NodeReading;
 import org.apache.log4j.Logger;
 
@@ -14,7 +16,7 @@ import java.util.List;
  * Date: 3/10/12
  * Time: 9:29 PM
  */
-public class CommandDispatcher {
+public class CommandDispatcher implements AbstractNodeReadingListener {
     /**
      * Logger.
      */
@@ -28,6 +30,7 @@ public class CommandDispatcher {
 
     public CommandDispatcher() {
         listeners = new ArrayList<CommandWSListener>();
+        LastNodeReadingConsumer.getInstance().registerVirtualReadingListener(this);
     }
 
     public synchronized static CommandDispatcher getInstance() {
@@ -93,5 +96,10 @@ public class CommandDispatcher {
 
     public void add(CommandWSListener thisListener) {
         listeners.add(thisListener);
+    }
+
+    @Override
+    public void update(final NodeReading nodeReading) {
+        sendCommand(nodeReading);
     }
 }
