@@ -12,21 +12,23 @@
         <property name="password" value="${wisedb.jdbc.connection.password}"/>
         <property name="initialSize" value="10"/>
         <property name="maxActive" value="30"/>
+        <property name="maxIdle" value="30"/>
+        <property name="maxWait" value="1000"/>
         <property name="validationQuery" value="select 1"/>
     </bean>
 
 
-    <bean id="log4jInitialization"
-          class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetClass"
-                  value="org.springframework.util.Log4jConfigurer"/>
-        <property name="targetMethod" value="initLogging"/>
-        <property name="arguments">
-            <list>
-                <value>webapps/uberdust/WEB-INF/classes/log4jWEBAPP.properties</value>
-            </list>
-        </property>
-    </bean>
+    <!--<bean id="log4jInitialization"-->
+    <!--class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">-->
+    <!--<property name="targetClass"-->
+    <!--value="org.springframework.util.Log4jConfigurer"/>-->
+    <!--<property name="targetMethod" value="initLogging"/>-->
+    <!--<property name="arguments">-->
+    <!--<list>-->
+    <!--<value>webapps/uberdust/WEB-INF/classes/log4j.properties</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
 
 
     <!-- Session Factory setup with hbm mappings in place -->
