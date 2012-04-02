@@ -93,6 +93,8 @@ public final class ShowTestbedStatusController extends AbstractRestController {
 
         final long start = System.currentTimeMillis();
 
+        long start1 = System.currentTimeMillis();
+
         // set command object
         final TestbedCommand command = (TestbedCommand) commandObj;
 
@@ -104,48 +106,59 @@ public final class ShowTestbedStatusController extends AbstractRestController {
             throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
         }
 
+        LOGGER.info("--------- Get Testbed id: " + (System.currentTimeMillis() - start1));
+        start1 = System.currentTimeMillis();
+
         // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
+        final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
         LOGGER.info("got testbed " + testbed);
 
+        LOGGER.info("--------- Get Testbed: " + (System.currentTimeMillis() - start1));
+
+
         if (nodeCapabilityManager == null) {
             LOGGER.error("nodeCapabilityManager==null");
         }
 
-
+        start1 = System.currentTimeMillis();
         // get a list of node last readings from testbed
         final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
+        LOGGER.info("--------- list nodeCapabilities: " + (System.currentTimeMillis() - start1));
 
-
+        start1 = System.currentTimeMillis();
+        String nodeCaps;
         try {
-            final String nodeCaps = HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
+            nodeCaps = HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
         } catch (NotImplementedException e) {
-
+            nodeCaps = "";
         }
+        LOGGER.info("--------- format last node readings: " + (System.currentTimeMillis() - start1));
 
+        start1 = System.currentTimeMillis();
         // get a list of link statistics from testbed
         final List<LinkCapability> linkCapabilities = linkCapabilityManager.list(testbed.getSetup());
+        LOGGER.info("--------- List link capabilities: " + (System.currentTimeMillis() - start1));
 
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
         refData.put("testbed", testbed);
+        refData.put("lastNodeReadings", nodeCaps);
+
+
         try {
-            refData.put("lastNodeReadings", HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities));
-        } catch (NotImplementedException e) {
-            LOGGER.error(e);
-        }
-        try {
-            refData.put("lastLinkReadings", HtmlFormatter.getInstance().formatLastLinkReadings(linkCapabilities));
+            start1 = System.currentTimeMillis();
+            refData.put("lastLinkReadings", HtmlFormatter.getInstance().formatLinkCapabilities(linkCapabilities));
+            LOGGER.info("--------- format link Capabilites: " + (System.currentTimeMillis() - start1));
         } catch (NotImplementedException e) {
             LOGGER.error(e);
         }
 
-
+        LOGGER.info("--------- Total time: " + (System.currentTimeMillis() - start));
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         LOGGER.info("prepared map");
 
