@@ -152,7 +152,7 @@ public final class ShowTestbedStatusController extends AbstractRestController {
 
         try {
             start1 = System.currentTimeMillis();
-            refData.put("lastLinkReadings", HtmlFormatter.getInstance().formatLinkCapabilities(linkCapabilities));
+            refData.put("lastLinkReadings", HtmlFormatter.getInstance().formatLastLinkReadings(linkCapabilities));
             LOGGER.info("--------- format link Capabilites: " + (System.currentTimeMillis() - start1));
         } catch (NotImplementedException e) {
             LOGGER.error(e);
