@@ -117,6 +117,7 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
         }
 
         final List<Node> nodes = nodeManager.list(testbed.getSetup());
+
         final Map<Node, String> descriptionMap = new HashMap<Node, String>();
         final Map<Node, List<NodeCapability>> capabilityMap = new HashMap<Node, List<NodeCapability>>();
         final Map<Node, Position> originMap = new HashMap<Node, Position>();

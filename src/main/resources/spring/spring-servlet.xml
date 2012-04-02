@@ -550,7 +550,6 @@
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
-        <property name="nodeReadingManager" ref="nodeReadingManager"/>
         <property name="uriPattern"
                   value="/testbed/{testbedId}/node/{nodeId}/capability/{capabilityId}/chart/limit/{readingsLimit}"/>
         <property name="viewNameSelector">

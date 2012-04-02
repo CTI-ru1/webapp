@@ -70,16 +70,6 @@
            memoryStoreEvictionPolicy="LRU"
            statistics="true"/>
 
-    <cache name="eu.uberdust.formatter.HtmlFormatter.showTestbed"
-           eternal="false"
-           maxElementsInMemory="5"
-           overflowToDisk="false"
-           diskPersistent="false"
-           timeToIdleSeconds="0"
-           timeToLiveSeconds="120"
-           memoryStoreEvictionPolicy="LRU"
-           statistics="true"/>
-
     <cache name="eu.wisebed.wisedb.controller.NodeControllerImpl.list"
            eternal="false"
            maxElementsInMemory="5"
