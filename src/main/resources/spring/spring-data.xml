@@ -4,10 +4,17 @@
 
 
     <!-- Data Source setup -->
-    <bean id="dataSource"
-          class="org.apache.commons.dbcp.BasicDataSource">
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="${wisedb.jdbc.connection.driver_class}"/>
         <property name="url" value="${wisedb.jdbc.connection.url}"/>
+        <property name="username" value="${wisedb.jdbc.connection.username}"/>
+        <property name="password" value="${wisedb.jdbc.connection.password}"/>
+    </bean>
+<!--
+
+    <bean id="dbcpDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${wisedb.jdbc.connection.driver_class}"/>
+
         <property name="username" value="${wisedb.jdbc.connection.username}"/>
         <property name="password" value="${wisedb.jdbc.connection.password}"/>
         <property name="initialSize" value="10"/>
@@ -16,6 +23,7 @@
         <property name="maxWait" value="1000"/>
         <property name="validationQuery" value="select 1"/>
     </bean>
+-->
 
 
     <!--<bean id="log4jInitialization"-->
@@ -33,9 +41,7 @@
 
     <!-- Session Factory setup with hbm mappings in place -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-        <property name="dataSource">
-            <ref bean="dataSource"/>
-        </property>
+        <property name="dataSource" ref="dataSource"/>
 
 
         <property name="mappingResources">
@@ -115,15 +121,15 @@
           abstract="true">
         <property name="transactionManager" ref="transactionManager"/>
         <property name="transactionAttributes">
-        <props>
-            <prop key="get*">PROPAGATION_SUPPORTS,readOnly</prop>
-            <prop key="list*">PROPAGATION_SUPPORTS,readOnly</prop>
-            <prop key="add*">PROPAGATION_REQUIRED</prop>
-            <prop key="update*">PROPAGATION_REQUIRED</prop>
-            <prop key="delete*">PROPAGATION_REQUIRED</prop>
-            <prop key="*">PROPAGATION_REQUIRED</prop>
-        </props>
-    </property>
+            <props>
+                <prop key="get*">PROPAGATION_SUPPORTS,readOnly</prop>
+                <prop key="list*">PROPAGATION_SUPPORTS,readOnly</prop>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
 
         <property name="preInterceptors">
             <list>
