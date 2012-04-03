@@ -9,6 +9,7 @@
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
 <jsp:useBean id="node" scope="request" class="eu.wisebed.wisedb.model.Node"/>
 <jsp:useBean id="capability" scope="request" class="eu.wisebed.wisedb.model.Capability"/>
+<jsp:useBean id="readings" scope="request" class="java.lang.String"/>
 
 <html>
 <%@include file="/header.jsp" %>
@@ -19,39 +20,16 @@
     <script type="text/javascript" src="<c:url value="/js/themes/gray.js"/>"></script>
     <script type="text/javascript">
 
-        var chart;
 
-        function requestData() {
-            $.ajax({
-                url: 'http://${pageContext.request.serverName}:${pageContext.request.serverPort}'
-                    .concat('<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.name}/json"/>')
-                    <c:if test="${requestScope.limit != null}">.concat('/limit/<c:out value="${requestScope.limit}"/>')</c:if>,
-                success: function(json, textStatus, xhr) {
-                    var readings = json['readings'];
-                    for (var i in readings) {
-                        var point = [readings[i].timestamp,readings[i].reading];
-                        chart.series[0].addPoint(point);
-                    }
-                },
-                complete: function(json, textStatus, xhr) {
-                },
-                cache : false
-            });
-        }
+        function displayChart() {
+            var chart;
 
-        $(document).ready(function() {
             chart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'container',
                     defaultSeriesType: 'spline',
                     zoomType: 'x',
-                    spacingRight: 20,
-                    events: {
-                        load: function(event) {
-                            console.log('chart loaded requesting data');
-                            requestData();
-                        }
-                    }
+                    spacingRight: 20
                 },
                 title: {
                     text: 'Readings Chart Testbed : '
@@ -88,18 +66,18 @@
                 series: [
                     {
                         name: 'Reading value (<c:out value="${capability.unit}"/>,<c:out value="${capability.datatype}"/>)',
-                        data: []
+                        data: [<c:out value="${readings}"/>]
                     }
                 ]
             });
-        });
+        }
     </script>
 
     <title>ÜberDust - Readings Chart Testbed: <c:out value="${testbed.name}"/> <c:out value="${node.name}"/> , Capability
         : <c:out value="${capability.name}"/></title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
 </head>
-<body>
+<body onload="displayChart()">
 <div id="container" style="width: 100%; height: 400px"></div>
 <%@include file="/footer.jsp" %>
 </body>

@@ -10,20 +10,20 @@
         <property name="username" value="${wisedb.jdbc.connection.username}"/>
         <property name="password" value="${wisedb.jdbc.connection.password}"/>
     </bean>
-<!--
+    <!--
 
-    <bean id="dbcpDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${wisedb.jdbc.connection.driver_class}"/>
+        <bean id="dbcpDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="${wisedb.jdbc.connection.driver_class}"/>
 
-        <property name="username" value="${wisedb.jdbc.connection.username}"/>
-        <property name="password" value="${wisedb.jdbc.connection.password}"/>
-        <property name="initialSize" value="10"/>
-        <property name="maxActive" value="30"/>
-        <property name="maxIdle" value="30"/>
-        <property name="maxWait" value="1000"/>
-        <property name="validationQuery" value="select 1"/>
-    </bean>
--->
+            <property name="username" value="${wisedb.jdbc.connection.username}"/>
+            <property name="password" value="${wisedb.jdbc.connection.password}"/>
+            <property name="initialSize" value="10"/>
+            <property name="maxActive" value="30"/>
+            <property name="maxIdle" value="30"/>
+            <property name="maxWait" value="1000"/>
+            <property name="validationQuery" value="select 1"/>
+        </bean>
+    -->
 
 
     <!--<bean id="log4jInitialization"-->

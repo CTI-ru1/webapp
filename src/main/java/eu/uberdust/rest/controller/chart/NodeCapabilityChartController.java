@@ -10,9 +10,11 @@ import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
+import eu.wisebed.wisedb.controller.NodeReadingController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.NodeReading;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +32,10 @@ import java.util.Map;
  */
 public final class NodeCapabilityChartController extends AbstractRestController {
 
+    /**
+     * NodeReadings persistence manager.
+     */
+    private transient NodeReadingController nodeReadingManager;
     /**
      * Node persistence manager.
      */
@@ -57,6 +64,15 @@ public final class NodeCapabilityChartController extends AbstractRestController 
 
         // Make sure to set which method this controller will support.
         this.setSupportedMethods(new String[]{METHOD_GET});
+    }
+
+    /**
+     * Sets nodeReadings persistence manager.
+     *
+     * @param nodeReadingManager nodeReadings persistence manager.
+     */
+    public void setNodeReadingManager(final NodeReadingController nodeReadingManager) {
+        this.nodeReadingManager = nodeReadingManager;
     }
 
     /**
@@ -150,10 +166,22 @@ public final class NodeCapabilityChartController extends AbstractRestController 
             throw new CapabilityNotFoundException("Cannot find capability [" + command.getCapabilityId() + "]");
         }
 
+
         // check if limit is provided
-        Integer limit = null;
+        int limit = 0;
         if (command.getReadingsLimit() != null) {
             limit = Integer.valueOf(command.getReadingsLimit());
+        }
+        List<NodeReading> readings;
+        if (limit > 0) {
+            readings = nodeReadingManager.listNodeReadings(node, capability, limit);
+        } else {
+            readings = nodeReadingManager.listNodeReadings(node, capability);
+        }
+        final StringBuilder data = new StringBuilder();
+        for (final NodeReading reading : readings) {
+            data.append(",[").append(reading.getTimestamp().getTime()).append(",");
+            data.append(reading.getReading()).append("]").append("\n");
         }
 
         // Prepare data to pass to jsp
@@ -163,6 +191,7 @@ public final class NodeCapabilityChartController extends AbstractRestController 
         refData.put("testbed", testbed);
         refData.put("node", node);
         refData.put("capability", capability);
+        refData.put("readings", data.toString().substring(1));
         refData.put("limit", limit);
 
         // check type of view requested

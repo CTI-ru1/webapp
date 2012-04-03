@@ -37,6 +37,7 @@
                 <prop key="GET /testbed/json">listTestbedsJSONController</prop>
                 <prop key="GET /testbed/*">showTestbedController</prop>
                 <prop key="GET /testbed/*/status">showTestbedStatusController</prop>
+                <prop key="GET /testbed/*/adminstatus">showTestbedAdminStatusController</prop>
                 <prop key="GET /testbed/*/status/raw">showRawTestbedStatusController</prop>
                 <prop key="GET /testbed/*/status/json">showJsonTestbedStatusController</prop>
                 <prop key="GET /testbed/*/rooms">showTestbedRoomsController</prop>
@@ -209,6 +210,14 @@
         <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
         <property name="linkCapabilityManager" ref="linkCapabilityManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/status"/>
+    </bean>
+    <!-- Show Testbed Status Controller -->
+    <bean name="showTestbedAdminStatusController"
+          class="eu.uberdust.rest.controller.tab.ShowTestbedAdminStatusController">
+        <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/adminstatus"/>
     </bean>
     <bean name="showRawTestbedStatusController"
           class="eu.uberdust.rest.controller.tab.ShowTestbedStatusController">
@@ -550,6 +559,7 @@
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
+        <property name="nodeReadingManager" ref="nodeReadingManager"/>
         <property name="uriPattern"
                   value="/testbed/{testbedId}/node/{nodeId}/capability/{capabilityId}/chart/limit/{readingsLimit}"/>
         <property name="viewNameSelector">

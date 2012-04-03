@@ -41,7 +41,7 @@
            statistics="true"/>
 
     <cache name="eu.uberdust.formatter.HtmlFormatter.formatNodes"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="5"
            overflowToDisk="false"
            diskPersistent="false"
@@ -51,7 +51,7 @@
            statistics="true"/>
 
     <cache name="eu.uberdust.formatter.HtmlFormatter.formatLinks"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="5"
            overflowToDisk="false"
            diskPersistent="false"
@@ -61,7 +61,7 @@
            statistics="true"/>
 
     <cache name="eu.uberdust.formatter.HtmlFormatter.formatCapabilities"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="5"
            overflowToDisk="false"
            diskPersistent="false"
@@ -71,30 +71,30 @@
            statistics="true"/>
 
     <cache name="eu.wisebed.wisedb.controller.NodeControllerImpl.list"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="5"
            overflowToDisk="false"
            diskPersistent="false"
            timeToIdleSeconds="0"
-           timeToLiveSeconds="120"
+           timeToLiveSeconds="0"
            memoryStoreEvictionPolicy="LRU"
            statistics="true"/>
     <cache name="eu.wisebed.wisedb.controller.LinkControllerImpl.list"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="5"
            overflowToDisk="false"
            diskPersistent="false"
            timeToIdleSeconds="0"
-           timeToLiveSeconds="120"
+           timeToLiveSeconds="0"
            memoryStoreEvictionPolicy="LRU"
            statistics="true"/>
     <cache name="eu.wisebed.wisedb.controller.CapabilityControllerImpl.list"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="5"
            overflowToDisk="false"
            diskPersistent="false"
            timeToIdleSeconds="0"
-           timeToLiveSeconds="120"
+           timeToLiveSeconds="0"
            memoryStoreEvictionPolicy="LRU"
            statistics="true"/>
 
