@@ -4,11 +4,17 @@
 
 
     <!-- Data Source setup -->
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <bean id="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="${wisedb.jdbc.connection.driver_class}"/>
         <property name="url" value="${wisedb.jdbc.connection.url}"/>
         <property name="username" value="${wisedb.jdbc.connection.username}"/>
         <property name="password" value="${wisedb.jdbc.connection.password}"/>
+        <property name="initialSize" value="10"/>
+        <property name="maxActive" value="30"/>
+        <property name="maxIdle" value="30"/>
+        <property name="maxWait" value="1000"/>
+        <property name="validationQuery" value="select 1"/>
     </bean>
     <!--
 
@@ -103,12 +109,6 @@
     </bean>
 
 
-    <!-- injecting a hibernate interceptor to session factory -->
-    <bean id="hibernateInterceptor"
-          class="org.springframework.orm.hibernate3.HibernateInterceptor">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
     <!--injecting a transaction manager to session factory -->
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate3.HibernateTransactionManager">
@@ -131,11 +131,6 @@
             </props>
         </property>
 
-        <property name="preInterceptors">
-            <list>
-                <ref bean="hibernateInterceptor"/>
-            </list>
-        </property>
     </bean>
 
 
