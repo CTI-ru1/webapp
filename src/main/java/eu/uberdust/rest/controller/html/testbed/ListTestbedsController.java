@@ -60,33 +60,34 @@ public final class ListTestbedsController extends AbstractRestController {
      */
     protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) {
-
-        LOGGER.info("listTestbedsController(...)");
-
-        HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
-
-        final long start = System.currentTimeMillis();
-
-        // testbed list
-        final List<Testbed> testbeds = testbedManager.list();
-
-        LOGGER.info(testbeds.size());
-        final Map<String, Long> nodesCount = testbedManager.countNodes();
-        LOGGER.info(nodesCount.size());
-        final Map<String, Long> linksCount = testbedManager.countLinks();
-        LOGGER.info(linksCount.size());
-
-
-        // Prepare data to pass to jsp
-        final Map<String, Object> refData = new HashMap<String, Object>();
-
         try {
-            refData.put("text", HtmlFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount));
-        } catch (NotImplementedException e) {
-            LOGGER.error(e);
-        }
+            LOGGER.info("listTestbedsController(...)");
 
-        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
-        return new ModelAndView("testbed/list.html", refData);
+            HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
+
+            final long start = System.currentTimeMillis();
+
+            // testbed list
+            final List<Testbed> testbeds = testbedManager.list();
+
+            final Map<String, Long> nodesCount = testbedManager.countNodes();
+            final Map<String, Long> linksCount = testbedManager.countLinks();
+
+
+            // Prepare data to pass to jsp
+            final Map<String, Object> refData = new HashMap<String, Object>();
+
+            try {
+                refData.put("text", HtmlFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount));
+            } catch (NotImplementedException e) {
+                LOGGER.error(e);
+            }
+
+            refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+            return new ModelAndView("testbed/list.html", refData);
+        } catch (Exception e) {
+            LOGGER.error("e", e);
+        }
+        return  null;
     }
 }

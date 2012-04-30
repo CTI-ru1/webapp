@@ -80,12 +80,15 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
         System.out.println("hanlde Request");
         //Process the handshake, selecting the protocol to be used.
-        final String protocol = servletRequest.getHeader("Sec-WebSocket-Protocol");
+        String protocol = servletRequest.getHeader("Sec-WebSocket-Protocol");
+
 
         if (protocol == null) {
             servletResponse.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
             return null;
         }
+
+        protocol = protocol.replaceAll("\\.", "@").replaceAll("-", ":");
 
         if (protocol.equals(WSIdentifiers.INSERT_PROTOCOL)) {
             System.out.println("WSIdentifiers.INSERT_PROTOCOL");

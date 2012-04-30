@@ -1,29 +1,8 @@
-
 function message(value2add){
     var myspan=document.getElementById('area');
-    var oldtext = myspan.value;
+    var oldtext = myspan.innerHTML;
     myspan.innerHTML=value2add+"<br>"+oldtext;
 }
-
-
-  var Envelope = {
-    1: {name: 'type',  type: 'string', rule: 'required'},
-    2: {name: 'control',    type: 'int',  rule: 'optional'},
-    3: {name: 'nodeReadings', type: 'string', rule: 'optional'},
-    4: {name: 'linkReadings', type: 'string', rule: 'optional'},
-  };
-  function inspect(obj) {
-    var ret = '';
-    for (var key in obj) {
-      ret += key + ':' + obj[key] + "\n";
-    }
-    return ret;
-  }
-  function testDecoder(file) {
-    pbuf = new Protobuf.Decoder(Envelope).decode(file);
-    message("done "+pbuf)
-  }
-
 
 function clearMessages(){
     document.getElementById('area').value="";
@@ -50,7 +29,7 @@ function connect(hostname,node,capability){
             encodedProtocol+=protocol[i];
         }
     }
-    encodedProtocol=protocol;
+//    encodedProtocol=protocol;
 
     try{
 
@@ -60,14 +39,17 @@ function connect(hostname,node,capability){
                          message("You have a browser that does not support MozWebsockets!");
                          return -1;
                 }
+
+
         else {
-            socket = new MozWebSocket(host,protocol);
+            socket = new MozWebSocket(host,encodedProtocol);
 
                 message('You have a browser that supports MozWebSockets');
         }
     }
     else {
-        message(encodedProtocol);
+//        message("encodedProtocol="+encodedProtocol);
+//        message("Protocol="+protocol);
         socket = new WebSocket(host,encodedProtocol);
         message('You have a browser that supports WebSockets');
     }
@@ -77,12 +59,11 @@ function connect(hostname,node,capability){
         }
 
         socket.onmessage = function(msg){
-            message('Received: '+msg.data);
-            testDecoder(msg.data);
-
+            if (!(msg.data instanceof Blob)) {
+                message(msg.data);
+            }
         }
-
-        socket.onclose = function(){
+       socket.onclose = function(){
             message("socket.onclose")
 //            message('Socket Status: '+socket.readyState+' (Closed)'+"");
         }
@@ -92,24 +73,22 @@ function connect(hostname,node,capability){
     }
 
 
-    function send(){
-        var text = $('#text').val();
-
-        if(text==""){
-            message('Please enter a message'+"");
-            return ;
-        }
-        try{
-            socket.send(text);
-            message('Sent: '+text+"")
-        } catch(exception){
-            message('Exception '+"");
-        }
-        $('#text').val("");
-    }
 
 
 }//End connect
+
+function send(text){
+    if(text==""){
+        message('Please enter a message'+"");
+        return ;
+    }
+    try{
+        socket.send(text);
+        message('Sent: '+text+"")
+    } catch(exception){
+        message('Exception '+"");
+    }
+}
 
 function disconnect(){
     socket.close();

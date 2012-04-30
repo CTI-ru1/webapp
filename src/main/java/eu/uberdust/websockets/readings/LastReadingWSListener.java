@@ -3,6 +3,8 @@ package eu.uberdust.websockets.readings;
 import com.caucho.websocket.AbstractWebSocketListener;
 import com.caucho.websocket.WebSocketContext;
 import eu.uberdust.communication.protobuf.Message;
+import eu.uberdust.formatter.TextFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.wisebed.wisedb.listeners.AbstractNodeReadingListener;
 import eu.wisebed.wisedb.model.NodeReading;
 import org.apache.log4j.Logger;
@@ -10,6 +12,7 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,12 +131,25 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
                     .setNodeReadings(readings)
                     .build();
             LOGGER.info(envelope);
+
+            String readingToString = "";
+            try {
+                readingToString = TextFormatter.getInstance().formatNodeReading(lastReading);
+            } catch (NotImplementedException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
             for (final WebSocketContext user : users) {
                 try {
                     final OutputStream thisWriter = user.startBinaryMessage();
                     thisWriter.write(envelope.toByteArray());
                     thisWriter.flush();
                     thisWriter.close();
+
+                    final PrintWriter thisMessageWriter = user.startTextMessage();
+                    thisMessageWriter.write(readingToString);
+                    thisMessageWriter.flush();
+                    thisMessageWriter.close();
 
                 } catch (final IOException e) {
                     LOGGER.error(e);
