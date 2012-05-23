@@ -9,13 +9,8 @@ import eu.wisebed.wisedb.listeners.AbstractNodeReadingListener;
 import eu.wisebed.wisedb.model.NodeReading;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by IntelliJ IDEA.
@@ -34,7 +29,7 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
     /**
      * A List with the connected users.
      */
-    private final transient List<WebSocketContext> users = new ArrayList<WebSocketContext>();
+    private final transient CopyOnWriteArrayList<WebSocketContext> users = new CopyOnWriteArrayList<WebSocketContext>();
 
     /**
      * The Node id..
