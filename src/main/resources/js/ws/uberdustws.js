@@ -67,6 +67,7 @@ function connect(hostname,node,capability){
             message("socket.onclose")
 //            message('Socket Status: '+socket.readyState+' (Closed)'+"");
         }
+          var t=setTimeout("ping()",30000);
 
     } catch(exception){
             message('Error'+exception+"");
@@ -76,6 +77,11 @@ function connect(hostname,node,capability){
 
 
 }//End connect
+
+function ping()
+{    send("ping");
+	var t=setTimeout("ping()",30000);
+}
 
 function send(text){
     if(text==""){

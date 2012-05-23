@@ -60,12 +60,12 @@ public class CommandWSListener extends AbstractWebSocketListener implements Abst
 
     @Override
     public final void onReadBinary(final WebSocketContext context, final InputStream inputStream) throws IOException {
-        super.onReadBinary(context, inputStream);
+//        super.onReadBinary(context, inputStream);
     }
 
     @Override
     public final void onReadText(final WebSocketContext context, final Reader reader) throws IOException {
-        super.onReadText(context, reader);
+//        super.onReadText(context, reader);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class CommandWSListener extends AbstractWebSocketListener implements Abst
 
 
     public final void update(final Message.Envelope envelope) {
-        LOGGER.info("Update");
+        LOGGER.info("Update " + envelope.toString());
         for (final WebSocketContext user : registeredTestbeds) {
             try {
                 final OutputStream response = user.startBinaryMessage();

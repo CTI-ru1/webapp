@@ -78,7 +78,12 @@
                 <prop key="GET /testbed/*/node/*/capability/*/live">nodeCapabilityLiveController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/html/limit/*">nodeCapabilityHTMLController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/tabdelimited">nodeCapabilityTabDelimitedController</prop>
+                <prop key="GET /testbed/*/link/*/*/capability/*/tabdelimited">linkCapabilityTabDelimitedController
+                </prop>
                 <prop key="GET /testbed/*/node/*/capability/*/tabdelimited/limit/*">nodeCapabilityTabDelimitedController
+                </prop>
+                <prop key="GET /testbed/*/link/*/*/capability/*/tabdelimited/limit/*">
+                    linkCapabilityTabDelimitedController
                 </prop>
                 <prop key="GET /testbed/*/node/*/capability/*/json">nodeCapabilityJsonController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/json/limit/*">nodeCapabilityJsonController</prop>
@@ -139,8 +144,8 @@
 
     <!-- Insert Reading Controller WebSocket -->
     <bean name="insertReadingWebSocketController" class="eu.uberdust.websockets.readings.ReadingsWebSocket">
-         <property name="insertReadingWSListener">
-           <bean class="eu.uberdust.websockets.readings.InsertReadingWSListener" factory-method="getInstance">
+        <property name="insertReadingWSListener">
+            <bean class="eu.uberdust.websockets.readings.InsertReadingWSListener" factory-method="getInstance">
                 <property name="nodeReadingManager" ref="nodeReadingManager"/>
                 <property name="linkReadingManager" ref="linkReadingManager"/>
             </bean>
@@ -540,6 +545,18 @@
         <property name="nodeReadingManager" ref="nodeReadingManager"/>
         <property name="uriPattern"
                   value="/testbed/{testbedId}/node/{nodeId}/capability/{capabilityId}/tabdelimited/limit/{readingsLimit}"/>
+    </bean>
+
+    <!-- Link-Capability Controller for Tab Delimited format -->
+    <bean name="linkCapabilityTabDelimitedController"
+          class="eu.uberdust.rest.controller.tab.LinkCapabilityTabDelimitedController">
+        <property name="commandClass" value="eu.uberdust.command.LinkCapabilityCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="linkManager" ref="linkManager"/>
+        <property name="capabilityManager" ref="capabilityManager"/>
+        <property name="linkReadingManager" ref="linkReadingManager"/>
+        <property name="uriPattern"
+                  value="/testbed/{testbedId}/link/{sourceId}/{targetId}/capability/{capabilityId}/tabdelimited/limit/{readingsLimit}"/>
     </bean>
 
     <!-- Node-Capability Controller for JSON format -->

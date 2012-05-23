@@ -91,15 +91,15 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
         protocol = protocol.replaceAll("\\.", "@").replaceAll("-", ":");
 
         if (protocol.equals(WSIdentifiers.INSERT_PROTOCOL)) {
-            System.out.println("WSIdentifiers.INSERT_PROTOCOL");
+            LOGGER.info("WSIdentifiers.INSERT_PROTOCOL");
 
             servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
 
-            System.out.println(insertReadingWSListener == null);
+            LOGGER.info(insertReadingWSListener == null);
             //Initialize Insert WebSocket Client
             final WebSocketServletRequest wsRequest = (WebSocketServletRequest) servletRequest;
             wsRequest.startWebSocket(insertReadingWSListener);
-            System.out.println("WSIdentifiers.INSERT_PROTOCOL");
+            LOGGER.info("WSIdentifiers.INSERT_PROTOCOL");
             return null;
         }
 

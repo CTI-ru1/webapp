@@ -136,10 +136,11 @@ public final class ShowTestbedAdminStatusController extends AbstractRestControll
                     final String room = roomCap == null ? "null" : roomCap.getLastNodeReading().getStringReading();
                     final String nodetype = nodeCap == null ? "null" : nodeCap.getLastNodeReading().getStringReading();
 
-                    output.append(node.getName())
-                            .append("\t").append(room == null ? "null" : room)
-                            .append("\t").append(nodetype == null ? "null" : nodetype)
-                            .append("\n");
+                    if (!node.getName().contains("virtual")) {
+                        output.append(node.getName()).append("\t").
+                                append(room == null ? "null" : room).append("\t")
+                                .append(nodetype == null ? "null" : nodetype).append("\n");
+                    }
                 }
             }
 
