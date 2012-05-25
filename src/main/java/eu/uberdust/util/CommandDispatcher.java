@@ -7,8 +7,7 @@ import eu.wisebed.wisedb.listeners.LastNodeReadingConsumer;
 import eu.wisebed.wisedb.model.NodeReading;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,10 +25,10 @@ public class CommandDispatcher implements AbstractNodeReadingListener {
     /**
      * A HashMap<CapabilityID:NodeID>.
      */
-    private final transient List<CommandWSListener> listeners;
+    private final transient CopyOnWriteArrayList<CommandWSListener> listeners;
 
     public CommandDispatcher() {
-        listeners = new ArrayList<CommandWSListener>();
+        listeners = new CopyOnWriteArrayList<CommandWSListener>();
         LastNodeReadingConsumer.getInstance().registerVirtualReadingListener(this);
     }
 
