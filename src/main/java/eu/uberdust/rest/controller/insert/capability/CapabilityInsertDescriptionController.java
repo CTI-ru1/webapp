@@ -1,12 +1,14 @@
 package eu.uberdust.rest.controller.insert.capability;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.CapabilityCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.Capability;
+import eu.wisebed.wisedb.model.Testbed;
+import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractRestController;
@@ -26,6 +28,10 @@ public final class CapabilityInsertDescriptionController extends AbstractRestCon
      */
     private transient TestbedController testbedManager;
 
+    /**
+     * Logger persistence manager.
+     */
+    private static final Logger LOGGER = Logger.getLogger(CapabilityInsertDescriptionController.class);
     /**
      * Capability persistence manager.
      */
@@ -62,6 +68,7 @@ public final class CapabilityInsertDescriptionController extends AbstractRestCon
      * @throws java.io.IOException       IO exception.
      */
     @Override
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) throws InvalidTestbedIdException,
             TestbedNotFoundException, IOException {

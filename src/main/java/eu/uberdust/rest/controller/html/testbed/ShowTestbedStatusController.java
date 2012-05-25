@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.html.testbed;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.TestbedCommand;
 import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -85,12 +86,10 @@ public final class ShowTestbedStatusController extends AbstractRestController {
      * @throws InvalidTestbedIdException a InvalidTestbedIDException exception.
      * @throws TestbedNotFoundException  a TestbedNotFoundException exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException {
-
-        LOGGER.info("showTestbedStatusController(...)");
-
         final long start = System.currentTimeMillis();
 
         long start1 = System.currentTimeMillis();

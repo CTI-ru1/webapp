@@ -1,6 +1,7 @@
 package eu.uberdust.rest.controller.tab;
 
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.LinkCommand;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -84,11 +85,10 @@ public final class ListLinksController extends AbstractRestController {
      *                     an TestbedNotFoundException exception.
      * @throws IOException IO Exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
-
-        LOGGER.info("listLinksController(...)");
 
         // get command
         final LinkCommand command = (LinkCommand) commandObj;

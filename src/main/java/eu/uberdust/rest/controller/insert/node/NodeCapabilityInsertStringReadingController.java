@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.insert.node;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityInsertReadingCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -77,11 +78,10 @@ public final class NodeCapabilityInsertStringReadingController extends AbstractR
      *                             testbed not found exception.
      * @throws java.io.IOException IO exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
-
-        LOGGER.info("nodeCapabilityInsertStringReading(...)");
 
         // set commandNode object
         final NodeCapabilityInsertReadingCommand command = (NodeCapabilityInsertReadingCommand) commandObj;

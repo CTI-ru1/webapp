@@ -1,8 +1,9 @@
 package eu.uberdust.rest.controller;
 
-import eu.uberdust.util.CommandDispatcher;
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.DestinationPayloadCommand;
 import eu.uberdust.rest.exception.NodeNotFoundException;
+import eu.uberdust.util.CommandDispatcher;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.model.Node;
 import org.apache.log4j.Logger;
@@ -60,12 +61,10 @@ public final class SendCommandController extends AbstractRestController {
      * @throws NodeNotFoundException NodeNotFoundException exception.
      * @throws IOException           IOException exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws NodeNotFoundException, IOException {
-
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
 
         // set commandNode object
         final DestinationPayloadCommand command = (DestinationPayloadCommand) commandObj;

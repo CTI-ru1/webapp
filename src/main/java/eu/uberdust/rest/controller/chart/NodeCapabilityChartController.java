@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.chart;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.rest.controller.json.NodeCapabilityController;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
@@ -117,13 +118,12 @@ public final class NodeCapabilityChartController extends AbstractRestController 
      * @throws NodeNotFoundException          node not found exception.
      * @throws CapabilityNotFoundException    capability not found exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
             TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException {
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
 
         // set command object
         final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;

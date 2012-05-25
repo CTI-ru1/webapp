@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.html.link;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.LinkCommand;
 import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -79,11 +80,10 @@ public final class ShowLinkController extends AbstractRestController {
      * @throws TestbedNotFoundException  TestbedNotFoundException exception.
      * @throws LinkNotFoundException     LinkNotFoundException exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, LinkNotFoundException {
-
-        LOGGER.info("showLinkController(...)");
 
         HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 

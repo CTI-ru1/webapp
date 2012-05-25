@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.json;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.formatter.JsonFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -80,10 +81,10 @@ public final class ListNodesController extends AbstractRestController {
      * @throws TestbedNotFoundException  an {@link TestbedNotFoundException} exception.
      * @throws IOException               IO exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException {
-        LOGGER.info("listNodesController(...)");
 
         // get command object
         final NodeCommand command = (NodeCommand) commandObj;

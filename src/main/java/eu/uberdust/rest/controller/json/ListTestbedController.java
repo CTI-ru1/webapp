@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.json;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.JsonFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.controller.html.testbed.ListTestbedsController;
@@ -60,9 +61,10 @@ public final class ListTestbedController extends AbstractRestController {
      * @param errors     BindException exception.
      * @return response http servlet response.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) throws IOException {
-        LOGGER.info("listTestbedController(...)");
+
         // testbed list
         final List<Testbed> testbeds = testbedManager.list();
         final Map<String, Long> nodesCount = testbedManager.countNodes();

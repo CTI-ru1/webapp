@@ -1,9 +1,16 @@
 package eu.uberdust.rest.controller.json;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.formatter.JsonFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
-import eu.uberdust.rest.exception.*;
+import eu.uberdust.rest.exception.CapabilityNotFoundException;
+import eu.uberdust.rest.exception.InvalidCapabilityNameException;
+import eu.uberdust.rest.exception.InvalidLimitException;
+import eu.uberdust.rest.exception.InvalidNodeIdException;
+import eu.uberdust.rest.exception.InvalidTestbedIdException;
+import eu.uberdust.rest.exception.NodeNotFoundException;
+import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Capability;
@@ -99,12 +106,12 @@ public final class ListNodeCapabilitiesController extends AbstractRestController
      * @throws eu.uberdust.rest.exception.InvalidLimitException
      *          invalid limit exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
 
-        LOGGER.info("listNodeCapabilitiesController(...)");
         try {
             // set commandNode object
             final NodeCommand command = (NodeCommand) commandObj;

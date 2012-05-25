@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.tab;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -99,12 +100,12 @@ public final class ListNodeCapabilitiesController extends AbstractRestController
      * @throws CapabilityNotFoundException    capability not found exception.
      * @throws InvalidLimitException          invalid limit exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
 
-        LOGGER.info("listNodeCapabilitiesController(...)");
         try {
             // set commandNode object
             final NodeCommand command = (NodeCommand) commandObj;

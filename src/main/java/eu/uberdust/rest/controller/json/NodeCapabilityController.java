@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.json;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.formatter.JsonFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -123,13 +124,12 @@ public final class NodeCapabilityController extends AbstractRestController {
      * @throws IOException                    IO exception.
      * @throws InvalidLimitException          invalid limit exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
             TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException,
             IOException, InvalidLimitException {
-
-        LOGGER.info("nodeCapabilityController(...)");
 
         // set commandNode object
         final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;

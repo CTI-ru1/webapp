@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
 import eu.uberdust.rest.exception.InvalidCapabilityNameException;
@@ -60,12 +61,11 @@ public final class LiveNodeCapabilityController extends AbstractRestController {
      * @throws eu.uberdust.rest.exception.InvalidLimitException
      *          invalid limit exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
-
-        LOGGER.info("showNodeCapabilityController(...)");
 
         String hostname = req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest"));
         hostname = hostname.replace("http://", "");

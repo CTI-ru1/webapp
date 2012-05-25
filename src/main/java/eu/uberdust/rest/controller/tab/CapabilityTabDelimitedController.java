@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.tab;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.CapabilityCommand;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -115,11 +116,10 @@ public final class CapabilityTabDelimitedController extends AbstractRestControll
      * @throws IOException                 an IOException exception.
      * @throws CapabilityNotFoundException a CapabilityNotFoundException exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException {
-
-        LOGGER.info("CapabilityTabDelimitedController(...)");
 
         // set command object
         final CapabilityCommand command = (CapabilityCommand) commandObj;

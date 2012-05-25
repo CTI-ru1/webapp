@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.json;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.formatter.JsonFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -104,14 +105,11 @@ public final class NodeCapabilityLastReadingController extends AbstractRestContr
      * @throws InvalidNodeIdException         invalid node id exception.
      * @throws IOException                    IO exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, NodeNotFoundException,
             CapabilityNotFoundException, InvalidCapabilityNameException, InvalidNodeIdException, IOException {
-
-        LOGGER.info("nodeCapabilityLastReadingController(...)");
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
 
         // set commandNode object
         final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;

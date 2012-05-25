@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.insert.link;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.LinkCapabilityInsertReadingCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -77,12 +78,10 @@ public final class LinkCapabilityInsertDoubleReadingController extends AbstractR
      * @throws TestbedNotFoundException  testbed not found exception.
      * @throws IOException               IO exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
-
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
 
         // set command object object
         final LinkCapabilityInsertReadingCommand command = (LinkCapabilityInsertReadingCommand) commandObj;

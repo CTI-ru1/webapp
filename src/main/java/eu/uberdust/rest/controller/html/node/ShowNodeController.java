@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.html.node;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -87,13 +88,12 @@ public final class ShowNodeController extends AbstractRestController {
      * @throws TestbedNotFoundException  TestbedNotFoundException exception.
      * @throws NodeNotFoundException     NodeNotFoundException exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, NodeNotFoundException {
-
         final long start = System.currentTimeMillis();
 
-        LOGGER.info("showNodeController(...)");
 
         HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 

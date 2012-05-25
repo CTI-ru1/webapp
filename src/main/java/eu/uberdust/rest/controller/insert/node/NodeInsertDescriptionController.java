@@ -1,12 +1,13 @@
 package eu.uberdust.rest.controller.insert.node;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -68,11 +69,10 @@ public final class NodeInsertDescriptionController extends AbstractRestControlle
      * @throws IOException               IO exception.
      */
     @Override
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) throws InvalidTestbedIdException,
             TestbedNotFoundException, IOException {
-
-        LOGGER.info("nodeInsertDescriptionController(...)");
 
         // set commandNode object
         final NodeCommand command = (NodeCommand) commandObj;

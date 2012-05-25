@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.wiseml;
 
+import eu.uberdust.caching.Loggable;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,10 +38,9 @@ public final class ShowTestbedWiseMlController extends AbstractRestController {
      * @param errors     a BindException exception.
      * @return response http servlet response.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) {
-
-        LOGGER.info("showTestbedWisemlController(...)");
 
         return null; //TODO make this controller
     }

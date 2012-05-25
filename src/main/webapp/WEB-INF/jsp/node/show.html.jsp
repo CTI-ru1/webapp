@@ -18,6 +18,7 @@
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>ÜberDust - Show Node : <c:out value="${node.name}"/></title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
+    <script type="text/javascript" src="/js/qrcode.js"></script>
     <%@include file="/googleAnalytics.jsp"%>
 </head>
 <body>

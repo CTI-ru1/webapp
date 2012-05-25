@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.html.node;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
@@ -107,7 +108,7 @@ public final class ShowNodeCapabilityController extends AbstractRestController {
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param req    http servlet req.
+     * @param req        http servlet req.
      * @param response   http servlet response.
      * @param commandObj command object.
      * @param errors     BindException exception.
@@ -120,12 +121,11 @@ public final class ShowNodeCapabilityController extends AbstractRestController {
      * @throws CapabilityNotFoundException    capability not found exception.
      * @throws InvalidLimitException          invalid limit exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
-
-        LOGGER.info("showNodeCapabilityController(...)");
 
         HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 

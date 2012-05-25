@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.html.testbed;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.wisebed.wisedb.controller.TestbedController;
@@ -58,10 +59,10 @@ public final class ListTestbedsController extends AbstractRestController {
      * @param errors     BindException exception.
      * @return response http servlet response.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors) {
         try {
-            LOGGER.info("listTestbedsController(...)");
 
             HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 
@@ -88,6 +89,6 @@ public final class ListTestbedsController extends AbstractRestController {
         } catch (Exception e) {
             LOGGER.error("e", e);
         }
-        return  null;
+        return null;
     }
 }

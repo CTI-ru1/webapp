@@ -1,6 +1,7 @@
 package eu.uberdust.rest.controller.georss;
 
 import com.sun.syndication.io.FeedException;
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.TestbedCommand;
 import eu.uberdust.formatter.GeoRssFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -91,11 +92,10 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
      * @throws FeedException             a FeedException exception.
      */
     @SuppressWarnings("unchecked")
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException {
-
-        LOGGER.info("showTestbedGeoRssController(...)");
 
         // set command object
         final TestbedCommand command = (TestbedCommand) commandObj;

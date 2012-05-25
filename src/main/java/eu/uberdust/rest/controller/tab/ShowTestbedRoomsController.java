@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.tab;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.TestbedCommand;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -87,12 +88,11 @@ public final class ShowTestbedRoomsController extends AbstractRestController {
      * @throws eu.uberdust.rest.exception.TestbedNotFoundException
      *          a TestbedNotFoundException exception.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException {
 
-        LOGGER.info("Remote address: " + request.getRemoteAddr());
-        LOGGER.info("Remote host: " + request.getRemoteHost());
         try {
             // set command object
             final TestbedCommand command = (TestbedCommand) commandObj;

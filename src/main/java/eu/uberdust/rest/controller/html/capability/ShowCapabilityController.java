@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.html.capability;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.CapabilityCommand;
 import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -104,7 +105,7 @@ public final class ShowCapabilityController extends AbstractRestController {
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param req    http servlet req.
+     * @param req        http servlet req.
      * @param response   http servlet response.
      * @param commandObj command object.
      * @param errors     BindException excetion.
@@ -113,11 +114,10 @@ public final class ShowCapabilityController extends AbstractRestController {
      * @throws TestbedNotFoundException    TestbedNotFoundException exception.
      * @throws CapabilityNotFoundException CapabilityNotFoundExcetion.
      */
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, CapabilityNotFoundException {
-
-        LOGGER.info("showCapabilityController(...)");
 
         HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 
