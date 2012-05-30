@@ -8,9 +8,13 @@ function clearMessages(){
     document.getElementById('area').value="";
 }
 
-var socket;
+var t=setTimeout("ping()",30000);
+var sockets=new Array();
+var sock_count=0;
 
 function connect(hostname,node,capability){
+	var mysock_id=sock_count;
+	sock_count++;
 
     clearMessages();
 
@@ -42,7 +46,7 @@ function connect(hostname,node,capability){
 
 
         else {
-            socket = new MozWebSocket(host,encodedProtocol);
+            sockets[mysock_id] = new MozWebSocket(host,encodedProtocol);
 
                 message('You have a browser that supports MozWebSockets');
         }
@@ -50,24 +54,24 @@ function connect(hostname,node,capability){
     else {
 //        message("encodedProtocol="+encodedProtocol);
 //        message("Protocol="+protocol);
-        socket = new WebSocket(host,encodedProtocol);
+        sockets[mysock_id] = new WebSocket(host,encodedProtocol);
         message('You have a browser that supports WebSockets');
     }
-        socket.onopen = function(){
+        sockets[mysock_id].onopen = function(){
             message('socket.onopen ');
 //            message('Socket Status: '+socket.readyState+' (open)'+"");
         }
 
-        socket.onmessage = function(msg){
+        sockets[mysock_id].onmessage = function(msg){
             if (!(msg.data instanceof Blob)) {
                 message(msg.data);
             }
         }
-       socket.onclose = function(){
+       sockets[mysock_id].onclose = function(){
             message("socket.onclose")
 //            message('Socket Status: '+socket.readyState+' (Closed)'+"");
         }
-          var t=setTimeout("ping()",30000);
+          
 
     } catch(exception){
             message('Error'+exception+"");
@@ -79,24 +83,28 @@ function connect(hostname,node,capability){
 }//End connect
 
 function ping()
-{    send("ping");
+{
+	var i=0;
+	for (i=0;i<sock_count;i++){
+		send("ping",i);
+	}
 	var t=setTimeout("ping()",30000);
 }
 
-function send(text){
+function send(text,sock_id){
     if(text==""){
         message('Please enter a message'+"");
         return ;
     }
     try{
-        socket.send(text);
+        sockets[sock_id].send(text);
         message('Sent: '+text+"")
     } catch(exception){
         message('Exception '+"");
     }
 }
 
-function disconnect(){
-    socket.close();
+function disconnect(sock_id){
+    sockets[sock_id].close();
     message("Connection Closed!");
 }
