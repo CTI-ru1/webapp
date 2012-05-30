@@ -78,10 +78,9 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
         servletRequest.getSession().setMaxInactiveInterval(Integer.MAX_VALUE);
 
-        System.out.println("hanlde Request");
         //Process the handshake, selecting the protocol to be used.
         String protocol = servletRequest.getHeader("Sec-WebSocket-Protocol");
-
+        LOGGER.info(protocol);
 
         if (protocol == null) {
             servletResponse.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
