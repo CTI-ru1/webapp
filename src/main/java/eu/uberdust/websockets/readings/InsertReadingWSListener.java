@@ -98,12 +98,12 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
      * @throws IOException IOException exception.
      */
     public void onReadBinary(final WebSocketContext context, final InputStream inputStream) throws IOException {
-        LOGGER.info("New Message Reveived");
+        LOGGER.debug("New Message Reveived");
 
         final Message.Envelope envelope = Message.Envelope.parseFrom(inputStream);
 
         if (envelope.getType().equals(Message.Envelope.Type.NODE_READINGS)) {
-            LOGGER.info("New NodeReading");
+            LOGGER.debug("New NodeReading");
             final Message.NodeReadings nodeReadings = envelope.getNodeReadings();
             for (Message.NodeReadings.Reading reading : nodeReadings.getReadingList()) {
                 final String nodeId = reading.getNode();
@@ -144,7 +144,7 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
 
 
         final long mBytes = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
-        LOGGER.info("Memory Usage: " + mBytes + " MB");
+        LOGGER.debug("Memory Usage: " + mBytes + " MB");
     }
 
     /**
@@ -162,7 +162,7 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
         while ((numChars = reader.read(arr, 0, arr.length)) > 0) {
             buf.append(arr, 0, numChars);
         }
-        LOGGER.info("onReadText() : " + buf.toString());
+        LOGGER.debug("onReadText() : " + buf.toString());
         super.onReadText(context, reader);
     }
 
@@ -195,6 +195,6 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
      * @throws IOException IOException exception.
      */
     public void onTimeout(final WebSocketContext context) throws IOException {
-        LOGGER.info("onTimeout()");
+        LOGGER.debug("onTimeout()");
     }
 }

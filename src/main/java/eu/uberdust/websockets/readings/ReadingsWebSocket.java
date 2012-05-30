@@ -3,7 +3,6 @@ package eu.uberdust.websockets.readings;
 import com.caucho.websocket.WebSocketServletRequest;
 import eu.uberdust.communication.websocket.WSIdentifiers;
 import eu.wisebed.wisedb.listeners.LastNodeReadingConsumer;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -61,7 +60,7 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
     public ReadingsWebSocket() {
         // empty constructor.
         listeners = new HashMap<String, LastReadingWSListener>();
-        LOGGER.setLevel(Level.DEBUG);
+//        LOGGER.setLevel(Level.DEBUG);
     }
 
     /**
@@ -91,24 +90,24 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
         if (protocol.equals(WSIdentifiers.INSERT_PROTOCOL)) {
             LOGGER.info("WSIdentifiers.INSERT_PROTOCOL");
+            LOGGER.debug(insertReadingWSListener == null);
 
             servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
 
-            LOGGER.info(insertReadingWSListener == null);
             //Initialize Insert WebSocket Client
             final WebSocketServletRequest wsRequest = (WebSocketServletRequest) servletRequest;
             wsRequest.startWebSocket(insertReadingWSListener);
-            LOGGER.info("WSIdentifiers.INSERT_PROTOCOL");
+
             return null;
         }
 
         if (protocol.startsWith(WSIdentifiers.SUBSCRIBE_PROTOCOL_PREFIX)) {
-            System.out.println("WSIdentifiers.SUBSCRIBE_PROTOCOL_PREFIX");
+            LOGGER.info("WSIdentifiers.SUBSCRIBE_PROTOCOL_PREFIX");
             LastReadingWSListener lastReadingWSListener;
             if (listeners.containsKey(protocol)) {
                 servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
                 lastReadingWSListener = listeners.get(protocol);
-                LOGGER.info("registered listener");
+                LOGGER.debug("registered listener");
 
             } else {
                 lastReadingWSListener = new LastReadingWSListener(
@@ -120,7 +119,7 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
                         protocol.split(WSIdentifiers.DELIMITER)[2],
                         lastReadingWSListener);
 
-                LOGGER.info("new listener");
+                LOGGER.debug("new listener");
                 listeners.put(protocol, lastReadingWSListener);
                 servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
             }
@@ -139,8 +138,7 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
     @Override
     public final void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws ServletException, IOException {
-        LOGGER.info("service");
-        System.out.println("Service");
+        LOGGER.debug("service");
         try {
             handleRequest((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
         } catch (Exception ex) {

@@ -60,7 +60,7 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
         super.onStart(context);
         LOGGER.info("onStart");
         users.add(context);
-        LOGGER.info(users.size());
+        LOGGER.debug(users.size());
         context.setTimeout(-1);
     }
 
@@ -79,7 +79,7 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
         super.onClose(context);
         LOGGER.info("onClose");
         users.remove(context);
-        LOGGER.info(users.size());
+        LOGGER.debug(users.size());
         /*if (users.size() == 0) {
             LastNodeReadingConsumer.getInstance().removeListener(nodeID, capabilityID);
         }*/
@@ -90,7 +90,7 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
         super.onDisconnect(context);
         LOGGER.info("onDisconnect");
         users.remove(context);
-        LOGGER.info(users.size());
+        LOGGER.debug(users.size());
         /*   if (users.size() == 0) {
             LastNodeReadingConsumer.getInstance().removeListener(nodeID, capabilityID);
         }*/
@@ -100,7 +100,7 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
     @Override
     public final void onTimeout(final WebSocketContext context) throws IOException {
         super.onTimeout(context);
-        LOGGER.info("onTimeout");
+        LOGGER.debug("onTimeout");
     }
 
     @Override
@@ -125,7 +125,7 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
                     .setType(Message.Envelope.Type.NODE_READINGS)
                     .setNodeReadings(readings)
                     .build();
-            LOGGER.info(envelope);
+            LOGGER.debug(envelope);
 
             String readingToString = "";
             try {

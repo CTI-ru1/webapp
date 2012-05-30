@@ -1,6 +1,7 @@
 package eu.uberdust.websockets.commands;
 
 import com.caucho.websocket.WebSocketServletRequest;
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.communication.websocket.WSIdentifiers;
 import eu.uberdust.util.CommandDispatcher;
 import org.apache.log4j.Logger;
@@ -44,9 +45,9 @@ public class CommandPublisherWebSocket
      * @throws javax.servlet.ServletException
      * @throws java.io.IOException
      */
+    @Loggable
     @Override
     public final ModelAndView handleRequest(final HttpServletRequest servletRequest, final HttpServletResponse servletResponse) throws Exception {
-        LOGGER.info("handleRequest");
 
         servletRequest.getSession().setMaxInactiveInterval(Integer.MAX_VALUE);
         /*
@@ -68,7 +69,7 @@ public class CommandPublisherWebSocket
 
             thisListener = new CommandWSListener(protocol.split(WSIdentifiers.DELIMITER)[1]);
 
-            LOGGER.info("new TESTBEDCONTROLLER");
+            LOGGER.debug("new TESTBEDCONTROLLER");
             CommandDispatcher.getInstance().add(thisListener);
             servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
 
@@ -95,7 +96,7 @@ public class CommandPublisherWebSocket
 
     @Override
     public final void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws ServletException, IOException {
-        LOGGER.info("service");
+        LOGGER.debug("service");
         try {
             handleRequest((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
         } catch (Exception ex) {
