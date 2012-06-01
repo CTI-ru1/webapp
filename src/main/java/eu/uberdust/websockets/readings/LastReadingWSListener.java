@@ -9,7 +9,11 @@ import eu.wisebed.wisedb.listeners.AbstractNodeReadingListener;
 import eu.wisebed.wisedb.model.NodeReading;
 import org.apache.log4j.Logger;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -71,6 +75,21 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
 
     @Override
     public final void onReadText(final WebSocketContext context, final Reader reader) throws IOException {
+
+        final char[] arr = new char[1024]; // 1K at a time
+        final StringBuffer buf = new StringBuffer();
+        int numChars;
+
+        while ((numChars = reader.read(arr, 0, arr.length)) > 0) {
+            buf.append(arr, 0, numChars);
+        }
+        LOGGER.info("onReadText() : " + buf.toString());
+
+        final PrintWriter writer = context.startTextMessage();
+        writer.append("pong");
+        writer.flush();
+        writer.close();
+
         super.onReadText(context, reader);
     }
 
