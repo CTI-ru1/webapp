@@ -1,7 +1,6 @@
 package eu.uberdust.websockets.commands;
 
 import com.caucho.websocket.WebSocketServletRequest;
-import eu.uberdust.caching.Loggable;
 import eu.uberdust.communication.websocket.WSIdentifiers;
 import eu.uberdust.util.CommandDispatcher;
 import org.apache.log4j.Logger;
@@ -45,7 +44,6 @@ public class CommandPublisherWebSocket
      * @throws javax.servlet.ServletException
      * @throws java.io.IOException
      */
-    @Loggable
     @Override
     public final ModelAndView handleRequest(final HttpServletRequest servletRequest, final HttpServletResponse servletResponse) throws Exception {
 

@@ -64,7 +64,9 @@ function connect(hostname,node,capability){
 
         sockets[mysock_id].onmessage = function(msg){
             if (!(msg.data instanceof Blob)) {
-                message(msg.data);
+                if (msg.data!="pong"){
+                    message(msg.data);
+                }
             }
         }
        sockets[mysock_id].onclose = function(){
@@ -98,7 +100,7 @@ function send(text,sock_id){
     }
     try{
         sockets[sock_id].send(text);
-        message('Sent: '+text+"")
+//        message('Sent: '+text+"")
     } catch(exception){
         message('Exception '+"");
     }

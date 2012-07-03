@@ -126,7 +126,9 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
     public final void update(final NodeReading lastReading) {
         LOGGER.info("Update");
 
-        if (lastReading.getCapability().getNode().getName().equals(nodeID)
+        LOGGER.info(nodeID+"--"+lastReading.getCapability().getNode().getName());
+        LOGGER.info(capabilityID+"--"+lastReading.getCapability().getCapability().getName());
+        if ((nodeID.contains("virtual") || lastReading.getCapability().getNode().getName().equals(nodeID))
                 && lastReading.getCapability().getCapability().getName().equals(capabilityID)) {
 
             final Message.NodeReadings.Reading.Builder reading = Message.NodeReadings.Reading.newBuilder()
@@ -152,6 +154,8 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
             } catch (NotImplementedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
+
+            LOGGER.info(users.size());
 
             for (final WebSocketContext user : users) {
                 try {

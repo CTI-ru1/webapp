@@ -2,7 +2,12 @@ package eu.uberdust.websockets.readings;
 
 import com.caucho.websocket.WebSocketServletRequest;
 import eu.uberdust.communication.websocket.WSIdentifiers;
+import eu.wisebed.wisedb.controller.LinkCapabilityControllerImpl;
+import eu.wisebed.wisedb.controller.LinkControllerImpl;
+import eu.wisebed.wisedb.controller.NodeControllerImpl;
 import eu.wisebed.wisedb.listeners.LastNodeReadingConsumer;
+import eu.wisebed.wisedb.model.Link;
+import eu.wisebed.wisedb.model.LinkCapability;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -15,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -86,7 +92,18 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
             return null;
         }
 
-        protocol = protocol.replaceAll("\\.", "@").replaceAll("-", ":");
+
+        if (protocol.contains("virtual")) {
+            protocol = protocol.substring(0, protocol.indexOf(".")) +
+                    "@" + protocol.substring(protocol.indexOf(".") + 1, protocol.lastIndexOf(".")) +
+                    "@" + protocol.substring(protocol.lastIndexOf(".") + 1);
+
+            protocol = protocol.replaceAll("-", ":");
+
+        } else {
+            protocol = protocol.replaceAll("\\.", "@").replaceAll("-", ":");
+        }
+
 
         if (protocol.equals(WSIdentifiers.INSERT_PROTOCOL)) {
             LOGGER.info("WSIdentifiers.INSERT_PROTOCOL");
@@ -113,7 +130,6 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
                 lastReadingWSListener = new LastReadingWSListener(
                         protocol.split(WSIdentifiers.DELIMITER)[1],
                         protocol.split(WSIdentifiers.DELIMITER)[2]);
-
                 LastNodeReadingConsumer.getInstance().registerListener(
                         protocol.split(WSIdentifiers.DELIMITER)[1],
                         protocol.split(WSIdentifiers.DELIMITER)[2],
@@ -121,6 +137,25 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
                 LOGGER.debug("new listener");
                 listeners.put(protocol, lastReadingWSListener);
+
+                if (protocol.split(WSIdentifiers.DELIMITER)[1].contains("virtual")) {
+                    List<Link> links = LinkControllerImpl.getInstance().getBySource(NodeControllerImpl.getInstance().getByName(protocol.split(WSIdentifiers.DELIMITER)[1]));
+                    for (Link link : links) {
+                        LOGGER.info(link);
+                        LinkCapability vcap = LinkCapabilityControllerImpl.getInstance().getByID(link, "virtual");
+                        if (vcap != null && vcap.getLastLinkReading().getReading() == 1.0) {
+
+                            LOGGER.info("registerListener@" + link.getTarget().getName());
+
+                            LastNodeReadingConsumer.getInstance().registerListener(
+                                    link.getTarget().getName(),
+                                    protocol.split(WSIdentifiers.DELIMITER)[2],
+                                    lastReadingWSListener);
+                        }
+                    }
+
+                }
+
                 servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
             }
 
@@ -137,7 +172,8 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
 
     @Override
-    public final void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws ServletException, IOException {
+    public final void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws
+            ServletException, IOException {
         LOGGER.debug("service");
         try {
             handleRequest((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
@@ -147,4 +183,3 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
         }
     }
 }
-
