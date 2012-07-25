@@ -143,6 +143,10 @@
     <bean id="testbedManager" parent="proxyTemplate">
         <property name="target" ref="testbedManagerTarget"/>
     </bean>
+    <!-- setupManager -->
+    <bean id="setupManager" parent="proxyTemplate">
+        <property name="target" ref="setupManagerTarget"/>
+    </bean>
     <!-- capabilityManager -->
     <bean id="capabilityManager" parent="proxyTemplate">
         <property name="target" ref="capabilityManagerTarget"/>
