@@ -68,15 +68,19 @@ public final class ListTestbedsController extends AbstractRestController {
 
             final long start = System.currentTimeMillis();
 
+            // Prepare data to pass to jsp
+            final Map<String, Object> refData = new HashMap<String, Object>();
+
+
             // testbed list
             final List<Testbed> testbeds = testbedManager.list();
+            if (testbeds.size() == 0) {
+                return new ModelAndView("testbed/add.html", refData);
+            }
 
             final Map<String, Long> nodesCount = testbedManager.countNodes();
             final Map<String, Long> linksCount = testbedManager.countLinks();
 
-
-            // Prepare data to pass to jsp
-            final Map<String, Object> refData = new HashMap<String, Object>();
 
             try {
                 refData.put("text", HtmlFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount));
