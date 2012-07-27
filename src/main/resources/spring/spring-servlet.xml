@@ -56,8 +56,8 @@
                 <prop key="GET /testbed/*/node">listNodesHTMLController</prop>
                 <prop key="GET /testbed/*/node/raw">listNodesController</prop>
                 <prop key="GET /testbed/*/node/json">listNodesJSONController</prop>
-                <prop key="GET /testbed/*/node/*/">showNodeController</prop>
-                <prop key="PUT /testbed/*/node/*/">addNodeController</prop>
+                <prop key="GET /testbed/*/node/*/">getNodeController</prop>
+                <prop key="PUT /testbed/*/node/*/">putNodeController</prop>
                 <prop key="GET /testbed/*/node/*/georss">showNodeGeoRssController</prop>
                 <prop key="GET /testbed/*/node/*/kml">showNodeKmlController</prop>
                 <prop key="GET /testbed/*/node/*/rdf">showNodeRdfController</prop>
@@ -334,25 +334,17 @@
         <property name="uriPattern" value="/testbed/{testbedId}/node/json"/>
     </bean>
 
-    <!-- Show Node Controller -->
-    <bean name="showNodeController" class="eu.uberdust.rest.controller.html.node.ShowNodeController">
+    <!-- NodeController -->
+    <!--get-->
+    <bean name="getNodeController" class="eu.uberdust.rest.controller.html.node.GetNodeController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
         <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/"/>
-        <property name="viewNameSelector">
-            <bean class="org.springframework.web.servlet.RestViewNameSelector">
-                <property name="defaultViewName" value="node/show.html"/>
-                <property name="views">
-                    <map>
-                        <entry key="text/html" value="node/show.html"/>
-                    </map>
-                </property>
-            </bean>
-        </property>
     </bean>
-    <bean name="addNodeController" class="eu.uberdust.rest.controller.html.node.AddNodeController">
+    <!--put-->
+    <bean name="putNodeController" class="eu.uberdust.rest.controller.html.node.PutNodeController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>

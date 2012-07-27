@@ -22,7 +22,7 @@ import java.io.Writer;
 /**
  * Controller class that returns the a web page for a node.
  */
-public final class AddNodeController extends AbstractRestController {
+public final class PutNodeController extends AbstractRestController {
     /**
      * Node persistence manager.
      */
@@ -36,12 +36,12 @@ public final class AddNodeController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(AddNodeController.class);
+    private static final Logger LOGGER = Logger.getLogger(PutNodeController.class);
 
     /**
      * Constructor.
      */
-    public AddNodeController() {
+    public PutNodeController() {
         super();
 
         // Make sure to set which method this controller will support.

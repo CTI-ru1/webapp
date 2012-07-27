@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Controller class that returns the a web page for a node.
  */
-public final class ShowNodeController extends AbstractRestController {
+public final class GetNodeController extends AbstractRestController {
     /**
      * Node persistence manager.
      */
@@ -46,12 +46,12 @@ public final class ShowNodeController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ShowNodeController.class);
+    private static final Logger LOGGER = Logger.getLogger(GetNodeController.class);
 
     /**
      * Constructor.
      */
-    public ShowNodeController() {
+    public GetNodeController() {
         super();
 
         // Make sure to set which method this controller will support.
