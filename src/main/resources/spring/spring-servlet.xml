@@ -57,6 +57,7 @@
                 <prop key="GET /testbed/*/node/raw">listNodesController</prop>
                 <prop key="GET /testbed/*/node/json">listNodesJSONController</prop>
                 <prop key="GET /testbed/*/node/*/">showNodeController</prop>
+                <prop key="PUT /testbed/*/node/*/">addNodeController</prop>
                 <prop key="GET /testbed/*/node/*/georss">showNodeGeoRssController</prop>
                 <prop key="GET /testbed/*/node/*/kml">showNodeKmlController</prop>
                 <prop key="GET /testbed/*/node/*/rdf">showNodeRdfController</prop>
@@ -350,6 +351,12 @@
                 </property>
             </bean>
         </property>
+    </bean>
+    <bean name="addNodeController" class="eu.uberdust.rest.controller.html.node.AddNodeController">
+        <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeManager" ref="nodeManager"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/"/>
     </bean>
 
     <bean name="showNodeRdfController" class="eu.uberdust.rest.controller.rdf.ShowNodeRdfController">
