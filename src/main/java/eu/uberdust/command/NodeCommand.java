@@ -11,6 +11,12 @@ public final class NodeCommand extends TestbedCommand {
     private String nodeId = null;
 
     /**
+     * the Format.
+     */
+    private String format = null;
+
+
+    /**
      * Node's description.
      */
     private String description = null;
@@ -31,6 +37,24 @@ public final class NodeCommand extends TestbedCommand {
      */
     public void setNodeId(final String thisId) {
         nodeId = thisId;
+    }
+
+    /**
+     * Get the Format requested.
+     *
+     * @return the Format.
+     */
+    public String getFormat() {
+        return format;
+    }
+
+    /**
+     * Set the Format requested.
+     *
+     * @param format the Format of request.
+     */
+    public void setFormat(final String format) {
+        this.format = format;
     }
 
     /**

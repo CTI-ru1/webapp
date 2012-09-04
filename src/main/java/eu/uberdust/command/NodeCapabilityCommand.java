@@ -11,6 +11,11 @@ public class NodeCapabilityCommand extends TestbedCommand {
     private String nodeId = null;
 
     /**
+     * the Format.
+     */
+    private String format = null;
+
+    /**
      * Capability ID.
      */
     private String capabilityId = null;
@@ -38,6 +43,25 @@ public class NodeCapabilityCommand extends TestbedCommand {
     public final void setNodeId(final String nodeId) {
         this.nodeId = nodeId;
     }
+
+    /**
+     * Get the Format requested.
+     *
+     * @return the Format.
+     */
+    public String getFormat() {
+        return format;
+    }
+
+    /**
+     * Set the Format requested.
+     *
+     * @param format the Format of request.
+     */
+    public void setFormat(final String format) {
+        this.format = format;
+    }
+
 
     /**
      * Returns the Id of capability.
@@ -68,6 +92,7 @@ public class NodeCapabilityCommand extends TestbedCommand {
 
     /**
      * Sets the readingsLimit.
+     *
      * @param readingsLimit the readingsLimit of readings
      */
     public final void setReadingsLimit(final String readingsLimit) {

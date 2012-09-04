@@ -2,16 +2,19 @@ package eu.uberdust.rest.controller.rdf;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.sun.syndication.io.FeedException;
-import eu.uberdust.command.NodeCommand;
+import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.formatter.RdfFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.LastNodeReadingController;
+import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
+import eu.wisebed.wisedb.controller.NodeReadingController;
 import eu.wisebed.wisedb.controller.TestbedController;
+import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.NodeReading;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -23,11 +26,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
 
 /**
  * Controller class that returns the position of a node in GeoRSS format.
  */
-public final class ShowNodeRdfController extends AbstractRestController {
+public final class NodeCapabilityRdfController extends AbstractRestController {
 
     /**
      * Tested persistence manager.
@@ -38,18 +42,23 @@ public final class ShowNodeRdfController extends AbstractRestController {
      * Node persistence manager.
      */
     private transient NodeController nodeManager;
-
-    private transient LastNodeReadingController lastNodeReadingManager;
-
+    /**
+     * NodeReading persistence manager.
+     */
+    private transient NodeReadingController nodeReadingManager;
+    /**
+     * Capability persistence manager.
+     */
+    private transient CapabilityController capabilityManager;
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ShowNodeRdfController.class);
+    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityRdfController.class);
 
     /**
      * Constructor.
      */
-    public ShowNodeRdfController() {
+    public NodeCapabilityRdfController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -74,8 +83,22 @@ public final class ShowNodeRdfController extends AbstractRestController {
         this.nodeManager = nodeManager;
     }
 
-    public void setLastNodeReadingManager(final LastNodeReadingController lastNodeReadingManager) {
-        this.lastNodeReadingManager = lastNodeReadingManager;
+    /**
+     * Sets NodeReading persistence manager.
+     *
+     * @param nodeReadingManager NodeReading persistence manager.
+     */
+    public void setNodeReadingManager(final NodeReadingController nodeReadingManager) {
+        this.nodeReadingManager = nodeReadingManager;
+    }
+
+    /**
+     * Sets capability persistence manager.
+     *
+     * @param capabilityManager capability persistence manager.
+     */
+    public void setCapabilityManager(final CapabilityController capabilityManager) {
+        this.capabilityManager = capabilityManager;
     }
 
     /**
@@ -86,11 +109,15 @@ public final class ShowNodeRdfController extends AbstractRestController {
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return http servlet response.
-     * @throws IOException               an IOException exception.
-     * @throws FeedException             a FeedException exception.
-     * @throws NodeNotFoundException     NodeNotFoundException exception.
-     * @throws TestbedNotFoundException  TestbedNotFoundException exception.
-     * @throws InvalidTestbedIdException InvalidTestbedIdException exception.
+     * @throws java.io.IOException an IOException exception.
+     * @throws com.sun.syndication.io.FeedException
+     *                             a FeedException exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException
+     *                             NodeNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                             TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                             InvalidTestbedIdException exception.
      */
     @SuppressWarnings("unchecked")
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
@@ -98,10 +125,10 @@ public final class ShowNodeRdfController extends AbstractRestController {
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
 
-        LOGGER.info("showNodeRdfController(...)");
+        LOGGER.info("nodeCapabilityRdfController(...)");
 
         // set command object
-        final NodeCommand command = (NodeCommand) commandObj;
+        final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;
 
         // a specific testbed is requested by testbed Id
         int testbedId;
@@ -126,11 +153,15 @@ public final class ShowNodeRdfController extends AbstractRestController {
             throw new NodeNotFoundException("Cannot find testbed [" + command.getNodeId() + "].");
         }
 
+        final Capability capability = capabilityManager.getByID(command.getCapabilityId());
+
+        List<NodeReading> readings = nodeReadingManager.listNodeReadings(node, capability, Integer.parseInt(command.getReadingsLimit()));
+
         // current host base URL
 
         String retVal = "";
         try {
-            Model model = (Model) RdfFormatter.getInstance().formatNode(node);
+            Model model = (Model) RdfFormatter.getInstance().formatNodeReadings(readings);
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             if (command.getFormat().toLowerCase().equals("turtle")) {

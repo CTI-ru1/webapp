@@ -39,6 +39,7 @@
                 <prop key="GET /testbed/*">showTestbedController</prop>
                 <prop key="GET /testbed/*/status">showTestbedStatusController</prop>
                 <prop key="GET /testbed/*/adminstatus">showTestbedAdminStatusController</prop>
+                <prop key="GET /testbed/*/timeout">showTestbedTimeoutController</prop>
                 <prop key="GET /testbed/*/status/raw">showRawTestbedStatusController</prop>
                 <prop key="GET /testbed/*/status/json">showJsonTestbedStatusController</prop>
                 <prop key="GET /testbed/*/rooms">showTestbedRoomsController</prop>
@@ -46,6 +47,7 @@
                 <prop key="GET /testbed/*/georss">showTestbedGeoRssController</prop>
                 <prop key="GET /testbed/*/kml">showTestbedKmlController</prop>
                 <prop key="GET /testbed/*/wiseml">showTestbedWiseMlController</prop>
+                <prop key="GET /testbed/*/rdf/*/">showTestbedRdfController</prop>
 
                 <prop key="PUT /testbed/insert/name/*/prefix/*/federated/*/timezone/*/description/*/url/*/x/*/y/*/z/*/phi/*/theta/*/ctype/*/">
                     insertTestbedController
@@ -59,7 +61,7 @@
                 <prop key="GET /testbed/*/node/*/">showNodeController</prop>
                 <prop key="GET /testbed/*/node/*/georss">showNodeGeoRssController</prop>
                 <prop key="GET /testbed/*/node/*/kml">showNodeKmlController</prop>
-                <prop key="GET /testbed/*/node/*/rdf">showNodeRdfController</prop>
+                <prop key="GET /testbed/*/node/*/rdf/*/">showNodeRdfController</prop>
                 <prop key="GET /testbed/*/node/*/insert/description/*/">nodeInsertDescriptionController</prop>
 
                 <!-- Link Related Controllers -->
@@ -97,6 +99,8 @@
                 <prop key="GET /testbed/*/node/*/capability/*/wiseml/limit/*">nodeCapabilityWiseMlController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/chart">nodeCapabilityChartController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/chart/limit/*">nodeCapabilityChartController</prop>
+                <prop key="GET /testbed/*/node/*/capability/*/rdf/*/limit/*">nodeCapabilityRdfController</prop>
+
                 <prop key="GET /testbed/*/node/*/capability/*/latestreading">nodeCapabilityLastReadingController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/latestreading/json">
                     nodeCapabilityJsonLastReadingController
@@ -241,6 +245,15 @@
         <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/adminstatus"/>
     </bean>
+    <!-- Show Testbed Status Controller -->
+    <bean name="showTestbedTimeoutController"
+          class="eu.uberdust.rest.controller.tab.ShowTestbedTimeoutsController">
+        <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeManager" ref="nodeManager"/>
+        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/timeout"/>
+    </bean>
     <bean name="showRawTestbedStatusController"
           class="eu.uberdust.rest.controller.tab.ShowTestbedStatusController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
@@ -297,6 +310,11 @@
     <bean name="showTestbedWiseMlController" class="eu.uberdust.rest.controller.wiseml.ShowTestbedWiseMlController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="uriPattern" value="/testbed/{testbedId}/wiseml"/>
+    </bean>
+    <bean name="showTestbedRdfController" class="eu.uberdust.rest.controller.rdf.ShowTestbedRdfController">
+        <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/rdf/{format}/"/>
     </bean>
 
     <!-- List available Nodes HTML Controller -->
@@ -357,7 +375,7 @@
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
         <property name="lastNodeReadingManager" ref="lastNodeReadingManager"/>
-        <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/rdf"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/rdf/{format}/"/>
     </bean>
     <!-- Show Node GeoRss Controller -->
     <bean name="showNodeGeoRssController" class="eu.uberdust.rest.controller.georss.ShowNodeGeoRssController">
@@ -606,6 +624,17 @@
                 </property>
             </bean>
         </property>
+    </bean>
+
+    <!-- Node-Capability Controller Rdf display -->
+    <bean name="nodeCapabilityRdfController" class="eu.uberdust.rest.controller.rdf.NodeCapabilityRdfController">
+        <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeManager" ref="nodeManager"/>
+        <property name="capabilityManager" ref="capabilityManager"/>
+        <property name="nodeReadingManager" ref="nodeReadingManager"/>
+        <property name="uriPattern"
+                  value="/testbed/{testbedId}/node/{nodeId}/capability/{capabilityId}/rdf/{format}/limit/{readingsLimit}"/>
     </bean>
 
     <!-- Node-Capability WiseML Controller -->

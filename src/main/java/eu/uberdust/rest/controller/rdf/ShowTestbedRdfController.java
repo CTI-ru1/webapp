@@ -2,16 +2,13 @@ package eu.uberdust.rest.controller.rdf;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.sun.syndication.io.FeedException;
-import eu.uberdust.command.NodeCommand;
+import eu.uberdust.caching.Loggable;
+import eu.uberdust.command.TestbedCommand;
 import eu.uberdust.formatter.RdfFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
-import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.LastNodeReadingController;
-import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -25,31 +22,24 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * Controller class that returns the position of a node in GeoRSS format.
+ * Controller class that returns the setup of a testbed in GeoRSS format.
  */
-public final class ShowNodeRdfController extends AbstractRestController {
+public final class ShowTestbedRdfController extends AbstractRestController {
 
     /**
-     * Tested persistence manager.
+     * Testbed persistence manager.
      */
     private transient TestbedController testbedManager;
 
     /**
-     * Node persistence manager.
-     */
-    private transient NodeController nodeManager;
-
-    private transient LastNodeReadingController lastNodeReadingManager;
-
-    /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ShowNodeRdfController.class);
+    private static final Logger LOGGER = Logger.getLogger(ShowTestbedRdfController.class);
 
     /**
      * Constructor.
      */
-    public ShowNodeRdfController() {
+    public ShowTestbedRdfController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -66,42 +56,29 @@ public final class ShowNodeRdfController extends AbstractRestController {
     }
 
     /**
-     * Sets node persistence manager.
-     *
-     * @param nodeManager node persistence manager.
-     */
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
-
-    public void setLastNodeReadingManager(final LastNodeReadingController lastNodeReadingManager) {
-        this.lastNodeReadingManager = lastNodeReadingManager;
-    }
-
-    /**
      * Handle request and return the appropriate response.
      *
      * @param request    http servlet request.
      * @param response   http servlet response.
      * @param commandObj command object.
-     * @param errors     BindException exception.
+     * @param errors     a BindException exception.
      * @return http servlet response.
-     * @throws IOException               an IOException exception.
-     * @throws FeedException             a FeedException exception.
-     * @throws NodeNotFoundException     NodeNotFoundException exception.
-     * @throws TestbedNotFoundException  TestbedNotFoundException exception.
-     * @throws InvalidTestbedIdException InvalidTestbedIdException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                             a TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                             a InvalidTestbedIdException exception.
+     * @throws java.io.IOException a IOException exception.
+     * @throws com.sun.syndication.io.FeedException
+     *                             a FeedException exception.
      */
     @SuppressWarnings("unchecked")
+    @Loggable
     protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
-            throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
-            InvalidTestbedIdException {
-
-        LOGGER.info("showNodeRdfController(...)");
+            throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException {
 
         // set command object
-        final NodeCommand command = (NodeCommand) commandObj;
+        final TestbedCommand command = (TestbedCommand) commandObj;
 
         // a specific testbed is requested by testbed Id
         int testbedId;
@@ -119,22 +96,13 @@ public final class ShowNodeRdfController extends AbstractRestController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        // look up node
-        final Node node = nodeManager.getByName(command.getNodeId());
-        if (node == null) {
-            // if no node is found throw exception
-            throw new NodeNotFoundException("Cannot find testbed [" + command.getNodeId() + "].");
-        }
-
-        // current host base URL
-
         String retVal = "";
         try {
-            Model model = (Model) RdfFormatter.getInstance().formatNode(node);
+            Model model = (Model) RdfFormatter.getInstance().formatTestbed(testbed);
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             if (command.getFormat().toLowerCase().equals("turtle")) {
-                response.setContentType("text/turtle");
+                response.setContentType("text/plain");
                 model.write(bos, "TURTLE");
             } else if (command.getFormat().toLowerCase().equals("n-triple")) {
                 response.setContentType("text/plain");
@@ -152,7 +120,7 @@ public final class ShowNodeRdfController extends AbstractRestController {
 
 
         // set up feed and entries
-        response.setContentType("application/rdf+xml");
+
         final Writer output = (response.getWriter());
 
         output.write(retVal);

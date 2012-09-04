@@ -11,6 +11,11 @@ public class TestbedCommand {
     private String testbedId = null;
 
     /**
+     * the Format.
+     */
+    private String format = null;
+
+    /**
      * Returns testbed id.
      *
      * @return testbed id
@@ -26,5 +31,23 @@ public class TestbedCommand {
      */
     public final void setTestbedId(final String testbedId) {
         this.testbedId = testbedId;
+    }
+
+    /**
+     * Get the Format requested.
+     *
+     * @return the Format.
+     */
+    public String getFormat() {
+        return format;
+    }
+
+    /**
+     * Set the Format requested.
+     *
+     * @param format the Format of request.
+     */
+    public void setFormat(final String format) {
+        this.format = format;
     }
 }
