@@ -191,7 +191,7 @@ public final class NodeCapabilityTabDelimitedController extends AbstractRestCont
         final Writer textOutput = (response.getWriter());
 
         try {
-            textOutput.append(TextFormatter.getInstance().formatNodeReadings(nodeReadings));
+            textOutput.append((String) TextFormatter.getInstance().formatNodeReadings(nodeReadings));
         } catch (NotImplementedException e) {
             textOutput.append("not implemented exception");
         }

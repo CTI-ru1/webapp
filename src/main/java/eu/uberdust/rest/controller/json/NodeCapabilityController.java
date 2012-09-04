@@ -192,7 +192,7 @@ public final class NodeCapabilityController extends AbstractRestController {
         response.setContentType("text/json");
         final Writer textOutput = (response.getWriter());
         try {
-            textOutput.append(JsonFormatter.getInstance().formatNodeReadings(nodeReadings));
+            textOutput.append((String)JsonFormatter.getInstance().formatNodeReadings(nodeReadings));
         } catch (NotImplementedException e) {
             textOutput.append("not implemented exception");
         }
