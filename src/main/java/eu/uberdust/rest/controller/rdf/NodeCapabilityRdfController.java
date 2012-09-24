@@ -1,6 +1,5 @@
 package eu.uberdust.rest.controller.rdf;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.sun.syndication.io.FeedException;
 import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.formatter.RdfFormatter;
@@ -23,7 +22,6 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
@@ -154,28 +152,36 @@ public final class NodeCapabilityRdfController extends AbstractRestController {
         }
 
         final Capability capability = capabilityManager.getByID(command.getCapabilityId());
+//        final Capability capabilityRoom = capabilityManager.getByID("room");
 
         List<NodeReading> readings = nodeReadingManager.listNodeReadings(node, capability, Integer.parseInt(command.getReadingsLimit()));
+//        List<NodeReading> roomReading = nodeReadingManager.listNodeReadings(node, capabilityRoom, 1);
+//        readings.add(1, roomReading.get(0));
 
         // current host base URL
 
         String retVal = "";
         try {
-            Model model = (Model) RdfFormatter.getInstance().formatNodeReadings(readings);
+//            Model model = ModelFactory.createDefaultModel();
+//            model.read((String) RdfFormatter.getInstance().formatNodeReadings(readings));
+            retVal = ((String) RdfFormatter.getInstance().formatNodeReadings(readings));
+//
+//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//            if (command.getFormat().toLowerCase().equals("turtle")) {
+//                response.setContentType("text/turtle");
+//                model.write(bos, "TURTLE");
+//                retVal = bos.toString().replaceAll("rdf-xml", "turtle");
+//
+//            } else if (command.getFormat().toLowerCase().equals("n-triple")) {
+//                response.setContentType("text/plain");
+//                model.write(bos, "N-TRIPLE");
+//                retVal = bos.toString().replaceAll("rdf-xml", "n-triple");
+//            } else {
+//                response.setContentType("application/rdf+xml");
+//                model.write(bos, "RDF/XML");
+//                retVal = bos.toString();
+//            }
 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            if (command.getFormat().toLowerCase().equals("turtle")) {
-                response.setContentType("text/turtle");
-                model.write(bos, "TURTLE");
-            } else if (command.getFormat().toLowerCase().equals("n-triple")) {
-                response.setContentType("text/plain");
-                model.write(bos, "N-TRIPLE");
-            } else {
-                response.setContentType("application/rdf+xml");
-                model.write(bos, "RDF/XML");
-            }
-
-            retVal = bos.toString();
 
         } catch (NotImplementedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
