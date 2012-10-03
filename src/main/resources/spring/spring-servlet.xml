@@ -101,6 +101,7 @@
                 <prop key="GET /testbed/*/node/*/capability/*/chart">nodeCapabilityChartController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/chart/limit/*">nodeCapabilityChartController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/rdf/*/limit/*">nodeCapabilityRdfController</prop>
+                <prop key="GET /testbed/*/node/*/capability/*/rdf/*">nodeCapabilityRdfDescriptionController</prop>
 
                 <prop key="GET /testbed/*/node/*/capability/*/latestreading">nodeCapabilityLastReadingController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/latestreading/json">
@@ -634,6 +635,16 @@
         <property name="nodeReadingManager" ref="nodeReadingManager"/>
         <property name="uriPattern"
                   value="/testbed/{testbedId}/node/{nodeId}/capability/{capabilityId}/rdf/{format}/limit/{readingsLimit}"/>
+    </bean>
+    <bean name="nodeCapabilityRdfDescriptionController"
+          class="eu.uberdust.rest.controller.rdf.NodeCapabilityRdfDescriptionController">
+        <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeManager" ref="nodeManager"/>
+        <property name="capabilityManager" ref="capabilityManager"/>
+        <property name="nodeReadingManager" ref="nodeReadingManager"/>
+        <property name="uriPattern"
+                  value="/testbed/{testbedId}/node/{nodeId}/capability/{capabilityId}/rdf/{format}"/>
     </bean>
 
     <!-- Node-Capability WiseML Controller -->

@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,23 +109,36 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
         } catch (NumberFormatException nfe) {
             throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
         }
-
-        // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
-        if (testbed == null) {
-            // if no testbed is found throw exception
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
-        }
+        Testbed testbed = testbedManager.getByID(testbedId);
 
         final List<Node> nodes = nodeManager.list(testbed.getSetup());
-
+        final List<Node> nodesList = new ArrayList<Node>();
         final Map<Node, String> descriptionMap = new HashMap<Node, String>();
         final Map<Node, List<NodeCapability>> capabilityMap = new HashMap<Node, List<NodeCapability>>();
         final Map<Node, Position> originMap = new HashMap<Node, Position>();
         for (final Node node : nodes) {
-            descriptionMap.put(node, nodeManager.getDescription(node));
-            capabilityMap.put(node, nodeCapabilityManager.list(node));
-            originMap.put(node, nodeManager.getPosition(node));
+            if (node.getName().contains("virtual")) {
+                continue;
+            }
+            String desc = null;
+            List<NodeCapability> caps;
+            Position origins;
+            try {
+                desc = nodeManager.getDescription(node);
+                caps = nodeCapabilityManager.list(node);
+                origins = nodeManager.getPosition(node);
+                if ((desc == null) || (caps == null) || (origins == null)) {
+                    continue;
+                }
+            } catch (Exception e) {
+                continue;
+            }
+
+            nodesList.add(node);
+            descriptionMap.put(node, desc);
+            capabilityMap.put(node, caps);
+            originMap.put(node, origins);
+
         }
 
         String output = "";
@@ -133,7 +147,7 @@ public final class ShowTestbedGeoRssController extends AbstractRestController {
             output = GeoRssFormatter.getInstance().describeTestbed(testbed,
                     request.getRequestURL().toString(),
                     request.getRequestURI(),
-                    nodes, descriptionMap, capabilityMap, originMap);
+                    nodesList, descriptionMap, capabilityMap, originMap);
         } catch (NotImplementedException e) {
             output = e.getMessage();
         }
