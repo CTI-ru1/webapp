@@ -120,6 +120,11 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
         if (protocol.startsWith(WSIdentifiers.SUBSCRIBE_PROTOCOL_PREFIX)) {
             LOGGER.info("WSIdentifiers.SUBSCRIBE_PROTOCOL_PREFIX");
+            String nodeName = protocol.split(WSIdentifiers.DELIMITER)[1];
+            String capabilityName = protocol.split(WSIdentifiers.DELIMITER)[2];
+            LOGGER.info("nodeName=" + nodeName);
+            LOGGER.info("capabilityName=" + capabilityName);
+
             LastReadingWSListener lastReadingWSListener;
             if (listeners.containsKey(protocol)) {
                 servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
@@ -127,34 +132,26 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
                 LOGGER.debug("registered listener");
 
             } else {
-                lastReadingWSListener = new LastReadingWSListener(
-                        protocol.split(WSIdentifiers.DELIMITER)[1],
-                        protocol.split(WSIdentifiers.DELIMITER)[2]);
-                LastNodeReadingConsumer.getInstance().registerListener(
-                        protocol.split(WSIdentifiers.DELIMITER)[1],
-                        protocol.split(WSIdentifiers.DELIMITER)[2],
-                        lastReadingWSListener);
+                lastReadingWSListener = new LastReadingWSListener(nodeName, capabilityName);
+                LastNodeReadingConsumer.getInstance().registerListener(nodeName, capabilityName, lastReadingWSListener);
 
                 LOGGER.debug("new listener");
                 listeners.put(protocol, lastReadingWSListener);
 
-                if (protocol.split(WSIdentifiers.DELIMITER)[1].contains("virtual")) {
-                    List<Link> links = LinkControllerImpl.getInstance().getBySource(NodeControllerImpl.getInstance().getByName(protocol.split(WSIdentifiers.DELIMITER)[1]));
-                    for (Link link : links) {
-                        LOGGER.info(link);
-                        LinkCapability vcap = LinkCapabilityControllerImpl.getInstance().getByID(link, "virtual");
-                        if (vcap != null && vcap.getLastLinkReading().getReading() == 1.0) {
-
-                            LOGGER.info("registerListener@" + link.getTarget().getName());
-
-                            LastNodeReadingConsumer.getInstance().registerListener(
-                                    link.getTarget().getName(),
-                                    protocol.split(WSIdentifiers.DELIMITER)[2],
-                                    lastReadingWSListener);
-                        }
+//                if (protocol.split(WSIdentifiers.DELIMITER)[1].contains("virtual")) {
+                //Get all links as nodes may be connected programmatically
+                List<Link> links = LinkControllerImpl.getInstance().getBySource(NodeControllerImpl.getInstance().getByName(protocol.split(WSIdentifiers.DELIMITER)[1]));
+                for (Link link : links) {
+                    LOGGER.info(link);
+                    LinkCapability vcap = LinkCapabilityControllerImpl.getInstance().getByID(link, "virtual");
+                    if (vcap != null && vcap.getLastLinkReading().getReading() == 1.0) {
+                        LOGGER.info("registerListenerAlso@" + link.getTarget().getName());
+                        LastNodeReadingConsumer.getInstance().registerListener(
+                                link.getTarget().getName(), capabilityName, lastReadingWSListener);
                     }
-
                 }
+
+//                }
 
                 servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
             }
