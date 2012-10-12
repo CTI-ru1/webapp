@@ -93,16 +93,16 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
         }
 
 
-        if (protocol.contains("virtual")) {
-            protocol = protocol.substring(0, protocol.indexOf(".")) +
-                    "@" + protocol.substring(protocol.indexOf(".") + 1, protocol.lastIndexOf(".")) +
-                    "@" + protocol.substring(protocol.lastIndexOf(".") + 1);
-
-            protocol = protocol.replaceAll("-", ":");
-
-        } else {
+//        if (protocol.contains("virtual")) {
+//            protocol = protocol.substring(0, protocol.indexOf(".")) +
+//                    "@" + protocol.substring(protocol.indexOf(".") + 1, protocol.lastIndexOf(".")) +
+//                    "@" + protocol.substring(protocol.lastIndexOf(".") + 1);
+//
+//            protocol = protocol.replaceAll("-", ":");
+//
+//        } else {
             protocol = protocol.replaceAll("\\.", "@").replaceAll("-", ":");
-        }
+//        }
 
 
         if (protocol.equals(WSIdentifiers.INSERT_PROTOCOL)) {
@@ -120,8 +120,8 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
         if (protocol.startsWith(WSIdentifiers.SUBSCRIBE_PROTOCOL_PREFIX)) {
             LOGGER.info("WSIdentifiers.SUBSCRIBE_PROTOCOL_PREFIX");
-            String nodeName = protocol.split(WSIdentifiers.DELIMITER)[1];
-            String capabilityName = protocol.split(WSIdentifiers.DELIMITER)[2];
+            String nodeName = protocol.substring(protocol.indexOf(WSIdentifiers.DELIMITER)+1,protocol.lastIndexOf(WSIdentifiers.DELIMITER)).replaceAll("@","\\.");
+            String capabilityName = protocol.substring(protocol.lastIndexOf(WSIdentifiers.DELIMITER)+1);
             LOGGER.info("nodeName=" + nodeName);
             LOGGER.info("capabilityName=" + capabilityName);
 
@@ -140,7 +140,7 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
 //                if (protocol.split(WSIdentifiers.DELIMITER)[1].contains("virtual")) {
                 //Get all links as nodes may be connected programmatically
-                List<Link> links = LinkControllerImpl.getInstance().getBySource(NodeControllerImpl.getInstance().getByName(protocol.split(WSIdentifiers.DELIMITER)[1]));
+                List<Link> links = LinkControllerImpl.getInstance().getBySource(NodeControllerImpl.getInstance().getByName(nodeName));
                 for (Link link : links) {
                     LOGGER.info(link);
                     LinkCapability vcap = LinkCapabilityControllerImpl.getInstance().getByID(link, "virtual");
