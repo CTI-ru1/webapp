@@ -124,15 +124,16 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
 
     @Override
     public final void update(final NodeReading lastReading) {
-        LOGGER.info("Update");
-
-        LOGGER.info(nodeID+"--"+lastReading.getCapability().getNode().getName());
-        LOGGER.info(capabilityID+"--"+lastReading.getCapability().getCapability().getName());
+        LOGGER.info("updating for " + lastReading);
+        LOGGER.info(lastReading.getCapability().getNode().getName()
+                + "--" + lastReading.getCapability().getCapability().getName());
         if ((nodeID.contains("virtual") || lastReading.getCapability().getNode().getName().equals(nodeID))
                 && lastReading.getCapability().getCapability().getName().equals(capabilityID)) {
-
-            final Message.NodeReadings.Reading.Builder reading = Message.NodeReadings.Reading.newBuilder()
-                    .setNode(lastReading.getCapability().getNode().getName())
+            LOGGER.info("is for me");
+            //create the protobuf
+            final Message.NodeReadings.Reading.Builder reading = Message.NodeReadings.Reading.newBuilder();
+            LOGGER.error("initialized?: " + reading.isInitialized());
+            reading.setNode(lastReading.getCapability().getNode().getName())
                     .setCapability(lastReading.getCapability().getCapability().getName())
                     .setTimestamp(lastReading.getTimestamp().getTime());
             if (lastReading.getReading() != null) {
@@ -140,22 +141,21 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
             } else {
                 reading.setStringReading(lastReading.getStringReading());
             }
-
             final Message.NodeReadings readings = Message.NodeReadings.newBuilder().addReading(reading.build()).build();
             final Message.Envelope envelope = Message.Envelope.newBuilder()
                     .setType(Message.Envelope.Type.NODE_READINGS)
                     .setNodeReadings(readings)
                     .build();
-            LOGGER.debug(envelope);
+            LOGGER.info("envelope built");
 
             String readingToString = "";
             try {
                 readingToString = TextFormatter.getInstance().formatNodeReading(lastReading);
             } catch (NotImplementedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOGGER.error(e, e);
             }
 
-            LOGGER.info(users.size());
+            LOGGER.info("Updating " + users.size() + " listeners");
 
             for (final WebSocketContext user : users) {
                 try {
@@ -170,7 +170,7 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
                     thisMessageWriter.close();
 
                 } catch (final IOException e) {
-                    LOGGER.error(e);
+                    LOGGER.error(e, e);
                 }
             }
         }
