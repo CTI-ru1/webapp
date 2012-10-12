@@ -85,7 +85,7 @@ public final class ListTestbedsController extends AbstractRestController {
             try {
                 refData.put("text", HtmlFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount));
             } catch (NotImplementedException e) {
-                LOGGER.error(e);
+                LOGGER.error(e, e);
             }
 
             refData.put("time", String.valueOf((System.currentTimeMillis() - start)));

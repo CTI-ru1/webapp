@@ -109,13 +109,24 @@ public final class ShowTestbedTimeoutsController extends AbstractRestController 
 
             StringBuilder responseSB = new StringBuilder("Running nodes :\n");
             String type = "";
+            String room = "";
+            String status = "";
             for (Node node : nodes) {
+                type = "";
+                room = "";
+                status = "";
                 if (node.getName().contains("virtual")) continue;
                 List<NodeCapability> ncaps = nodeCapabilityManager.list(node);
                 long max = -1;
                 for (NodeCapability ncap : ncaps) {
                     if (ncap.getCapability().getName().contains("nodetype")) {
                         type = ncap.getLastNodeReading().getStringReading();
+                    }
+                    if (ncap.getCapability().getName().contains("status")) {
+                        status = ncap.getLastNodeReading().getStringReading();
+                    }
+                    if (ncap.getCapability().getName().contains("room")) {
+                        room = ncap.getLastNodeReading().getStringReading();
                     }
                     long timediff = System.currentTimeMillis() - ncap.getLastNodeReading().getTimestamp().getTime();
                     if (max == -1) {
@@ -124,26 +135,30 @@ public final class ShowTestbedTimeoutsController extends AbstractRestController 
                         max = timediff;
                     }
                 }
+
+                if (status.contains("offline")) continue;
+
                 long secs = max / 1000;
                 long min = secs / 60;
                 long hours = min / 60;
                 long days = hours / 24;
+                String mess = new StringBuilder().append(node).append(",").append(type).append(" ").append(room).append(" @ ").toString();
                 if (secs < 60) {
-                    responseSB.append(node + "," + type + " @ " + min + " mins ago\n");
-                } else if (min < 10) {
-                    responseSB.append(node + "," + type + " @ " + min + " mins ago\n");
+                    responseSB.append(mess).append(min).append(" mins ago\n");
+                } else if (min < 35) {
+                    responseSB.append(mess).append(min).append(" mins ago\n");
                 } else if (min < 60) {
-                    responseSB.insert(0, node + "," + type + " @ " + min + " mins ago\n");
+                    responseSB.insert(0, new StringBuilder().append(mess).append(min).append(" mins ago\n").toString());
                 } else if (hours < 24) {
                     counter++;
-                    responseSB.insert(0, node + "," + type + " @ " + hours + " hours ago\n");
+                    responseSB.insert(0, new StringBuilder().append(mess).append(hours).append(" hours ago\n").toString());
                 } else {
                     counter++;
-                    responseSB.insert(0, node + "," + type + " @ " + days + " days ago\n");
+                    responseSB.insert(0, new StringBuilder().append(mess).append(days).append(" days ago\n").toString());
                 }
             }
             responseSB.insert(0, "Late Nodes :\n");
-            responseSB.insert(0, "Total Nodes: " + nodes.size());
+            responseSB.insert(0, "Total Nodes: " + nodes.size() + "\n");
 
 
             // write on the HTTP response
@@ -166,4 +181,5 @@ public final class ShowTestbedTimeoutsController extends AbstractRestController 
         }
         return false;
     }
+
 }
