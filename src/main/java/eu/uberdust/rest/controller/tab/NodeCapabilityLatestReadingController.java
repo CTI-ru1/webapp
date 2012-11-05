@@ -11,6 +11,7 @@ import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
+import eu.wisebed.wisedb.controller.LastNodeReadingController;
 import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
@@ -57,6 +58,7 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
      * Logger.
      */
     private static final Logger LOGGER = Logger.getLogger(NodeCapabilityLatestReadingController.class);
+    private LastNodeReadingController lastNodeReadingManager;
 
     /**
      * Constructor.
@@ -97,6 +99,14 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
 
     public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
+    }
+
+    public void setLastNodeReadingManager(LastNodeReadingController lastNodeReadingManager) {
+        this.lastNodeReadingManager = lastNodeReadingManager;
+    }
+
+    public LastNodeReadingController getLastNodeReadingManager() {
+        return lastNodeReadingManager;
     }
 
     /**
@@ -162,7 +172,7 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
             throw new CapabilityNotFoundException("Cannot find capability [" + command.getCapabilityId() + "]");
         }
         // retrieve last node rading for this node/capability
-        final LastNodeReading lnr = nodeCapabilityManager.getByID(node, capability).getLastNodeReading();
+        final LastNodeReading lnr = lastNodeReadingManager.getByNodeCapability(node, capability);
 
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());

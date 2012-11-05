@@ -667,6 +667,7 @@
         <property name="nodeManager" ref="nodeManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
         <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
+        <property name="lastNodeReadingManager" ref="lastNodeReadingManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/capability/{capabilityId}/latestreading"/>
     </bean>
 
