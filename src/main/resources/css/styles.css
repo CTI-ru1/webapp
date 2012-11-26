@@ -43,6 +43,11 @@ table.readings th{
     text-decoration:none;
     text-transform:lowercase;
 }
+     .qrdiv {
+         position: absolute;
+         top: 200px;
+         right: 10px;
+     }
 
 
 .reading {
