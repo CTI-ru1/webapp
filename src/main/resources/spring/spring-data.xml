@@ -4,33 +4,36 @@
 
 
     <!-- Data Source setup -->
-    <bean id="dataSource"
-          class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="driverClassName" value="${wisedb.jdbc.connection.driver_class}"/>
-        <property name="url" value="${wisedb.jdbc.connection.url}"/>
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="username" value="${wisedb.jdbc.connection.username}"/>
         <property name="password" value="${wisedb.jdbc.connection.password}"/>
-        <property name="initialSize" value="10"/>
-        <property name="maxActive" value="30"/>
-        <property name="maxIdle" value="30"/>
-        <property name="maxWait" value="1000"/>
+        <property name="url" value="${wisedb.jdbc.connection.url}"/>
+        <property name="driverClassName" value="${wisedb.jdbc.connection.driver_class}"/>
+        <property name="initialSize" value="0"/>
+        <property name="maxActive" value="20"/>
+        <property name="minIdle" value="0"/>
+        <property name="poolPreparedStatements" value="false"/>
+        <property name="defaultAutoCommit" value="false"/>
+        <property name="defaultTransactionIsolation" value="1"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testOnReturn" value="true"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="timeBetweenEvictionRunsMillis" value="10000"/>
         <property name="validationQuery" value="select 1"/>
     </bean>
-    <!--
 
-        <bean id="dbcpDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-            <property name="driverClassName" value="${wisedb.jdbc.connection.driver_class}"/>
-
-            <property name="username" value="${wisedb.jdbc.connection.username}"/>
-            <property name="password" value="${wisedb.jdbc.connection.password}"/>
-            <property name="initialSize" value="10"/>
-            <property name="maxActive" value="30"/>
-            <property name="maxIdle" value="30"/>
-            <property name="maxWait" value="1000"/>
-            <property name="validationQuery" value="select 1"/>
-        </bean>
-    -->
-
+    <!--<bean id="dataSource"-->
+          <!--class="org.apache.commons.dbcp.BasicDataSource">-->
+        <!--<property name="driverClassName" value="${wisedb.jdbc.connection.driver_class}"/>-->
+        <!--<property name="url" value="${wisedb.jdbc.connection.url}"/>-->
+        <!--<property name="username" value="${wisedb.jdbc.connection.username}"/>-->
+        <!--<property name="password" value="${wisedb.jdbc.connection.password}"/>-->
+        <!--<property name="initialSize" value="10"/>-->
+        <!--<property name="maxActive" value="30"/>-->
+        <!--<property name="maxIdle" value="30"/>-->
+        <!--<property name="maxWait" value="1000"/>-->
+        <!--<property name="validationQuery" value="select 1"/>-->
+    <!--</bean>-->
 
     <!--<bean id="log4jInitialization"-->
     <!--class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">-->
