@@ -101,7 +101,7 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 //            protocol = protocol.replaceAll("-", ":");
 //
 //        } else {
-            protocol = protocol.replaceAll("\\.", "@").replaceAll("-", ":");
+        protocol = protocol.replaceAll("\\.", "@").replaceAll("--", ":");
 //        }
 
 
@@ -120,8 +120,8 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
         if (protocol.startsWith(WSIdentifiers.SUBSCRIBE_PROTOCOL_PREFIX)) {
             LOGGER.info("WSIdentifiers.SUBSCRIBE_PROTOCOL_PREFIX");
-            String nodeName = protocol.substring(protocol.indexOf(WSIdentifiers.DELIMITER)+1,protocol.lastIndexOf(WSIdentifiers.DELIMITER)).replaceAll("@","\\.");
-            String capabilityName = protocol.substring(protocol.lastIndexOf(WSIdentifiers.DELIMITER)+1);
+            String nodeName = protocol.substring(protocol.indexOf(WSIdentifiers.DELIMITER) + 1, protocol.lastIndexOf(WSIdentifiers.DELIMITER)).replaceAll("@", "\\.");
+            String capabilityName = protocol.substring(protocol.lastIndexOf(WSIdentifiers.DELIMITER) + 1);
             LOGGER.info("nodeName=" + nodeName);
             LOGGER.info("capabilityName=" + capabilityName);
 
@@ -162,7 +162,7 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
             return null;
         }
-
+        LOGGER.debug("HttpServletResponse.SC_NOT_ACCEPTABLE");
         servletResponse.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
         return null;
     }

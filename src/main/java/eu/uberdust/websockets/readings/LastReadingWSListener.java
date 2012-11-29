@@ -169,8 +169,10 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
                     thisMessageWriter.flush();
                     thisMessageWriter.close();
 
-                } catch (final IOException e) {
-                    LOGGER.error(e, e);
+                } catch (final IOException ioe) {
+                    LOGGER.error(ioe, ioe);
+                } catch (final IllegalStateException ise) {
+                    LOGGER.error(ise, ise);
                 }
             }
         }
