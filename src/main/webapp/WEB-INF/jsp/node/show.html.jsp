@@ -33,12 +33,10 @@
 
 <c:out value="${nodeCapabilities}" escapeXml="false" />
 
-<div id=qrdiv" class="qrdiv">
+<div id="qrdiv" class="qrdiv">
         <img id="qr" src="" alt="QRCode" width="150px"/>
         <script type="text/javascript">
-                function change(){
-                        document.getElementById("qr").src="http://qrfree.kaywa.com/?s=8&d="+encodeURIComponent(window.location+"rdf/rdf+xml/");
-                }
+            document.getElementById("qr").src="http://qrfree.kaywa.com/?s=8&d="+encodeURIComponent(window.location+"rdf/rdf+xml/");
         </script>
 </div>
 
