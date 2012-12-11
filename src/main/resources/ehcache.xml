@@ -125,7 +125,16 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="36000"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
+    <cache name="eu.wisebed.wisedb.controller.NodeCapabilityControllerImpl.getByIDs"
+           eternal="false"
+           maxElementsInMemory="10"
+           overflowToDisk="false"
+           diskPersistent="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           memoryStoreEvictionPolicy="LRU"
+            />
 
 
 </ehcache>
