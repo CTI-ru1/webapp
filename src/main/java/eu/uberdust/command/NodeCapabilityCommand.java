@@ -25,6 +25,16 @@ public class NodeCapabilityCommand extends TestbedCommand {
      */
     private String readingsLimit = null;
 
+    /**
+     *
+     */
+    private String readingsFrom = null;
+
+    /**
+     *
+     */
+    private String readingsTo = null;
+
 
     /**
      * Get the ID of the Node or Link.
@@ -97,5 +107,21 @@ public class NodeCapabilityCommand extends TestbedCommand {
      */
     public final void setReadingsLimit(final String readingsLimit) {
         this.readingsLimit = readingsLimit;
+    }
+
+    public String getReadingsFrom() {
+        return readingsFrom;
+    }
+
+    public void setReadingsFrom(String readingsFrom) {
+        this.readingsFrom = readingsFrom;
+    }
+
+    public String getReadingsTo() {
+        return readingsTo;
+    }
+
+    public void setReadingsTo(String readingsTo) {
+        this.readingsTo = readingsTo;
     }
 }
