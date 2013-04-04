@@ -2,8 +2,6 @@ package eu.uberdust.rest.controller.rdf;
 
 import com.sun.syndication.io.FeedException;
 import eu.uberdust.command.NodeCapabilityCommand;
-import eu.uberdust.formatter.RdfFormatter;
-import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -161,31 +159,11 @@ public final class NodeCapabilityRdfDescriptionController extends AbstractRestCo
         // current host base URL
 
         String retVal = "";
-        try {
-//            Model model = ModelFactory.createDefaultModel();
-//            model.read((String) RdfFormatter.getInstance().formatNodeReadings(readings));
-            retVal = ((String) RdfFormatter.getInstance().formatNodeReading(readings.get(0)));
-//
-//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//            if (command.getFormat().toLowerCase().equals("turtle")) {
-//                response.setContentType("text/turtle");
-//                model.write(bos, "TURTLE");
-//                retVal = bos.toString().replaceAll("rdf-xml", "turtle");
-//
-//            } else if (command.getFormat().toLowerCase().equals("n-triple")) {
-//                response.setContentType("text/plain");
-//                model.write(bos, "N-TRIPLE");
-//                retVal = bos.toString().replaceAll("rdf-xml", "n-triple");
-//            } else {
-//                response.setContentType("application/rdf+xml");
-//                model.write(bos, "RDF/XML");
-//                retVal = bos.toString();
-//            }
-
-
-        } catch (NotImplementedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+//        try {
+//            retVal = ((String) RdfFormatter.getInstance().formatNodeReading(readings.get(0)));
+//        } catch (NotImplementedException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
 
 
         // set up feed and entries

@@ -1,10 +1,7 @@
 package eu.uberdust.rest.controller.rdf;
 
-import com.hp.hpl.jena.rdf.model.Model;
 import com.sun.syndication.io.FeedException;
 import eu.uberdust.command.NodeCommand;
-import eu.uberdust.formatter.RdfFormatter;
-import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -20,7 +17,6 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -129,26 +125,26 @@ public final class ShowNodeRdfController extends AbstractRestController {
         // current host base URL
 
         String retVal = "";
-        try {
-            Model model = (Model) RdfFormatter.getInstance().formatNode(node);
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            if (command.getFormat().toLowerCase().equals("turtle")) {
-                response.setContentType("text/turtle");
-                model.write(bos, "TURTLE");
-            } else if (command.getFormat().toLowerCase().equals("n-triple")) {
-                response.setContentType("text/plain");
-                model.write(bos, "N-TRIPLE");
-            } else {
-                response.setContentType("application/rdf+xml");
-                model.write(bos, "RDF/XML");
-            }
-
-            retVal = bos.toString();
-
-        } catch (NotImplementedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+//        try {
+//            Model model = (Model) RdfFormatter.getInstance().formatNode(node);
+//
+//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//            if (command.getFormat().toLowerCase().equals("turtle")) {
+//                response.setContentType("text/turtle");
+//                model.write(bos, "TURTLE");
+//            } else if (command.getFormat().toLowerCase().equals("n-triple")) {
+//                response.setContentType("text/plain");
+//                model.write(bos, "N-TRIPLE");
+//            } else {
+//                response.setContentType("application/rdf+xml");
+//                model.write(bos, "RDF/XML");
+//            }
+//
+//            retVal = bos.toString();
+//
+//        } catch (NotImplementedException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
 
 
         // set up feed and entries
