@@ -20,20 +20,7 @@ function connect(hostname,node,capability){
 
     var host = "ws://"+hostname+"/readings.ws";
 
-    var protocol = "SUB@"+node+"@"+capability;
-    var encodedProtocol="";
-    for (var i=0;i<protocol.length;i++){
-        if (protocol[i]=="@"){
-            encodedProtocol+=".";
-        }
-        else if(protocol[i]==":"){
-            encodedProtocol+="-";
-        }
-        else{
-            encodedProtocol+=protocol[i];
-        }
-    }
-//    encodedProtocol=protocol;
+    var encodedProtocol=protocol.replace(/@/g,".").replace(/:/g,"--");
 
     try{
 
@@ -73,7 +60,7 @@ function connect(hostname,node,capability){
             message("socket.onclose")
 //            message('Socket Status: '+socket.readyState+' (Closed)'+"");
         }
-          
+
 
     } catch(exception){
             message('Error'+exception+"");
