@@ -39,7 +39,11 @@
     <span id="area"></span>
 
     <script type="text/javascript">
-        connect("<c:out value="${host}"/>","<c:out value="${node}"/>","<c:out value="${capability}"/>");
+        connect("<c:out value="${host}"/>","<c:out value="${node}"/>","<c:out value="${capability}"/>", function message(value2add){
+            var myspan=document.getElementById('area');
+            var oldtext = myspan.innerHTML;
+            myspan.innerHTML=value2add+"<br>"+oldtext;
+        });
     </script>
 
 <%@include file="/footer.jsp" %>
