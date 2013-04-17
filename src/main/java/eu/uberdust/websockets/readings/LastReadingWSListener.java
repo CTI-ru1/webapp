@@ -6,14 +6,11 @@ import eu.uberdust.communication.protobuf.Message;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.wisebed.wisedb.listeners.AbstractNodeReadingListener;
+import eu.wisebed.wisedb.listeners.LastNodeReadingConsumer;
 import eu.wisebed.wisedb.model.NodeReading;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
+import java.io.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -99,9 +96,9 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
         LOGGER.info("onClose");
         users.remove(context);
         LOGGER.debug(users.size());
-        /*if (users.size() == 0) {
-            LastNodeReadingConsumer.getInstance().removeListener(nodeID, capabilityID);
-        }*/
+        if (users.size() == 0) {
+            LastNodeReadingConsumer.getInstance().removeListener(nodeID, capabilityID, this);
+        }
     }
 
     @Override
@@ -110,9 +107,9 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
         LOGGER.info("onDisconnect");
         users.remove(context);
         LOGGER.debug(users.size());
-        /*   if (users.size() == 0) {
-            LastNodeReadingConsumer.getInstance().removeListener(nodeID, capabilityID);
-        }*/
+        if (users.size() == 0) {
+            LastNodeReadingConsumer.getInstance().removeListener(nodeID, capabilityID, this);
+        }
 
     }
 
@@ -120,6 +117,10 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
     public final void onTimeout(final WebSocketContext context) throws IOException {
         super.onTimeout(context);
         LOGGER.debug("onTimeout");
+    }
+
+    public int userCount() {
+        return users.size();
     }
 
     @Override

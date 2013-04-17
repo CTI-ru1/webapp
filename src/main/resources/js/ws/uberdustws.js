@@ -27,14 +27,12 @@ function connect(hostname, node, capability, action) {
             }
         }
         else {
-            //        message("encodedProtocol="+encodedProtocol);
-            //        message("Protocol="+protocol);
             sockets[mysock_id] = new WebSocket(host, encodedProtocol);
-            // message('You have a browser that supports WebSockets');
+            action('You have a browser that supports WebSockets');
         }
         sockets[mysock_id].onopen = function () {
             console.log("socket.onopen");
-            //            message('Socket Status: '+socket.readyState+' (open)'+"");
+//            action('Socket Status: ' + socket.readyState + ' (open)' + "");
         }
 
         sockets[mysock_id].onmessage = function (msg) {
@@ -47,7 +45,7 @@ function connect(hostname, node, capability, action) {
         }
         sockets[mysock_id].onclose = function () {
             console.log("socket.onclose");
-            //            message('Socket Status: '+socket.readyState+' (Closed)'+"");
+//            action('Socket Status: ' + socket.readyState + ' (Closed)' + "");
         }
 
 

@@ -109,7 +109,7 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
             LOGGER.info("WSIdentifiers.INSERT_PROTOCOL");
             LOGGER.debug(insertReadingWSListener == null);
 
-            servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
+//                servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
 
             //Initialize Insert WebSocket Client
             final WebSocketServletRequest wsRequest = (WebSocketServletRequest) servletRequest;
@@ -126,10 +126,12 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
             LOGGER.info("capabilityName=" + capabilityName);
 
             LastReadingWSListener lastReadingWSListener;
-            if (listeners.containsKey(protocol)) {
-                servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
+            LOGGER.info("listeners:" + listeners.size());
+
+            if (listeners.containsKey(protocol) && (listeners.get(protocol).userCount() > 0)) {
+//                servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
                 lastReadingWSListener = listeners.get(protocol);
-                LOGGER.debug("registered listener");
+                LOGGER.debug("registered in existing listener");
 
             } else {
                 lastReadingWSListener = new LastReadingWSListener(nodeName, capabilityName);
@@ -153,7 +155,7 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
 
 //                }
 
-                servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
+//                servletResponse.setHeader("Sec-WebSocket-Protocol", protocol);
             }
 
             //Initialize LastReading WebSocket Client
