@@ -2,7 +2,6 @@ package eu.uberdust.rest.controller.html.testbed;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.HtmlFormatter;
-import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
@@ -12,14 +11,12 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Controller class that returns a list of testbed in HTML format.
  */
-public final class ListTestbedsController extends AbstractRestController {
+public final class ListController extends AbstractRestController {
 
     /**
      * Testbed persistence manager.
@@ -29,12 +26,12 @@ public final class ListTestbedsController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListTestbedsController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListController.class);
 
     /**
      * Constructor.
      */
-    public ListTestbedsController() {
+    public ListController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -81,12 +78,9 @@ public final class ListTestbedsController extends AbstractRestController {
             final Map<String, Long> nodesCount = testbedManager.countNodes();
             final Map<String, Long> linksCount = testbedManager.countLinks();
 
-
-            try {
-                refData.put("text", HtmlFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount));
-            } catch (NotImplementedException e) {
-                LOGGER.error(e, e);
-            }
+            refData.put("testbeds", testbeds);
+            refData.put("nodes", nodesCount);
+            refData.put("links", linksCount);
 
             refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
             return new ModelAndView("testbed/list.html", refData);

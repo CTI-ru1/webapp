@@ -3,7 +3,6 @@ package eu.uberdust.rest.controller.html.node;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.formatter.HtmlFormatter;
-import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeController;
@@ -17,14 +16,12 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Controller class that returns a list of links for a given testbed in HTML format.
  */
-public final class ListNodesController extends AbstractRestController {
+public final class ListController extends AbstractRestController {
 
     /**
      * Testbed persistence manager.
@@ -39,12 +36,12 @@ public final class ListNodesController extends AbstractRestController {
     /**
      * Logger persistence manager.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListNodesController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListController.class);
 
     /**
      * Constructor.
      */
-    public ListNodesController() {
+    public ListController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -114,11 +111,8 @@ public final class ListNodesController extends AbstractRestController {
 
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
-        try {
-            refData.put("text", HtmlFormatter.getInstance().formatNodes(nodes));
-        } catch (NotImplementedException e) {
-            LOGGER.error(e);
-        }
+
+        refData.put("nodes", nodes);
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         return new ModelAndView("node/list.html", refData);

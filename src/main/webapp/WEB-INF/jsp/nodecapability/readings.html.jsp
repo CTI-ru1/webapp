@@ -5,7 +5,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<jsp:useBean id="text" scope="request" class="java.lang.String"/>
+<jsp:useBean id="readings" scope="request" class="java.util.ArrayList"/>
 
 <html>
 <head>
@@ -13,14 +13,37 @@
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>ÜberDust - Show Readings</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
-    <%@include file="/googleAnalytics.jsp"%>
+    <%@include file="/head.jsp" %>
+
 </head>
 
 <body>
 <%@include file="/header.jsp" %>
 
-<c:out value="${text}" escapeXml="false" />
+<div class="container">
+    <c:out value="${text}" escapeXml="false"/>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Reading</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${readings}" var="reading">
+            <tr>
+                <td><c:out value="${reading.timestamp}"/></td>
+
+                <td><c:out value="${reading.stringReading}"/><c:out value="${reading.reading}"/></td>
+
+
+            </tr>
+        </c:forEach>
+
+        </tbody>
+    </table>
+</div>
 
 <%@include file="/footer.jsp" %>
 </body>

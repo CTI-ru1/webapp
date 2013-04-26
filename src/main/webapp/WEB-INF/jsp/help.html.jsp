@@ -12,17 +12,17 @@
     <META http-equiv="Content-Language" content="en"/>
     <title>ÜberDust - List Testbeds</title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
-    <%@include file="/googleAnalytics.jsp"%>
+    <%@include file="/googleAnalytics.jsp" %>
 </head>
 
 <jsp:useBean id="text" scope="request" class="java.lang.String"/>
 
 <body>
-<%@include file="/header.jsp"%>
-<h1>ÜberDust Help Page</h1>
+<%@include file="/header.jsp" %>
+<div class="container">
+    <h1>ÜberDust Help Page</h1>
+</div>
+<%@include file="/footer.jsp" %>
 
-
-
-<%@include file="/footer.jsp"%>
 </body>
 </html>

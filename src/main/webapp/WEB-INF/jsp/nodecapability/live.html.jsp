@@ -15,37 +15,41 @@
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>ÜberDust - Show Readings</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
-    <%@include file="/googleAnalytics.jsp"%>
+    <%@include file="/head.jsp" %>
+
     <script type="text/javascript" src="http://<c:out value="${host}"/>/js/ws/uberdustws.js"></script>
 
 </head>
 
 <body>
 <%@include file="/header.jsp" %>
-
+<div class="container">
     <table>
         <tr>
             <th> Live Readings</th>
         </tr>
         <tr>
-            <td> Node ID </td> <td> <a href="/rest/testbed/<c:out value="${testbed}"/>/node/<c:out value="${node}"/>"><c:out value="${node}"/></a> </td>
+            <td> Node ID</td>
+            <td><a href="/rest/testbed/<c:out value="${testbed}"/>/node/<c:out value="${node}"/>"><c:out
+                    value="${node}"/></a></td>
         </tr>
         <tr>
-            <td> Capability </td> <td> <a href="/rest/testbed/<c:out value="${testbed}"/>/capability/<c:out value="${capability}"/>"><c:out value="${capability}"/></a> </td>
+            <td> Capability</td>
+            <td><a href="/rest/testbed/<c:out value="${testbed}"/>/capability/<c:out value="${capability}"/>"><c:out
+                    value="${capability}"/></a></td>
         </tr>
     </table>
 
     <span id="area"></span>
 
     <script type="text/javascript">
-        connect("<c:out value="${host}"/>","<c:out value="${node}"/>","<c:out value="${capability}"/>", function message(value2add){
-            var myspan=document.getElementById('area');
+        connect("<c:out value="${host}"/>", "<c:out value="${node}"/>", "<c:out value="${capability}"/>", function message(value2add) {
+            var myspan = document.getElementById('area');
             var oldtext = myspan.innerHTML;
-            myspan.innerHTML=value2add+"<br>"+oldtext;
+            myspan.innerHTML = value2add + "<br>" + oldtext;
         });
     </script>
-
+</div>
 <%@include file="/footer.jsp" %>
 </body>
 </html>

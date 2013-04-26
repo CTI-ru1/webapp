@@ -3,17 +3,11 @@ package eu.uberdust.rest.controller.html.node;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.formatter.HtmlFormatter;
-import eu.uberdust.formatter.exception.NotImplementedException;
-import eu.uberdust.rest.exception.InvalidTestbedIdException;
-import eu.uberdust.rest.exception.NodeNotFoundException;
-import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.NodeCapabilityController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.TestbedController;
+import eu.uberdust.rest.exception.*;
+import eu.wisebed.wisedb.controller.*;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractRestController;
@@ -114,9 +108,6 @@ public final class GetNodeController extends AbstractRestController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-//        LOGGER.info(CacheManager.getInstance().getCache("testCache").getKeys().size());
-        integerToString(5);
-
         // look up node
         final Node node = nodeManager.getByName(command.getNodeId());
         if (node == null) {
@@ -130,24 +121,10 @@ public final class GetNodeController extends AbstractRestController {
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
         refData.put("node", node);
-        try {
-            refData.put("text", HtmlFormatter.getInstance().formatNode(node));
-        } catch (NotImplementedException e) {
-            LOGGER.error(e);
-        }
-        try {
-            refData.put("nodeCapabilities", HtmlFormatter.getInstance().describeNodeCapabilities(nodeCapabilityManager.list(node)));
-        } catch (NotImplementedException e) {
-            LOGGER.error(e);
-        }
+
+        refData.put("nodeCapabilities", nodeCapabilityManager.list(node));
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         return new ModelAndView("node/show.html", refData);
-    }
-
-    @Cacheable("testCache1")
-    public String integerToString(final int integer) {
-        LOGGER.info("heere");
-        return Integer.toString(integer);
     }
 }

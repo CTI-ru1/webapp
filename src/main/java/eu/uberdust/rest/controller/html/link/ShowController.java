@@ -3,16 +3,9 @@ package eu.uberdust.rest.controller.html.link;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.LinkCommand;
 import eu.uberdust.formatter.HtmlFormatter;
-import eu.uberdust.formatter.exception.NotImplementedException;
-import eu.uberdust.rest.exception.InvalidTestbedIdException;
-import eu.uberdust.rest.exception.LinkNotFoundException;
-import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.LinkCapabilityController;
-import eu.wisebed.wisedb.controller.LinkController;
-import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Link;
-import eu.wisebed.wisedb.model.LinkCapability;
-import eu.wisebed.wisedb.model.Testbed;
+import eu.uberdust.rest.exception.*;
+import eu.wisebed.wisedb.controller.*;
+import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,14 +13,12 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Controller class that returns the a web page for a node.
  */
-public final class ShowLinkController extends AbstractRestController {
+public final class ShowController extends AbstractRestController {
 
     /**
      * Link persistence manager.
@@ -48,7 +39,7 @@ public final class ShowLinkController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ShowLinkController.class);
+    private static final Logger LOGGER = Logger.getLogger(ShowController.class);
 
     /**
      * Sets link persistence manager.
@@ -120,23 +111,16 @@ public final class ShowLinkController extends AbstractRestController {
             throw new LinkNotFoundException("Cannot find link [" + command.getSourceId() + "," + command.getTargetId()
                     + "] or the inverse link [" + command.getTargetId() + "," + command.getSourceId() + "]");
         }
-        List<LinkCapability> linkCapabilities = linkCapabilityManager.list(link);
+        List<LinkCapability> capabilities = linkCapabilityManager.list(link);
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
 
         refData.put("testbed", testbed);
         refData.put("link", link);
-        try {
-            refData.put("text", HtmlFormatter.getInstance().formatLink(link));
-        } catch (NotImplementedException e) {
-            LOGGER.error(e);
-        }
-        try {
-            refData.put("linkCapabilities", HtmlFormatter.getInstance().formatLinkCapabilities(linkCapabilities));
-        } catch (NotImplementedException e) {
-            LOGGER.error(e);
-        }
+
+        refData.put("capabilities", capabilities);
+
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
 
         return new ModelAndView("link/show.html", refData);

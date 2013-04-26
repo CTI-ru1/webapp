@@ -3,18 +3,9 @@ package eu.uberdust.rest.controller.html.capability;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.CapabilityCommand;
 import eu.uberdust.formatter.HtmlFormatter;
-import eu.uberdust.formatter.exception.NotImplementedException;
-import eu.uberdust.rest.exception.CapabilityNotFoundException;
-import eu.uberdust.rest.exception.InvalidTestbedIdException;
-import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.CapabilityController;
-import eu.wisebed.wisedb.controller.LinkController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Capability;
-import eu.wisebed.wisedb.model.Link;
-import eu.wisebed.wisedb.model.Node;
-import eu.wisebed.wisedb.model.Testbed;
+import eu.uberdust.rest.exception.*;
+import eu.wisebed.wisedb.controller.*;
+import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,14 +13,12 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Controller class that returns the a web page for a capability.
  */
-public final class ShowCapabilityController extends AbstractRestController {
+public final class ShowController extends AbstractRestController {
 
     /**
      * Testbed persistence manager.
@@ -54,12 +43,12 @@ public final class ShowCapabilityController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ShowCapabilityController.class);
+    private static final Logger LOGGER = Logger.getLogger(ShowController.class);
 
     /**
      * Constructor.
      */
-    public ShowCapabilityController() {
+    public ShowController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -156,21 +145,10 @@ public final class ShowCapabilityController extends AbstractRestController {
 
         refData.put("testbed", testbed);
         refData.put("capability", capability);
-        try {
-            refData.put("capabilityText", HtmlFormatter.getInstance().formatCapability(testbed, capability));
-        } catch (final NotImplementedException e) {
-            LOGGER.error(e);
-        }
-        try {
-            refData.put("nodes", HtmlFormatter.getInstance().formatNodes(nodes));
-        } catch (final NotImplementedException e) {
-            LOGGER.error(e);
-        }
-        try {
-            refData.put("links", HtmlFormatter.getInstance().formatLinks(links));
-        } catch (final NotImplementedException e) {
-            LOGGER.error(e);
-        }
+
+        refData.put("nodes", nodes);
+        refData.put("links", links);
+
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
 
         return new ModelAndView("capability/show.html", refData);

@@ -12,11 +12,9 @@
 <jsp:useBean id="readings" scope="request" class="java.lang.String"/>
 
 <html>
-<%@include file="/header.jsp" %>
 <head>
-    <%@include file="/googleAnalytics.jsp"%>
-
-    <script type="text/javascript" src="<c:url value="/js/jquery.js"/>"></script>
+    <%@include file="/googleAnalytics.jsp" %>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
     <script type="text/javascript" src="<c:url value="/js/highcharts.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/themes/gray.js"/>"></script>
     <script type="text/javascript">
@@ -26,63 +24,65 @@
             var chart;
 
             chart = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'container',
-                    defaultSeriesType: 'spline',
-                    zoomType: 'x',
-                    spacingRight: 20
+                chart:{
+                    renderTo:'chartcontainer',
+                    defaultSeriesType:'spline',
+                    zoomType:'x',
+                    spacingRight:20
                 },
-                title: {
-                    text: 'Readings Chart Testbed : '
+                title:{
+                    text:'Readings Chart Testbed : '
                             .concat('<c:out value="${testbed.name}"/>')
                             .concat(' Node : ')
                             .concat('<c:out value="${node.name}"/>')
                             .concat(' Capability : ')
                             .concat('<c:out value="${capability.name}"/>')
                 },
-                subtitle: {
-                    text: document.ontouchstart === undefined ?
+                subtitle:{
+                    text:document.ontouchstart === undefined ?
                             'Click and drag in the plot area to zoom in' :
                             'Drag your cursor over the plot to zoom in'
                 },
-                xAxis: {
-                    type: 'datetime',
-                    tickPixelInterval: 150,
-                    maxZoom: 1000
+                xAxis:{
+                    type:'datetime',
+                    tickPixelInterval:150,
+                    maxZoom:1000
                 },
-                yAxis: {
-                    title: {
-                        text: 'Reading'
+                yAxis:{
+                    title:{
+                        text:'Reading'
                     },
-                    min: 0.6,
-                    startOnTick: false,
-                    showFirstLabel: false
+                    min:0.6,
+                    startOnTick:false,
+                    showFirstLabel:false
                 },
-                tooltip: {
-                    shared: true
+                tooltip:{
+                    shared:true
                 },
-                legend: {
-                    enabled: false
+                legend:{
+                    enabled:false
                 },
-                series: [
+                series:[
                     {
-                        name: 'Reading value (<c:out value="${capability.unit}"/>,<c:out value="${capability.datatype}"/>)',
-                        data: [<c:out value="${readings}"/>]
+                        name:'Reading value (<c:out value="${capability.unit}"/>,<c:out value="${capability.datatype}"/>)',
+                        data:[<c:out value="${readings}"/>]
                     }
                 ]
             });
         }
     </script>
 
-    <title>ÜberDust - Readings Chart Testbed: <c:out value="${testbed.name}"/> <c:out value="${node.name}"/> , Capability
+    <title>ÜberDust - Readings Chart Testbed: <c:out value="${testbed.name}"/> <c:out value="${node.name}"/> ,
+        Capability
         : <c:out value="${capability.name}"/></title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
 </head>
-<body>
+<body onload="displayChart()">
 
-<div align="center" id="container" style="width: 80%; height: 400px"></div>
-
-<script type="text/javascript">displayChart();</script>
+<%@include file="/header.jsp" %>
+<div class="container">
+    <div id="chartcontainer" style="width: 100%; height: 400px"></div>
+</div>
 <%@include file="/footer.jsp" %>
 </body>
 </html>

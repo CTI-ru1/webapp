@@ -6,12 +6,8 @@ import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.LinkCapabilityController;
-import eu.wisebed.wisedb.controller.NodeCapabilityController;
-import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.LinkCapability;
-import eu.wisebed.wisedb.model.NodeCapability;
-import eu.wisebed.wisedb.model.Testbed;
+import eu.wisebed.wisedb.controller.*;
+import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,14 +15,12 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Controller class that returns the status page for the nodes and links of a testbed.
  */
-public final class ShowTestbedStatusController extends AbstractRestController {
+public final class StatusController extends AbstractRestController {
 
     /**
      * Testbed persistence manager.
@@ -46,12 +40,12 @@ public final class ShowTestbedStatusController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ShowTestbedStatusController.class);
+    private static final Logger LOGGER = Logger.getLogger(StatusController.class);
 
     /**
      * Constructor.
      */
-    public ShowTestbedStatusController() {
+    public StatusController() {
         super();
 
         // Make sure to set which method this controller will support.

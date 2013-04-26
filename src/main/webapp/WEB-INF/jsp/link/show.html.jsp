@@ -8,8 +8,7 @@
 
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
 <jsp:useBean id="link" scope="request" class="eu.wisebed.wisedb.model.Link"/>
-<jsp:useBean id="text" scope="request" class="java.lang.String"/>
-<jsp:useBean id="linkCapabilities" scope="request" class="java.lang.String"/>
+<jsp:useBean id="capabilities" scope="request" class="java.util.ArrayList"/>
 
 
 <html>
@@ -18,19 +17,67 @@
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>ÜberDust - Show Link [<c:out value="${link.source.name}"/>,<c:out value="${link.target.name}"/>]</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
-    <%@include file="/googleAnalytics.jsp"%>
+    <%@include file="/head.jsp" %>
+
 </head>
 <body>
 <%@include file="/header.jsp" %>
-    /<a href="<c:url value="/rest/testbed"/>">testbeds</a>/
-    <a href="<c:url value="/rest/testbed/${testbed.id}"/>">testbed</a>/
-    <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>">link</a>
 
-    <c:out value="${text}" escapeXml="false" />
+<div class="container">
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>
+                <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>">
+                    <c:out value="${link.source.name}"/>--<c:out value="${link.target.name}"/>
+                </a>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Source</td>
+            <td>
+                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${link.source.name}/"/>">
+                    <c:out value="${link.source.name}"/>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>Target</td>
+            <td>
+                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${link.target.name}/"/>">
+                    <c:out value="${link.target.name}"/>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Capabilities</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${capabilities}" var="capability">
+                        <tr>
+                            <td>
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.capability.name}"/>">
+                                        ${capability.capability.name}
+                                </a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
 
-    <c:out value="${linkCapabilities}" escapeXml="false" />
-
+    </table>
+</div>
 
 <%@include file="/footer.jsp" %>
 </body>

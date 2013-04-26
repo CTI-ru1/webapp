@@ -3,13 +3,7 @@ package eu.uberdust.rest.controller.html.node;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.formatter.HtmlFormatter;
-import eu.uberdust.rest.exception.CapabilityNotFoundException;
-import eu.uberdust.rest.exception.InvalidCapabilityNameException;
-import eu.uberdust.rest.exception.InvalidLimitException;
-import eu.uberdust.rest.exception.InvalidNodeIdException;
-import eu.uberdust.rest.exception.InvalidTestbedIdException;
-import eu.uberdust.rest.exception.NodeNotFoundException;
-import eu.uberdust.rest.exception.TestbedNotFoundException;
+import eu.uberdust.rest.exception.*;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.NodeReadingController;
@@ -32,7 +26,7 @@ import java.util.Map;
 /**
  * Controller class that returns an HTML page containing a list of the readings for a node/capability.
  */
-public final class ShowNodeCapabilityController extends AbstractRestController {
+public final class ShowByDateController extends AbstractRestController {
 
     /**
      * Node peristence manager.
@@ -57,12 +51,12 @@ public final class ShowNodeCapabilityController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ShowNodeCapabilityController.class);
+    private static final Logger LOGGER = Logger.getLogger(ShowByDateController.class);
 
     /**
      * Constructor.
      */
-    public ShowNodeCapabilityController() {
+    public ShowByDateController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -113,13 +107,20 @@ public final class ShowNodeCapabilityController extends AbstractRestController {
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws InvalidNodeIdException         invalid node id exception.
-     * @throws InvalidCapabilityNameException invalid capability name exception.
-     * @throws InvalidTestbedIdException      invalid testbed id exception.
-     * @throws TestbedNotFoundException       testbed not found exception.
-     * @throws NodeNotFoundException          node not found exception.
-     * @throws CapabilityNotFoundException    capability not found exception.
-     * @throws InvalidLimitException          invalid limit exception.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
+     *          invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
+     *          invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *          invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *          testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException
+     *          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
+     *          capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException
+     *          invalid limit exception.
      */
     @Loggable
     protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
@@ -174,28 +175,27 @@ public final class ShowNodeCapabilityController extends AbstractRestController {
 
         // retrieve readings based on node/capability
         final List<NodeReading> nodeReadings;
-        if (command.getReadingsLimit() == null) {
-            // no limit is provided
-            nodeReadings = nodeReadingManager.listNodeReadings(node, capability);
-        } else {
-            int limit;
-            try {
-                limit = Integer.parseInt(command.getReadingsLimit());
-            } catch (NumberFormatException nfe) {
-                throw new InvalidLimitException("Limit must have have number format.", nfe);
-            }
-            nodeReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
-        }
+        final long from = command.getReadingsFrom() == null ? 0 : Long.parseLong(command.getReadingsFrom());
+        final long to = command.getReadingsTo() == null ? 0 : Long.parseLong(command.getReadingsTo());
+
+        // no limit is provided
+        nodeReadings = nodeReadingManager.listNodeReadings(node, capability,from,to);
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
 
         // else put thisNode instance in refData and return index view
         refData.put("testbedId", command.getTestbedId());
-        refData.put("text", HtmlFormatter.getInstance().formatNodeReadings(nodeReadings));
+        refData.put("text", HtmlFormatter.getInstance().
+
+                formatNodeReadings(nodeReadings)
+
+        );
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         // check type of view requested
-        return new ModelAndView("nodecapability/readings.html", refData);
+        return new
+
+                ModelAndView("nodecapability/readings.html", refData);
     }
 }

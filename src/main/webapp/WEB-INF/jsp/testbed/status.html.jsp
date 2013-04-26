@@ -17,23 +17,16 @@
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>ÜberDust - Testbed <c:out value="${testbed.name}"/> status page</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
-    <%@include file="/googleAnalytics.jsp"%>
+    <%@include file="/head.jsp" %>
+
 </head>
 <body>
-<%@include file="/header.jsp"%>
-<h1>Testbed <c:out value="${testbed.name}"/> status page</h1>
-<p>
-    /<a href="<c:url value="/rest/testbed"/>">testbeds</a>/
-    <a href="<c:url value="/rest/testbed/${testbed.id}"/>">testbed</a>/
-    <a href="<c:url value="/rest/testbed/${testbed.id}/status"/>">status</a>
-</p>
-
-<c:out value="${lastNodeReadings}" escapeXml="false" />
-
-<c:out value="${lastLinkReadings}" escapeXml="false" />
-
-
-<%@include file="/footer.jsp"%>
+<%@include file="/header.jsp" %>
+<div class="container">
+    <h1>Testbed <c:out value="${testbed.name}"/> status page</h1>
+    <c:out value="${lastNodeReadings}" escapeXml="false"/>
+    <c:out value="${lastLinkReadings}" escapeXml="false"/>
+</div>
+<%@include file="/footer.jsp" %>
 </body>
 </html>

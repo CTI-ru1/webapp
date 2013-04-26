@@ -192,7 +192,7 @@
 
 
     <!-- List Testbeds HTML Controller -->
-    <bean name="listTestbedsHTMLController" class="eu.uberdust.rest.controller.html.testbed.ListTestbedsController">
+    <bean name="listTestbedsHTMLController" class="eu.uberdust.rest.controller.html.testbed.ListController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="uriPattern" value="/testbed/"/>
@@ -223,7 +223,7 @@
     </bean>
 
     <!-- Show Testbed Controller -->
-    <bean name="showTestbedController" class="eu.uberdust.rest.controller.html.testbed.ShowTestbedController">
+    <bean name="showTestbedController" class="eu.uberdust.rest.controller.html.testbed.ShowController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -244,7 +244,7 @@
 
     <!-- Show Testbed Status Controller -->
     <bean name="showTestbedStatusController"
-          class="eu.uberdust.rest.controller.html.testbed.ShowTestbedStatusController">
+          class="eu.uberdust.rest.controller.html.testbed.StatusController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
@@ -332,7 +332,7 @@
     </bean>
 
     <!-- List available Nodes HTML Controller -->
-    <bean name="listNodesHTMLController" class="eu.uberdust.rest.controller.html.node.ListNodesController">
+    <bean name="listNodesHTMLController" class="eu.uberdust.rest.controller.html.node.ListController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -375,7 +375,7 @@
         <property name="uriPattern" value="/testbed/{testbedId}/node/{nodeId}/"/>
     </bean>
     <!--put-->
-    <bean name="putNodeController" class="eu.uberdust.rest.controller.html.node.PutNodeController">
+    <bean name="putNodeController" class="eu.uberdust.rest.controller.html.node.PutController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -413,7 +413,7 @@
     </bean>
 
     <!-- List available Link HTML Controller -->
-    <bean name="listLinksHTMLController" class="eu.uberdust.rest.controller.html.link.ListLinksController">
+    <bean name="listLinksHTMLController" class="eu.uberdust.rest.controller.html.link.ListController">
         <property name="commandClass" value="eu.uberdust.command.LinkCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkManager" ref="linkManager"/>
@@ -437,7 +437,7 @@
     </bean>
 
     <!-- Show Link Controller -->
-    <bean name="showLinkController" class="eu.uberdust.rest.controller.html.link.ShowLinkController">
+    <bean name="showLinkController" class="eu.uberdust.rest.controller.html.link.ShowController">
         <property name="commandClass" value="eu.uberdust.command.LinkCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="linkManager" ref="linkManager"/>
@@ -457,7 +457,7 @@
 
     <!-- List available Capabilities HTML Controller -->
     <bean name="listCapabilitiesHTMLController"
-          class="eu.uberdust.rest.controller.html.capability.ListCapabilitiesController">
+          class="eu.uberdust.rest.controller.html.capability.ListController">
         <property name="commandClass" value="eu.uberdust.command.CapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
@@ -491,7 +491,7 @@
     </bean>
 
     <!-- Show Capability Controller -->
-    <bean name="showCapbilityController" class="eu.uberdust.rest.controller.html.capability.ShowCapabilityController">
+    <bean name="showCapbilityController" class="eu.uberdust.rest.controller.html.capability.ShowController">
         <property name="commandClass" value="eu.uberdust.command.CapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
@@ -554,7 +554,7 @@
 
     <!-- Node-Capability Controller for HTML Format -->
     <bean name="nodeCapabilityHTMLController"
-          class="eu.uberdust.rest.controller.html.node.ShowNodeCapabilityController">
+          class="eu.uberdust.rest.controller.html.node.ShowReadingsController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -576,7 +576,7 @@
 
     <!-- Node-Capability Controller for HTML Format -->
     <bean name="nodeCapabilityByDateHTMLController"
-          class="eu.uberdust.rest.controller.html.node.ShowNodeCapabilityByDateController">
+          class="eu.uberdust.rest.controller.html.node.ShowByDateController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>

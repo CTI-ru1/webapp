@@ -4,14 +4,8 @@ import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.rest.exception.*;
-import eu.wisebed.wisedb.controller.CapabilityController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.NodeReadingController;
-import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Capability;
-import eu.wisebed.wisedb.model.Node;
-import eu.wisebed.wisedb.model.NodeReading;
-import eu.wisebed.wisedb.model.Testbed;
+import eu.wisebed.wisedb.controller.*;
+import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,14 +13,12 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Controller class that returns an HTML page containing a list of the readings for a node/capability.
  */
-public final class ShowNodeCapabilityByDateController extends AbstractRestController {
+public final class ShowReadingsController extends AbstractRestController {
 
     /**
      * Node peristence manager.
@@ -51,12 +43,12 @@ public final class ShowNodeCapabilityByDateController extends AbstractRestContro
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ShowNodeCapabilityByDateController.class);
+    private static final Logger LOGGER = Logger.getLogger(ShowReadingsController.class);
 
     /**
      * Constructor.
      */
-    public ShowNodeCapabilityByDateController() {
+    public ShowReadingsController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -107,20 +99,13 @@ public final class ShowNodeCapabilityByDateController extends AbstractRestContro
      * @param commandObj command object.
      * @param errors     BindException exception.
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
-     *          invalid node id exception.
-     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
-     *          invalid capability name exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          testbed not found exception.
-     * @throws eu.uberdust.rest.exception.NodeNotFoundException
-     *          node not found exception.
-     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
-     *          capability not found exception.
-     * @throws eu.uberdust.rest.exception.InvalidLimitException
-     *          invalid limit exception.
+     * @throws InvalidNodeIdException         invalid node id exception.
+     * @throws InvalidCapabilityNameException invalid capability name exception.
+     * @throws InvalidTestbedIdException      invalid testbed id exception.
+     * @throws TestbedNotFoundException       testbed not found exception.
+     * @throws NodeNotFoundException          node not found exception.
+     * @throws CapabilityNotFoundException    capability not found exception.
+     * @throws InvalidLimitException          invalid limit exception.
      */
     @Loggable
     protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
@@ -175,27 +160,29 @@ public final class ShowNodeCapabilityByDateController extends AbstractRestContro
 
         // retrieve readings based on node/capability
         final List<NodeReading> nodeReadings;
-        final long from = command.getReadingsFrom() == null ? 0 : Long.parseLong(command.getReadingsFrom());
-        final long to = command.getReadingsTo() == null ? 0 : Long.parseLong(command.getReadingsTo());
-
-        // no limit is provided
-        nodeReadings = nodeReadingManager.listNodeReadings(node, capability,from,to);
+        if (command.getReadingsLimit() == null) {
+            // no limit is provided
+            nodeReadings = nodeReadingManager.listNodeReadings(node, capability);
+        } else {
+            int limit;
+            try {
+                limit = Integer.parseInt(command.getReadingsLimit());
+            } catch (NumberFormatException nfe) {
+                throw new InvalidLimitException("Limit must have have number format.", nfe);
+            }
+            nodeReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
+        }
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
 
         // else put thisNode instance in refData and return index view
         refData.put("testbedId", command.getTestbedId());
-        refData.put("text", HtmlFormatter.getInstance().
-
-                formatNodeReadings(nodeReadings)
-
-        );
+        refData.put("readings", nodeReadings);
+        refData.put("testbed", testbed);
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         // check type of view requested
-        return new
-
-                ModelAndView("nodecapability/readings.html", refData);
+        return new ModelAndView("nodecapability/readings.html", refData);
     }
 }

@@ -44,9 +44,9 @@
         <repository>
             <id>repository.ru1</id>
             <url>http://ru1.cti.gr/maven</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
             <layout>default</layout>
         </repository>
 
@@ -450,6 +450,10 @@
                             <directory>${project.basedir}/src/main/resources/css</directory>
                             <targetPath>css</targetPath>
                         </resource>
+                        <resource>
+                            <directory>${project.basedir}/src/main/resources/img</directory>
+                            <targetPath>img</targetPath>
+                        </resource>
                     </webResources>
                     <archive>
                         <manifestEntries>
@@ -549,7 +553,7 @@
     </reporting>
 
     <distributionManagement>
-        <!-- use the following if you're not using a snapshot version. -->
+        <!-- use the followring if you're not using a snapshot version. -->
         <repository>
             <id>repository.ru1</id>
             <name>RU1 Repo</name>
