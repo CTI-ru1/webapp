@@ -28,11 +28,9 @@ function connect(hostname, node, capability, action) {
         }
         else {
             sockets[mysock_id] = new WebSocket(host, encodedProtocol);
-            action('You have a browser that supports WebSockets');
         }
         sockets[mysock_id].onopen = function () {
             console.log("socket.onopen");
-//            action('Socket Status: ' + socket.readyState + ' (open)' + "");
         }
 
         sockets[mysock_id].onmessage = function (msg) {
@@ -45,7 +43,6 @@ function connect(hostname, node, capability, action) {
         }
         sockets[mysock_id].onclose = function () {
             console.log("socket.onclose");
-//            action('Socket Status: ' + socket.readyState + ' (Closed)' + "");
         }
 
 

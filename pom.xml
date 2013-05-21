@@ -115,9 +115,20 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>uberdust</groupId>
@@ -128,6 +139,12 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-annotations</artifactId>
             <version>${hibernate.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- database related dependencies -->
         <dependency>
@@ -215,6 +232,13 @@
             <version>0.9.1</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/spring-webmvc-rest-0.9.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>coap8</groupId>
+            <artifactId>coap8</artifactId>
+            <version>1.8</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ExampleClient.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
