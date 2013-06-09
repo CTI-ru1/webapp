@@ -40,6 +40,7 @@
                 <prop key="GET /testbed/raw">listTestbedsController</prop>
                 <prop key="GET /testbed/json">listTestbedsJSONController</prop>
                 <prop key="GET /testbed/*">showTestbedController</prop>
+                <prop key="GET /testbed/*/json">showJSONTestbedController</prop>
                 <prop key="GET /testbed/*/status">showTestbedStatusController</prop>
                 <prop key="GET /testbed/*/adminstatus">showTestbedAdminStatusController</prop>
                 <prop key="GET /testbed/*/timeout">showTestbedTimeoutController</prop>
@@ -242,6 +243,16 @@
                 </property>
             </bean>
         </property>
+    </bean>
+
+    <!-- Show Testbed Controller -->
+    <bean name="showJSONTestbedController" class="eu.uberdust.rest.controller.json.ShowTestbedController">
+        <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeManager" ref="nodeManager"/>
+        <property name="linkManager" ref="linkManager"/>
+        <property name="capabilityManager" ref="capabilityManager"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/json"/>
     </bean>
 
     <!-- Show Testbed Status Controller -->
