@@ -34,6 +34,7 @@ public class NodeCapabilityCommand extends TestbedCommand {
      *
      */
     private String readingsTo = null;
+    private String stringReading = null;
 
 
     /**
@@ -123,5 +124,13 @@ public class NodeCapabilityCommand extends TestbedCommand {
 
     public void setReadingsTo(String readingsTo) {
         this.readingsTo = readingsTo;
+    }
+
+    public String getStringReading() {
+        return stringReading;
+    }
+
+    public void setStringReading(String stringReading) {
+        this.stringReading = stringReading;
     }
 }

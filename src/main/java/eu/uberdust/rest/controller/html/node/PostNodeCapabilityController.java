@@ -1,22 +1,17 @@
-package eu.uberdust.rest.controller.tab;
+package eu.uberdust.rest.controller.html.node;
 
+import ch.ethz.inf.vs.californium.coap.CodeRegistry;
+import ch.ethz.inf.vs.californium.coap.Option;
+import ch.ethz.inf.vs.californium.coap.OptionNumberRegistry;
+import ch.ethz.inf.vs.californium.coap.Request;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityCommand;
-import eu.uberdust.formatter.TextFormatter;
-import eu.uberdust.formatter.exception.NotImplementedException;
-import eu.uberdust.rest.exception.CapabilityNotFoundException;
-import eu.uberdust.rest.exception.InvalidCapabilityNameException;
-import eu.uberdust.rest.exception.InvalidNodeIdException;
-import eu.uberdust.rest.exception.InvalidTestbedIdException;
-import eu.uberdust.rest.exception.NodeNotFoundException;
-import eu.uberdust.rest.exception.TestbedNotFoundException;
+import eu.uberdust.rest.exception.*;
+import eu.uberdust.util.CommandDispatcher;
 import eu.wisebed.wisedb.controller.CapabilityController;
-import eu.wisebed.wisedb.controller.LastNodeReadingController;
-import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Capability;
-import eu.wisebed.wisedb.model.LastNodeReading;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
@@ -28,19 +23,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Random;
 
 /**
- * Controller class for returning the latest reading for a node/capability.
+ * Controller class that returns an HTML page containing a list of the readings for a node/capability.
  */
-public final class NodeCapabilityLatestReadingController extends AbstractRestController {
+public final class PostNodeCapabilityController extends AbstractRestController {
 
     /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Node persistence manager.
+     * Node peristence manager.
      */
     private transient NodeController nodeManager;
 
@@ -50,33 +41,23 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
     private transient CapabilityController capabilityManager;
 
     /**
-     * LastNodeReading persistence manager.
+     * Testbed peristence manager.
      */
-    private transient NodeCapabilityController nodeCapabilityManager;
-    private LastNodeReadingController lastNodeReadingManager;
+    private transient TestbedController testbedManager;
+
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityLatestReadingController.class);
-
+    private static final Logger LOGGER = Logger.getLogger(PostNodeCapabilityController.class);
 
     /**
      * Constructor.
      */
-    public NodeCapabilityLatestReadingController() {
+    public PostNodeCapabilityController() {
         super();
 
         // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
-    }
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
+        this.setSupportedMethods(new String[]{METHOD_POST});
     }
 
     /**
@@ -97,35 +78,44 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
         this.capabilityManager = capabilityManager;
     }
 
-    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
-        this.nodeCapabilityManager = nodeCapabilityManager;
-    }
-
-    public void setLastNodeReadingManager(LastNodeReadingController lastNodeReadingManager) {
-        this.lastNodeReadingManager = lastNodeReadingManager;
+    /**
+     * Sets Testbed persistence manager.
+     *
+     * @param testbedManager Testbed persistence manager.
+     */
+    public void setTestbedManager(final TestbedController testbedManager) {
+        this.testbedManager = testbedManager;
     }
 
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param request    http servlet request.
+     * @param req        http servlet req.
      * @param response   http servlet response.
      * @param commandObj command object.
      * @param errors     BindException exception.
-     * @return http servlet response.
-     * @throws InvalidNodeIdException         InvalidNodeIdException exception.
-     * @throws InvalidCapabilityNameException InvalidNodeCapability exception.
-     * @throws InvalidTestbedIdException      InvalidTestbedIdException exception.
-     * @throws TestbedNotFoundException       TestbedNotFoundException exception.
-     * @throws NodeNotFoundException          NodeNotFoundException exception.
-     * @throws CapabilityNotFoundException    CapabilityNotFoundException exception.
-     * @throws IOException                    IOException exception.
+     * @return response http servlet response.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
+     *          invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
+     *          invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *          invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *          testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException
+     *          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
+     *          capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException
+     *          invalid limit exception.
      */
     @Loggable
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
+    protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
                                   final Object commandObj, final BindException errors)
-            throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
-            TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, IOException {
+            throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
+            InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException, IOException {
+
 
         // set commandNode object
         final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;
@@ -167,19 +157,34 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
         if (capability == null) {
             throw new CapabilityNotFoundException("Cannot find capability [" + command.getCapabilityId() + "]");
         }
-        // retrieve last node rading for this node/capability
-        final LastNodeReading lnr = lastNodeReadingManager.getByNodeCapability(node, capability);
+
+
+        Request coapReq = new Request(CodeRegistry.METHOD_POST, false);
+        coapReq.setMID((new Random()).nextInt() % 60000);
+        if (node.getName().contains("0x")) {
+            Option uriHost = new Option(OptionNumberRegistry.URI_HOST);
+            uriHost.setStringValue(node.getName().split("0x")[1]);
+            coapReq.addOption(uriHost);
+        }
+        final String capShortName = capability.getName().substring(capability.getName().lastIndexOf(":") + 1);
+        coapReq.setURI(capShortName);
+        coapReq.setPayload(command.getStringReading());
+
+        StringBuilder payloadStringBuilder = new StringBuilder();
+        for (Byte data : coapReq.toByteArray()) {
+            int i = data;
+            payloadStringBuilder.append(",");
+            payloadStringBuilder.append(Integer.toHexString(i));
+        }
+
+        final String payloadString = "33," + payloadStringBuilder.toString().substring(1).replaceAll("ffffff", "");
+
+        CommandDispatcher.getInstance().sendCommand(node.getSetup().getId(), node.getName(), payloadString);
 
         response.setContentType("text/plain");
         final Writer textOutput = (response.getWriter());
-        try {
-            textOutput.append(TextFormatter.getInstance().formatNodeReading(lnr));
-        } catch (NotImplementedException e) {
-            textOutput.append("not implemented exception");
-        }
-        textOutput.flush();
-        textOutput.close();
-
+        textOutput.write("OK . Destination : " + node.getName() + "\nPayload : " + payloadString);
+        coapReq.prettyPrint();
 
         return null;
     }

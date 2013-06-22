@@ -77,6 +77,8 @@ public final class SendCommandController extends AbstractRestController {
             throw new NodeNotFoundException("Destination Node [" + command.getDestination() + "] is not stored.");
         }
 
+
+
         CommandDispatcher.getInstance().sendCommand(destinationNode.getSetup().getId(), command.getDestination(), command.getPayload());
 
         response.setContentType("text/plain");

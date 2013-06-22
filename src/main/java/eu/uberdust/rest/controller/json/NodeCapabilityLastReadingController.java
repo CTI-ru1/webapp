@@ -4,16 +4,9 @@ import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.formatter.JsonFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
-import eu.uberdust.rest.exception.CapabilityNotFoundException;
-import eu.uberdust.rest.exception.InvalidCapabilityNameException;
-import eu.uberdust.rest.exception.InvalidNodeIdException;
-import eu.uberdust.rest.exception.InvalidTestbedIdException;
-import eu.uberdust.rest.exception.NodeNotFoundException;
-import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.CapabilityController;
+import eu.uberdust.rest.exception.*;
+import eu.wisebed.wisedb.controller.*;
 import eu.wisebed.wisedb.controller.NodeCapabilityController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.LastNodeReading;
 import eu.wisebed.wisedb.model.Node;
@@ -52,7 +45,7 @@ public final class NodeCapabilityLastReadingController extends AbstractRestContr
      * LastNodeReading persistence manager.
      */
     private transient NodeCapabilityController nodeCapabilityManager;
-
+    private LastNodeReadingController lastNodeReadingManager;
     /**
      * Logger.
      */
@@ -89,6 +82,11 @@ public final class NodeCapabilityLastReadingController extends AbstractRestContr
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
+    public void setLastNodeReadingManager(LastNodeReadingController lastNodeReadingManager) {
+        this.lastNodeReadingManager = lastNodeReadingManager;
+    }
+
+
     /**
      * Handle Request and return the appropriate response.
      *
@@ -110,7 +108,6 @@ public final class NodeCapabilityLastReadingController extends AbstractRestContr
                                   final Object commandObj, final BindException errors)
             throws InvalidTestbedIdException, TestbedNotFoundException, NodeNotFoundException,
             CapabilityNotFoundException, InvalidCapabilityNameException, InvalidNodeIdException, IOException {
-
         // set commandNode object
         final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;
 
@@ -128,6 +125,7 @@ public final class NodeCapabilityLastReadingController extends AbstractRestContr
         int testbedId;
         try {
             testbedId = Integer.parseInt(command.getTestbedId());
+
         } catch (NumberFormatException nfe) {
             throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
         }
@@ -150,10 +148,10 @@ public final class NodeCapabilityLastReadingController extends AbstractRestContr
         if (capability == null) {
             throw new CapabilityNotFoundException("Cannot find capability [" + command.getCapabilityId() + "]");
         }
+        // retrieve last node rading for this node/capability
+        final LastNodeReading lnr = lastNodeReadingManager.getByNodeCapability(node, capability);
 
-        // retrieve last node reading for this node/capability
-        final LastNodeReading lnr = nodeCapabilityManager.getByID(node, capability).getLastNodeReading();
-
+        System.out.println("Reached here " + lnr.toString());
         // write on the HTTP response
         response.setContentType("text/json");
         final Writer textOutput = (response.getWriter());
