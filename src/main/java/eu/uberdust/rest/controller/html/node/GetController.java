@@ -6,6 +6,7 @@ import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.rest.exception.*;
 import eu.wisebed.wisedb.controller.*;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.NodeCapability;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -14,13 +15,15 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Controller class that returns the a web page for a node.
  */
-public final class GetNodeController extends AbstractRestController {
+public final class GetController extends AbstractRestController {
     /**
      * Node persistence manager.
      */
@@ -40,12 +43,12 @@ public final class GetNodeController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(GetNodeController.class);
+    private static final Logger LOGGER = Logger.getLogger(GetController.class);
 
     /**
      * Constructor.
      */
-    public GetNodeController() {
+    public GetController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -114,6 +117,18 @@ public final class GetNodeController extends AbstractRestController {
             // if no testbed is found throw exception
             throw new NodeNotFoundException("Cannot find testbed [" + command.getNodeId() + "].");
         }
+        List<NodeCapability> nodeCapabilities = new ArrayList<NodeCapability>();
+        List<NodeCapability> allCapabilities = nodeCapabilityManager.list(node);
+        for (NodeCapability nodeCapability : allCapabilities) {
+            if (nodeCapability.getCapability().getName().startsWith("urn")) {
+                nodeCapabilities.add(nodeCapability);
+            }
+        }
+        for (NodeCapability nodeCapability : allCapabilities) {
+            if (!nodeCapability.getCapability().getName().startsWith("urn")) {
+                nodeCapabilities.add(nodeCapability);
+            }
+        }
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
@@ -122,7 +137,7 @@ public final class GetNodeController extends AbstractRestController {
         refData.put("testbed", testbed);
         refData.put("node", node);
 
-        refData.put("nodeCapabilities", nodeCapabilityManager.list(node));
+        refData.put("nodeCapabilities", nodeCapabilities);
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         return new ModelAndView("node/show.html", refData);

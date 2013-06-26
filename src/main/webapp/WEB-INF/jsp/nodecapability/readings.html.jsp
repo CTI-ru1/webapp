@@ -23,7 +23,7 @@
 <div class="container">
     <c:out value="${text}" escapeXml="false"/>
 
-    <table class="table">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th>Timestamp</th>

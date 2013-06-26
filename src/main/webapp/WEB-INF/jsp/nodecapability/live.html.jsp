@@ -17,7 +17,7 @@
     <title>ÜberDust - Show Readings</title>
     <%@include file="/head.jsp" %>
 
-    <script type="text/javascript" src="http://<c:out value="${host}"/>/js/ws/uberdustws.js"></script>
+    <script type="text/javascript" src="<c:url value="/js/ws/uberdustws.js"/>"></script>
 
 </head>
 
@@ -29,21 +29,26 @@
             <th> Live Readings</th>
         </tr>
         <tr>
-            <td> Node ID</td>
+            <td> Node
+                ID
+            </td>
             <td><a href="/rest/testbed/<c:out value="${testbed}"/>/node/<c:out value="${node}"/>"><c:out
-                    value="${node}"/></a></td>
+                    value="${node}"/> </a>
+            </td>
         </tr>
         <tr>
             <td> Capability</td>
             <td><a href="/rest/testbed/<c:out value="${testbed}"/>/capability/<c:out value="${capability}"/>"><c:out
-                    value="${capability}"/></a></td>
+                    value="${capability}"/> </a>
+            </td>
         </tr>
     </table>
 
-    <span id="area"></span>
+    <span id="area"> </span>
 
     <script type="text/javascript">
-        connect("<c:out value="${host}"/>", "<c:out value="${node}"/>", "<c:out value="${capability}"/>", function message(value2add) {
+        connect("<c:out value="${host}"/>", "<c:out value="${node}"/>", "<c:out
+        value="${capability}"/>", function message(value2add) {
             var myspan = document.getElementById('area');
             var oldtext = myspan.innerHTML;
             myspan.innerHTML = value2add + "<br>" + oldtext;

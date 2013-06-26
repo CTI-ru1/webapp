@@ -24,8 +24,7 @@
     <table>
         <thead>
         <tr>
-            <th>Capabilities (
-                <a href="<c:url value="/rest/testbed/${testbed.id}/capability"/>">html</a>,
+            <th>Capabilities (view also as :
                 <a href="<c:url value="/rest/testbed/${testbed.id}/capability/raw"/>">raw</a>,
                 <a href="<c:url value="/rest/testbed/${testbed.id}/capability/json"/>">json</a>
                 )

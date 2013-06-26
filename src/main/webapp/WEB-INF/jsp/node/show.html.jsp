@@ -23,17 +23,12 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>">
-                    <c:out value="${node.name}"/>
-                </a>
-            </th>
-        </tr>
-        </thead>
+    <h3>
+        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>">
+            <c:out value="${node.name}"/>
+        </a>
+    </h3>
+    <table class="table-hover">
         <tbody>
         <tr>
             <td>GeoRSS Feed</td>
@@ -62,52 +57,44 @@
                 </a>
             </td>
         </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-hover">
+        <thead>
         <tr>
-            <td colspan="2">
-                <table>
-                    <tbody>
-                    <c:forEach items="${nodeCapabilities}" var="capability">
-                        <tr>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}"/>">${capability.capability.name}</a>
-                            </td>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/html/limit/10"/>">HTML</a>
-                            </td>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/tabdelimited/limit/10"/>">Tab
-                                    Delimited</a>
-                            </td>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/json/limit/10"/>">JSON</a>
-                            </td>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/wiseml/limit/10"/>">WiseML</a>
-                            </td>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/latestreading"/>">Last
-                                    Reading Tab</a>
-                            </td>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/latestreading/json"/>">Last
-                                    Reading JSON</a>
-                            </td>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/rdf/rdf+xml/limit/1"/>">Last
-                                    Reading RDF_XML</a>
-                            </td>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/chart/limit/10"/>">Chart</a>
-                            </td>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/live"/>">Live</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </td>
+            <th>Capability</th>
+            <th> Last 10 Readings</th>
+            <th> Last Reading</th>
         </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${nodeCapabilities}" var="capability">
+            <tr>
+                <td>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}"/>">${capability.capability.name}</a>
+                </td>
+                <td>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/html/limit/10"/>">HTML</a>,
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/tabdelimited/limit/10"/>">Tab
+                        Delimited</a>,
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/json/limit/10"/>">JSON</a>,
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/wiseml/limit/10"/>">WiseML</a>
+
+                </td>
+                <td>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/latestreading"/>">Tab</a>,
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/latestreading/json"/>">JSON</a>,
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/rdf/rdf+xml/limit/1"/>">RDF_XML</a>
+                </td>
+                <td>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/chart/limit/10"/>">Chart</a>
+                </td>
+                <td>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/live"/>">Live</a>
+                </td>
+            </tr>
+        </c:forEach>
         </tbody>
     </table>
 

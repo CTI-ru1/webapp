@@ -23,11 +23,10 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-    <table>
+    <table class="table-hover">
         <thead>
         <tr>
-            <th>Nodes (
-                <a href="<c:url value="/rest/testbed/${testbed.id}/node"/>">html</a>,
+            <th>Nodes (view also as :
                 <a href="<c:url value="/rest/testbed/${testbed.id}/node/raw"/>">raw</a>,
                 <a href="<c:url value="/rest/testbed/${testbed.id}/node/json"/>">json</a>
                 )

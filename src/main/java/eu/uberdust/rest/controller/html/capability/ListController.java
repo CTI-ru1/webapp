@@ -108,6 +108,7 @@ public final class ListController extends AbstractRestController {
         // get testbed's capabilities
         final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
 
+
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
 

@@ -141,13 +141,13 @@ public final class ShowController extends AbstractRestController {
 
 
         // get testbed nodes
-        final List<Node> allNodes= nodeManager.list(testbed.getSetup());
-        final List<Node> nodes= new ArrayList<Node>();
+        final List<Node> allNodes = nodeManager.list(testbed.getSetup());
+        final List<Node> nodes = new ArrayList<Node>();
         final List<Node> virtual = new ArrayList<Node>();
         for (Node node : allNodes) {
-            if (node.getName().contains("virtual")){
-                 virtual.add(node);
-            }else{
+            if (node.getName().contains("virtual")) {
+                virtual.add(node);
+            } else {
                 nodes.add(node);
             }
         }
@@ -163,11 +163,11 @@ public final class ShowController extends AbstractRestController {
         refData.put("testbed", testbed);
         try {
             refData.put("text", HtmlFormatter.getInstance().showTestbed(testbed, nodes, links, capabilities));
-            refData.put("testbed",testbed);
-            refData.put("nodes",nodes);
-            refData.put("links",links);
-            refData.put("virtual",virtual);
-            refData.put("capabilities",capabilities);
+            refData.put("testbed", testbed);
+            refData.put("nodes", nodes);
+            refData.put("links", links);
+            refData.put("virtual", virtual);
+            refData.put("capabilities", capabilities);
         } catch (NotImplementedException e) {
             LOGGER.error(e);
         }

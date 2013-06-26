@@ -117,18 +117,25 @@ public final class StatusController extends AbstractRestController {
             LOGGER.error("nodeCapabilityManager==null");
         }
 
+        long before5Min = new Date().getTime() - 5 * 60 * 1000;
         start1 = System.currentTimeMillis();
         // get a list of node last readings from testbed
         final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
+        final Set<String> updated = new HashSet<String>();
+
+        for (NodeCapability nodeCapability : nodeCapabilities) {
+            if (nodeCapability.getLastNodeReading().getTimestamp().getTime() - before5Min > 0)
+                updated.add(nodeCapability.getNode().getName());
+        }
         LOGGER.info("--------- list nodeCapabilities: " + (System.currentTimeMillis() - start1));
 
         start1 = System.currentTimeMillis();
-        String nodeCaps;
-        try {
-            nodeCaps = HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
-        } catch (NotImplementedException e) {
-            nodeCaps = "";
-        }
+//        String nodeCaps;
+//        try {
+//            nodeCaps = HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
+//        } catch (NotImplementedException e) {
+//            nodeCaps = "";
+//        }
         LOGGER.info("--------- format last node readings: " + (System.currentTimeMillis() - start1));
 
         start1 = System.currentTimeMillis();
@@ -140,8 +147,8 @@ public final class StatusController extends AbstractRestController {
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
         refData.put("testbed", testbed);
-        refData.put("lastNodeReadings", nodeCaps);
-
+        refData.put("lastNodeReadings", nodeCapabilities);
+        refData.put("updated", updated);
 
         try {
             start1 = System.currentTimeMillis();

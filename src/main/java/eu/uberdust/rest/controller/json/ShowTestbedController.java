@@ -2,18 +2,12 @@ package eu.uberdust.rest.controller.json;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.TestbedCommand;
-import eu.uberdust.formatter.HtmlFormatter;
-import eu.uberdust.formatter.JsonFormatter;
-import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.LinkController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Capability;
-import eu.wisebed.wisedb.model.Link;
-import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -26,9 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Controller class that returns the a web page for a testbed.

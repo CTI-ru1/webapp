@@ -1,4 +1,4 @@
-package eu.uberdust.rest.controller.html.node;
+package eu.uberdust.rest.controller.html.reading;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityCommand;
@@ -179,7 +179,7 @@ public final class ShowByDateController extends AbstractRestController {
         final long to = command.getReadingsTo() == null ? 0 : Long.parseLong(command.getReadingsTo());
 
         // no limit is provided
-        nodeReadings = nodeReadingManager.listNodeReadings(node, capability,from,to);
+        nodeReadings = nodeReadingManager.listNodeReadings(node, capability, from, to);
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();

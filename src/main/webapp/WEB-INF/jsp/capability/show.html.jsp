@@ -22,14 +22,12 @@
 <body>
 <%@include file="/header.jsp" %>
 <div class="container">
-    <table class="table">
+    <h3>
+        <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>">${capability.name}</a>
+    </h3>
+
+    <table class="table table-hover">
         <thead>
-        <tr>
-            <th>Capability</th>
-            <th>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>">${capability.name}</a>
-            </th>
-        </tr>
         </thead>
         <tbody>
         <tr>
@@ -46,51 +44,65 @@
                 <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}/tabdelimited"/>">raw</a>
             </th>
         </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead>
         <tr>
-            <td>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Nodes</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${nodes}" var="node">
-                        <tr>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>">
-                                    <c:out value="${node.name}"/>
-                                </a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </td>
-            <td>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Links</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${links}" var="link">
-                        <tr>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>">
-                                    <c:out value="${link.source.name}"/>--<c:out value="${link.target.name}"/>
-                                </a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </td>
+            <c:choose>
+                <c:when test="${fn:length(nodes) > 0}">
+                    <th>Nodes</th>
+                </c:when>
+            </c:choose>
+            <c:choose>
+                <c:when test="${fn:length(links) > 0}">
+                    <th>Links</th>
+                </c:when>
+            </c:choose>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <c:choose>
+                <c:when test="${fn:length(nodes) > 0}">
+                    <td>
+                        <table class="table table-hover">
+                            <tbody>
+                            <c:forEach items="${nodes}" var="node">
+                                <tr>
+                                    <td>
+                                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>">
+                                            <c:out value="${node.name}"/>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </td>
+                </c:when>
+            </c:choose>
+            <c:choose>
+                <c:when test="${fn:length(links) > 0}">
+                    <td>
+                        <table class="table table-hover">
+                            <tbody>
+                            <c:forEach items="${links}" var="link">
+                                <tr>
+                                    <td>
+                                        <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>">
+                                            <c:out value="${link.source.name}"/>--<c:out value="${link.target.name}"/>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </td>
+                </c:when>
+            </c:choose>
         </tr>
         </tbody>
-
-
     </table>
 
 </div>

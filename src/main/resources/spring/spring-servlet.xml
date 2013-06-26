@@ -60,9 +60,24 @@
 
                 <!-- Node Related controller -->
                 <prop key="GET /testbed/*/node">listNodesHTMLController</prop>
+                <prop key="GET /testbed/*/link">listLinksHTMLController</prop>
+                <prop key="GET /testbed/*/virtualnode">listVirtualNodesHTMLController</prop>
+                <prop key="GET /testbed/*/capability">listCapabilitiesHTMLController</prop>
+
                 <prop key="GET /testbed/*/node/raw">listNodesController</prop>
+                <prop key="GET /testbed/*/link/raw">listLinksController</prop>
+                <prop key="GET /testbed/*/capability/raw">listCapabilitiesController</prop>
+                <prop key="GET /testbed/*/virtualnode/raw">listVirtualNodesController</prop>
+
                 <prop key="GET /testbed/*/node/json">listNodesJSONController</prop>
+                <prop key="GET /testbed/*/link/json">listLinksJSONController</prop>
+                <prop key="GET /testbed/*/capability/json">listCapabilitiesJSONController</prop>
+                <prop key="GET /testbed/*/virtualnode/json">listVirtualNodesJSONController</prop>
+
                 <prop key="GET /testbed/*/node/*/">getNodeController</prop>
+                <prop key="GET /testbed/*/link/*/*">showLinkController</prop>
+                <prop key="GET /testbed/*/capability/*">showCapbilityController</prop>
+
                 <prop key="PUT /testbed/*/node/*/">putNodeController</prop>
                 <prop key="GET /testbed/*/node/*/georss">showNodeGeoRssController</prop>
                 <prop key="GET /testbed/*/node/*/kml">showNodeKmlController</prop>
@@ -70,16 +85,8 @@
                 <prop key="GET /testbed/*/node/*/insert/description/*/">nodeInsertDescriptionController</prop>
 
                 <!-- Link Related Controllers -->
-                <prop key="GET /testbed/*/link">listLinksHTMLController</prop>
-                <prop key="GET /testbed/*/link/raw">listLinksController</prop>
-                <prop key="GET /testbed/*/link/json">listLinksJSONController</prop>
-                <prop key="GET /testbed/*/link/*/*">showLinkController</prop>
 
                 <!-- Capability Related Controllers -->
-                <prop key="GET /testbed/*/capability">listCapabilitiesHTMLController</prop>
-                <prop key="GET /testbed/*/capability/raw">listCapabilitiesController</prop>
-                <prop key="GET /testbed/*/capability/json">listCapabilitiesJSONController</prop>
-                <prop key="GET /testbed/*/capability/*">showCapbilityController</prop>
                 <prop key="GET /testbed/*/capability/*/tabdelimited">capabilityTabDelimitedController</prop>
                 <prop key="GET /testbed/*/capability/*/insert/description/*/">capabilityInsertDescriptionController
                 </prop>
@@ -91,8 +98,11 @@
                 <prop key="POST /testbed/*/node/*/capability/*/*/">nodeCapabilityPOSTController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/live">nodeCapabilityLiveController</prop>
                 <prop key="GET /testbed/*/node/*/capability/*/html/limit/*">nodeCapabilityHTMLController</prop>
-                <prop key="GET /testbed/*/node/*/capability/*/html/from/*/to/*/">nodeCapabilityByDateHTMLController</prop>
-                <prop key="GET /testbed/*/node/*/capability/*/tabdelimited/from/*/to/*/">nodeCapabilityByDateTabController</prop>
+                <prop key="GET /testbed/*/node/*/capability/*/html/from/*/to/*/">nodeCapabilityByDateHTMLController
+                </prop>
+                <prop key="GET /testbed/*/node/*/capability/*/tabdelimited/from/*/to/*/">
+                    nodeCapabilityByDateTabController
+                </prop>
                 <prop key="GET /testbed/*/node/*/capability/*/tabdelimited">nodeCapabilityTabDelimitedController</prop>
                 <prop key="GET /testbed/*/link/*/*/capability/*/tabdelimited">linkCapabilityTabDelimitedController
                 </prop>
@@ -191,7 +201,6 @@
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="uriPattern" value="/help/"/>
     </bean>
-
 
 
     <!-- List Testbeds HTML Controller -->
@@ -362,25 +371,56 @@
         </property>
     </bean>
 
+    <bean name="listVirtualNodesHTMLController" class="eu.uberdust.rest.controller.html.virtualnode.ListController">
+        <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeManager" ref="nodeManager"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/virtaulnode/html"/>
+        <property name="viewNameSelector">
+            <bean class="org.springframework.web.servlet.RestViewNameSelector">
+                <property name="defaultViewName" value="virtaulnode/list.html"/>
+                <property name="views">
+                    <map>
+                        <entry key="text/html" value="virtaulnode/list.html"/>
+                    </map>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
     <!-- List Available Nodes Raw Text Controller -->
-    <bean name="listNodesController" class="eu.uberdust.rest.controller.tab.ListNodesController">
+    <bean name="listNodesController" class="eu.uberdust.rest.controller.tab.node.ListController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/node/raw"/>
     </bean>
+    <!-- List Available Nodes Raw Text Controller -->
+    <bean name="listVirtualNodesController" class="eu.uberdust.rest.controller.tab.virtualnode.ListController">
+        <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeManager" ref="nodeManager"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/virtualnode/raw"/>
+    </bean>
 
     <!-- List Available Nodes JSON Controller -->
-    <bean name="listNodesJSONController" class="eu.uberdust.rest.controller.json.ListNodesController">
+    <bean name="listNodesJSONController" class="eu.uberdust.rest.controller.json.node.ListController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}/node/json"/>
     </bean>
+    <!-- List Available Nodes Raw Text Controller -->
+    <bean name="listVirtualNodesJSONController" class="eu.uberdust.rest.controller.json.virtualnode.ListController">
+        <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
+        <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeManager" ref="nodeManager"/>
+        <property name="uriPattern" value="/testbed/{testbedId}/virtualnode/json"/>
+    </bean>
 
     <!-- NodeController -->
     <!--get-->
-    <bean name="getNodeController" class="eu.uberdust.rest.controller.html.node.GetNodeController">
+    <bean name="getNodeController" class="eu.uberdust.rest.controller.html.node.GetController">
         <property name="commandClass" value="eu.uberdust.command.NodeCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -567,7 +607,7 @@
 
     <!-- Node-Capability Controller for HTML Format -->
     <bean name="nodeCapabilityHTMLController"
-          class="eu.uberdust.rest.controller.html.node.ShowReadingsController">
+          class="eu.uberdust.rest.controller.html.reading.ShowController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -588,7 +628,7 @@
     </bean>
 
     <bean name="nodeCapabilityPOSTController"
-          class="eu.uberdust.rest.controller.html.node.PostNodeCapabilityController">
+          class="eu.uberdust.rest.controller.html.nodecapability.PostController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>
@@ -599,7 +639,7 @@
 
     <!-- Node-Capability Controller for HTML Format -->
     <bean name="nodeCapabilityByDateHTMLController"
-          class="eu.uberdust.rest.controller.html.node.ShowByDateController">
+          class="eu.uberdust.rest.controller.html.reading.ShowByDateController">
         <property name="commandClass" value="eu.uberdust.command.NodeCapabilityCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
         <property name="nodeManager" ref="nodeManager"/>

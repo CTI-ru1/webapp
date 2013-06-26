@@ -14,6 +14,7 @@
 <html>
 <head>
     <%@include file="/googleAnalytics.jsp" %>
+    <%@include file="/head.jsp" %>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
     <script type="text/javascript" src="<c:url value="/js/highcharts.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/themes/gray.js"/>"></script>
@@ -24,48 +25,48 @@
             var chart;
 
             chart = new Highcharts.Chart({
-                chart:{
-                    renderTo:'chartcontainer',
-                    defaultSeriesType:'spline',
-                    zoomType:'x',
-                    spacingRight:20
+                chart: {
+                    renderTo: 'chartcontainer',
+                    defaultSeriesType: 'spline',
+                    zoomType: 'x',
+                    spacingRight: 20
                 },
-                title:{
-                    text:'Readings Chart Testbed : '
+                title: {
+                    text: 'Readings Chart Testbed : '
                             .concat('<c:out value="${testbed.name}"/>')
                             .concat(' Node : ')
                             .concat('<c:out value="${node.name}"/>')
                             .concat(' Capability : ')
                             .concat('<c:out value="${capability.name}"/>')
                 },
-                subtitle:{
-                    text:document.ontouchstart === undefined ?
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
                             'Click and drag in the plot area to zoom in' :
                             'Drag your cursor over the plot to zoom in'
                 },
-                xAxis:{
-                    type:'datetime',
-                    tickPixelInterval:150,
-                    maxZoom:1000
+                xAxis: {
+                    type: 'datetime',
+                    tickPixelInterval: 150,
+                    maxZoom: 1000
                 },
-                yAxis:{
-                    title:{
-                        text:'Reading'
+                yAxis: {
+                    title: {
+                        text: 'Reading'
                     },
-                    min:0.6,
-                    startOnTick:false,
-                    showFirstLabel:false
+                    min: 0.6,
+                    startOnTick: false,
+                    showFirstLabel: false
                 },
-                tooltip:{
-                    shared:true
+                tooltip: {
+                    shared: true
                 },
-                legend:{
-                    enabled:false
+                legend: {
+                    enabled: false
                 },
-                series:[
+                series: [
                     {
-                        name:'Reading value (<c:out value="${capability.unit}"/>,<c:out value="${capability.datatype}"/>)',
-                        data:[<c:out value="${readings}"/>]
+                        name: 'Reading value (<c:out value="${capability.unit}"/>,<c:out value="${capability.datatype}"/>)',
+                        data: [<c:out value="${readings}"/>]
                     }
                 ]
             });

@@ -104,7 +104,12 @@ public final class ListController extends AbstractRestController {
         }
 
         // get testbed's nodes
-        final List<Node> nodes = nodeManager.list(testbed.getSetup());
+        final List<Node> nodes = new ArrayList<Node>();
+        for (Node node : nodeManager.list(testbed.getSetup())) {
+            if (!node.getName().contains(":virtual:")) {
+                nodes.add(node);
+            }
+        }
 
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();

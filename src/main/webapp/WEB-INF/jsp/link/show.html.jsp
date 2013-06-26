@@ -24,17 +24,12 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-    <table>
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>">
-                    <c:out value="${link.source.name}"/>--<c:out value="${link.target.name}"/>
-                </a>
-            </th>
-        </tr>
-        </thead>
+    <h3>
+        <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>">
+            <c:out value="${link.source.name}"/>--<c:out value="${link.target.name}"/>
+        </a>
+    </h3>
+    <table class="table-hover">
         <tbody>
         <tr>
             <td>Source</td>
@@ -52,30 +47,25 @@
                 </a>
             </td>
         </tr>
-        <tr>
-            <td colspan="2">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Capabilities</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${capabilities}" var="capability">
-                        <tr>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.capability.name}"/>">
-                                        ${capability.capability.name}
-                                </a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
         </tbody>
-
+    </table>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Capabilities</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${capabilities}" var="capability">
+            <tr>
+                <td>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.capability.name}"/>">
+                            ${capability.capability.name}
+                    </a>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
     </table>
 </div>
 

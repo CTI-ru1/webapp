@@ -18,27 +18,22 @@
 </c:if>
 
 
-
-
-
-
-
 </div>
 
 
-<div class="navbar">
+<div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-        <a class="brand" href="#">Überdust</a>
+        <a class="brand" href="<c:url value="/"/>">Überdust</a>
         <ul class="nav">
             <li><a href="<c:url value="/rest/testbed"/>">testbeds</a></li>
-    <c:if test="${testbed != null}">
-        <li><a href="<c:url value="/rest/testbed/${testbed.id}"/>">testbed</a></li>
-        <li><a href="<c:url value="/rest/testbed/${testbed.id}/node"/>">nodes</a></li>
-        <li><a href="<c:url value="/rest/testbed/${testbed.id}/link"/>">links</a></li>
-        <li><a href="<c:url value="/rest/testbed/${testbed.id}/capability"/>">capabilies</a></li>
-        <li><a href="<c:url value="/rest/testbed/${testbed.id}/virtual"/>">virtual</a></li>
-        <li><a href="<c:url value="/rest/testbed/${testbed.id}/status"/>">status</a></li>
-    </c:if>
+            <c:if test="${testbed != null}">
+                <li><a href="<c:url value="/rest/testbed/${testbed.id}"/>">testbed</a></li>
+                <li><a href="<c:url value="/rest/testbed/${testbed.id}/node"/>">nodes</a></li>
+                <li><a href="<c:url value="/rest/testbed/${testbed.id}/link"/>">links</a></li>
+                <li><a href="<c:url value="/rest/testbed/${testbed.id}/capability"/>">capabilies</a></li>
+                <li><a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode"/>">virtual</a></li>
+                <li><a href="<c:url value="/rest/testbed/${testbed.id}/status"/>">status</a></li>
+            </c:if>
         </ul>
     </div>
 </div>

@@ -1,4 +1,4 @@
-package eu.uberdust.rest.controller.json;
+package eu.uberdust.rest.controller.json.node;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCommand;
@@ -19,12 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Controller class that returns a list of links for a given testbed in JSON format.
  */
-public final class ListNodesController extends AbstractRestController {
+public final class ListController extends AbstractRestController {
 
     /**
      * Testbed persistence manager.
@@ -39,12 +40,12 @@ public final class ListNodesController extends AbstractRestController {
     /**
      * Logger persistence manager.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListNodesController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListController.class);
 
     /**
      * Constructor.
      */
-    public ListNodesController() {
+    public ListController() {
         super();
 
         // Make sure to set which method this controller will support.
@@ -103,8 +104,13 @@ public final class ListNodesController extends AbstractRestController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        // get Testbed nodes
-        final List<Node> nodes = nodeManager.list(testbed.getSetup());
+        // get testbed's nodes
+        final List<Node> nodes = new ArrayList<Node>();
+        for (Node node : nodeManager.list(testbed.getSetup())) {
+            if (!node.getName().contains(":virtual:")) {
+                nodes.add(node);
+            }
+        }
 
         // write on the HTTP response
         response.setContentType("text/json");
