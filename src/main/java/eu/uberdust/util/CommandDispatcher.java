@@ -51,9 +51,9 @@ public class CommandDispatcher implements AbstractNodeReadingListener {
 
         for (CommandWSListener listener : listeners) {
             LOGGER.info("Sending command to Listener");
-            if (listener.getTestbedId() == id) {
+            //if (listener.getTestbedId() == id) {
                 listener.update(envelope);
-            }
+            //}
         }
     }
 
