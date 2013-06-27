@@ -26,9 +26,11 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-<h2>
-    <c:out value="${testbed.name}"/>
-</h2>
+<div class="span4">
+    <h2>
+        <a href="<c:url value="/rest/testbed/${testbed.id}"/>"><c:out value="${testbed.name}"/></a>
+    </h2>
+</div>
 
 
 <div id="testbed_info">
