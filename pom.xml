@@ -234,6 +234,19 @@
             <systemPath>${project.basedir}/lib/spring-webmvc-rest-0.9.1.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>org.openjena</groupId>
+            <artifactId>fuseki</artifactId>
+            <version>0.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/fuseki-0.1.0-server.jar</systemPath>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>coap8</groupId>
             <artifactId>coap8</artifactId>
             <version>1.8</version>
