@@ -42,6 +42,17 @@ table.readings th {
     text-transform: lowercase;
 }
 
+.realheader {
+    position: fixed;
+    top: 0px;
+    height: 25px;
+    right: 0px;
+    text-align: left;
+    background: rgb(199, 199, 199);
+    width: 100%;
+    padding: 0px;
+}
+
 .realfooter {
     position: fixed;
     bottom: 0px;
@@ -53,6 +64,15 @@ table.readings th {
     padding: 0px;
 }
 
+.container {
+    margin-top: 50px;
+    padding-top: 50px;
+    padding-bottom: 25px;
+    width: 90%;
+    vertical-align: middle;
+    margin: 0px auto;
+}
+
 .qrdiv {
     position: absolute;
     top: 200px;
@@ -61,8 +81,4 @@ table.readings th {
 
 .reading {
     text-align: right;
-}
-
-body {
-    margin-bottom: 25px;
 }

@@ -3,7 +3,7 @@ package eu.uberdust.rest.controller.json;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.JsonFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
-import eu.uberdust.rest.controller.html.testbed.ListTestbedsController;
+import eu.uberdust.rest.controller.html.testbed.ListController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
@@ -31,7 +31,7 @@ public final class ListTestbedController extends AbstractRestController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListTestbedsController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListController.class);
 
     /**
      * Constructor.

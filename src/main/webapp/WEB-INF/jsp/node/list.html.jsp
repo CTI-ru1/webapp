@@ -7,7 +7,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
-<jsp:useBean id="text" scope="request" class="java.lang.String"/>
+<jsp:useBean id="nodes" scope="request" class="java.util.ArrayList"/>
 
 
 <html>
@@ -16,19 +16,35 @@
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>ÜberDust - Show Testbed Nodes : <c:out value="${testbed.name}"/></title>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
-    <%@include file="/googleAnalytics.jsp"%>
+    <%@include file="/head.jsp" %>
+
 </head>
 <body>
 <%@include file="/header.jsp" %>
 
-<p>
-    /<a href="<c:url value="/rest/testbed"/>">testbeds</a>/
-    <a href="<c:url value="/rest/testbed/${testbed.id}"/>">testbed</a>/
-    <a href="<c:url value="/rest/testbed/${testbed.id}/node"/>">testbed nodes</a>
-</p>
+<div class="container">
+    <div class="span12">
+        <h3>Nodes (view also as :
+            <a href="<c:url value="/rest/testbed/${testbed.id}/node/raw"/>">raw</a>,
+            <a href="<c:url value="/rest/testbed/${testbed.id}/node/json"/>">json</a>
+            )
+        </h3>
+    </div>
 
-<c:out value="${text}" escapeXml="false" />
+    <table class="table-hover">
+        <tbody>
+        <c:forEach items="${nodes}" var="node">
+            <tr>
+                <td>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>">
+                        <c:out value="${node.name}"/>
+                    </a>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</div>
 
 <%@include file="/footer.jsp" %>
 </body>

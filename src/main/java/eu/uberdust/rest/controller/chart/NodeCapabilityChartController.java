@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,11 +173,16 @@ public final class NodeCapabilityChartController extends AbstractRestController 
         if (command.getReadingsLimit() != null) {
             limit = Integer.valueOf(command.getReadingsLimit());
         }
-        List<NodeReading> readings;
+        List<NodeReading> readings = new ArrayList<NodeReading>();
+        List<NodeReading> unsortedReadings;
         if (limit > 0) {
-            readings = nodeReadingManager.listNodeReadings(node, capability, limit);
+            unsortedReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
         } else {
-            readings = nodeReadingManager.listNodeReadings(node, capability);
+            unsortedReadings = nodeReadingManager.listNodeReadings(node, capability);
+        }
+
+        for (int i = unsortedReadings.size() - 1; i >= 0; i--) {
+            readings.add(unsortedReadings.get(i));
         }
         final StringBuilder data = new StringBuilder();
         for (final NodeReading reading : readings) {

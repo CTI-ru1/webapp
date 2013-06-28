@@ -12,11 +12,10 @@
 <jsp:useBean id="readings" scope="request" class="java.lang.String"/>
 
 <html>
-<%@include file="/header.jsp" %>
 <head>
-    <%@include file="/googleAnalytics.jsp"%>
-
-    <script type="text/javascript" src="<c:url value="/js/jquery.js"/>"></script>
+    <%@include file="/googleAnalytics.jsp" %>
+    <%@include file="/head.jsp" %>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
     <script type="text/javascript" src="<c:url value="/js/highcharts.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/themes/gray.js"/>"></script>
     <script type="text/javascript">
@@ -27,7 +26,7 @@
 
             chart = new Highcharts.Chart({
                 chart: {
-                    renderTo: 'container',
+                    renderTo: 'chartcontainer',
                     defaultSeriesType: 'spline',
                     zoomType: 'x',
                     spacingRight: 20
@@ -74,15 +73,17 @@
         }
     </script>
 
-    <title>ÜberDust - Readings Chart Testbed: <c:out value="${testbed.name}"/> <c:out value="${node.name}"/> , Capability
+    <title>ÜberDust - Readings Chart Testbed: <c:out value="${testbed.name}"/> <c:out value="${node.name}"/> ,
+        Capability
         : <c:out value="${capability.name}"/></title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
 </head>
-<body>
+<body onload="displayChart()">
 
-<div align="center" id="container" style="width: 80%; height: 400px"></div>
-
-<script type="text/javascript">displayChart();</script>
+<%@include file="/header.jsp" %>
+<div class="container">
+    <div id="chartcontainer" style="width: 100%; height: 400px"></div>
+</div>
 <%@include file="/footer.jsp" %>
 </body>
 </html>

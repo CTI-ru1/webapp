@@ -44,9 +44,9 @@
         <repository>
             <id>repository.ru1</id>
             <url>http://ru1.cti.gr/maven</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <!--<snapshots>-->
+            <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
             <layout>default</layout>
         </repository>
 
@@ -341,6 +341,19 @@
             <artifactId>protobuf-java</artifactId>
             <version>2.4.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjena</groupId>
+            <artifactId>fuseki</artifactId>
+            <version>0.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/fuseki-0.1.0-server.jar</systemPath>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <build>
@@ -487,6 +500,10 @@
                             <directory>${project.basedir}/src/main/resources/css</directory>
                             <targetPath>css</targetPath>
                         </resource>
+                        <resource>
+                            <directory>${project.basedir}/src/main/resources/img</directory>
+                            <targetPath>img</targetPath>
+                        </resource>
                     </webResources>
                     <archive>
                         <manifestEntries>
@@ -586,7 +603,7 @@
     </reporting>
 
     <distributionManagement>
-        <!-- use the following if you're not using a snapshot version. -->
+        <!-- use the followring if you're not using a snapshot version. -->
         <repository>
             <id>repository.ru1</id>
             <name>RU1 Repo</name>
