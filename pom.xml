@@ -45,7 +45,7 @@
             <id>repository.ru1</id>
             <url>http://ru1.cti.gr/maven</url>
             <!--<snapshots>-->
-                <!--<enabled>true</enabled>-->
+            <!--<enabled>true</enabled>-->
             <!--</snapshots>-->
             <layout>default</layout>
         </repository>
@@ -327,6 +327,19 @@
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>2.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjena</groupId>
+            <artifactId>fuseki</artifactId>
+            <version>0.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/fuseki-0.1.0-server.jar</systemPath>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

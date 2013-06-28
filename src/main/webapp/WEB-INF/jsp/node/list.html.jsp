@@ -23,16 +23,15 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
+    <div class="span12">
+        <h3>Nodes (view also as :
+            <a href="<c:url value="/rest/testbed/${testbed.id}/node/raw"/>">raw</a>,
+            <a href="<c:url value="/rest/testbed/${testbed.id}/node/json"/>">json</a>
+            )
+        </h3>
+    </div>
+
     <table class="table-hover">
-        <thead>
-        <tr>
-            <th>Nodes (view also as :
-                <a href="<c:url value="/rest/testbed/${testbed.id}/node/raw"/>">raw</a>,
-                <a href="<c:url value="/rest/testbed/${testbed.id}/node/json"/>">json</a>
-                )
-            </th>
-        </tr>
-        </thead>
         <tbody>
         <c:forEach items="${nodes}" var="node">
             <tr>

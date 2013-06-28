@@ -22,34 +22,29 @@
 <body>
 <%@include file="/header.jsp" %>
 <div class="container">
-    <div class="span4">
-        <h3>
-            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>"><c:out value="${node.name}"/> </a>
-        </h3>
-    </div>
-    <div class="span4">
+    <div class="span12">
         <h3>
             <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>">${capability.name}</a>
         </h3>
     </div>
 
-    <table class="table table-hover">
+    <table class="table-hover">
         <thead>
         </thead>
         <tbody>
         <tr>
-            <th>Unit of Measurement</th>
-            <th>${capability.unit}</th>
+            <td>Unit of Measurement</td>
+            <td>${capability.unit}</td>
         </tr>
         <tr>
-            <th>Capability Semantic Description</th>
-            <th></th>
+            <td>Capability Semantic Description</td>
+            <td></td>
         </tr>
         <tr>
-            <th>List Latest Readings</th>
-            <th>
+            <td>List Latest Readings</td>
+            <td>
                 <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}/tabdelimited"/>">raw</a>
-            </th>
+            </td>
         </tr>
         </tbody>
     </table>

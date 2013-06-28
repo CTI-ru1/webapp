@@ -26,14 +26,14 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-<div class="span4">
+<div class="span12">
     <h2>
         <a href="<c:url value="/rest/testbed/${testbed.id}"/>"><c:out value="${testbed.name}"/></a>
     </h2>
 </div>
 
 
-<div id="testbed_info">
+<div id="testbed_info" class="span12">
 
     <table class="table-hover">
         <tbody>
@@ -157,27 +157,28 @@
                 <thead>
                 <tr>
                     <th>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/link"/>">Links</a>
+                        <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode"/>">Virtual Nodes</a>
                         (
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/link/raw"/>">raw</a>,
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/link/json"/>">json</a>
+                        <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/raw"/>">raw</a>,
+                        <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/json"/>">json</a>
                         )
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:choose>
-                    <c:when test="${links == null || fn:length(links) == 0 }">
+                    <c:when test="${virtual == null || fn:length(virtual) == 0}">
                         <tr>
-                            <td style="color : red">No links found for <c:out value="${testbed.name}"/></td>
+                            <td style="color : red">No virtual nodes found for testbed <c:out
+                                    value="${testbed.name}"/></td>
                         </tr>
                     </c:when>
                     <c:otherwise>
-                        <c:forEach items="${links}" var="link">
+                        <c:forEach items="${virtual}" var="node">
                             <tr>
                                 <td>
-                                    <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>"><c:out
-                                            value="${link.source.name},${link.target.name}"/></a>
+                                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>"><c:out
+                                            value="${node.name}"/></a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -220,33 +221,33 @@
                 </tbody>
             </table>
         </td>
+
         <td style="vertical-align:top">
             <table class="table-hover">
                 <thead>
                 <tr>
                     <th>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode"/>">Virtual Nodes</a>
+                        <a href="<c:url value="/rest/testbed/${testbed.id}/link"/>">Links</a>
                         (
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/raw"/>">raw</a>,
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/json"/>">json</a>
+                        <a href="<c:url value="/rest/testbed/${testbed.id}/link/raw"/>">raw</a>,
+                        <a href="<c:url value="/rest/testbed/${testbed.id}/link/json"/>">json</a>
                         )
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:choose>
-                    <c:when test="${virtual == null || fn:length(virtual) == 0}">
+                    <c:when test="${links == null || fn:length(links) == 0 }">
                         <tr>
-                            <td style="color : red">No virtual nodes found for testbed <c:out
-                                    value="${testbed.name}"/></td>
+                            <td style="color : red">No links found for <c:out value="${testbed.name}"/></td>
                         </tr>
                     </c:when>
                     <c:otherwise>
-                        <c:forEach items="${virtual}" var="node">
+                        <c:forEach items="${links}" var="link">
                             <tr>
                                 <td>
-                                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>"><c:out
-                                            value="${node.name}"/></a>
+                                    <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>"><c:out
+                                            value="${link.source.name},${link.target.name}"/></a>
                                 </td>
                             </tr>
                         </c:forEach>

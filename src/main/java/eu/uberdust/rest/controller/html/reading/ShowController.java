@@ -4,8 +4,14 @@ import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.rest.exception.*;
-import eu.wisebed.wisedb.controller.*;
-import eu.wisebed.wisedb.model.*;
+import eu.wisebed.wisedb.controller.CapabilityController;
+import eu.wisebed.wisedb.controller.NodeController;
+import eu.wisebed.wisedb.controller.NodeReadingController;
+import eu.wisebed.wisedb.controller.TestbedController;
+import eu.wisebed.wisedb.model.Capability;
+import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.NodeReading;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,7 +19,9 @@ import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller class that returns an HTML page containing a list of the readings for a node/capability.
@@ -180,6 +188,8 @@ public final class ShowController extends AbstractRestController {
         refData.put("testbedId", command.getTestbedId());
         refData.put("readings", nodeReadings);
         refData.put("testbed", testbed);
+        refData.put("capability", capability);
+        refData.put("node", node);
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         // check type of view requested

@@ -21,16 +21,14 @@
 <body>
 <%@include file="/header.jsp" %>
 <div class="container">
+    <div class="span12">
+        <h3>Capabilities (view also as :
+            <a href="<c:url value="/rest/testbed/${testbed.id}/capability/raw"/>">raw</a>,
+            <a href="<c:url value="/rest/testbed/${testbed.id}/capability/json"/>">json</a>
+            )
+        </h3>
+    </div>
     <table>
-        <thead>
-        <tr>
-            <th>Capabilities (view also as :
-                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/raw"/>">raw</a>,
-                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/json"/>">json</a>
-                )
-            </th>
-        </tr>
-        </thead>
         <tbody>
         <c:forEach items="${capabilities}" var="capability">
             <tr>

@@ -6,7 +6,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <jsp:useBean id="readings" scope="request" class="java.util.ArrayList"/>
-
+<jsp:useBean id="node" scope="request" class="eu.wisebed.wisedb.model.Node"/>
+<jsp:useBean id="capability" scope="request" class="eu.wisebed.wisedb.model.Capability"/>
 <html>
 <head>
     <META NAME="Description" CONTENT="ÜberDust"/>
@@ -22,6 +23,18 @@
 
 <div class="container">
     <c:out value="${text}" escapeXml="false"/>
+    <div class="span4">
+        <h3>
+            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>">
+                <c:out value="${node.name}"/>
+            </a>
+        </h3>
+    </div>
+    <div class="span4">
+        <h3>
+            <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>">${capability.name}</a>
+        </h3>
+    </div>
 
     <table class="table table-hover">
         <thead>

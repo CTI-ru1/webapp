@@ -23,11 +23,13 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-    <h3>
-        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>">
-            <c:out value="${node.name}"/>
-        </a>
-    </h3>
+    <div class="span12">
+        <h3>
+            <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>">
+                <c:out value="${node.name}"/>
+            </a>
+        </h3>
+    </div>
     <table class="table-hover">
         <tbody>
         <tr>
@@ -72,7 +74,7 @@
         <c:forEach items="${nodeCapabilities}" var="capability">
             <tr>
                 <td>
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}"/>">${capability.capability.name}</a>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.capability.name}"/>">${capability.capability.name}</a>
                 </td>
                 <td>
                     <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/html/limit/10"/>">HTML</a>,
