@@ -3,8 +3,12 @@ package eu.uberdust.rest.controller.html.node;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.formatter.HtmlFormatter;
-import eu.uberdust.rest.exception.*;
-import eu.wisebed.wisedb.controller.*;
+import eu.uberdust.rest.exception.InvalidTestbedIdException;
+import eu.uberdust.rest.exception.NodeNotFoundException;
+import eu.uberdust.rest.exception.TestbedNotFoundException;
+import eu.wisebed.wisedb.controller.NodeCapabilityController;
+import eu.wisebed.wisedb.controller.NodeController;
+import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.NodeCapability;
 import eu.wisebed.wisedb.model.Testbed;
@@ -130,12 +134,15 @@ public final class GetController extends AbstractRestController {
             }
         }
 
+
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
 
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
+        refData.put("setup", testbed.getSetup());
         refData.put("node", node);
+        refData.put("nodePosition", nodeManager.getPosition(node));
 
         refData.put("nodeCapabilities", nodeCapabilities);
 
