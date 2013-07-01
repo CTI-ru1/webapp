@@ -41,8 +41,8 @@
         </div>
         <div id="collapse<c:out value="${testbed.id}"/>" class="accordion-body collapse in">
             <div class="accordion-inner">
-                <a href="<c:url value="/rest/testbed/${testbed.id}"/>">View <c:out value="${testbed.id}"/></a>
-
+                <a href="<c:url value="/rest/testbed/${testbed.id}"/>">Access</a>
+                uid: <c:out value="${testbed.id}"/> |
                 urnPrefix: <c:out value="${testbed.urnPrefix}"/> |
                 urnCapabilityPrefix: <c:out value="${testbed.urnCapabilityPrefix}"/> |
                 <c:out value="${nodes[testbed.name]}"/> Nodes |
