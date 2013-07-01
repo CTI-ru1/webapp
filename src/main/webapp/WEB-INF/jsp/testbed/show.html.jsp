@@ -126,149 +126,153 @@
 
 </div>
 
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#nodestab" data-toggle="tab">Nodes</a></li>
+    <li><a href="#virtualnodestab" data-toggle="tab">Virtual Nodes</a></li>
+    <li><a href="#capabilitiestab" data-toggle="tab">Capabilities</a></li>
+    <li><a href="#linkstab" data-toggle="tab">Links</a></li>
+</ul>
 
-<table>
-    <tr>
-        <td style="vertical-align:top">
-            <table class="table-hover">
-                <thead>
-                <tr>
-                    <th>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/node"/>">Nodes</a>
-                        (
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/raw"/>">raw</a>,
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/json"/>">json</a>
-                        )
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:choose>
-                    <c:when test="${nodes == null || fn:length(nodes) == 0}">
+<div class="tab-content">
+    <div class="tab-pane active" id="nodestab">
+        <table class="table-hover table table-condensed">
+            <thead>
+            <tr>
+                <th>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node"/>">Nodes</a>
+                    (
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/raw"/>">raw</a>,
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/json"/>">json</a>
+                    )
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:choose>
+                <c:when test="${nodes == null || fn:length(nodes) == 0}">
+                    <tr>
+                        <td style="color : red">No nodes found for testbed <c:out value="${testbed.name}"/></td>
+                    </tr>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach items="${nodes}" var="node">
                         <tr>
-                            <td style="color : red">No nodes found for testbed <c:out value="${testbed.name}"/></td>
+                            <td>
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>"><c:out
+                                        value="${node.name}"/></a>
+                            </td>
                         </tr>
-                    </c:when>
-                    <c:otherwise>
-                        <c:forEach items="${nodes}" var="node">
-                            <tr>
-                                <td>
-                                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>"><c:out
-                                            value="${node.name}"/></a>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
-                </tbody>
-            </table>
-        </td>
-        <td style="vertical-align:top">
-            <table class="table-hover">
-                <thead>
-                <tr>
-                    <th>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode"/>">Virtual Nodes</a>
-                        (
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/raw"/>">raw</a>,
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/json"/>">json</a>
-                        )
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:choose>
-                    <c:when test="${virtual == null || fn:length(virtual) == 0}">
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" id="virtualnodestab">
+        <table class="table-hover table table-condensed">
+            <thead>
+            <tr>
+                <th>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode"/>">Virtual Nodes</a>
+                    (
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/raw"/>">raw</a>,
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/json"/>">json</a>
+                    )
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:choose>
+                <c:when test="${virtual == null || fn:length(virtual) == 0}">
+                    <tr>
+                        <td style="color : red">No virtual nodes found for testbed <c:out
+                                value="${testbed.name}"/></td>
+                    </tr>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach items="${virtual}" var="node">
                         <tr>
-                            <td style="color : red">No virtual nodes found for testbed <c:out
-                                    value="${testbed.name}"/></td>
+                            <td>
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>"><c:out
+                                        value="${node.name}"/></a>
+                            </td>
                         </tr>
-                    </c:when>
-                    <c:otherwise>
-                        <c:forEach items="${virtual}" var="node">
-                            <tr>
-                                <td>
-                                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>"><c:out
-                                            value="${node.name}"/></a>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
-                </tbody>
-            </table>
-        </td>
-        <td style="vertical-align:top">
-            <table class="table-hover">
-                <thead>
-                <tr>
-                    <th>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/capability"/>">Capabilities</a>
-                        (
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/capability/raw"/>">raw</a>,
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/capability/json"/>">json</a>
-                        )
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:choose>
-                    <c:when test="${capabilities == null || fn:length(capabilities) == 0 }">
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" id="capabilitiestab">
+        <table class="table-hover table table-condensed">
+            <thead>
+            <tr>
+                <th>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/capability"/>">Capabilities</a>
+                    (
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/capability/raw"/>">raw</a>,
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/capability/json"/>">json</a>
+                    )
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:choose>
+                <c:when test="${capabilities == null || fn:length(capabilities) == 0 }">
+                    <tr>
+                        <td style="color : red">No capabilities found for <c:out value="${testbed.name}"/></td>
+                    </tr>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach items="${capabilities}" var="capability">
                         <tr>
-                            <td style="color : red">No capabilities found for <c:out value="${testbed.name}"/></td>
+                            <td>
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>"><c:out
+                                        value="${capability.name}"/></a>
+                            </td>
                         </tr>
-                    </c:when>
-                    <c:otherwise>
-                        <c:forEach items="${capabilities}" var="capability">
-                            <tr>
-                                <td>
-                                    <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>"><c:out
-                                            value="${capability.name}"/></a>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
-                </tbody>
-            </table>
-        </td>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" id="linkstab">
+        <table class="table-hover table table-condensed">
+            <thead>
+            <tr>
+                <th>
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/link"/>">Links</a>
+                    (
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/link/raw"/>">raw</a>,
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/link/json"/>">json</a>
+                    )
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:choose>
+                <c:when test="${links == null || fn:length(links) == 0 }">
+                    <tr>
+                        <td style="color : red">No links found for <c:out value="${testbed.name}"/></td>
+                    </tr>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach items="${links}" var="link">
+                        <tr>
+                            <td>
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>"><c:out
+                                        value="${link.source.name},${link.target.name}"/></a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-        <td style="vertical-align:top">
-            <table class="table-hover">
-                <thead>
-                <tr>
-                    <th>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/link"/>">Links</a>
-                        (
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/link/raw"/>">raw</a>,
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/link/json"/>">json</a>
-                        )
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:choose>
-                    <c:when test="${links == null || fn:length(links) == 0 }">
-                        <tr>
-                            <td style="color : red">No links found for <c:out value="${testbed.name}"/></td>
-                        </tr>
-                    </c:when>
-                    <c:otherwise>
-                        <c:forEach items="${links}" var="link">
-                            <tr>
-                                <td>
-                                    <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>"><c:out
-                                            value="${link.source.name},${link.target.name}"/></a>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-</table>
 </div>
 <%@include file="/footer.jsp" %>
 </body>
