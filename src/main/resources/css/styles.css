@@ -82,3 +82,9 @@ table.readings th {
 .reading {
     text-align: right;
 }
+
+#map-canvas {
+    margin: 0;
+    padding: 0;
+    height: 300px;
+}
