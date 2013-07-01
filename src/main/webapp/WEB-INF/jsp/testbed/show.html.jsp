@@ -6,7 +6,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
-<jsp:useBean id="text" scope="request" class="java.lang.String"/>
 <jsp:useBean id="testbed" scope="request" class="eu.wisebed.wisedb.model.Testbed"/>
 <jsp:useBean id="nodes" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="virtual" scope="request" class="java.util.ArrayList"/>
@@ -20,10 +19,20 @@
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>ÜberDust - Show testbed : <c:out value="${testbed.name}"/></title>
     <%@include file="/head.jsp" %>
-
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 </head>
 <body>
 <%@include file="/header.jsp" %>
+<script>
+    var map;
+    function initialize() {
+        var myLatlng = new google.maps.LatLng(<c:out value="${setup.origin.x}"/>, <c:out value="${setup.origin.y}"/>);
+        var mapOptions = {zoom: 13, center: myLatlng, mapTypeId: google.maps.MapTypeId.HYBRID};
+        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+        var marker = new google.maps.Marker({position: myLatlng, map: map, title: "<c:out value="${node.name}"/>"});
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
 
 <div class="container">
 <div class="span12">
@@ -33,7 +42,7 @@
 </div>
 
 
-<div id="testbed_info" class="span12">
+<div id="testbed_info" class="span6">
 
     <table class="table-hover">
         <tbody>
@@ -42,8 +51,7 @@
             <td><c:out value="${testbed.id}"/></td>
         </tr>
         <tr>
-            <td>Testbed Description</td>
-            <td><c:out value="${testbed.description}"/></td>
+            <td colspan="2"><c:out value="${testbed.description}"/></td>
         </tr>
         <tr>
             <td>Testbed Name</td>
@@ -113,6 +121,9 @@
         </tr>
         </tbody>
     </table>
+</div>
+<div class="span6" id="map-canvas" style="height: 400px;">
+
 </div>
 
 
