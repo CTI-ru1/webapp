@@ -2,7 +2,7 @@
     <div class="navbar-inner">
         <ul class="nav">
             <li><a href="https://github.com/Uberdust/webapp/wiki"> Github Project</a></li>
-            <li><a href="http://ru1.cti.gr/index.php/software-a-systems/5-general-software/158-uberdust"> CTI & P -
+            <li><a href="http://ru1.cti.gr/index.php/software-a-systems/5-general-software/158-uberdust"> CTI -
                 Ru1 </a>
             </li>
             <li><a href="<c:url value="/rest/help/"/>"> Help </a></li>
