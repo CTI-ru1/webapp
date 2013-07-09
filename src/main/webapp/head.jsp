@@ -4,3 +4,9 @@
 <%@include file="/bootstrap.jsp" %>
 <!-- Google Analytics -->
 <%@include file="/googleAnalytics.jsp" %>
+
+<style>
+    img {
+        max-width: none
+    }
+</style>
