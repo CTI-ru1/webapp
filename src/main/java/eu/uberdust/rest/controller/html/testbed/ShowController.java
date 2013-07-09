@@ -3,17 +3,11 @@ package eu.uberdust.rest.controller.html.testbed;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.TestbedCommand;
 import eu.uberdust.formatter.HtmlFormatter;
-import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.CapabilityController;
-import eu.wisebed.wisedb.controller.LinkController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Capability;
-import eu.wisebed.wisedb.model.Link;
-import eu.wisebed.wisedb.model.Node;
-import eu.wisebed.wisedb.model.Testbed;
+import eu.wisebed.wisedb.Coordinate;
+import eu.wisebed.wisedb.controller.*;
+import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
@@ -50,6 +44,13 @@ public final class ShowController extends AbstractRestController {
      * Node persistence manager.
      */
     private transient NodeController nodeManager;
+
+    /**
+     * Node Capability persistence manager.
+     */
+    private transient NodeCapabilityController nodeCapabilityManager;
+
+
     /**
      * Logger.
      */
@@ -99,6 +100,10 @@ public final class ShowController extends AbstractRestController {
      */
     public void setNodeManager(final NodeController nodeManager) {
         this.nodeManager = nodeManager;
+    }
+
+    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
+        this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
     /**
@@ -151,6 +156,51 @@ public final class ShowController extends AbstractRestController {
                 nodes.add(node);
             }
         }
+
+        Map<String, Position> nodePositions = new HashMap<String, Position>();
+        Map<String, String> nodeTypes = new HashMap<String, String>();
+        for (Node node : nodes) {
+            Position nodePosition = nodeManager.getPosition(node);
+
+            if (!(testbed.getSetup().getCoordinateType().equals("Absolute"))) {
+                // determine testbed origin by the type of coordinates given
+                final Origin origin = testbed.getSetup().getOrigin();
+                Coordinate originCoordinate = new Coordinate();
+                originCoordinate.setX((double) origin.getX());
+                originCoordinate.setY((double) origin.getY());
+                originCoordinate.setZ((double) origin.getZ());
+                originCoordinate.setPhi((double) origin.getPhi());
+                originCoordinate.setTheta((double) origin.getTheta());
+                Coordinate properOrigin = Coordinate.blh2xyz(originCoordinate);
+
+                Position testbedPosition = new Position();
+                testbedPosition.setX(testbed.getSetup().getOrigin().getX());
+                testbedPosition.setY(testbed.getSetup().getOrigin().getY());
+                testbedPosition.setZ(testbed.getSetup().getOrigin().getZ());
+                testbedPosition.setPhi(testbed.getSetup().getOrigin().getPhi());
+                testbedPosition.setTheta(testbed.getSetup().getOrigin().getTheta());
+
+                Coordinate nodeCoordinate = new Coordinate();
+                nodeCoordinate.setX((double) nodePosition.getX());
+                nodeCoordinate.setY((double) nodePosition.getY());
+                nodeCoordinate.setZ((double) nodePosition.getZ());
+
+                final Coordinate rotated = Coordinate.rotate(nodeCoordinate, properOrigin.getPhi());
+                final Coordinate absolute = Coordinate.absolute(properOrigin, rotated);
+                final Coordinate finalNodePosition = Coordinate.xyz2blh(absolute);
+                nodePosition.setX(Float.parseFloat(finalNodePosition.getX().toString()));
+                nodePosition.setY(Float.parseFloat(finalNodePosition.getY().toString()));
+            }
+            nodePositions.put(node.getName(), nodePosition);
+            NodeCapability cap = nodeCapabilityManager.getByID(node, "nodeType");
+            if (cap != null) {
+                nodeTypes.put(node.getName(), cap.getLastNodeReading().getStringReading());
+            } else {
+                nodeTypes.put(node.getName(), "default");
+            }
+
+        }
+
         // get testbed links
         final List<Link> links = linkManager.list(testbed.getSetup());
         // get testbed capabilities
@@ -167,6 +217,8 @@ public final class ShowController extends AbstractRestController {
         refData.put("links", links);
         refData.put("virtual", virtual);
         refData.put("capabilities", capabilities);
+        refData.put("nodePositions", nodePositions);
+        refData.put("nodeTypes", nodeTypes);
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
 
         return new ModelAndView("testbed/show.html", refData);

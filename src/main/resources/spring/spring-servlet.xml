@@ -241,6 +241,7 @@
         <property name="nodeManager" ref="nodeManager"/>
         <property name="linkManager" ref="linkManager"/>
         <property name="capabilityManager" ref="capabilityManager"/>
+        <property name="nodeCapabilityManager" ref="nodeCapabilityManager"/>
         <property name="uriPattern" value="/testbed/{testbedId}"/>
         <property name="viewNameSelector">
             <bean class="org.springframework.web.servlet.RestViewNameSelector">

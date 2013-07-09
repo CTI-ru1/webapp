@@ -11,6 +11,9 @@
 <jsp:useBean id="virtual" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="links" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="capabilities" scope="request" class="java.util.ArrayList"/>
+<jsp:useBean id="nodePositions" scope="request" class="java.util.HashMap"/>
+<jsp:useBean id="nodeTypes" scope="request" class="java.util.HashMap"/>
+
 
 <html>
 <head>
@@ -29,7 +32,19 @@
         var myLatlng = new google.maps.LatLng(<c:out value="${setup.origin.x}"/>, <c:out value="${setup.origin.y}"/>);
         var mapOptions = {zoom: 13, center: myLatlng, mapTypeId: google.maps.MapTypeId.HYBRID};
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-        var marker = new google.maps.Marker({position: myLatlng, map: map, title: "<c:out value="${node.name}"/>"});
+        var bounds = new google.maps.LatLngBounds();
+
+        var marker = new google.maps.Marker({position: myLatlng, map: map, title: "<c:out value="${testbed.name}"/>"});
+        bounds.extend(marker.getPosition());
+        <c:forEach items="${nodes}" var="node">
+        <c:if test="${nodePositions[node.name].x!=0}">
+        var iconLink = '<c:url value="/img/markers/${nodeTypes[node.name]}.png"/>';
+        var myLatlng<c:out value="${node.id}"/> = new google.maps.LatLng(<c:out value="${nodePositions[node.name].x}"/>, <c:out value="${nodePositions[node.name].y}"/>);
+        var marker<c:out value="${node.id}"/> = new google.maps.Marker({position: myLatlng<c:out value="${node.id}"/>, map: map, title: "<c:out value="${node.name}"/>", icon: iconLink});
+        bounds.extend(marker<c:out value="${node.id}"/>.getPosition());
+        </c:if>
+        </c:forEach>
+        map.fitBounds(bounds);
     }
     google.maps.event.addDomListener(window, 'load', initialize);
 </script>
