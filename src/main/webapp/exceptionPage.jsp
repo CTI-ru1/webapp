@@ -9,27 +9,21 @@
     <META NAME="Description" CONTENT="ÜberDust"/>
     <META http-equiv="Content-Language" content="en"/>
     <title>ÜberDust - Exception Occured</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
+    <%@include file="/head.jsp" %>
 </head>
 <body>
 <%@include file="/header.jsp" %>
-<p>Exception Occured</p>
-<table class="error">
-    <tbody>
-    <tr>
-        <td>Exception's Message</td>
-        <td>${pageContext.exception.message}</td>
-    </tr>
-    <tr>
-        <td>Exception's Stacktrace</td>
-        <td>
-            <c:forEach var="stacktraceElement" items="${pageContext.exception.stackTrace}">
-                    ${stacktraceElement}</br>
-            </c:forEach>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <h3>Exception Detected</h3>
+    <p>${pageContext.exception.message} </p>
+    <pre class="pre-scrollable">
+      <c:forEach var="stacktraceElement" items="${pageContext.exception.stackTrace}">
+          <c:out value="${stacktraceElement}" escapeXml="false"/>
+      </c:forEach>                                                       
+    </pre>
+
+    </table>
+</div>
 <%@include file="/footer.jsp" %>
 </body>
 </html>
