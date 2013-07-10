@@ -44,20 +44,20 @@
     <div class="accordion-group">
         <div class="accordion-heading">
             <c:choose>
-            <c:when test="${!updated.contains(lnr.node.name)}">
-            <div class="alert">
+                <c:when test="${!updated.contains(lnr.node.name)}">
+                    <div class="alert">
                 </c:when>
-                </c:choose>
+            </c:choose>
 
                 <a class="accordion-toggle" data-toggle="collapse"
                    data-parent="#accordion"
                    href="#collapseOne<c:out value="${lnr.node.id}"/>">
                     <c:out value="${lnr.node.name}"/>
                 </a>
-                <c:choose>
+            <c:choose>
                 <c:when test="${!updated.contains(lnr.node.name)}">
-            </div>
-            </c:when>
+                    </div>
+                </c:when>
             </c:choose>
         </div>
         <c:choose>
