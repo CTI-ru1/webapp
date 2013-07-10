@@ -207,6 +207,7 @@
     <bean name="listTestbedsHTMLController" class="eu.uberdust.rest.controller.html.testbed.ListController">
         <property name="commandClass" value="eu.uberdust.command.TestbedCommand"/>
         <property name="testbedManager" ref="testbedManager"/>
+        <property name="nodeManager" ref="nodeManager"/>
         <property name="uriPattern" value="/testbed/"/>
         <property name="viewNameSelector">
             <bean class="org.springframework.web.servlet.RestViewNameSelector">
