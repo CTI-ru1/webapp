@@ -9,27 +9,15 @@
     <META NAME="Description" CONTENT="ÜberDust"/>
     <META http-equiv="Content-Language" content="en"/>
     <title>ÜberDust - ${pageContext.errorData.statusCode}</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
+    <%@include file="/head.jsp" %>
 </head>
 <body>
 
 <%@include file="/header.jsp" %>
-<table class="error">
-    <tbody>
-    <tr>
-        <td>Status</td>
-        <td>${pageContext.errorData.statusCode}</td>
-    </tr>
-    <tr>
-        <td>URI</td>
-        <td>${pageContext.errorData.requestURI}</td>
-    </tr>
-    <tr>
-        <td>Servlet Name</td>
-        <td>${pageContext.errorData.servletName}</td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <h3> ${pageContext.errorData.statusCode} Error Detected </h3>
+    <p>URI Requested: <pre>${pageContext.errorData.requestURI}</pre></p>
+</div>
 <%@include file="/footer.jsp" %>
 </body>
 </html>
