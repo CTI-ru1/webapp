@@ -20,7 +20,7 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="60"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
     <cache name="eu.uberdust.formatter.HtmlFormatter.formatLink"
            eternal="false"
            maxElementsInMemory="200"
@@ -29,7 +29,7 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="60"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
 
     <cache name="eu.uberdust.formatter.HtmlFormatter.formatCapability"
            eternal="false"
@@ -39,7 +39,7 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="120"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
 
     <cache name="eu.uberdust.formatter.HtmlFormatter.formatNodes"
            eternal="false"
@@ -49,7 +49,7 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="12"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
 
     <cache name="eu.uberdust.formatter.HtmlFormatter.formatLinks"
            eternal="false"
@@ -59,7 +59,7 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="12"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
 
     <cache name="eu.uberdust.formatter.HtmlFormatter.formatCapabilities"
            eternal="false"
@@ -69,7 +69,7 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="12"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
 
     <cache name="eu.wisebed.wisedb.controller.NodeControllerImpl.list"
            eternal="false"
@@ -79,7 +79,7 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="10"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
     <cache name="eu.wisebed.wisedb.controller.LinkControllerImpl.list"
            eternal="false"
            maxElementsInMemory="5"
@@ -88,7 +88,7 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="10"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
     <cache name="eu.wisebed.wisedb.controller.CapabilityControllerImpl.list"
            eternal="false"
            maxElementsInMemory="5"
@@ -97,7 +97,7 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="10"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
     <cache name="eu.wisebed.wisedb.controller.NodeCapabilityControllerImpl.list"
            eternal="true"
            maxElementsInMemory="5"
@@ -106,7 +106,7 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="0"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
     <cache name="eu.wisebed.wisedb.controller.LinkCapabilityControllerImpl.list"
            eternal="true"
            maxElementsInMemory="5"
@@ -115,7 +115,7 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="0"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
 
     <cache name="eu.wisebed.wisedb.controller.NodeReadingControllerImpl.getByIDs"
            eternal="false"
@@ -125,7 +125,63 @@
            timeToIdleSeconds="0"
            timeToLiveSeconds="36000"
            memoryStoreEvictionPolicy="LRU"
-           />
+            />
+    <cache name="eu.uberdust.rest.controller.html.node.GetController.getNodePosition"
+           eternal="false"
+           maxElementsInMemory="3000"
+           overflowToDisk="false"
+           diskPersistent="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           memoryStoreEvictionPolicy="LRU"
+            />
+
+    <cache name="eu.wisebed.wisedb.controller.NodeReadingControllerImpl.getAbsolutePosition"
+           eternal="false"
+           maxElementsInMemory="3000"
+           overflowToDisk="false"
+           diskPersistent="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           memoryStoreEvictionPolicy="LRU"
+            />
+    <cache name="eu.uberdust.rest.controller.html.testbed.ShowController.getNodeType"
+           eternal="false"
+           maxElementsInMemory="3000"
+           overflowToDisk="false"
+           diskPersistent="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           memoryStoreEvictionPolicy="LRU"
+            />
+    <cache name="eu.uberdust.rest.controller.html.testbed.ShowController.getNodePositions"
+           eternal="false"
+           maxElementsInMemory="10"
+           overflowToDisk="false"
+           diskPersistent="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           memoryStoreEvictionPolicy="LRU"
+            />
+    <cache name="eu.uberdust.rest.controller.html.testbed.ListController.getNodePositions"
+           eternal="false"
+           maxElementsInMemory="10"
+           overflowToDisk="false"
+           diskPersistent="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           memoryStoreEvictionPolicy="LRU"
+            />
+
+    <cache name="eu.uberdust.rest.controller.html.testbed.ShowController.getNodeTypes"
+           eternal="false"
+           maxElementsInMemory="10"
+           overflowToDisk="false"
+           diskPersistent="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="36000"
+           memoryStoreEvictionPolicy="LRU"
+            />
 
 
 </ehcache>
