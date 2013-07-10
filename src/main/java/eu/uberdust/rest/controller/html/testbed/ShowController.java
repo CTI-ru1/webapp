@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.html.testbed;
 
+import eu.uberdust.caching.Cachable;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.TestbedCommand;
 import eu.uberdust.formatter.HtmlFormatter;
@@ -157,49 +158,8 @@ public final class ShowController extends AbstractRestController {
             }
         }
 
-        Map<String, Position> nodePositions = new HashMap<String, Position>();
-        Map<String, String> nodeTypes = new HashMap<String, String>();
-        for (Node node : nodes) {
-            Position nodePosition = nodeManager.getPosition(node);
-
-            if (!(testbed.getSetup().getCoordinateType().equals("Absolute"))) {
-                // determine testbed origin by the type of coordinates given
-                final Origin origin = testbed.getSetup().getOrigin();
-                Coordinate originCoordinate = new Coordinate();
-                originCoordinate.setX((double) origin.getX());
-                originCoordinate.setY((double) origin.getY());
-                originCoordinate.setZ((double) origin.getZ());
-                originCoordinate.setPhi((double) origin.getPhi());
-                originCoordinate.setTheta((double) origin.getTheta());
-                Coordinate properOrigin = Coordinate.blh2xyz(originCoordinate);
-
-                Position testbedPosition = new Position();
-                testbedPosition.setX(testbed.getSetup().getOrigin().getX());
-                testbedPosition.setY(testbed.getSetup().getOrigin().getY());
-                testbedPosition.setZ(testbed.getSetup().getOrigin().getZ());
-                testbedPosition.setPhi(testbed.getSetup().getOrigin().getPhi());
-                testbedPosition.setTheta(testbed.getSetup().getOrigin().getTheta());
-
-                Coordinate nodeCoordinate = new Coordinate();
-                nodeCoordinate.setX((double) nodePosition.getX());
-                nodeCoordinate.setY((double) nodePosition.getY());
-                nodeCoordinate.setZ((double) nodePosition.getZ());
-
-                final Coordinate rotated = Coordinate.rotate(nodeCoordinate, properOrigin.getPhi());
-                final Coordinate absolute = Coordinate.absolute(properOrigin, rotated);
-                final Coordinate finalNodePosition = Coordinate.xyz2blh(absolute);
-                nodePosition.setX(Float.parseFloat(finalNodePosition.getX().toString()));
-                nodePosition.setY(Float.parseFloat(finalNodePosition.getY().toString()));
-            }
-            nodePositions.put(node.getName(), nodePosition);
-            NodeCapability cap = nodeCapabilityManager.getByID(node, "nodeType");
-            if (cap != null) {
-                nodeTypes.put(node.getName(), cap.getLastNodeReading().getStringReading());
-            } else {
-                nodeTypes.put(node.getName(), "default");
-            }
-
-        }
+        Map<String, Position> nodePositions = getNodePositions(testbed);
+        Map<String, String> nodeTypes = getNodeTypes(testbed);
 
         // get testbed links
         final List<Link> links = linkManager.list(testbed.getSetup());
@@ -224,5 +184,30 @@ public final class ShowController extends AbstractRestController {
         return new ModelAndView("testbed/show.html", refData);
     }
 
+    @Cachable
+    private Map<String, Position> getNodePositions(Testbed testbed) {
+        final List<Node> nodes = nodeManager.list(testbed.getSetup());
+        Map<String, Position> nodePositions = new HashMap<String, Position>();
+        for (Node node : nodes) {
+            Position nodePosition = nodeManager.getAbsolutePosition(node);
+            nodePositions.put(node.getName(), nodePosition);
+        }
+        return nodePositions;
+    }
 
+    @Cachable
+    private Map<String, String> getNodeTypes(Testbed testbed) {
+        final List<Node> nodes = nodeManager.list(testbed.getSetup());
+        Map<String, String> nodeTypes = new HashMap<String, String>();
+        for (Node node : nodes) {
+            NodeCapability cap = nodeCapabilityManager.getByID(node, "nodeType");
+            if (cap != null) {
+                nodeTypes.put(node.getName(), cap.getLastNodeReading().getStringReading());
+            } else {
+                nodeTypes.put(node.getName(), "default");
+            }
+
+        }
+        return nodeTypes;
+    }
 }

@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.html.node;
 
+import eu.uberdust.caching.Cachable;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.command.NodeCommand;
 import eu.uberdust.formatter.HtmlFormatter;
@@ -123,42 +124,8 @@ public final class GetController extends AbstractRestController {
         List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(node);
 
 
-        Position nodePosition = nodeManager.getPosition(node);
-
-        if (!(testbed.getSetup().getCoordinateType().equals("Absolute"))) {
-            // determine testbed origin by the type of coordinates given
-            final Origin origin = testbed.getSetup().getOrigin();
-            Coordinate originCoordinate = new Coordinate();
-            originCoordinate.setX((double) origin.getX());
-            originCoordinate.setY((double) origin.getY());
-            originCoordinate.setZ((double) origin.getZ());
-            originCoordinate.setPhi((double) origin.getPhi());
-            originCoordinate.setTheta((double) origin.getTheta());
-            Coordinate properOrigin = Coordinate.blh2xyz(originCoordinate);
-
-            Position testbedPosition = new Position();
-            testbedPosition.setX(testbed.getSetup().getOrigin().getX());
-            testbedPosition.setY(testbed.getSetup().getOrigin().getY());
-            testbedPosition.setZ(testbed.getSetup().getOrigin().getZ());
-            testbedPosition.setPhi(testbed.getSetup().getOrigin().getPhi());
-            testbedPosition.setTheta(testbed.getSetup().getOrigin().getTheta());
-
-            Coordinate nodeCoordinate = new Coordinate();
-            nodeCoordinate.setX((double) nodePosition.getX());
-            nodeCoordinate.setY((double) nodePosition.getY());
-            nodeCoordinate.setZ((double) nodePosition.getZ());
-
-            final Coordinate rotated = Coordinate.rotate(nodeCoordinate, properOrigin.getPhi());
-            final Coordinate absolute = Coordinate.absolute(properOrigin, rotated);
-            final Coordinate finalNodePosition = Coordinate.xyz2blh(absolute);
-            nodePosition.setX(Float.parseFloat(finalNodePosition.getX().toString()));
-            nodePosition.setY(Float.parseFloat(finalNodePosition.getY().toString()));
-        }
-        String nodeType = "default";
-        NodeCapability cap = nodeCapabilityManager.getByID(node, "nodeType");
-        if (cap != null) {
-            nodeType = cap.getLastNodeReading().getStringReading();
-        }
+        Position nodePosition = nodeManager.getAbsolutePosition(node);
+        String nodeType = getNodeType(node);
 
 
         // Prepare data to pass to jsp
@@ -175,4 +142,15 @@ public final class GetController extends AbstractRestController {
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         return new ModelAndView("node/show.html", refData);
     }
+
+    @Cachable
+    String getNodeType(Node node) {
+        String nodeType = "default";
+        NodeCapability cap = nodeCapabilityManager.getByID(node, "nodeType");
+        if (cap != null) {
+            nodeType = cap.getLastNodeReading().getStringReading();
+        }
+        return nodeType;
+    }
+
 }
