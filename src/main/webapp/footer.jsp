@@ -1,3 +1,9 @@
+<spring:message code="uberdust.hudson.url" var="hudsonUrl" scope="application" text=""/>
+<spring:message code="uberdust.hudson.build" var="hudsonBuild" scope="application" text=""/>
+<spring:message code="uberdust.hudson.jobname" var="hudsonJobName" scope="application" text=""/>
+<spring:message code="uberdust.webapp.version" var="uberdustWebappVersion" scope="application" text=""/>
+
+
 <div class="navbar navbar-fixed-bottom">
     <div class="navbar-inner">
         <ul class="nav">
@@ -6,6 +12,7 @@
                 Ru1 </a>
             </li>
             <li><a href="<c:url value="/rest/help/"/>"> Help </a></li>
+            <li> <a> v${uberdustWebappVersion}b${hudsonBuild} </a> </li>
             <jsp:useBean id="time" scope="request" class="String"/>
             <c:if test="${time != ''}">
                 <li><a href="<c:url value="/rest/statistics"/>"> page loaded in <c:out value="${time}"/>
