@@ -33,8 +33,6 @@
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
         var bounds = new google.maps.LatLngBounds();
 
-        <%--var marker = new google.maps.Marker({position: myLatlng, map: map, title: "<c:out value="${testbed.name}"/>"});--%>
-        <%--bounds.extend(marker.getPosition());--%>
         <c:set var="count" value="0" scope="page" />
         var iconLink = '<c:url value="/img/markers/default.png"/>';
         <c:forEach items="${nodePositions}" var="entry" >
@@ -42,19 +40,19 @@
         <c:out value="${count}" />
         <c:if test="${entry.x!=0}">
         var myLatlng<c:out value="${count}"/> = new google.maps.LatLng(<c:out value="${entry.x}"/>, <c:out value="${entry.y}"/>);
-        var marker<c:out value="${count}"/> = new google.maps.Marker({position: myLatlng<c:out value="${count}"/>, map: map, icon: iconLink ,zIndex:0});
+        var marker<c:out value="${count}"/> = new google.maps.Marker({position: myLatlng<c:out value="${count}"/>, map: map, icon: iconLink, zIndex: 0});
         bounds.extend(marker<c:out value="${count}"/>.getPosition());
         </c:if>
         </c:forEach>
 
 
         <c:forEach items="${testbeds}" var="testbed">
-        <%--<c:if test="${nodePositions[node.name].x!=0}">--%>
-        <%--var iconLink = '<c:url value="/img/markers/${nodeTypes[node.name]}.png"/>';--%>
         var myLatlng<c:out value="${testbed.id}"/> = new google.maps.LatLng(<c:out value="${origins[testbed.id].x}"/>, <c:out value="${origins[testbed.id].y}"/>);
-        var marker<c:out value="${testbed.id}"/> = new google.maps.Marker({position: myLatlng<c:out value="${testbed.id}"/>, map: map, title: "<c:out value="${testbed.name}"/>"});
+        var marker<c:out value="${testbed.id}"/> = new google.maps.Marker({position: myLatlng<c:out value="${testbed.id}"/>, map: map, title: "<c:out value="${testbed.name}"/>", zIndex:<c:out value="${testbed.id}"/> });
         bounds.extend(marker<c:out value="${testbed.id}"/>.getPosition());
-        <%--</c:if>--%>
+        google.maps.event.addListener(marker<c:out value="${testbed.id}"/>, 'click', function () {
+            $("#clickable<c:out value="${testbed.id}"/>").click()
+        });
         </c:forEach>
 
 
@@ -70,17 +68,17 @@
     <div id="map-canvas" style="height: 100%;" class="span8">
     </div>
     <div class="span4">
-        <%--<div class="accordion" id="accordion2">--%>
+        <h4>Available Testbeds:</h4>
         <c:forEach items="${testbeds}" var="testbed">
-            <%--<div class="accordion-group">--%>
             <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+                   id="clickable<c:out value="${testbed.id}"/>"
                    href="#collapse<c:out value="${testbed.id}"/>">
                     <img src="<c:url value="/img/wsn.jpg"/>">
                     <c:out value="${testbed.name}"/>
                 </a>
             </div>
-            <div id="collapse<c:out value="${testbed.id}"/>" class="accordion-body collapse in">
+            <div id="collapse<c:out value="${testbed.id}"/>" class="accordion-body collapse">
                 <div class="accordion-inner">
                     <a href="<c:url value="/rest/testbed/${testbed.id}"/>">View More</a> <br/>
                     uid: <c:out value="${testbed.id}"/> <br/>
@@ -90,7 +88,6 @@
 
                 </div>
             </div>
-            <%--</div>--%>
         </c:forEach>
     </div>
 </div>

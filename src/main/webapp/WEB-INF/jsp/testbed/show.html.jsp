@@ -30,7 +30,7 @@
     var map;
     function initialize() {
         var myLatlng = new google.maps.LatLng(<c:out value="${setup.origin.x}"/>, <c:out value="${setup.origin.y}"/>);
-        var mapOptions = {zoom: 13, center: myLatlng, mapTypeId: google.maps.MapTypeId.HYBRID};
+        var mapOptions = {zoom: 13, center: myLatlng, mapTypeId: google.maps.MapTypeId.HYBRID, disableDefaultUI: true};
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
         var bounds = new google.maps.LatLngBounds();
 
