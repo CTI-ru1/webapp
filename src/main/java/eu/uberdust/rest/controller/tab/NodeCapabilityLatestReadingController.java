@@ -1,38 +1,37 @@
 package eu.uberdust.rest.controller.tab;
 
 import eu.uberdust.caching.Loggable;
-import eu.uberdust.command.NodeCapabilityCommand;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
-import eu.uberdust.rest.exception.CapabilityNotFoundException;
-import eu.uberdust.rest.exception.InvalidCapabilityNameException;
-import eu.uberdust.rest.exception.InvalidNodeIdException;
-import eu.uberdust.rest.exception.InvalidTestbedIdException;
-import eu.uberdust.rest.exception.NodeNotFoundException;
-import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.CapabilityController;
-import eu.wisebed.wisedb.controller.LastNodeReadingController;
-import eu.wisebed.wisedb.controller.NodeCapabilityController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.TestbedController;
+import eu.uberdust.rest.exception.*;
+import eu.wisebed.wisedb.controller.*;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.LastNodeReading;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
 
 /**
  * Controller class for returning the latest reading for a node/capability.
  */
-public final class NodeCapabilityLatestReadingController extends AbstractRestController {
+@Controller
+@RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/latestreading")
+public final class NodeCapabilityLatestReadingController {
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityLatestReadingController.class);
 
     /**
      * Testbed persistence manager.
@@ -48,33 +47,21 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
      * Capability persistence manager.
      */
     private transient CapabilityController capabilityManager;
-
     /**
      * LastNodeReading persistence manager.
      */
     private transient NodeCapabilityController nodeCapabilityManager;
+    /**
+     *
+     */
     private LastNodeReadingController lastNodeReadingManager;
-    /**
-     * Logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityLatestReadingController.class);
-
-
-    /**
-     * Constructor.
-     */
-    public NodeCapabilityLatestReadingController() {
-        super();
-
-        // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
-    }
 
     /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
      */
+    @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
@@ -84,6 +71,7 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
      *
      * @param nodeManager node persistence manager.
      */
+    @Autowired
     public void setNodeManager(final NodeController nodeManager) {
         this.nodeManager = nodeManager;
     }
@@ -93,14 +81,17 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
      *
      * @param capabilityManager capability persistence manager.
      */
+    @Autowired
     public void setCapabilityManager(final CapabilityController capabilityManager) {
         this.capabilityManager = capabilityManager;
     }
 
+    @Autowired
     public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
+    @Autowired
     public void setLastNodeReadingManager(LastNodeReadingController lastNodeReadingManager) {
         this.lastNodeReadingManager = lastNodeReadingManager;
     }
@@ -108,10 +99,6 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param request    http servlet request.
-     * @param response   http servlet response.
-     * @param commandObj command object.
-     * @param errors     BindException exception.
      * @return http servlet response.
      * @throws InvalidNodeIdException         InvalidNodeIdException exception.
      * @throws InvalidCapabilityNameException InvalidNodeCapability exception.
@@ -122,65 +109,37 @@ public final class NodeCapabilityLatestReadingController extends AbstractRestCon
      * @throws IOException                    IOException exception.
      */
     @Loggable
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors)
-            throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
-            TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, IOException {
-
-        // set commandNode object
-        final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;
-
-        // check node id
-        if (command.getNodeId() == null || command.getNodeId().isEmpty()) {
-            throw new InvalidNodeIdException("Must provide node id");
-        }
-
-        // check capability name
-        if (command.getCapabilityId() == null || command.getCapabilityId().isEmpty()) {
-            throw new InvalidCapabilityNameException("Must provide capability name");
-        }
-
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
-
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-        }
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName)
+            throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException, TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, IOException {
 
         // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
+        final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
         // retrieve node
-        final Node node = nodeManager.getByName(command.getNodeId());
+        final Node node = nodeManager.getByName(nodeName);
         if (node == null) {
-            throw new NodeNotFoundException("Cannot find node [" + command.getNodeId() + "]");
+            throw new NodeNotFoundException("Cannot find node [" + nodeName + "]");
         }
 
         // retrieve capability
-        final Capability capability = capabilityManager.getByID(command.getCapabilityId());
+        final Capability capability = capabilityManager.getByID(capabilityName);
         if (capability == null) {
-            throw new CapabilityNotFoundException("Cannot find capability [" + command.getCapabilityId() + "]");
+            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
         }
         // retrieve last node rading for this node/capability
         final LastNodeReading lnr = lastNodeReadingManager.getByNodeCapability(node, capability);
 
-        response.setContentType("text/plain");
-        final Writer textOutput = (response.getWriter());
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
         try {
-            textOutput.append(TextFormatter.getInstance().formatNodeReading(lnr));
+            return new ResponseEntity<String>(TextFormatter.getInstance().formatNodeReading(lnr), responseHeaders, HttpStatus.OK);
         } catch (NotImplementedException e) {
-            textOutput.append("not implemented exception");
+            return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        textOutput.flush();
-        textOutput.close();
-
-
-        return null;
     }
 }

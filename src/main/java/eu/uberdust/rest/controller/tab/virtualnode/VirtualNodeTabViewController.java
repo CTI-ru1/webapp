@@ -1,14 +1,13 @@
-package eu.uberdust.rest.controller.tab;
-
+package eu.uberdust.rest.controller.tab.virtualnode;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.LinkController;
+import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Link;
+import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +20,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Controller class that returns a list of links for a given testbed in Raw Text format.
+ * Controller class that returns a list of links for a given testbed in HTML format.
  */
 @Controller
-@RequestMapping("/testbed/{testbedId}/link/raw")
-public final class ListLinksController {
-
+@RequestMapping("/testbed/{testbedId}/virtualnode/raw")
+public final class VirtualNodeTabViewController {
 
     /**
-     * Logger.
+     * Logger persistence manager.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListLinksController.class);
+    private static final Logger LOGGER = Logger.getLogger(VirtualNodeTabViewController.class);
 
     /**
      * Testbed persistence manager.
@@ -42,9 +41,9 @@ public final class ListLinksController {
     private transient TestbedController testbedManager;
 
     /**
-     * Link persistence manager.
+     * Node persistence manager.
      */
-    private transient LinkController linkManager;
+    private transient NodeController nodeManager;
 
 
     /**
@@ -58,13 +57,13 @@ public final class ListLinksController {
     }
 
     /**
-     * Sets link persistence manager.
+     * Sets node persistence manager.
      *
-     * @param linkManager link persistence manager.
+     * @param nodeManager node persistence manager.
      */
     @Autowired
-    public void setLinkManager(final LinkController linkManager) {
-        this.linkManager = linkManager;
+    public void setNodeManager(final NodeController nodeManager) {
+        this.nodeManager = nodeManager;
     }
 
     /**
@@ -72,27 +71,31 @@ public final class ListLinksController {
      *
      * @return response http servlet response.
      * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *                     an InvalidTestbedIdException exception.
+     *          an InvalidTestbedIdException exception.
      * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *                     an TestbedNotFoundException exception.
-     * @throws IOException IO Exception.
+     *          an TestbedNotFoundException exception.
      */
     @Loggable
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId) throws InvalidTestbedIdException, TestbedNotFoundException, IOException, NotImplementedException {
+    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId) throws TestbedNotFoundException, InvalidTestbedIdException, IOException, NotImplementedException {
 
-        // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
-        final List<Link> links = linkManager.list(testbed.getSetup());
+
+        // get testbed's nodes
+        final List<Node> nodes = new ArrayList<Node>();
+        for (Node node : nodeManager.list(testbed.getSetup())) {
+            if (node.getName().contains(":virtual:")) {
+                nodes.add(node);
+            }
+        }
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-
-        return new ResponseEntity<String>(TextFormatter.getInstance().formatLinks(links), responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<String>(TextFormatter.getInstance().formatNodes(nodes), responseHeaders, HttpStatus.OK);
 
     }
 }

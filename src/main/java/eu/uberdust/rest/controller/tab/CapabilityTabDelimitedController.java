@@ -1,7 +1,6 @@
 package eu.uberdust.rest.controller.tab;
 
 import eu.uberdust.caching.Loggable;
-import eu.uberdust.command.CapabilityCommand;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
@@ -16,20 +15,29 @@ import eu.wisebed.wisedb.model.LastLinkReading;
 import eu.wisebed.wisedb.model.LastNodeReading;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 
 /**
  * Controller class that returns readings of a specific capability in a tab delimited format.
  */
-public final class CapabilityTabDelimitedController extends AbstractRestController {
+@Controller
+@RequestMapping("/testbed/{testbedId}/capability")
+public final class CapabilityTabDelimitedController {
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(CapabilityTabDelimitedController.class);
 
     /**
      * Testbed persistence manager.
@@ -52,25 +60,11 @@ public final class CapabilityTabDelimitedController extends AbstractRestControll
     private transient LastLinkReadingController lastLinkReadingManager;
 
     /**
-     * Logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(CapabilityTabDelimitedController.class);
-
-    /**
-     * Constructor.
-     */
-    public CapabilityTabDelimitedController() {
-        super();
-
-        // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
-    }
-
-    /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
      */
+    @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
@@ -80,6 +74,7 @@ public final class CapabilityTabDelimitedController extends AbstractRestControll
      *
      * @param capabilityManager capability persistence manager.
      */
+    @Autowired
     public void setCapabilityManager(final CapabilityController capabilityManager) {
         this.capabilityManager = capabilityManager;
     }
@@ -87,29 +82,58 @@ public final class CapabilityTabDelimitedController extends AbstractRestControll
     /**
      * Sets last node reading persistence manager.
      *
-     * @param lastNodeReading last node reading persistence manager.
+     * @param lastNodeReadingManager last node reading persistence manager.
      */
-    public void setLastNodeReadingManager(final LastNodeReadingController lastNodeReading) {
-        this.lastNodeReadingManager = lastNodeReading;
+    @Autowired
+    public void setLastNodeReadingManager(final LastNodeReadingController lastNodeReadingManager) {
+        this.lastNodeReadingManager = lastNodeReadingManager;
     }
 
     /**
      * Sets last link reading persistence manager.
      *
-     * @param lastLinkReading last link reading persistence manager.
+     * @param lastLinkReadingManager last link reading persistence manager.
      */
-    public void setLastLinkReadingManager(final LastLinkReadingController lastLinkReading) {
-        this.lastLinkReadingManager = lastLinkReading;
+    @Autowired
+    public void setLastLinkReadingManager(final LastLinkReadingController lastLinkReadingManager) {
+        this.lastLinkReadingManager = lastLinkReadingManager;
     }
 
+    /**
+     * Handle Request and return the appropriate response.
+     * System.out.println(request.getRemoteUser());
+     *
+     * @return response http servlet response.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                     an InvalidTestbedIdException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                     an TestbedNotFoundException exception.
+     * @throws IOException IO exception.
+     */
+    @Loggable
+    @RequestMapping(value = {"/raw", "/tabdelimited"}, method = RequestMethod.GET)
+    public ResponseEntity<String> listCapabilities(@PathVariable("testbedId") int testbedId)
+            throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException, NotImplementedException {
+
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+
+        // get testbed's capabilities
+        final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        return new ResponseEntity<String>(TextFormatter.getInstance().formatCapabilities(testbed, capabilities), responseHeaders, HttpStatus.OK);
+
+    }
 
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param request    http servlet request.
-     * @param response   http servlet response.
-     * @param commandObj command object.
-     * @param errors     BindException exception.
      * @return response http servlet response.
      * @throws InvalidTestbedIdException   a InvalidTestbedIdException exception.
      * @throws TestbedNotFoundException    a TestbedNotFoundException exception.
@@ -117,52 +141,29 @@ public final class CapabilityTabDelimitedController extends AbstractRestControll
      * @throws CapabilityNotFoundException a CapabilityNotFoundException exception.
      */
     @Loggable
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors)
-            throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException {
-
-        // set command object
-        final CapabilityCommand command = (CapabilityCommand) commandObj;
-
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
-
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Invalid Testbed ID.", nfe);
-        }
+    @RequestMapping(value = {"/{capabilityName}/tabdelimited","/{capabilityName}/raw"}, method = RequestMethod.GET)
+    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName)
+            throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException, NotImplementedException {
 
         // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
+        final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
         // look up capability
-        final Capability capability = capabilityManager.getByID(command.getCapabilityName());
+        final Capability capability = capabilityManager.getByID(capabilityName);
         if (capability == null) {
             // if no capability is found throw exception
-            throw new CapabilityNotFoundException("Cannot find capability [" + command.getCapabilityName() + "].");
+            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "].");
         }
-
-        // write on the HTTP response
-        response.setContentType("text/plain");
-        final Writer textOutput = (response.getWriter());
 
         final List<LastNodeReading> lnrs = lastNodeReadingManager.getByCapability(testbed.getSetup(), capability);
         final List<LastLinkReading> llrs = lastLinkReadingManager.getByCapability(testbed.getSetup(), capability);
-        try {
-            textOutput.append(TextFormatter.getInstance().formatLastReadings(lnrs, llrs));
-        } catch (NotImplementedException e) {
-            textOutput.append("not implemented exception");
-        }
 
-        // flush close output
-        textOutput.flush();
-        textOutput.close();
-
-        return null;
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        return new ResponseEntity<String>(TextFormatter.getInstance().formatLastReadings(lnrs, llrs), responseHeaders, HttpStatus.OK);
     }
 }
