@@ -1,35 +1,24 @@
 package eu.uberdust.rest.controller.wiseml;
 
 import eu.uberdust.caching.Loggable;
-import eu.uberdust.command.NodeCapabilityCommand;
-import eu.uberdust.rest.exception.CapabilityNotFoundException;
-import eu.uberdust.rest.exception.InvalidCapabilityNameException;
-import eu.uberdust.rest.exception.InvalidLimitException;
-import eu.uberdust.rest.exception.InvalidNodeIdException;
-import eu.uberdust.rest.exception.InvalidTestbedIdException;
-import eu.uberdust.rest.exception.NodeNotFoundException;
-import eu.uberdust.rest.exception.TestbedNotFoundException;
+import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.exception.*;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.NodeReadingController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Capability;
-import eu.wisebed.wisedb.model.Node;
-import eu.wisebed.wisedb.model.NodeReading;
-import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.validation.BindException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * Controller class that returns the readings of a node capability pair in WiseML format.
  */
-public final class NodeCapabilityWiseMlController extends AbstractRestController {
+@Controller
+public final class NodeCapabilityWiseMlController {
 
     /**
      * Testbed persistence manager.
@@ -57,21 +46,11 @@ public final class NodeCapabilityWiseMlController extends AbstractRestController
     private static final Logger LOGGER = Logger.getLogger(NodeCapabilityWiseMlController.class);
 
     /**
-     * Constructor.
-     */
-    public NodeCapabilityWiseMlController() {
-
-        super();
-
-        // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
-    }
-
-    /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
      */
+    @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
@@ -81,6 +60,7 @@ public final class NodeCapabilityWiseMlController extends AbstractRestController
      *
      * @param nodeManager node persistence manager.
      */
+    @Autowired
     public void setNodeManager(final NodeController nodeManager) {
         this.nodeManager = nodeManager;
     }
@@ -90,6 +70,7 @@ public final class NodeCapabilityWiseMlController extends AbstractRestController
      *
      * @param capabilityManager capability persistence manager.
      */
+    @Autowired
     public void setCapabilityManager(final CapabilityController capabilityManager) {
         this.capabilityManager = capabilityManager;
     }
@@ -99,18 +80,27 @@ public final class NodeCapabilityWiseMlController extends AbstractRestController
      *
      * @param nodeReadingManager NodeReading persistence manager.
      */
+    @Autowired
     public void setNodeReadingManager(final NodeReadingController nodeReadingManager) {
         this.nodeReadingManager = nodeReadingManager;
     }
 
 
     /**
+     * Handle request and return the appropriate response.
+     *
+     * @return http servlet response.
+     */
+    // TODO make this controller
+    @RequestMapping("/testbed/{testbedId}/wiseml")
+    protected ModelAndView showTestbedWiseML(@PathVariable("testbedId") int testbedId) throws NotImplementedException {
+        LOGGER.info("showTestbedWiseMLController(...)");
+        throw new NotImplementedException();
+    }
+
+    /**
      * Handle Request and return the appropriate response.
      *
-     * @param request    http servlet request.
-     * @param response   http servlet response.
-     * @param commandObj command object
-     * @param errors     a BindException exception.
      * @return http servlet response.
      * @throws InvalidNodeIdException         a InvalidNodeIdException exception.
      * @throws InvalidCapabilityNameException a InvalidCapabilityNameException exception.
@@ -121,71 +111,34 @@ public final class NodeCapabilityWiseMlController extends AbstractRestController
      * @throws InvalidLimitException          a InvalidLimitException exception.
      */
     @Loggable
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors)
+    @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/wiseml/limit/{limit}")
+    protected ModelAndView showNodeKML(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
-            TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, InvalidLimitException {
+            TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, InvalidLimitException, NotImplementedException {
 
-        // set commandNode object
-        final NodeCapabilityCommand command = (NodeCapabilityCommand) commandObj;
+//        // look up testbed
+//        final Testbed testbed = testbedManager.getByID(testbedId);
+//        if (testbed == null) {
+//            // if no testbed is found throw exception
+//            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+//        }
+//
+//        // retrieve node
+//        final Node node = nodeManager.getByName(nodeName);
+//        if (node == null) {
+//            throw new NodeNotFoundException("Cannot find node [" + nodeName + "]");
+//        }
+//
+//        // retrieve capability
+//        final Capability capability = capabilityManager.getByID(capabilityName);
+//        if (capability == null) {
+//            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
+//        }
+//
+//        // retrieve readings based on node/capability
+//        final List<NodeReading> nodeReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
 
-        // check node id
-        if (command.getNodeId() == null || command.getNodeId().isEmpty()) {
-            throw new InvalidNodeIdException("Must provide node id");
-        }
-
-        // check capability name
-        if (command.getCapabilityId() == null || command.getCapabilityId().isEmpty()) {
-            throw new InvalidCapabilityNameException("Must provide capability name");
-        }
-
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
-
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-        }
-
-        // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
-        if (testbed == null) {
-            // if no testbed is found throw exception
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
-        }
-
-        // retrieve node
-        final Node node = nodeManager.getByName(command.getNodeId());
-        if (node == null) {
-            throw new NodeNotFoundException("Cannot find node [" + command.getNodeId() + "]");
-        }
-
-        // retrieve capability
-        final Capability capability = capabilityManager.getByID(command.getCapabilityId());
-        if (capability == null) {
-            throw new CapabilityNotFoundException("Cannot find capability [" + command.getCapabilityId() + "]");
-        }
-
-        // retrieve readings based on node/capability
-        final List<NodeReading> nodeReadings;
-        if (command.getReadingsLimit() == null) {
-            // no limit is provided
-            nodeReadings = nodeReadingManager.listNodeReadings(node, capability);
-        } else {
-            int limit;
-            try {
-                limit = Integer.parseInt(command.getReadingsLimit());
-            } catch (NumberFormatException nfe) {
-                throw new InvalidLimitException("Limit must have have number format.", nfe);
-            }
-            nodeReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
-        }
-
-        // Results are here . TODO make this controller.
-        nodeReadings.size();
-
-        return null;
+        throw new NotImplementedException();
     }
 }
 
