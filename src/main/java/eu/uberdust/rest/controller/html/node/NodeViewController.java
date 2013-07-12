@@ -8,12 +8,14 @@ import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.*;
+import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.NodeCapability;
+import eu.wisebed.wisedb.model.Position;
+import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +33,7 @@ import java.util.Map;
  * Controller class that returns the a web page for a node.
  */
 @Controller
-@RequestMapping("/testbed/{testbedId}/node/{nodeName}/")
+@RequestMapping("/testbed/{testbedId}/node")
 public final class NodeViewController {
     /**
      * Logger.
@@ -83,7 +86,7 @@ public final class NodeViewController {
      * @throws NodeNotFoundException     NodeNotFoundException exception.
      */
     @Loggable
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "{nodeName}/", method = RequestMethod.GET)
     public ModelAndView getNode(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName) throws TestbedNotFoundException, NodeNotFoundException {
 
         final long start = System.currentTimeMillis();
@@ -125,7 +128,7 @@ public final class NodeViewController {
     }
 
     @Loggable
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(value = "{nodeName}/", method = RequestMethod.PUT)
     @Transactional
     @ResponseBody
     public String putNode(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, HttpServletResponse response)
@@ -156,6 +159,47 @@ public final class NodeViewController {
         response.setCharacterEncoding("UTF-8");
 
         return "Node added to the system";
+    }
+
+    /**
+     * Handle Request and return the appropriate response.
+     *
+     * @return response http servlet response.
+     * @throws InvalidTestbedIdException an InvalidTestbedIdException exception.
+     * @throws TestbedNotFoundException  an TestbedNotFoundException exception.
+     */
+    @Loggable
+    @RequestMapping(method = RequestMethod.GET)
+    public ModelAndView listNodes(@PathVariable("testbedId") int testbedId) throws TestbedNotFoundException {
+
+
+        final long start = System.currentTimeMillis();
+
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+
+        // get testbed's nodes
+        final List<Node> nodes = new ArrayList<Node>();
+        for (Node node : nodeManager.list(testbed.getSetup())) {
+            if (!node.getName().contains(":virtual:")) {
+                nodes.add(node);
+            }
+        }
+
+        // Prepare data to pass to jsp
+        final Map<String, Object> refData = new HashMap<String, Object>();
+
+        // else put thisNode instance in refData and return index view
+        refData.put("testbed", testbed);
+
+        refData.put("nodes", nodes);
+
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+        return new ModelAndView("node/list.html", refData);
+
     }
 
     @Cachable
