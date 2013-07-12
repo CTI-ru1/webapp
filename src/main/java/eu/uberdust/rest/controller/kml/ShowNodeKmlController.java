@@ -1,17 +1,17 @@
 package eu.uberdust.rest.controller.kml;
 
+import eu.uberdust.formatter.exception.NotImplementedException;
 import org.apache.log4j.Logger;
-import org.springframework.validation.BindException;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Controller class that returns the positoin of a node in KML format.
  */
-public final class ShowNodeKmlController extends AbstractRestController {
+@Controller
+public final class ShowNodeKmlController {
 
     /**
      * Logger.
@@ -19,26 +19,26 @@ public final class ShowNodeKmlController extends AbstractRestController {
     private static final Logger LOGGER = Logger.getLogger(ShowNodeKmlController.class);
 
     /**
-     * Constructor.
+     * Handle request and return the appropriate response.
+     *
+     * @return http servlet response.
      */
-    public ShowNodeKmlController() {
-
-        // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
+    // TODO make this controller
+    @RequestMapping("/testbed/{testbedId}/kml")
+    protected ModelAndView showTestbedKML(@PathVariable("testbedId") int testbedId) throws NotImplementedException {
+        LOGGER.info("showTestbedKmlController(...)");
+        throw new NotImplementedException();
     }
 
     /**
      * Handle request and return the appropriate response.
      *
-     * @param request    http servlet request.
-     * @param response   http servlet response.
-     * @param commandObj command object.
-     * @param errors     BindException exception.
      * @return http servlet response.
      */
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors) {
+    // TODO make this controller
+    @RequestMapping("/testbed/{testbedId}/node/{nodeName}/kml")
+    protected ModelAndView showNodeKML(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName) throws NotImplementedException {
         LOGGER.info("showNodeKmlController(...)");
-        return null; // TODO make this controller
+        throw new NotImplementedException();
     }
 }
