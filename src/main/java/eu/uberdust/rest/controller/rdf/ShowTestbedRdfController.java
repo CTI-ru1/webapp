@@ -2,30 +2,28 @@ package eu.uberdust.rest.controller.rdf;
 
 import com.sun.syndication.io.FeedException;
 import eu.uberdust.caching.Loggable;
-import eu.uberdust.command.TestbedCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
 
 /**
  * Controller class that returns the setup of a testbed in GeoRSS format.
  */
-public final class ShowTestbedRdfController extends AbstractRestController {
-
-    /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
+@Controller
+@RequestMapping("/testbed/{testbedId}/rdf/{rdfEncoding}")
+public final class ShowTestbedRdfController {
 
     /**
      * Logger.
@@ -33,20 +31,17 @@ public final class ShowTestbedRdfController extends AbstractRestController {
     private static final Logger LOGGER = Logger.getLogger(ShowTestbedRdfController.class);
 
     /**
-     * Constructor.
+     * Testbed persistence manager.
      */
-    public ShowTestbedRdfController() {
-        super();
+    private transient TestbedController testbedManager;
 
-        // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
-    }
 
     /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
      */
+    @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
@@ -54,10 +49,6 @@ public final class ShowTestbedRdfController extends AbstractRestController {
     /**
      * Handle request and return the appropriate response.
      *
-     * @param request    http servlet request.
-     * @param response   http servlet response.
-     * @param commandObj command object.
-     * @param errors     a BindException exception.
      * @return http servlet response.
      * @throws eu.uberdust.rest.exception.TestbedNotFoundException
      *                             a TestbedNotFoundException exception.
@@ -69,24 +60,12 @@ public final class ShowTestbedRdfController extends AbstractRestController {
      */
     @SuppressWarnings("unchecked")
     @Loggable
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors)
+    @RequestMapping(method = RequestMethod.GET)
+    protected ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("rdfEncoding") String rdfEncoding)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException {
 
-        // set command object
-        final TestbedCommand command = (TestbedCommand) commandObj;
-
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
-
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-        }
-
         // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
+        final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
@@ -116,13 +95,8 @@ public final class ShowTestbedRdfController extends AbstractRestController {
 
 
         // set up feed and entries
-
-        final Writer output = (response.getWriter());
-
-        output.write(retVal);
-        output.flush();
-        output.close();
-
-        return null;
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "application/rdf+xml; charset=UTF-8");
+        return new ResponseEntity<String>(retVal, responseHeaders, HttpStatus.OK);
     }
 }

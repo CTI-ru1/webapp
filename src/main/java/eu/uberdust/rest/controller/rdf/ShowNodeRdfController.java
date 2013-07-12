@@ -1,7 +1,6 @@
 package eu.uberdust.rest.controller.rdf;
 
 import com.sun.syndication.io.FeedException;
-import eu.uberdust.command.NodeCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -11,19 +10,28 @@ import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
 
 /**
  * Controller class that returns the position of a node in GeoRSS format.
  */
-public final class ShowNodeRdfController extends AbstractRestController {
+@Controller
+@RequestMapping("/testbed/{testbedId}/node/{nodeName}/rdf/{rdfEncoding}")
+public final class ShowNodeRdfController {
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(ShowNodeRdfController.class);
 
     /**
      * Tested persistence manager.
@@ -38,25 +46,11 @@ public final class ShowNodeRdfController extends AbstractRestController {
     private transient LastNodeReadingController lastNodeReadingManager;
 
     /**
-     * Logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(ShowNodeRdfController.class);
-
-    /**
-     * Constructor.
-     */
-    public ShowNodeRdfController() {
-        super();
-
-        // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
-    }
-
-    /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
      */
+    @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
@@ -66,10 +60,12 @@ public final class ShowNodeRdfController extends AbstractRestController {
      *
      * @param nodeManager node persistence manager.
      */
+    @Autowired
     public void setNodeManager(final NodeController nodeManager) {
         this.nodeManager = nodeManager;
     }
 
+    @Autowired
     public void setLastNodeReadingManager(final LastNodeReadingController lastNodeReadingManager) {
         this.lastNodeReadingManager = lastNodeReadingManager;
     }
@@ -77,10 +73,6 @@ public final class ShowNodeRdfController extends AbstractRestController {
     /**
      * Handle request and return the appropriate response.
      *
-     * @param request    http servlet request.
-     * @param response   http servlet response.
-     * @param commandObj command object.
-     * @param errors     BindException exception.
      * @return http servlet response.
      * @throws IOException               an IOException exception.
      * @throws FeedException             a FeedException exception.
@@ -89,37 +81,26 @@ public final class ShowNodeRdfController extends AbstractRestController {
      * @throws InvalidTestbedIdException InvalidTestbedIdException exception.
      */
     @SuppressWarnings("unchecked")
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors)
+    @RequestMapping(method = RequestMethod.GET)
+    protected ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("rdfEncoding") String rdfEncoding)
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
 
         LOGGER.info("showNodeRdfController(...)");
 
-        // set command object
-        final NodeCommand command = (NodeCommand) commandObj;
-
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
-
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-        }
 
         // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
+        final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
         // look up node
-        final Node node = nodeManager.getByName(command.getNodeId());
+        final Node node = nodeManager.getByName(nodeName);
         if (node == null) {
             // if no node is found throw exception
-            throw new NodeNotFoundException("Cannot find testbed [" + command.getNodeId() + "].");
+            throw new NodeNotFoundException("Cannot find testbed [" + nodeName + "].");
         }
 
         // current host base URL
@@ -147,14 +128,8 @@ public final class ShowNodeRdfController extends AbstractRestController {
 //        }
 
 
-        // set up feed and entries
-        response.setContentType("application/rdf+xml");
-        final Writer output = (response.getWriter());
-
-        output.write(retVal);
-        output.flush();
-        output.close();
-
-        return null;
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "application/rdf+xml; charset=UTF-8");
+        return new ResponseEntity<String>(retVal, responseHeaders, HttpStatus.OK);
     }
 }
