@@ -9,9 +9,13 @@ import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.*;
 import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +24,14 @@ import java.util.*;
 /**
  * Controller class that returns the status page for the nodes and links of a testbed.
  */
-public final class StatusController extends AbstractRestController {
+@Controller
+@RequestMapping("/testbed/{testbedId}/status")
+public final class StatusController {
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(StatusController.class);
 
     /**
      * Testbed persistence manager.
@@ -38,33 +49,21 @@ public final class StatusController extends AbstractRestController {
     private transient LinkCapabilityController linkCapabilityManager;
 
     /**
-     * Logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(StatusController.class);
-
-    /**
-     * Constructor.
-     */
-    public StatusController() {
-        super();
-
-        // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
-    }
-
-    /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
      */
+    @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
 
+    @Autowired
     public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
+    @Autowired
     public void setLinkCapabilityManager(final LinkCapabilityController linkCapabilityManager) {
         this.linkCapabilityManager = linkCapabilityManager;
     }
@@ -72,32 +71,17 @@ public final class StatusController extends AbstractRestController {
     /**
      * Handle request and return the appropriate response.
      *
-     * @param request    http servlet request.
-     * @param response   http servlet response.
-     * @param commandObj command object.
-     * @param errors     a BindException exception.
      * @return http servlet response.
      * @throws InvalidTestbedIdException a InvalidTestbedIDException exception.
      * @throws TestbedNotFoundException  a TestbedNotFoundException exception.
      */
     @Loggable
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors)
-            throws InvalidTestbedIdException, TestbedNotFoundException {
+    @RequestMapping(method = RequestMethod.GET)
+    public ModelAndView showTestbedStatus(@PathVariable("testbedId") int testbedId) throws TestbedNotFoundException {
         final long start = System.currentTimeMillis();
 
         long start1 = System.currentTimeMillis();
 
-        // set command object
-        final TestbedCommand command = (TestbedCommand) commandObj;
-
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-        }
 
         LOGGER.info("--------- Get Testbed id: " + (System.currentTimeMillis() - start1));
         start1 = System.currentTimeMillis();
