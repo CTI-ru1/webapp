@@ -1,8 +1,6 @@
 package eu.uberdust.rest.controller.html.virtualnode;
 
 import eu.uberdust.caching.Loggable;
-import eu.uberdust.command.NodeCommand;
-import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeController;
@@ -10,12 +8,13 @@ import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.validation.BindException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +23,14 @@ import java.util.Map;
 /**
  * Controller class that returns a list of links for a given testbed in HTML format.
  */
-public final class ListController extends AbstractRestController {
+@Controller
+@RequestMapping("/testbed/{testbedId}/virtualnode")
+public final class VirtualNodeViewController {
+
+    /**
+     * Logger persistence manager.
+     */
+    private static final Logger LOGGER = Logger.getLogger(VirtualNodeViewController.class);
 
     /**
      * Testbed persistence manager.
@@ -36,26 +42,13 @@ public final class ListController extends AbstractRestController {
      */
     private transient NodeController nodeManager;
 
-    /**
-     * Logger persistence manager.
-     */
-    private static final Logger LOGGER = Logger.getLogger(ListController.class);
-
-    /**
-     * Constructor.
-     */
-    public ListController() {
-        super();
-
-        // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
-    }
 
     /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
      */
+    @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
@@ -65,6 +58,7 @@ public final class ListController extends AbstractRestController {
      *
      * @param nodeManager node persistence manager.
      */
+    @Autowired
     public void setNodeManager(final NodeController nodeManager) {
         this.nodeManager = nodeManager;
     }
@@ -72,10 +66,6 @@ public final class ListController extends AbstractRestController {
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param req        http servlet req.
-     * @param response   http servlet response.
-     * @param commandObj command object.
-     * @param errors     BindException exception.
      * @return response http servlet response.
      * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
      *          an InvalidTestbedIdException exception.
@@ -83,26 +73,13 @@ public final class ListController extends AbstractRestController {
      *          an TestbedNotFoundException exception.
      */
     @Loggable
-    protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors)
+    @RequestMapping(method = RequestMethod.GET)
+    protected ModelAndView listVirtualNodes(@PathVariable("testbedId") int testbedId)
             throws TestbedNotFoundException, InvalidTestbedIdException {
-
-        HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 
         final long start = System.currentTimeMillis();
 
-        // get command object
-        final NodeCommand command = (NodeCommand) commandObj;
-
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
-
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-        }
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
+        final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
