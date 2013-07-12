@@ -2,7 +2,6 @@ package eu.uberdust.rest.controller.html.testbed;
 
 import eu.uberdust.caching.Cachable;
 import eu.uberdust.caching.Loggable;
-import eu.uberdust.formatter.HtmlFormatter;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
@@ -10,12 +9,12 @@ import eu.wisebed.wisedb.model.Origin;
 import eu.wisebed.wisedb.model.Position;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.validation.BindException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,38 +23,33 @@ import java.util.Map;
 /**
  * Controller class that returns a list of testbed in HTML format.
  */
-public final class ListController extends AbstractRestController {
+@Controller
+@RequestMapping(value={"/","/testbed"})
+public final class ListTestbedsController {
 
     /**
      * Testbed persistence manager.
      */
+
     private transient TestbedController testbedManager;
     private transient NodeController nodeManager;
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListController.class);
-
-    /**
-     * Constructor.
-     */
-    public ListController() {
-        super();
-
-        // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
-    }
+    private static final Logger LOGGER = Logger.getLogger(ListTestbedsController.class);
 
     /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
      */
+    @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
 
+    @Autowired
     public void setNodeManager(final NodeController nodeManager) {
         this.nodeManager = nodeManager;
     }
@@ -63,18 +57,13 @@ public final class ListController extends AbstractRestController {
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param req        http servlet req.
-     * @param response   http servlet response.
-     * @param commandObj command object.
-     * @param errors     BindException exception.
      * @return response http servlet response.
      */
     @Loggable
-    protected ModelAndView handle(final HttpServletRequest req, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors) {
+    @RequestMapping(method = RequestMethod.GET)
+    public ModelAndView listTestbeds() {
         try {
 
-            HtmlFormatter.getInstance().setBaseUrl(req.getRequestURL().substring(0, req.getRequestURL().indexOf("/rest")));
 
             final long start = System.currentTimeMillis();
 
