@@ -1,16 +1,15 @@
 package eu.uberdust.rest.controller.json;
 
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.formatter.JsonFormatter;
+import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.LinkController;
-import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
+import eu.wisebed.wisedb.model.Link;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,18 +20,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
- * Controller class that returns the a web page for a testbed.
+ * Controller class that returns a list of links for a given testbed in JSON format.
  */
 @Controller
-@RequestMapping("/testbed/{testbedId}/json")
-public final class ShowTestbedController {
+@RequestMapping("/testbed/{testbedId}/link/json")
+public final class ListLinksJsonViewController {
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ShowTestbedController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListLinksJsonViewController.class);
 
     /**
      * Testbed persistence manager.
@@ -40,18 +40,9 @@ public final class ShowTestbedController {
     private transient TestbedController testbedManager;
 
     /**
-     * Capability persistence manager.
-     */
-    private transient CapabilityController capabilityManager;
-
-    /**
      * Link persistence manager.
      */
     private transient LinkController linkManager;
-    /**
-     * Node persistence manager.
-     */
-    private transient NodeController nodeManager;
 
     /**
      * Sets testbed persistence manager.
@@ -61,16 +52,6 @@ public final class ShowTestbedController {
     @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
-    }
-
-    /**
-     * Sets capability persistence manager.
-     *
-     * @param capabilityManager capability persistence manager.
-     */
-    @Autowired
-    public void setCapabilityManager(final CapabilityController capabilityManager) {
-        this.capabilityManager = capabilityManager;
     }
 
     /**
@@ -84,30 +65,17 @@ public final class ShowTestbedController {
     }
 
     /**
-     * Sets node persistence manager.
+     * Handle Request and return the appropriate response.
      *
-     * @param nodeManager node persistence manager.
-     */
-    @Autowired
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
-
-    /**
-     * Handle req and return the appropriate response.
-     *
-     * @return http servlet response
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          a TestbedNotFoundException exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          a InvalidTestbedException exception.
+     * @return response http servlet response.
+     * @throws InvalidTestbedIdException an {@link InvalidTestbedIdException} exception.
+     * @throws TestbedNotFoundException  an {@link TestbedNotFoundException} exception.
+     * @throws java.io.IOException       IO Exception.
      */
     @Loggable
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId)
-            throws TestbedNotFoundException, InvalidTestbedIdException, JSONException, IOException {
-        final long start = System.currentTimeMillis();
-
+    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId)
+            throws InvalidTestbedIdException, TestbedNotFoundException, IOException, NotImplementedException {
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
@@ -115,16 +83,11 @@ public final class ShowTestbedController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        JSONObject jobj = new JSONObject();
-        jobj.put("testbedID", testbed.getId());
-        jobj.put("testbedName", testbed.getName());
-        jobj.put("urnPrefix", testbed.getUrnPrefix());
-        jobj.put("urnCapabilityPrefix", testbed.getUrnCapabilityPrefix());
+        final List<Link> links = linkManager.list(testbed.getSetup());
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(jobj.toString(), responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<String>(JsonFormatter.getInstance().formatLinks(links), responseHeaders, HttpStatus.OK);
+
     }
-
-
 }

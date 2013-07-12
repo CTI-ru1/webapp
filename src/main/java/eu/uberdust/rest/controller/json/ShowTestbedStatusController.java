@@ -1,7 +1,6 @@
 package eu.uberdust.rest.controller.json;
 
 import eu.uberdust.caching.Loggable;
-import eu.uberdust.command.TestbedCommand;
 import eu.uberdust.formatter.JsonFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
@@ -12,20 +11,28 @@ import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.NodeCapability;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 
 /**
  * Controller class that returns the status page for the nodes and links of a testbed.
  */
-public final class ShowTestbedStatusController extends AbstractRestController {
+@Controller
+@RequestMapping("/testbed/{testbedId}/status/json")
+public final class ShowTestbedStatusController {
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(ShowTestbedStatusController.class);
 
     /**
      * Testbed persistence manager.
@@ -43,33 +50,27 @@ public final class ShowTestbedStatusController extends AbstractRestController {
     private transient LinkCapabilityController linkCapabilityManager;
 
     /**
-     * Logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(ShowTestbedStatusController.class);
-
-    /**
-     * Constructor.
-     */
-    public ShowTestbedStatusController() {
-        super();
-
-        // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
-    }
-
-    /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
      */
+    @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
 
+    /**
+     * @param nodeCapabilityManager
+     */
+    @Autowired
     public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
+    /**
+     * @param linkCapabilityManager
+     */
+    @Autowired
     public void setLinkCapabilityManager(final LinkCapabilityController linkCapabilityManager) {
         this.linkCapabilityManager = linkCapabilityManager;
     }
@@ -77,10 +78,6 @@ public final class ShowTestbedStatusController extends AbstractRestController {
     /**
      * Handle request and return the appropriate response.
      *
-     * @param request    http servlet request.
-     * @param response   http servlet response.
-     * @param commandObj command object.
-     * @param errors     a BindException exception.
      * @return http servlet response.
      * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
      *          a InvalidTestbedIDException exception.
@@ -88,25 +85,14 @@ public final class ShowTestbedStatusController extends AbstractRestController {
      *          a TestbedNotFoundException exception.
      */
     @Loggable
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors)
-            throws InvalidTestbedIdException, TestbedNotFoundException {
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId)
+            throws InvalidTestbedIdException, TestbedNotFoundException, NotImplementedException {
 
         final long start = System.currentTimeMillis();
 
-        // set command object
-        final TestbedCommand command = (TestbedCommand) commandObj;
-
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-        }
-
         // look up testbed
-        final Testbed testbed = testbedManager.getByID(Integer.parseInt(command.getTestbedId()));
+        final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
             // if no testbed is found throw exception
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
@@ -120,28 +106,9 @@ public final class ShowTestbedStatusController extends AbstractRestController {
         // get a list of node last readings from testbed
         final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
 
-        // write on the HTTP response
-        response.setContentType("text/json");
-
-        final Writer textOutput;
-        try {
-            textOutput = (response.getWriter());
-
-            try {
-                final String responseStr = JsonFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
-                textOutput.append(responseStr);
-
-            } catch (NotImplementedException e) {
-                textOutput.append("not implemented exception");
-            }
-
-            textOutput.flush();
-            textOutput.close();
-        } catch (IOException e) {
-            LOGGER.error(e);
-        }
-
-        return null;
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(JsonFormatter.getInstance().formatLastNodeReadings(nodeCapabilities), responseHeaders, HttpStatus.OK);
 
     }
 }

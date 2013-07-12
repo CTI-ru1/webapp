@@ -3,25 +3,31 @@ package eu.uberdust.rest.controller.json;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.JsonFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
-import eu.uberdust.rest.controller.html.testbed.ListController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Controller class that returns a list of testbed in JSON format.
  */
-public final class ListTestbedController extends AbstractRestController {
+@Controller
+@RequestMapping("/testbed/json")
+public final class ListTestbedController {
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(ListTestbedController.class);
 
     /**
      * Testbed persistence manager.
@@ -29,25 +35,11 @@ public final class ListTestbedController extends AbstractRestController {
     private transient TestbedController testbedManager;
 
     /**
-     * Logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(ListController.class);
-
-    /**
-     * Constructor.
-     */
-    public ListTestbedController() {
-        super();
-
-        // Make sure to set which method this controller will support.
-        this.setSupportedMethods(new String[]{METHOD_GET});
-    }
-
-    /**
      * Sets testbed persistence manager.
      *
      * @param testbedManager testbed persistence manager.
      */
+    @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
@@ -55,32 +47,19 @@ public final class ListTestbedController extends AbstractRestController {
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param request    http servlet request.
-     * @param response   http servlet response.
-     * @param commandObj command object.
-     * @param errors     BindException exception.
      * @return response http servlet response.
      */
     @Loggable
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors) throws IOException {
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<String> handle() throws NotImplementedException {
 
         // testbed list
         final List<Testbed> testbeds = testbedManager.list();
         final Map<String, Long> nodesCount = testbedManager.countNodes();
         final Map<String, Long> linksCount = testbedManager.countLinks();
 
-        // write on the HTTP response
-        response.setContentType("text/json");
-        final Writer textOutput = (response.getWriter());
-        try {
-            textOutput.append(JsonFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount));
-        } catch (NotImplementedException e) {
-            textOutput.append("not implemented exception");
-        }
-        textOutput.flush();
-        textOutput.close();
-
-        return null;
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "application/json; charset=utf-8");
+        return new ResponseEntity<String>(JsonFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount), responseHeaders, HttpStatus.OK);
     }
 }

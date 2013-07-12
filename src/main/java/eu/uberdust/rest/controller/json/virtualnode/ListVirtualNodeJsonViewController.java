@@ -1,4 +1,4 @@
-package eu.uberdust.rest.controller.json.node;
+package eu.uberdust.rest.controller.json.virtualnode;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.JsonFormatter;
@@ -27,13 +27,13 @@ import java.util.List;
  * Controller class that returns a list of links for a given testbed in JSON format.
  */
 @Controller
-@RequestMapping("/testbed/{testbedId}/node/json")
-public final class ListController {
+@RequestMapping("/testbed/{testbedId}/virtualnode/json")
+public final class ListVirtualNodeJsonViewController {
 
     /**
      * Logger persistence manager.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListVirtualNodeJsonViewController.class);
 
     /**
      * Testbed persistence manager.
@@ -44,7 +44,6 @@ public final class ListController {
      * Node persistence manager.
      */
     private transient NodeController nodeManager;
-
 
     /**
      * Sets testbed persistence manager.
@@ -70,9 +69,11 @@ public final class ListController {
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.
-     * @throws InvalidTestbedIdException an {@link InvalidTestbedIdException} exception.
-     * @throws TestbedNotFoundException  an {@link TestbedNotFoundException} exception.
-     * @throws IOException               IO exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                             an {@link eu.uberdust.rest.exception.InvalidTestbedIdException} exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                             an {@link eu.uberdust.rest.exception.TestbedNotFoundException} exception.
+     * @throws java.io.IOException IO exception.
      */
     @Loggable
     @RequestMapping(method = RequestMethod.GET)
@@ -88,7 +89,7 @@ public final class ListController {
         // get testbed's nodes
         final List<Node> nodes = new ArrayList<Node>();
         for (Node node : nodeManager.list(testbed.getSetup())) {
-            if (!node.getName().contains(":virtual:")) {
+            if (node.getName().contains(":virtual:")) {
                 nodes.add(node);
             }
         }
