@@ -93,7 +93,7 @@ public final class NodeCapabilityWiseMlController {
      */
     // TODO make this controller
     @RequestMapping("/testbed/{testbedId}/wiseml")
-    protected ModelAndView showTestbedWiseML(@PathVariable("testbedId") int testbedId) throws NotImplementedException {
+    public ModelAndView showTestbedWiseML(@PathVariable("testbedId") int testbedId) throws NotImplementedException {
         LOGGER.info("showTestbedWiseMLController(...)");
         throw new NotImplementedException();
     }
@@ -112,7 +112,7 @@ public final class NodeCapabilityWiseMlController {
      */
     @Loggable
     @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/wiseml/limit/{limit}")
-    protected ModelAndView showNodeKML(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
+    public ModelAndView showNodeKML(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
             TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, InvalidLimitException, NotImplementedException {
 

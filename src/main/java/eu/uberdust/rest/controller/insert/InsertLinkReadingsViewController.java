@@ -71,7 +71,7 @@ public final class InsertLinkReadingsViewController {
      */
     @Loggable
     @RequestMapping("/reading/{readingDOUBLE}")
-    protected ResponseEntity<String> insertDoubleReading(@PathVariable("testbedId") int testbedId, @PathVariable("sourceName") String sourceName, @PathVariable("targetName") String targetName, @PathVariable("capabilityName") String capabilityName, @PathVariable("timestampLONG") long timestampLONG, @PathVariable("readingSTR") String readingSTR)
+    public ResponseEntity<String> insertDoubleReading(@PathVariable("testbedId") int testbedId, @PathVariable("sourceName") String sourceName, @PathVariable("targetName") String targetName, @PathVariable("capabilityName") String capabilityName, @PathVariable("timestampLONG") long timestampLONG, @PathVariable("readingSTR") String readingSTR)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
 
         // parse reading and timestamp

@@ -110,7 +110,7 @@ public final class NodeCapabilityRdfController {
      */
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET)
-    protected ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("rdfEncoding") String rdfEncoding, @PathVariable("limit") int limit)
+    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("rdfEncoding") String rdfEncoding, @PathVariable("limit") int limit)
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
 

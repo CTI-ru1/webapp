@@ -74,7 +74,7 @@ public final class VirtualNodeViewController {
      */
     @Loggable
     @RequestMapping(method = RequestMethod.GET)
-    protected ModelAndView listVirtualNodes(@PathVariable("testbedId") int testbedId)
+    public ModelAndView listVirtualNodes(@PathVariable("testbedId") int testbedId)
             throws TestbedNotFoundException, InvalidTestbedIdException {
 
         final long start = System.currentTimeMillis();

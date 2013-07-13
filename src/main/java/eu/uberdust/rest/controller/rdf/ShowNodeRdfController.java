@@ -82,7 +82,7 @@ public final class ShowNodeRdfController {
      */
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET)
-    protected ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("rdfEncoding") String rdfEncoding)
+    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("rdfEncoding") String rdfEncoding)
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
 

@@ -73,7 +73,7 @@ public final class InsertNodeReadingsViewController {
      */
     @Loggable
     @RequestMapping(value = "/reading/{readingSTR}", method = RequestMethod.GET)
-    protected ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("timestampLONG") long timestampLONG, @PathVariable("readingSTR") String readingSTR)
+    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("timestampLONG") long timestampLONG, @PathVariable("readingSTR") String readingSTR)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);

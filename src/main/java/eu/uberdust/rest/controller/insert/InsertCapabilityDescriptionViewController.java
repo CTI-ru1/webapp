@@ -69,7 +69,7 @@ public final class InsertCapabilityDescriptionViewController {
      */
     @Loggable
     @RequestMapping("/reading/{readingDOUBLE}")
-    protected ResponseEntity<String> insertDoubleReading(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, @PathVariable("description") String description) throws TestbedNotFoundException, IOException {
+    public ResponseEntity<String> insertDoubleReading(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, @PathVariable("description") String description) throws TestbedNotFoundException, IOException {
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);

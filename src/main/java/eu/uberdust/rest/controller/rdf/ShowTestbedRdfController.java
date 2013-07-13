@@ -61,7 +61,7 @@ public final class ShowTestbedRdfController {
     @SuppressWarnings("unchecked")
     @Loggable
     @RequestMapping(method = RequestMethod.GET)
-    protected ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("rdfEncoding") String rdfEncoding)
+    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("rdfEncoding") String rdfEncoding)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException {
 
         // look up testbed

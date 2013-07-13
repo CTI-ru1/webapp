@@ -25,7 +25,7 @@ public final class ShowNodeKmlController {
      */
     // TODO make this controller
     @RequestMapping("/testbed/{testbedId}/kml")
-    protected ModelAndView showTestbedKML(@PathVariable("testbedId") int testbedId) throws NotImplementedException {
+    public ModelAndView showTestbedKML(@PathVariable("testbedId") int testbedId) throws NotImplementedException {
         LOGGER.info("showTestbedKmlController(...)");
         throw new NotImplementedException();
     }
@@ -37,7 +37,7 @@ public final class ShowNodeKmlController {
      */
     // TODO make this controller
     @RequestMapping("/testbed/{testbedId}/node/{nodeName}/kml")
-    protected ModelAndView showNodeKML(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName) throws NotImplementedException {
+    public ModelAndView showNodeKML(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName) throws NotImplementedException {
         LOGGER.info("showNodeKmlController(...)");
         throw new NotImplementedException();
     }
