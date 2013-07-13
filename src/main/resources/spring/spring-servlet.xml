@@ -2,7 +2,6 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans
@@ -22,7 +21,7 @@
 
     <!-- Set the message source -->
     <bean id="messageSource" class=
-        "org.springframework.context.support.ResourceBundleMessageSource">
+            "org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basenames">
             <list>
                 <value>bundles/version</value>
@@ -33,28 +32,6 @@
     </bean>
 
     <context:component-scan base-package="eu.uberdust.rest.controller"/>
+    <context:component-scan base-package="eu.uberdust.websockets"/>
 
-    <!--&lt;!&ndash; WebSocket Servlet Mappings &ndash;&gt;-->
-    <!--<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">-->
-        <!--<property name="mappings">-->
-            <!--<props>-->
-                <!--<prop key="/readings.ws">insertReadingWebSocketController</prop>-->
-                <!--<prop key="/testbedcontroller.ws">sendCommandWebSocketController</prop>-->
-            <!--</props>-->
-        <!--</property>-->
-    <!--</bean>-->
-
-    <!--&lt;!&ndash; Insert Reading Controller WebSocket &ndash;&gt;-->
-    <!--<bean name="insertReadingWebSocketController" class="eu.uberdust.websockets.readings.ReadingsWebSocket">-->
-        <!--<property name="insertReadingWSListener">-->
-            <!--<bean class="eu.uberdust.websockets.readings.InsertReadingWSListener" factory-method="getInstance">-->
-                <!--<property name="nodeReadingManager" ref="nodeReadingManager"/>-->
-                <!--<property name="linkReadingManager" ref="linkReadingManager"/>-->
-            <!--</bean>-->
-        <!--</property>-->
-    <!--</bean>-->
-
-    <!--&lt;!&ndash; Insert Reading Controller WebSocket &ndash;&gt;-->
-    <!--<bean name="sendCommandWebSocketController" class="eu.uberdust.websockets.commands.CommandPublisherWebSocket">-->
-    <!--</bean>-->
 </beans>
