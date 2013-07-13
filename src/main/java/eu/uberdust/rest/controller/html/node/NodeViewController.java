@@ -86,7 +86,7 @@ public final class NodeViewController {
      * @throws NodeNotFoundException     NodeNotFoundException exception.
      */
     @Loggable
-    @RequestMapping(value = "{nodeName}/", method = RequestMethod.GET)
+    @RequestMapping(value = "/{nodeName}", method = RequestMethod.GET)
     public ModelAndView getNode(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName) throws TestbedNotFoundException, NodeNotFoundException {
 
         final long start = System.currentTimeMillis();
