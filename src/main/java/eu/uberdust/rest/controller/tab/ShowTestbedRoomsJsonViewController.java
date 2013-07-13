@@ -34,12 +34,12 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}")
-public final class ShowTestbedRoomsController {
+public final class ShowTestbedRoomsJsonViewController {
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ShowTestbedRoomsController.class);
+    private static final Logger LOGGER = Logger.getLogger(ShowTestbedRoomsJsonViewController.class);
 
     /**
      * Testbed persistence manager.
