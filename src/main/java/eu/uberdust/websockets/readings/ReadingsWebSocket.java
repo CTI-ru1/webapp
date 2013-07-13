@@ -9,6 +9,8 @@ import eu.wisebed.wisedb.listeners.LastNodeReadingConsumer;
 import eu.wisebed.wisedb.model.Link;
 import eu.wisebed.wisedb.model.LinkCapability;
 import org.apache.log4j.Logger;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
@@ -30,7 +32,9 @@ import java.util.Map;
  * Time: 1:07 AM
  * To change this template use File | Settings | File Templates.
  */
-public class ReadingsWebSocket extends GenericServlet implements Controller {
+@org.springframework.stereotype.Controller
+@RequestMapping("/readings.ws")
+public class ReadingsWebSocket extends GenericServlet {
 
     /**
      * Static Logger.
@@ -78,6 +82,7 @@ public class ReadingsWebSocket extends GenericServlet implements Controller {
      * @throws javax.servlet.ServletException ServletException exception.
      * @throws java.io.IOException            IOException exception.
      */
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(final HttpServletRequest servletRequest,
                                       final HttpServletResponse servletResponse) throws ServletException, IOException {
 

@@ -4,6 +4,8 @@ import com.caucho.websocket.WebSocketServletRequest;
 import eu.uberdust.communication.websocket.WSIdentifiers;
 import eu.uberdust.util.CommandDispatcher;
 import org.apache.log4j.Logger;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
@@ -18,9 +20,11 @@ import java.io.IOException;
 /**
  * Validates the initial HTTP request and  dispatches a new WebSocket connection.
  */
+
+@org.springframework.stereotype.Controller
+@RequestMapping("/testbedcontroller.ws")
 public class CommandPublisherWebSocket
-        extends GenericServlet
-        implements Controller {
+        extends GenericServlet {
 
     /**
      * Static Logger.
@@ -44,7 +48,7 @@ public class CommandPublisherWebSocket
      * @throws javax.servlet.ServletException
      * @throws java.io.IOException
      */
-    @Override
+    @RequestMapping(method = RequestMethod.GET)
     public final ModelAndView handleRequest(final HttpServletRequest servletRequest, final HttpServletResponse servletResponse) throws Exception {
 
         servletRequest.getSession().setMaxInactiveInterval(Integer.MAX_VALUE);
