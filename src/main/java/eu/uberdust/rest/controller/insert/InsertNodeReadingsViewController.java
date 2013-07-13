@@ -1,4 +1,4 @@
-package eu.uberdust.rest.controller.insert.node;
+package eu.uberdust.rest.controller.insert;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
