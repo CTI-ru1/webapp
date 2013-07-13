@@ -1,7 +1,6 @@
-package eu.uberdust.rest.controller.insert.capability;
+package eu.uberdust.rest.controller.insert;
 
 import eu.uberdust.caching.Loggable;
-import eu.uberdust.command.CapabilityCommand;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
@@ -9,29 +8,32 @@ import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractRestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
 
 /**
  * Controller class for inserting description of a node.
  */
-public final class CapabilityInsertDescriptionController extends AbstractRestController {
+@Controller
+@RequestMapping("/testbed/{testbedId}/capability/{capabilityName}/insert/description/{description}/")
+public final class InsertCapabilityDescriptionViewController {
+
+    /**
+     * Logger persistence manager.
+     */
+    private static final Logger LOGGER = Logger.getLogger(InsertCapabilityDescriptionViewController.class);
 
     /**
      * Testbed persistence manager.
      */
     private transient TestbedController testbedManager;
-
-    /**
-     * Logger persistence manager.
-     */
-    private static final Logger LOGGER = Logger.getLogger(CapabilityInsertDescriptionController.class);
     /**
      * Capability persistence manager.
      */
@@ -42,6 +44,7 @@ public final class CapabilityInsertDescriptionController extends AbstractRestCon
      *
      * @param testbedManager testbed persistence manager.
      */
+    @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
@@ -51,6 +54,7 @@ public final class CapabilityInsertDescriptionController extends AbstractRestCon
      *
      * @param capabilityManager capability persistence manager.
      */
+    @Autowired
     public void setCapabilityManager(final CapabilityController capabilityManager) {
         this.capabilityManager = capabilityManager;
     }
@@ -58,31 +62,14 @@ public final class CapabilityInsertDescriptionController extends AbstractRestCon
     /**
      * Handle Request and return the appropriate response.
      *
-     * @param request    http servlet request.
-     * @param response   http servlet response.
-     * @param commandObj command object.
-     * @param errors     BindException exception.
      * @return response http servlet response.
      * @throws InvalidTestbedIdException an invalid testbed id exception.
      * @throws TestbedNotFoundException  testbed not found exception.
      * @throws java.io.IOException       IO exception.
      */
-    @Override
     @Loggable
-    protected ModelAndView handle(final HttpServletRequest request, final HttpServletResponse response,
-                                  final Object commandObj, final BindException errors) throws InvalidTestbedIdException,
-            TestbedNotFoundException, IOException {
-
-        // set commandNode object
-        final CapabilityCommand command = (CapabilityCommand) commandObj;
-
-        // a specific testbed is requested by testbed Id
-        int testbedId;
-        try {
-            testbedId = Integer.parseInt(command.getTestbedId());
-        } catch (NumberFormatException nfe) {
-            throw new InvalidTestbedIdException("Testbed IDs have number format.", nfe);
-        }
+    @RequestMapping("/reading/{readingDOUBLE}")
+    protected ResponseEntity<String> insertDoubleReading(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, @PathVariable("description") String description) throws TestbedNotFoundException, IOException {
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -91,8 +78,7 @@ public final class CapabilityInsertDescriptionController extends AbstractRestCon
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        // look up node
-        final String capabilityName = command.getCapabilityName();
+        // look up capability
         Capability capability = capabilityManager.getByID(capabilityName);
         if (capability == null) {
             // if capability not found create one and store it
@@ -101,18 +87,15 @@ public final class CapabilityInsertDescriptionController extends AbstractRestCon
         }
 
         // update description
-        final String description = command.getDescription();
         capability.setDescription(description);
         capabilityManager.add(capability);
 
         // make response
-        response.setContentType("text/plain");
-        final Writer textOutput = (response.getWriter());
-        textOutput.write("Desciption \"" + description + "\" inserted for Capability(" + command.getCapabilityName()
-                + ")" + ") Testbed(" + testbed.getId() + "). OK");
-        textOutput.flush();
-        textOutput.close();
-
-        return null;
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        return new ResponseEntity<String>(
+                "Desciption \"" + description + "\" inserted for Capability(" + capabilityName
+                        + ")" + ") Testbed(" + testbedId + "). OK"
+                , responseHeaders, HttpStatus.OK);
     }
 }
