@@ -8,10 +8,10 @@ import eu.wisebed.wisedb.model.Link;
 import eu.wisebed.wisedb.model.LinkCapability;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
@@ -31,7 +31,7 @@ import java.util.Map;
  * Time: 1:07 AM
  * To change this template use File | Settings | File Templates.
  */
-@org.springframework.stereotype.Controller
+@Controller
 @RequestMapping("/readings.ws")
 public class ReadingsWebSocket {
 
@@ -108,9 +108,9 @@ public class ReadingsWebSocket {
      * @throws javax.servlet.ServletException ServletException exception.
      * @throws java.io.IOException            IOException exception.
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView handleRequest(final HttpServletRequest servletRequest,
-                                      final HttpServletResponse servletResponse) throws ServletException, IOException {
+    @RequestMapping()
+    public void handleRequest(final HttpServletRequest servletRequest,
+                              final HttpServletResponse servletResponse) throws ServletException, IOException {
 
         servletRequest.getSession().setMaxInactiveInterval(Integer.MAX_VALUE);
 
@@ -120,7 +120,7 @@ public class ReadingsWebSocket {
 
         if (protocol == null) {
             servletResponse.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
-            return null;
+            return;
         }
 
 
@@ -146,7 +146,7 @@ public class ReadingsWebSocket {
             final WebSocketServletRequest wsRequest = (WebSocketServletRequest) servletRequest;
             wsRequest.startWebSocket(insertReadingWSListener);
 
-            return null;
+            return;
         }
 
         if (protocol.startsWith(WSIdentifiers.SUBSCRIBE_PROTOCOL_PREFIX)) {
@@ -193,11 +193,11 @@ public class ReadingsWebSocket {
             final WebSocketServletRequest wsRequest = (WebSocketServletRequest) servletRequest;
             wsRequest.startWebSocket(lastReadingWSListener);
 
-            return null;
+            return;
         }
         LOGGER.debug("HttpServletResponse.SC_NOT_ACCEPTABLE");
         servletResponse.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
-        return null;
+        return;
     }
 
 

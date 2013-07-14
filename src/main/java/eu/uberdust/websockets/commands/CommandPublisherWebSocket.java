@@ -4,10 +4,11 @@ import com.caucho.websocket.WebSocketServletRequest;
 import eu.uberdust.communication.websocket.WSIdentifiers;
 import eu.uberdust.util.CommandDispatcher;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
+
 
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletException;
@@ -21,7 +22,7 @@ import java.io.IOException;
  * Validates the initial HTTP request and  dispatches a new WebSocket connection.
  */
 
-@org.springframework.stereotype.Controller
+@Controller
 @RequestMapping("/testbedcontroller.ws")
 public class CommandPublisherWebSocket {
 
@@ -47,8 +48,8 @@ public class CommandPublisherWebSocket {
      * @throws javax.servlet.ServletException
      * @throws java.io.IOException
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public final ModelAndView handleRequest(final HttpServletRequest servletRequest, final HttpServletResponse servletResponse) throws Exception {
+    @RequestMapping()
+    public final void handleRequest(final HttpServletRequest servletRequest, final HttpServletResponse servletResponse) throws Exception {
 
         servletRequest.getSession().setMaxInactiveInterval(Integer.MAX_VALUE);
         /*
@@ -77,7 +78,6 @@ public class CommandPublisherWebSocket {
             final WebSocketServletRequest wsRequest = (WebSocketServletRequest) servletRequest;
             wsRequest.startWebSocket(thisListener);
         }
-        return null;
     }
 
     private String decode(final String header) {
