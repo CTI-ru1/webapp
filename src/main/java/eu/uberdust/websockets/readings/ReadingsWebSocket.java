@@ -2,13 +2,12 @@ package eu.uberdust.websockets.readings;
 
 import com.caucho.websocket.WebSocketServletRequest;
 import eu.uberdust.communication.websocket.WSIdentifiers;
-import eu.wisebed.wisedb.controller.LinkCapabilityControllerImpl;
-import eu.wisebed.wisedb.controller.LinkControllerImpl;
-import eu.wisebed.wisedb.controller.NodeControllerImpl;
+import eu.wisebed.wisedb.controller.*;
 import eu.wisebed.wisedb.listeners.LastNodeReadingConsumer;
 import eu.wisebed.wisedb.model.Link;
 import eu.wisebed.wisedb.model.LinkCapability;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -45,6 +44,33 @@ public class ReadingsWebSocket {
      * Serial Version Unique ID.
      */
     private static final long serialVersionUID = -279704326229266519L;
+
+    /**
+     * Link persistence manager.
+     */
+    private transient NodeController nodeManager;
+    private transient LinkController linkManager;
+    private transient LinkCapabilityController linkCapabilityManager;
+
+    @Autowired
+    public void setNodeManager(final NodeController nodeManager) {
+        this.nodeManager = nodeManager;
+    }
+
+    /**
+     * Sets link persistence manager.
+     *
+     * @param linkManager link persistence manager.
+     */
+    @Autowired
+    public void setLinkManager(final LinkController linkManager) {
+        this.linkManager = linkManager;
+    }
+
+    @Autowired
+    public void setLinkCapabilityManager(final LinkCapabilityController linkCapabilityManager) {
+        this.linkCapabilityManager = linkCapabilityManager;
+    }
 
     /**
      * Insert Reading Web Socket Listener.
@@ -147,10 +173,10 @@ public class ReadingsWebSocket {
 
 //                if (protocol.split(WSIdentifiers.DELIMITER)[1].contains("virtual")) {
                 //Get all links as nodes may be connected programmatically
-                List<Link> links = LinkControllerImpl.getInstance().getBySource(NodeControllerImpl.getInstance().getByName(nodeName));
+                List<Link> links = linkManager.getBySource(nodeManager.getByName(nodeName));
                 for (Link link : links) {
                     LOGGER.info(link);
-                    LinkCapability vcap = LinkCapabilityControllerImpl.getInstance().getByID(link, "virtual");
+                    LinkCapability vcap = linkCapabilityManager.getByID(link, "virtual");
                     if (vcap != null && vcap.getLastLinkReading().getReading() == 1.0) {
                         LOGGER.info("registerListenerAlso@" + link.getTarget().getName());
                         LastNodeReadingConsumer.getInstance().registerListener(
