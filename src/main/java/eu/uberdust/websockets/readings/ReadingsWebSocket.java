@@ -34,7 +34,7 @@ import java.util.Map;
  */
 @org.springframework.stereotype.Controller
 @RequestMapping("/readings.ws")
-public class ReadingsWebSocket extends GenericServlet {
+public class ReadingsWebSocket {
 
     /**
      * Static Logger.
@@ -175,15 +175,15 @@ public class ReadingsWebSocket extends GenericServlet {
     }
 
 
-    @Override
-    public final void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws
-            ServletException, IOException {
-        LOGGER.debug("service");
-        try {
-            handleRequest((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
-        } catch (Exception ex) {
-            LOGGER.fatal(ex);
-            ex.printStackTrace();
-        }
-    }
+//    @Override
+//    public final void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws
+//            ServletException, IOException {
+//        LOGGER.debug("service");
+//        try {
+//            handleRequest((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
+//        } catch (Exception ex) {
+//            LOGGER.fatal(ex);
+//            ex.printStackTrace();
+//        }
+//    }
 }

@@ -23,8 +23,7 @@ import java.io.IOException;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/testbedcontroller.ws")
-public class CommandPublisherWebSocket
-        extends GenericServlet {
+public class CommandPublisherWebSocket {
 
     /**
      * Static Logger.
@@ -96,15 +95,15 @@ public class CommandPublisherWebSocket
         }
     }
 
-    @Override
-    public final void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws ServletException, IOException {
-        LOGGER.debug("service");
-        try {
-            handleRequest((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
-        } catch (Exception ex) {
-            LOGGER.fatal(ex);
-            ex.printStackTrace();
-        }
-    }
+//    @Override
+//    public final void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws ServletException, IOException {
+//        LOGGER.debug("service");
+//        try {
+//            handleRequest((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);
+//        } catch (Exception ex) {
+//            LOGGER.fatal(ex);
+//            ex.printStackTrace();
+//        }
+//    }
 }
 
