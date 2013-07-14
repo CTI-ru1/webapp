@@ -100,7 +100,8 @@
                                 <c:when test="${fn:startsWith(lnr.capability.name , 'urn')}">
                         <tr>
                             <td>
-                                    ${lnr.capability.name}
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${lnr.capability.name}"/>"><c:out
+                                    value="${lnr.capability.name}"/></a>
                             <td>
                                     ${lnr.lastNodeReading.timestamp}
                             <td>
