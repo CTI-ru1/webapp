@@ -201,4 +201,7 @@
     <bean id="lastNodeReadingConsumer" class="eu.wisebed.wisedb.listeners.LastNodeReadingConsumer"
           factory-method="getInstance"/>
 
+    <bean id="InsertReadingWSListener" class="eu.uberdust.websockets.readings.InsertReadingWSListener"
+          factory-method="getInstance"/>
+
 </beans>

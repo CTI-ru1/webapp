@@ -1,12 +1,20 @@
 package eu.uberdust.websockets.commands;
 
+import com.caucho.server.http.HttpResponse;
+import com.caucho.server.http.HttpServletResponseImpl;
 import com.caucho.websocket.WebSocketServletRequest;
 import eu.uberdust.communication.websocket.WSIdentifiers;
+import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.util.CommandDispatcher;
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -43,8 +51,7 @@ public class CommandPublisherWebSocket {
     /**
      * Services the request.
      *
-     * @param servletRequest  the servletRequest
-     * @param servletResponse the servletResponse
+     * @param servletRequest the servletRequest
      * @throws javax.servlet.ServletException
      * @throws java.io.IOException
      */
@@ -63,7 +70,7 @@ public class CommandPublisherWebSocket {
 
         if (protocol == null) {
             servletResponse.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
-            return null;
+            return;
         }
 
         final CommandWSListener thisListener;
@@ -96,7 +103,7 @@ public class CommandPublisherWebSocket {
     }
 
 //    @Override
-//    public final void service(final ServletRequest servletRequest, final ServletResponse servletResponse) throws ServletException, IOException {
+//    public final void service(@RequestBody final ServletRequest servletRequest, final ServletResponse servletResponse) throws ServletException, IOException {
 //        LOGGER.debug("service");
 //        try {
 //            handleRequest((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);

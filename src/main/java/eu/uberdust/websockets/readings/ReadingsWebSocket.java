@@ -86,6 +86,7 @@ public class ReadingsWebSocket {
      *
      * @param insertReadingWSListener reading web socket listener.
      */
+    @Autowired
     public void setInsertReadingWSListener(final InsertReadingWSListener insertReadingWSListener) {
         this.insertReadingWSListener = insertReadingWSListener;
     }

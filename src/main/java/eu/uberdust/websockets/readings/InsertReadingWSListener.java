@@ -7,6 +7,8 @@ import eu.wisebed.wisedb.controller.LinkReadingController;
 import eu.wisebed.wisedb.controller.NodeReadingController;
 import eu.wisebed.wisedb.exception.UnknownTestbedException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +18,7 @@ import java.util.Date;
 /**
  * Insert Reading Web Socket Listener.
  */
+@Controller
 public final class InsertReadingWSListener extends AbstractWebSocketListener {
 
     /**
@@ -66,7 +69,9 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
      *
      * @param nodeReadingManager node reading persistence manager.
      */
+    @Autowired
     public void setNodeReadingManager(final NodeReadingController nodeReadingManager) {
+        System.out.println("SET setNodeReadingManager");
         this.nodeReadingManager = nodeReadingManager;
     }
 
@@ -75,6 +80,7 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
      *
      * @param linkReadingManager link reading manager.
      */
+    @Autowired
     public void setLinkReadingManager(final LinkReadingController linkReadingManager) {
         this.linkReadingManager = linkReadingManager;
     }
@@ -87,7 +93,8 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
      */
     public void onStart(final WebSocketContext context) throws IOException {
         super.onStart(context);
-        LOGGER.info("onStart()");
+        LOGGER.info("onStart()-" + (nodeReadingManager == null) + ":" + (linkReadingManager == null));
+
     }
 
     /**
