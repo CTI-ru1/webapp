@@ -114,12 +114,7 @@ public final class StatusController {
         LOGGER.info("--------- list nodeCapabilities: " + (System.currentTimeMillis() - start1));
 
         start1 = System.currentTimeMillis();
-//        String nodeCaps;
-//        try {
-//            nodeCaps = HtmlFormatter.getInstance().formatLastNodeReadings(nodeCapabilities);
-//        } catch (NotImplementedException e) {
-//            nodeCaps = "";
-//        }
+
         LOGGER.info("--------- format last node readings: " + (System.currentTimeMillis() - start1));
 
         start1 = System.currentTimeMillis();

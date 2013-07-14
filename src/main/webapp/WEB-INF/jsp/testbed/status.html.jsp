@@ -44,20 +44,20 @@
     <div class="accordion-group">
         <div class="accordion-heading">
             <c:choose>
-                <c:when test="${!updated.contains(lnr.node.name)}">
-                    <div class="alert">
+            <c:when test="${!updated.contains(lnr.node.name)}">
+            <div class="alert">
                 </c:when>
-            </c:choose>
+                </c:choose>
 
                 <a class="accordion-toggle" data-toggle="collapse"
                    data-parent="#accordion"
                    href="#collapseOne<c:out value="${lnr.node.id}"/>">
                     <c:out value="${lnr.node.name}"/>
                 </a>
-            <c:choose>
+                <c:choose>
                 <c:when test="${!updated.contains(lnr.node.name)}">
-                    </div>
-                </c:when>
+            </div>
+            </c:when>
             </c:choose>
         </div>
         <c:choose>
@@ -70,12 +70,14 @@
                 </c:choose>
 
                 <div class="accordion-inner">
+                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/${lnr.node.name}/"/>"> View Node</a>
                     <table class="table-hover table table-condensed table-striped">
                         <c:choose>
                         <c:when test="${fn:startsWith(lnr.capability.name , 'urn')}">
                         <tr>
                             <td>
-                                    ${lnr.capability.name}
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${lnr.capability.name}"/>"><c:out
+                                    value="${lnr.capability.name}"/></a>
                             <td>
                                     ${lnr.lastNodeReading.timestamp}
                             <td>
