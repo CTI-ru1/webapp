@@ -1,4 +1,4 @@
-package eu.uberdust.rest.controller.tab.virtualnode;
+package eu.uberdust.rest.controller.tab;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.TextFormatter;
@@ -28,12 +28,12 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/virtualnode/raw")
-public final class VirtualNodeTabViewController {
+public final class VirtualNodeTabDelimitedViewController {
 
     /**
      * Logger persistence manager.
      */
-    private static final Logger LOGGER = Logger.getLogger(VirtualNodeTabViewController.class);
+    private static final Logger LOGGER = Logger.getLogger(VirtualNodeTabDelimitedViewController.class);
 
     /**
      * Testbed persistence manager.

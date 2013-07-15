@@ -34,12 +34,12 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}")
-public final class ShowTestbedRoomsJsonViewController {
+public final class TestbedTabDelimitedViewController {
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ShowTestbedRoomsJsonViewController.class);
+    private static final Logger LOGGER = Logger.getLogger(TestbedTabDelimitedViewController.class);
 
     /**
      * Testbed persistence manager.
@@ -102,7 +102,7 @@ public final class ShowTestbedRoomsJsonViewController {
      */
     @Loggable
     @RequestMapping(value = "/rooms", method = RequestMethod.GET)
-    public ResponseEntity<String> showReadingsByDate(@PathVariable("testbedId") int testbedId)
+    public ResponseEntity<String> getTestbedRooms(@PathVariable("testbedId") int testbedId)
             throws InvalidTestbedIdException, TestbedNotFoundException {
 
         // look up testbed
@@ -139,7 +139,7 @@ public final class ShowTestbedRoomsJsonViewController {
      */
     @Loggable
     @RequestMapping(value = "/status/raw", method = RequestMethod.GET)
-    public ResponseEntity<String> showTestbedStatus(@PathVariable("testbedId") int testbedId)
+    public ResponseEntity<String> getTestbedStatus(@PathVariable("testbedId") int testbedId)
             throws InvalidTestbedIdException, TestbedNotFoundException {
 
         final long start = System.currentTimeMillis();
@@ -179,7 +179,7 @@ public final class ShowTestbedRoomsJsonViewController {
      */
     @Loggable
     @RequestMapping(value = "/timeout", method = RequestMethod.GET)
-    public ResponseEntity<String> showTestbedTimeouts(@PathVariable("testbedId") int testbedId)
+    public ResponseEntity<String> getTestbedTimeouts(@PathVariable("testbedId") int testbedId)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
 
         LOGGER.info("showTestbedAdminStatusController(...)");
@@ -258,7 +258,7 @@ public final class ShowTestbedRoomsJsonViewController {
      */
     @Loggable
     @RequestMapping(value = "/adminstatus", method = RequestMethod.GET)
-    public ResponseEntity<String> showAdminStatus(@PathVariable("testbedId") int testbedId)
+    public ResponseEntity<String> getTestbedAdminStatus(@PathVariable("testbedId") int testbedId)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
 
         LOGGER.info("showTestbedAdminStatusController(...)");

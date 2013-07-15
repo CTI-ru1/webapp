@@ -29,12 +29,12 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capabilities")
-public final class ListNodeCapabilitiesController {
+public final class NodeCapabilitiesTabDelimitedViewController {
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListNodeCapabilitiesController.class);
+    private static final Logger LOGGER = Logger.getLogger(NodeCapabilitiesTabDelimitedViewController.class);
 
     /**
      * Node peristence manager.

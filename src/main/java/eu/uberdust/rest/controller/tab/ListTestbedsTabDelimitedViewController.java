@@ -23,12 +23,12 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/testbed/raw")
-public final class ListTestbedsTabViewController {
+public final class ListTestbedsTabDelimitedViewController {
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListTestbedsTabViewController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListTestbedsTabDelimitedViewController.class);
 
     /**
      * Testbed persistence manager.

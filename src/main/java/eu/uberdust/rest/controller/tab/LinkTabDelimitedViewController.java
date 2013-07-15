@@ -31,13 +31,13 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/link")
-public final class ListLinksTabDelimitedViewController {
+public final class LinkTabDelimitedViewController {
 
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ListLinksTabDelimitedViewController.class);
+    private static final Logger LOGGER = Logger.getLogger(LinkTabDelimitedViewController.class);
 
     /**
      * Testbed persistence manager.
