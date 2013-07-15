@@ -7,6 +7,8 @@ import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.NodeCapability;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -21,30 +23,33 @@ import java.util.Map;
  * Time: 10:53 AM
  * To change this template use File | Settings | File Templates.
  */
+@Controller
 public class RdfConverter {
-    private static RdfConverter instance = new RdfConverter();
-    private static LastNodeReadingController lastNodeReadingManager;
-
-    public static void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
-        RdfConverter.nodeCapabilityManager = nodeCapabilityManager;
-    }
-
-    private static NodeCapabilityController nodeCapabilityManager;
-    private Map<String, Map<String, Double>> sensorValues;
-
-
-    public static RdfConverter getInstance() {
-        return instance;
-    }
-
-    private static Map rdfMapping = new HashMap<String, String>();
     /**
      * Logger.
      */
     private static final Logger LOGGER = Logger.getLogger(RdfConverter.class);
 
-    public RdfConverter() {
+    private LastNodeReadingController lastNodeReadingManager;
 
+    private NodeCapabilityController nodeCapabilityManager;
+
+    @Autowired
+    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
+        this.nodeCapabilityManager = nodeCapabilityManager;
+    }
+
+    @Autowired
+    public void setLastNodeReadingManager(final LastNodeReadingController lastNodeReadingManager) {
+        this.lastNodeReadingManager = lastNodeReadingManager;
+    }
+
+//    private Map<String, Map<String, Double>> sensorValues;
+
+    private Map rdfMapping;
+
+    public RdfConverter() {
+        rdfMapping = new HashMap<String, String>();
         rdfMapping.put("urn:wisebed:node:capability:light", "luminance");
         rdfMapping.put("urn:wisebed:node:capability:temperature", "Temperature");
         rdfMapping.put("urn:wisebed:node:capability:pir", "pir");
@@ -62,15 +67,11 @@ public class RdfConverter {
 
     }
 
-    public static void setLastNodeReadingManager(final LastNodeReadingController lastNodeReadingManager) {
-        RdfConverter.lastNodeReadingManager = lastNodeReadingManager;
-    }
-
-    public static String map(final String key) {
+    public String map(final String key) {
         return (String) rdfMapping.get(key);
     }
 
-    public static String getRdf(final Node node, final String uri) {
+    public String getRdf(final Node node, final String uri) {
 
         final StringBuilder rdfOutput = new StringBuilder();
         //headers
@@ -131,7 +132,7 @@ public class RdfConverter {
         return output.toString();  //To change body of created methods use File | Settings | File Templates.
     }
 
-    public static String encode(final String inStr) {
+    public String encode(final String inStr) {
         String input = inStr;
         input = input.replaceAll("_", "\\_U");
         input = inStr.replaceAll("/", "\\_S");
