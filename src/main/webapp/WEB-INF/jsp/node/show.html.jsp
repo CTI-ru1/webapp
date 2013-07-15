@@ -139,7 +139,7 @@
                         <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/rdf/rdf+xml/limit/1"/>">RDF_XML</a>
                     </td>
                     <td>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/chart/limit/10"/>">Chart</a>
+                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/chart/limit/10"/>"><img src="<c:url value="/img/graph.png"/>"> Chart</a>
                     </td>
                     <td>
                         <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/live"/>">Live</a>
