@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.tab;
 
+
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -22,25 +23,31 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
- * Controller class that returns an HTML page containing a list of the readings for a node/capability.
+ * Controller class that returns a list of links for a given testbed in Raw Text format.
  */
 @Controller
-@RequestMapping("/testbed/{testbedId}/link/{sourceName}/{targetName}/capability/{capabilityName}/tabdelimited/limit/{limit}")
-public final class LinkCapabilityTabDelimitedController {
+@RequestMapping("/testbed/{testbedId}/link")
+public final class ListLinksTabDelimitedViewController {
+
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(LinkCapabilityTabDelimitedController.class);
+    private static final Logger LOGGER = Logger.getLogger(ListLinksTabDelimitedViewController.class);
 
     /**
-     * Node peristence manager.
+     * Testbed persistence manager.
+     */
+    private transient TestbedController testbedManager;
+
+    /**
+     * Link persistence manager.
      */
     private transient LinkController linkManager;
-
     /**
      * Capability persistence manager.
      */
@@ -52,14 +59,19 @@ public final class LinkCapabilityTabDelimitedController {
     private transient LinkReadingController linkReadingManager;
 
     /**
-     * Testbed peristence manager.
+     * Sets testbed persistence manager.
+     *
+     * @param testbedManager testbed persistence manager.
      */
-    private transient TestbedController testbedManager;
+    @Autowired
+    public void setTestbedManager(final TestbedController testbedManager) {
+        this.testbedManager = testbedManager;
+    }
 
     /**
-     * Sets node persistence manager.
+     * Sets link persistence manager.
      *
-     * @param linkManager node persistence manager.
+     * @param linkManager link persistence manager.
      */
     @Autowired
     public void setLinkManager(final LinkController linkManager) {
@@ -87,14 +99,34 @@ public final class LinkCapabilityTabDelimitedController {
     }
 
     /**
-     * Sets Testbed persistence manager.
+     * Handle Request and return the appropriate response.
      *
-     * @param testbedManager Testbed persistence manager.
+     * @return response http servlet response.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                     an InvalidTestbedIdException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                     an TestbedNotFoundException exception.
+     * @throws IOException IO Exception.
      */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
+    @Loggable
+    @RequestMapping(value = "/raw", method = RequestMethod.GET)
+    public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId) throws InvalidTestbedIdException, TestbedNotFoundException, IOException, NotImplementedException {
+
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+        final List<Link> links = linkManager.list(testbed.getSetup());
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+
+        return new ResponseEntity<String>(TextFormatter.getInstance().formatLinks(links), responseHeaders, HttpStatus.OK);
+
     }
+
 
     /**
      * Handle Request and return the appropriate response.
@@ -116,7 +148,7 @@ public final class LinkCapabilityTabDelimitedController {
      *          invalid limit exception.
      */
     @Loggable
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/{sourceName}/{targetName}/capability/{capabilityName}/tabdelimited/limit/{limit}", method = RequestMethod.GET)
     public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("sourceName") String sourceName, @PathVariable("targetName") String targetName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException, NotImplementedException {
