@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -19,6 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public final class NodeCapabilityWiseMlController {
+
+    /**
+     * Logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityWiseMlController.class);
 
     /**
      * Testbed persistence manager.
@@ -39,11 +45,6 @@ public final class NodeCapabilityWiseMlController {
      * NodeReading persistence manager.
      */
     private transient NodeReadingController nodeReadingManager;
-
-    /**
-     * Logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityWiseMlController.class);
 
     /**
      * Sets testbed persistence manager.
@@ -92,8 +93,8 @@ public final class NodeCapabilityWiseMlController {
      * @return http servlet response.
      */
     // TODO make this controller
-    @RequestMapping("/testbed/{testbedId}/wiseml")
-    public ModelAndView showTestbedWiseML(@PathVariable("testbedId") int testbedId) throws NotImplementedException {
+    @RequestMapping(value = "/testbed/{testbedId}/wiseml", method = RequestMethod.GET)
+    public ModelAndView getTestbedWiseML(@PathVariable("testbedId") int testbedId) throws NotImplementedException {
         LOGGER.info("showTestbedWiseMLController(...)");
         throw new NotImplementedException();
     }
@@ -111,8 +112,8 @@ public final class NodeCapabilityWiseMlController {
      * @throws InvalidLimitException          a InvalidLimitException exception.
      */
     @Loggable
-    @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/wiseml/limit/{limit}")
-    public ModelAndView showNodeKML(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
+    @RequestMapping(value = "/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/wiseml/limit/{limit}", method = RequestMethod.GET)
+    public ModelAndView getNodeWiseML(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
             TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, InvalidLimitException, NotImplementedException {
 
