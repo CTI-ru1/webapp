@@ -93,6 +93,7 @@ public final class NodeCapabilityWiseMlController {
      * @return http servlet response.
      */
     // TODO make this controller
+    @Loggable
     @RequestMapping(value = "/testbed/{testbedId}/wiseml", method = RequestMethod.GET)
     public ModelAndView getTestbedWiseML(@PathVariable("testbedId") int testbedId) throws NotImplementedException {
         LOGGER.info("showTestbedWiseMLController(...)");

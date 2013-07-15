@@ -1,5 +1,6 @@
 package eu.uberdust.rest.controller.kml;
 
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,7 @@ public final class ShowNodeKmlController {
      * @return http servlet response.
      */
     // TODO make this controller
+    @Loggable
     @RequestMapping("/testbed/{testbedId}/node/{nodeName}/kml")
     public ModelAndView showNodeKML(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName) throws NotImplementedException {
         LOGGER.info("showNodeKmlController(...)");

@@ -58,8 +58,8 @@ public final class ShowTestbedRdfController {
      * @throws com.sun.syndication.io.FeedException
      *                             a FeedException exception.
      */
-    @SuppressWarnings("unchecked")
     @Loggable
+    @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("rdfEncoding") String rdfEncoding)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException {

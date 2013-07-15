@@ -1,6 +1,7 @@
 package eu.uberdust.rest.controller.rdf;
 
 import com.sun.syndication.io.FeedException;
+import eu.uberdust.caching.Loggable;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -108,6 +109,7 @@ public final class NodeCapabilityRdfController {
      * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
      *                             InvalidTestbedIdException exception.
      */
+    @Loggable
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("rdfEncoding") String rdfEncoding, @PathVariable("limit") int limit)
