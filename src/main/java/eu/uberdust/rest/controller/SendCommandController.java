@@ -62,11 +62,6 @@ public final class SendCommandController {
     public ResponseEntity<String> handle(@PathVariable("destinationName") String destinationName, @PathVariable("payloadSTR") String payloadSTR)
             throws NodeNotFoundException, IOException {
 
-        // set commandNode object
-
-        final String payload = payloadSTR.replaceAll(",", "");
-        final String nodeId = payload.substring(3);
-
         // look for destination node
         final Node destinationNode = nodeManager.getByName(destinationName);
         if (destinationNode == null) {
