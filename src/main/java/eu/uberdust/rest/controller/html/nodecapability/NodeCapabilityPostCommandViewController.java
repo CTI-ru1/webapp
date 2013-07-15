@@ -51,6 +51,11 @@ public final class NodeCapabilityPostCommandViewController {
      * Testbed peristence manager.
      */
     private transient TestbedController testbedManager;
+    private final Random rand;
+
+    public NodeCapabilityPostCommandViewController() {
+        rand = new Random();
+    }
 
     /**
      * Sets node persistence manager.
@@ -129,7 +134,11 @@ public final class NodeCapabilityPostCommandViewController {
 
 
         Request coapReq = new Request(CodeRegistry.METHOD_POST, false);
-        coapReq.setMID((new Random()).nextInt() % 60000);
+        if (rand != null) {
+            coapReq.setMID(rand.nextInt() % 60000);
+        } else {
+            coapReq.setMID(0);
+        }
         if (node.getName().contains("0x")) {
             Option uriHost = new Option(OptionNumberRegistry.URI_HOST);
             uriHost.setStringValue(node.getName().split("0x")[1]);
