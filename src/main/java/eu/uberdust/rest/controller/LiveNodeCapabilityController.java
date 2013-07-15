@@ -1,24 +1,15 @@
 package eu.uberdust.rest.controller;
 
 import eu.uberdust.caching.Loggable;
-import eu.uberdust.command.NodeCapabilityCommand;
-import eu.uberdust.rest.exception.CapabilityNotFoundException;
-import eu.uberdust.rest.exception.InvalidCapabilityNameException;
-import eu.uberdust.rest.exception.InvalidLimitException;
-import eu.uberdust.rest.exception.InvalidNodeIdException;
-import eu.uberdust.rest.exception.InvalidTestbedIdException;
-import eu.uberdust.rest.exception.NodeNotFoundException;
-import eu.uberdust.rest.exception.TestbedNotFoundException;
+import eu.uberdust.rest.exception.*;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,7 +45,7 @@ public final class LiveNodeCapabilityController {
      */
     @Loggable
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, HttpServletRequest request)
+    public ModelAndView getLiveWSReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, HttpServletRequest request)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
 
