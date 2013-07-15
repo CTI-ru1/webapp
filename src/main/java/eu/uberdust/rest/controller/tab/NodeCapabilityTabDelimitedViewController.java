@@ -4,14 +4,8 @@ import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.exception.*;
-import eu.wisebed.wisedb.controller.CapabilityController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.NodeReadingController;
-import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Capability;
-import eu.wisebed.wisedb.model.Node;
-import eu.wisebed.wisedb.model.NodeReading;
-import eu.wisebed.wisedb.model.Testbed;
+import eu.wisebed.wisedb.controller.*;
+import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,13 +23,13 @@ import java.util.List;
  * Controller class that returns readings of a specific node in a tab delimited format.
  */
 @Controller
-@RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/tabdelimited")
-public final class NodeCapabilityTabDelimitedController {
+@RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}")
+public final class NodeCapabilityTabDelimitedViewController {
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityTabDelimitedController.class);
+    private static final Logger LOGGER = Logger.getLogger(NodeCapabilityTabDelimitedViewController.class);
 
     /**
      * Node persistence manager.
@@ -56,6 +50,10 @@ public final class NodeCapabilityTabDelimitedController {
      * Testbed persistence manager.
      */
     private transient TestbedController testbedManager;
+    /**
+     *
+     */
+    private LastNodeReadingController lastNodeReadingManager;
 
     /**
      * Sets node persistence manager.
@@ -97,6 +95,58 @@ public final class NodeCapabilityTabDelimitedController {
         this.testbedManager = testbedManager;
     }
 
+    @Autowired
+    public void setLastNodeReadingManager(LastNodeReadingController lastNodeReadingManager) {
+        this.lastNodeReadingManager = lastNodeReadingManager;
+    }
+
+    /**
+     * Handle Request and return the appropriate response.
+     *
+     * @return http servlet response.
+     * @throws InvalidNodeIdException         InvalidNodeIdException exception.
+     * @throws InvalidCapabilityNameException InvalidNodeCapability exception.
+     * @throws InvalidTestbedIdException      InvalidTestbedIdException exception.
+     * @throws TestbedNotFoundException       TestbedNotFoundException exception.
+     * @throws NodeNotFoundException          NodeNotFoundException exception.
+     * @throws CapabilityNotFoundException    CapabilityNotFoundException exception.
+     * @throws IOException                    IOException exception.
+     */
+    @Loggable
+    @RequestMapping(value = "/latestreading",method = RequestMethod.GET)
+    public ResponseEntity<String> getLatestReading(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName)
+            throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException, TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, IOException {
+
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+
+        // retrieve node
+        final Node node = nodeManager.getByName(nodeName);
+        if (node == null) {
+            throw new NodeNotFoundException("Cannot find node [" + nodeName + "]");
+        }
+
+        // retrieve capability
+        final Capability capability = capabilityManager.getByID(capabilityName);
+        if (capability == null) {
+            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
+        }
+        // retrieve last node rading for this node/capability
+        final LastNodeReading lnr = lastNodeReadingManager.getByNodeCapability(node, capability);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        try {
+            return new ResponseEntity<String>(TextFormatter.getInstance().formatNodeReading(lnr), responseHeaders, HttpStatus.OK);
+        } catch (NotImplementedException e) {
+            return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     /**
      * Handle Request and return the appropriate response.
      *
@@ -111,8 +161,8 @@ public final class NodeCapabilityTabDelimitedController {
      * @throws InvalidLimitException          invalid limit exception.
      */
     @Loggable
-    @RequestMapping(value = "/limit/{limit}", method = RequestMethod.GET)
-    public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
+    @RequestMapping(value = "/tabdelimited/limit/{limit}", method = RequestMethod.GET)
+    public ResponseEntity<String> getReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
             TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, IOException,
             InvalidLimitException {
@@ -147,6 +197,7 @@ public final class NodeCapabilityTabDelimitedController {
         }
     }
 
+
     /**
      * Handle Request and return the appropriate response.
      *
@@ -167,8 +218,8 @@ public final class NodeCapabilityTabDelimitedController {
      *          invalid limit exception.
      */
     @Loggable
-    @RequestMapping(value = "  /from/{from}/to/{to}/", method = RequestMethod.GET)
-    public ResponseEntity<String> showReadingsByDate(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("from") long from, @PathVariable("to") long to)
+    @RequestMapping(value = "/tabdelimited/from/{from}/to/{to}/", method = RequestMethod.GET)
+    public ResponseEntity<String> getReadingsByDate(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("from") long from, @PathVariable("to") long to)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException, IOException {
 
