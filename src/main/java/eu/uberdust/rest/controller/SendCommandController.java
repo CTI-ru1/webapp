@@ -59,7 +59,7 @@ public final class SendCommandController {
      */
     @Loggable
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<String> handle(@PathVariable("destinationName") String destinationName, @PathVariable("payloadSTR") String payloadSTR)
+    public ResponseEntity<String> getCommand(@PathVariable("destinationName") String destinationName, @PathVariable("payloadSTR") String payloadSTR)
             throws NodeNotFoundException, IOException {
 
         // look for destination node
