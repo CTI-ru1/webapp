@@ -195,6 +195,13 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.openjena</groupId>
+            <artifactId>fuseki</artifactId>
+            <version>0.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/fuseki-0.1.0-server.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
             <version>${springframework.version}</version>
@@ -515,6 +522,23 @@
             <!--</dependency>-->
             <!--</dependencies>-->
             <!--</plugin>-->
+
+            <plugin>
+                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <executions>
+                    <execution><!-- Run our version calculation script -->
+                        <id>Version Calculation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${project.basedir}/generate_mappings.bash</executable>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
