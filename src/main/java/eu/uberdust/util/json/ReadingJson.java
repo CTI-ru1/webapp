@@ -1,4 +1,4 @@
-package eu.uberdust.util;
+package eu.uberdust.util.json;
 
 /**
  * POJO class for holding parameters for JSON representation of a reading.

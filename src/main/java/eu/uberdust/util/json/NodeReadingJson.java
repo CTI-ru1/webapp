@@ -1,4 +1,4 @@
-package eu.uberdust.util;
+package eu.uberdust.util.json;
 
 import java.util.List;
 
