@@ -120,9 +120,6 @@
             <td>Testbed GeoJSON</td>
             <td>
                 <a href="<c:url value="/rest/testbed/${testbed.id}/geojson"/>">GeoJSON</a>
-                (<a href="http://maps.google.com/maps?q=<c:url value="${baseURL}/rest/testbed/${testbed.id}/geojson"/>">View
-                On Google
-                Maps</a>)
             </td>
         </tr>
         <tr>

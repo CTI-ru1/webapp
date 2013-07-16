@@ -76,8 +76,8 @@
         });
 
         var infoWindow = new google.maps.InfoWindow({
-            content: " <table><tr><td> <a href='http://maps.google.com/maps?q=<c:url value='/rest/testbed/${testbed.id}/node/${node.name}/georss'/> alt='georss'>GeoRSS feed <img src='<c:url value='/img/google-map-logo.gif'/>'></a> <br/>\
-            <a href='http://maps.google.com/maps?q=<c:url value='/rest/testbed/${testbed.id}/node/${node.name}/geojson'/> alt='geojson'>GeoJSON <img src='<c:url value='/img/google-map-logo.gif'/>'></a> <br/>\
+            content: " <table><tr><td> <a href='http://maps.google.com/maps?q=<c:url value='/rest/testbed/${testbed.id}/node/${node.name}/georss'/>' alt='georss'>GeoRSS feed <img src='<c:url value='/img/google-map-logo.gif'/>'></a> <br/>\
+            <a href='<c:url value='/rest/testbed/${testbed.id}/node/${node.name}/geojson'/>' alt='geojson'>GeoJSON </a> <br/>\
 			<a href='http://maps.google.com/maps?q=<c:url value='/rest/testbed/${testbed.id}/node/${node.name}/kml'/>'alt='kml'>KML feed<img src='<c:url value='/img/google-map-logo.gif'/>'></a> <br/>\
 			<a href='<c:url value='/rest/testbed/${testbed.id}/node/${node.name}/rdf/rdf+xml/'/>' alt='rdf'>RDF description <img src='<c:url value='/img/rdf.png'/>'></a> <br/>\
 			</td><td><div id='qrdiv'><img id='qr' src='http://qrfree.kaywa.com/?s=8&d=" + encodeURIComponent(window.location + 'rdf/rdf+xml/') + "' alt='QRCode' width='150px'/></div></td></tr></table>",

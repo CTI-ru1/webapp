@@ -1,4 +1,4 @@
-package eu.uberdust.rest.controller.georss;
+package eu.uberdust.rest.controller.geojson;
 
 import com.sun.syndication.io.FeedException;
 import eu.uberdust.caching.Loggable;
@@ -10,10 +10,7 @@ import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Node;
-import eu.wisebed.wisedb.model.NodeCapability;
-import eu.wisebed.wisedb.model.Position;
-import eu.wisebed.wisedb.model.Testbed;
+import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -102,7 +99,7 @@ public final class GeoJsonViewController {
     @Loggable
     @RequestMapping(value = "/testbed/{testbedId}/node/{nodeName}/geojson", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<String> showNodeGeorssFeed(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity<String> showNodeGeoJSONFeed(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, HttpServletRequest request, HttpServletResponse response)
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, NotImplementedException {
         // look up testbed
@@ -170,7 +167,7 @@ public final class GeoJsonViewController {
     @Loggable
     @RequestMapping(value = "/testbed/{testbedId}/geojson", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<String> showTestbedGeorssFeed(@PathVariable("testbedId") int testbedId, HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity<String> showTestbedGeoJSON(@PathVariable("testbedId") int testbedId, HttpServletRequest request, HttpServletResponse response)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException, NotImplementedException {
 
         // look up testbed
@@ -207,6 +204,59 @@ public final class GeoJsonViewController {
                         properties.put(nCap.getCapability().getName(), nCap.getLastNodeReading().getReading());
                     }
                 }
+                nodeDescription.put("properties", properties);
+                nodeDescriptions.put(nodeDescription);
+            }
+            geoJsonObject.put("features", nodeDescriptions);
+        } catch (JSONException e) {
+            LOGGER.error(e, e);
+        }
+
+        String output = geoJsonObject.toString();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
+        return new ResponseEntity<String>(output, responseHeaders, HttpStatus.OK);
+    }
+
+    /**
+     * Handle request and return the appropriate response.
+     *
+     * @return http servlet response.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                             a TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                             a InvalidTestbedIdException exception.
+     * @throws java.io.IOException a IOException exception.
+     * @throws com.sun.syndication.io.FeedException
+     *                             a FeedException exception.
+     */
+    @SuppressWarnings("unchecked")
+    @Loggable
+    @RequestMapping(value = "/testbed/geojson", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<String> showTestbedsGeoJSON(HttpServletRequest request, HttpServletResponse response)
+            throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException, NotImplementedException {
+
+        // look up node
+        final List<Testbed> testbeds = testbedManager.list();
+
+        JSONObject geoJsonObject = new JSONObject();
+        JSONArray nodeDescriptions = new JSONArray();
+        try {
+            geoJsonObject.put("type", "FeatureCollection");
+            for (Testbed testbed : testbeds) {
+                JSONObject nodeDescription = new JSONObject();
+                nodeDescription.put("type", "Feature");
+                JSONObject geometry = new JSONObject();
+                geometry.put("type", "point");
+                Origin position = testbed.getSetup().getOrigin();
+                JSONArray coords = new JSONArray();
+                coords.put(position.getX());
+                coords.put(position.getY());
+                geometry.put("coordinates", coords);
+                nodeDescription.put("geometry", geometry);
+                JSONObject properties = new JSONObject();
                 nodeDescription.put("properties", properties);
                 nodeDescriptions.put(nodeDescription);
             }
