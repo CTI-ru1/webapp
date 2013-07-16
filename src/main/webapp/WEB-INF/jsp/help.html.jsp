@@ -31,6 +31,7 @@
         <tr><td>application/json</td><td> json</td></tr>
         <tr><td>application/rdf+xml</td><td> rdf/rdf+xml</td></tr>
         <tr><td>GeoRSS</td><td> georss</td></tr>
+        <tr><td>GeoJSON</td><td> geojson</td></tr>
         <tr><td>KML</td><td> kml</td></tr>
         <tr><td>WiseML</td><td> wiseml</td></tr>
     </table>
