@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,7 +158,7 @@ public final class CapabilityViewController {
         final Capability capability = capabilityManager.getByID(capabilityName);
         if (capability == null) {
             // if no capability is found throw exception
-            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName+ "].");
+            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "].");
         }
 
         // get testbed nodes only
@@ -176,5 +177,51 @@ public final class CapabilityViewController {
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
 
         return new ModelAndView("capability/show.html", refData);
+    }
+
+
+    /**
+     * Handle Request and return the appropriate response.
+     *
+     * @return http servlet response
+     * @throws InvalidTestbedIdException   InvalidTestbedIdException exception.
+     * @throws TestbedNotFoundException    TestbedNotFoundException exception.
+     * @throws CapabilityNotFoundException CapabilityNotFoundExcetion.
+     */
+    @Loggable
+    @RequestMapping(value = "/{capabilityName}/live", method = RequestMethod.GET)
+    public ModelAndView liveCapabilityReadings(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, HttpServletRequest request)
+            throws TestbedNotFoundException, CapabilityNotFoundException {
+        final long start = System.currentTimeMillis();
+
+
+        String hostname = request.getRequestURL().substring(0, request.getRequestURL().indexOf("/rest"));
+        hostname = hostname.replace("http://", "");
+
+
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+
+        // look up capability
+        final Capability capability = capabilityManager.getByID(capabilityName);
+        if (capability == null) {
+            // if no capability is found throw exception
+            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "].");
+        }
+
+        // Prepare data to pass to jsp
+        final Map<String, Object> refData = new HashMap<String, Object>();
+
+        // else put thisNode instance in refData and return index view
+        refData.put("testbedId", testbedId);
+        refData.put("host", hostname);
+        refData.put("testbedUrnPrefix", testbed.getUrnPrefix());
+        refData.put("capability", capabilityName);
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+        // check type of view requested
+        return new ModelAndView("capability/live.html", refData);
     }
 }

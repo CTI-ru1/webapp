@@ -30,8 +30,20 @@ public final class UtilitiesViewController {
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
-        return new ModelAndView("help.html", refData);
+        return new ModelAndView("help/help.html", refData);
     }
+
+    @Loggable
+    @RequestMapping(value = "/help/websockets", method = RequestMethod.GET)
+    public ModelAndView getHelpWebsockets() {
+        final long start = System.currentTimeMillis();
+
+        // Prepare data to pass to jsp
+        final Map<String, Object> refData = new HashMap<String, Object>();
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+        return new ModelAndView("help/websockets.html", refData);
+    }
+
 
     @Loggable
     @RequestMapping(value = "/cleancache", method = RequestMethod.GET)
@@ -41,6 +53,6 @@ public final class UtilitiesViewController {
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
-        return new ModelAndView("help.html", refData);
+        return new ModelAndView("help/help.html", refData);
     }
 }

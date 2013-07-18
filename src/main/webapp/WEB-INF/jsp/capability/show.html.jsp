@@ -46,6 +46,12 @@
                 <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}/tabdelimited"/>">raw</a>
             </td>
         </tr>
+        <tr>
+            <td>Live Readings</td>
+            <td>
+                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}/live"/>">View</a>
+            </td>
+        </tr>
         </tbody>
     </table>
     <table>

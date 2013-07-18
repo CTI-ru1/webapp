@@ -126,10 +126,31 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
     @Override
     public final void update(final NodeReading lastReading) {
         LOGGER.info("updating for " + lastReading);
-        LOGGER.info(lastReading.getCapability().getNode().getName()
-                + "--" + lastReading.getCapability().getCapability().getName());
-        if ((nodeID.contains("virtual") || lastReading.getCapability().getNode().getName().equals(nodeID))
-                && lastReading.getCapability().getCapability().getName().equals(capabilityID)) {
+        final String nodeName = lastReading.getCapability().getNode().getName();
+        final String capabilityName = lastReading.getCapability().getCapability().getName();
+        LOGGER.info(nodeName
+                + "--" + capabilityName);
+        String testbedUrnPrefix = "";
+        if (nodeName.contains(":")) {
+            testbedUrnPrefix = nodeName.substring(0, nodeName.lastIndexOf(":") + 1);
+        }
+        String capabilityUrnPrefix = "";
+        if (capabilityName.contains(":")) {
+            capabilityUrnPrefix = capabilityName.substring(0, nodeName.lastIndexOf(":") + 1);
+        }
+
+        if (
+                (
+                        (nodeID.contains("virtual")
+                                || lastReading.getCapability().getNode().getName().equals(nodeID))
+                                || "*".equals(nodeID)
+                                || nodeID.equals(testbedUrnPrefix + "*")
+                ) && (
+                        lastReading.getCapability().getCapability().getName().equals(capabilityID)
+                                || "*".equals(capabilityID)
+                                || capabilityID.equals(capabilityName + "*")
+                )
+                ) {
             LOGGER.info("is for me");
             //create the protobuf
             final Message.NodeReadings.Reading.Builder reading = Message.NodeReadings.Reading.newBuilder();
