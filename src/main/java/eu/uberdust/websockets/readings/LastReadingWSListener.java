@@ -148,7 +148,7 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
                 ) && (
                         lastReading.getCapability().getCapability().getName().equals(capabilityID)
                                 || "*".equals(capabilityID)
-                                || capabilityID.equals(capabilityName + "*")
+                                || capabilityID.equals(capabilityUrnPrefix + "*")
                 )
                 ) {
             LOGGER.info("is for me");
