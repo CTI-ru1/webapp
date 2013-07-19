@@ -77,7 +77,7 @@
                         <tr>
                             <td>
                                 <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${lnr.capability.name}"/>"><c:out
-                                    value="${lnr.capability.name}"/></a>
+                                        value="${lnr.capability.name}"/></a>
                             <td>
                                     ${lnr.lastNodeReading.timestamp}
                             <td>
@@ -101,7 +101,7 @@
                         <tr>
                             <td>
                                 <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${lnr.capability.name}"/>"><c:out
-                                    value="${lnr.capability.name}"/></a>
+                                        value="${lnr.capability.name}"/></a>
                             <td>
                                     ${lnr.lastNodeReading.timestamp}
                             <td>

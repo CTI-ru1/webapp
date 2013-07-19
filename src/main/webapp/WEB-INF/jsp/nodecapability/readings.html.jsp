@@ -48,8 +48,16 @@
             <tr>
                 <td><c:out value="${reading.timestamp}"/></td>
 
-                <td><c:out value="${reading.stringReading}"/><c:out value="${reading.reading}"/></td>
-
+                <td>
+                    <c:choose>
+                        <c:when test="${reading.stringReading == null || reading.stringReading == '' }">
+                            ${reading.reading}
+                        </c:when>
+                        <c:otherwise>
+                            ${fn:substring(reading.stringReading, 0, 20)}
+                        </c:otherwise>
+                    </c:choose>
+                </td>
 
             </tr>
         </c:forEach>
