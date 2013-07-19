@@ -70,6 +70,10 @@
         <servlet-name>uberdust</servlet-name>
         <url-pattern>/robots.txt</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>uberdust</servlet-name>
+        <url-pattern>/ping</url-pattern>
+    </servlet-mapping>
 
     <!-- Open Session In View Filter -->
     <filter>
