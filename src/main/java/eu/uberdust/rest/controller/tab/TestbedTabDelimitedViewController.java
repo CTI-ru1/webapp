@@ -24,10 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Controller class that returns the status page for the nodes and links of a testbed.
@@ -125,6 +122,60 @@ public final class TestbedTabDelimitedViewController {
         } catch (NotImplementedException e) {
             return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * Handle request and return the appropriate response.
+     *
+     * @return http servlet response.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *          a InvalidTestbedIDException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *          a TestbedNotFoundException exception.
+     */
+    @Loggable
+    @RequestMapping(value = "/timezone", method = RequestMethod.GET)
+    public ResponseEntity<String> getTestbedTimezone(@PathVariable("testbedId") int testbedId)
+            throws InvalidTestbedIdException, TestbedNotFoundException {
+
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        return new ResponseEntity<String>(testbed.getTimeZone().getDisplayName(Locale.getDefault()), responseHeaders, HttpStatus.OK);
+    }
+
+    /**
+     * Handle request and return the appropriate response.
+     *
+     * @return http servlet response.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *          a InvalidTestbedIDException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *          a TestbedNotFoundException exception.
+     */
+    @Loggable
+    @RequestMapping(value = "/timezone/offset", method = RequestMethod.GET)
+    public ResponseEntity<String> getTestbedTimezoneOffset(@PathVariable("testbedId") int testbedId)
+            throws InvalidTestbedIdException, TestbedNotFoundException {
+
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+
+        int offset = testbed.getTimeZone().getRawOffset()+testbed.getTimeZone().getDSTSavings();
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        return new ResponseEntity<String>("" + offset, responseHeaders, HttpStatus.OK);
     }
 
 
