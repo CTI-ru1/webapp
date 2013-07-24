@@ -37,6 +37,14 @@
             <td>${capability.unit}</td>
         </tr>
         <tr>
+            <td>Minimum Value</td>
+            <td>${capability.minvalue}</td>
+        </tr>
+        <tr>
+            <td>Maximum Value</td>
+            <td>${capability.maxvalue}</td>
+        </tr>
+        <tr>
             <td>Capability Semantic Description</td>
             <td></td>
         </tr>

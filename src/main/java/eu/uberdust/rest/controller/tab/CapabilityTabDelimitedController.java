@@ -131,6 +131,7 @@ public final class CapabilityTabDelimitedController {
 
     }
 
+
     /**
      * Handle Request and return the appropriate response.
      *
@@ -165,5 +166,104 @@ public final class CapabilityTabDelimitedController {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
         return new ResponseEntity<String>(TextFormatter.getInstance().formatLastReadings(lnrs, llrs), responseHeaders, HttpStatus.OK);
+    }
+
+    /**
+     * Handle Request and return the appropriate response.
+     *
+     * @return response http servlet response.
+     * @throws InvalidTestbedIdException   a InvalidTestbedIdException exception.
+     * @throws TestbedNotFoundException    a TestbedNotFoundException exception.
+     * @throws IOException                 an IOException exception.
+     * @throws CapabilityNotFoundException a CapabilityNotFoundException exception.
+     */
+    @Loggable
+    @RequestMapping(value = {"/{capabilityName}/uom/tabdelimited","/{capabilityName}/uom/raw"}, method = RequestMethod.GET)
+    public ResponseEntity<String> showUOM(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName)
+            throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException, NotImplementedException {
+
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+
+        // look up capability
+        final Capability capability = capabilityManager.getByID(capabilityName);
+        if (capability == null) {
+            // if no capability is found throw exception
+            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "].");
+        }
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        return new ResponseEntity<String>(capability.getUnit(), responseHeaders, HttpStatus.OK);
+    }
+
+    /**
+     * Handle Request and return the appropriate response.
+     *
+     * @return response http servlet response.
+     * @throws InvalidTestbedIdException   a InvalidTestbedIdException exception.
+     * @throws TestbedNotFoundException    a TestbedNotFoundException exception.
+     * @throws IOException                 an IOException exception.
+     * @throws CapabilityNotFoundException a CapabilityNotFoundException exception.
+     */
+    @Loggable
+    @RequestMapping(value = {"/{capabilityName}/minvalue/tabdelimited","/{capabilityName}/minvalue/raw"}, method = RequestMethod.GET)
+    public ResponseEntity<String> showMinvalue(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName)
+            throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException, NotImplementedException {
+
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+
+        // look up capability
+        final Capability capability = capabilityManager.getByID(capabilityName);
+        if (capability == null) {
+            // if no capability is found throw exception
+            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "].");
+        }
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        return new ResponseEntity<String>(capability.getMinvalue().toString(), responseHeaders, HttpStatus.OK);
+    }
+
+    /**
+     * Handle Request and return the appropriate response.
+     *
+     * @return response http servlet response.
+     * @throws InvalidTestbedIdException   a InvalidTestbedIdException exception.
+     * @throws TestbedNotFoundException    a TestbedNotFoundException exception.
+     * @throws IOException                 an IOException exception.
+     * @throws CapabilityNotFoundException a CapabilityNotFoundException exception.
+     */
+    @Loggable
+    @RequestMapping(value = {"/{capabilityName}/maxvalue/tabdelimited","/{capabilityName}/maxvalue/raw"}, method = RequestMethod.GET)
+    public ResponseEntity<String> showMaxvalue(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName)
+            throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException, NotImplementedException {
+
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+
+        // look up capability
+        final Capability capability = capabilityManager.getByID(capabilityName);
+        if (capability == null) {
+            // if no capability is found throw exception
+            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "].");
+        }
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        return new ResponseEntity<String>(capability.getMaxvalue().toString(), responseHeaders, HttpStatus.OK);
     }
 }
