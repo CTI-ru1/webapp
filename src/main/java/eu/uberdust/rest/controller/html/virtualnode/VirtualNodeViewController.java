@@ -105,4 +105,33 @@ public final class VirtualNodeViewController {
         return new ModelAndView("virtualnode/list.html", refData);
 
     }
+
+    @Loggable
+    @RequestMapping(method = RequestMethod.GET, value = "/create")
+    public ModelAndView createVirtualNode(@PathVariable("testbedId") int testbedId)
+            throws TestbedNotFoundException, InvalidTestbedIdException {
+
+        final long start = System.currentTimeMillis();
+
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+
+        // get testbed's nodes
+        final List<Node> nodes = nodeManager.list(testbed.getSetup());
+
+        // Prepare data to pass to jsp
+        final Map<String, Object> refData = new HashMap<String, Object>();
+
+        // else put thisNode instance in refData and return index view
+        refData.put("testbed", testbed);
+
+        refData.put("nodes", nodes);
+
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+        return new ModelAndView("blockly/create.html", refData);
+
+    }
 }
