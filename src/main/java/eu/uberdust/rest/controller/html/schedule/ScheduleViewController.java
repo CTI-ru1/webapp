@@ -1,13 +1,15 @@
-package eu.uberdust.rest.controller.html.virtualnode;
+package eu.uberdust.rest.controller.html.schedule;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
+import eu.wisebed.wisedb.controller.ScheduleController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.Schedule;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +28,13 @@ import java.util.Map;
  * Controller class that returns a list of links for a given testbed in HTML format.
  */
 @Controller
-@RequestMapping("/testbed/{testbedId}/virtualnode")
-public final class VirtualNodeViewController {
+@RequestMapping("/testbed/{testbedId}/schedule")
+public final class ScheduleViewController {
 
     /**
      * Logger persistence manager.
      */
-    private static final Logger LOGGER = Logger.getLogger(VirtualNodeViewController.class);
+    private static final Logger LOGGER = Logger.getLogger(ScheduleViewController.class);
 
     /**
      * Testbed persistence manager.
@@ -48,6 +50,7 @@ public final class VirtualNodeViewController {
      * Capability persistence manager.
      */
     private transient CapabilityController capabilityManager;
+    private transient ScheduleController scheduleManager;
 
 
     /**
@@ -80,6 +83,11 @@ public final class VirtualNodeViewController {
         this.capabilityManager = capabilityManager;
     }
 
+    @Autowired
+    public void setScheduleManager(final ScheduleController scheduleManager) {
+        this.scheduleManager = scheduleManager;
+    }
+
     /**
      * Handle Request and return the appropriate response.
      *
@@ -102,24 +110,27 @@ public final class VirtualNodeViewController {
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        // get testbed's nodes
-        final List<Node> nodes = new ArrayList<Node>();
-        for (Node node : nodeManager.list(testbed.getSetup())) {
-            if (node.getName().contains(":virtual:")) {
-                nodes.add(node);
-            }
-        }
-
         // Prepare data to pass to jsp
         final Map<String, Object> refData = new HashMap<String, Object>();
 
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
 
-        refData.put("nodes", nodes);
+        LOGGER.info("HERE");
+        if (scheduleManager != null) {
+            try {
+                final List<Schedule> schedules = scheduleManager.list();
+                refData.put("schedules", schedules);
+            } catch (Exception e) {
+                LOGGER.error(e, e);
+            }
+        } else {
+            LOGGER.info("HERE not null");
+        }
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
-        return new ModelAndView("virtualnode/list.html", refData);
+        LOGGER.info("HERE");
+        return new ModelAndView("blockly/schedule/list.html", refData);
 
     }
 
@@ -149,7 +160,7 @@ public final class VirtualNodeViewController {
         refData.put("capabilities", capabilities);
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
-        return new ModelAndView("blockly/create.html", refData);
+        return new ModelAndView("blockly/schedule/create.html", refData);
 
     }
 }

@@ -15,7 +15,7 @@
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <title>ÜberDust - Create Virtual Node</title>
+    <title>ÜberDust - Create Schedule</title>
     <%@include file="/head.jsp" %>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="<c:url value="/js/blockly/blockly_compressed.js"/>"></script>
@@ -48,44 +48,45 @@
         }
     </style>
     <script>
+        function generateCode() {
+            fcode = Blockly.Generator.workspaceToCode('JavaScript');
+            $("#generated").text(fcode);
+        }
         function init() {
+            setInterval(generateCode, 2000);
             Blockly.inject(document.getElementById('blocklyDiv'),
                     {path: '../../', toolbox: document.getElementById('toolbox')});
             // Let the top-level application know that Blockly is ready.
             window.parent.blocklyLoaded(Blockly);
         }
-        function generateCode() {
-            fcode = Blockly.Generator.workspaceToCode('JavaScript');
-            $("#generated").text(fcode);
+        function uploadRule() {
+
         }
     </script>
 
 </head>
-<body>
-<%@include file="/header.jsp" %>
 <body onload="init()">
 <%@include file="/header.jsp" %>
 
 <div class="container">
-    <div class="span2">
-        <button class="btn btn-large btn-primary" onclick="generateCode();">Create Node!</button>
-    </div>
-    <div class="span6">
-        <pre id="generated"></pre>
+    <div class="span12">
+        <div class="span2" style="text-align: center;vertical-align: middle;">
+            <button class="btn btn-large btn-primary" onclick="uploadRule();">Add Schdedule</button>
+        </div>
+        <div class="span8" style="text-align: left;">
+            <div class="span6" style="text-align: left;">Schedule Description:</div>
+            <div class="span6" style="text-align: center;">
+                <pre id="generated"></pre>
+            </div>
+        </div>
     </div>
     <div id="blocklyDiv">
         <xml id="toolbox" style="display: none">
-            <block type="virtual_node"></block>
-            <block type="node"></block>
-            <block type="text"></block>
             <block type="schedule"></block>
             <block type="command"></block>
-            <!--<block type="controls_repeat_ext"></block>
-            <block type="math_number"></block>
-            <block type="math_arithmetic"></block>
-            <block type="text_print"></block>-->
         </xml>
     </div>
-    <%@include file="/footer.jsp" %>
+</div>
+<%@include file="/footer.jsp" %>
 </body>
 </html>

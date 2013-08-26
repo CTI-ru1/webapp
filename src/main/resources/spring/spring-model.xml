@@ -21,5 +21,6 @@
     <bean id="TimeInfo" class="eu.wisebed.wisedb.model.TimeInfo"/>
     <bean id="LastNodeReading" class="eu.wisebed.wisedb.model.LastNodeReading"/>
     <bean id="LastLinkReading" class="eu.wisebed.wisedb.model.LastLinkReading"/>
+    <bean id="Schedule" class="eu.wisebed.wisedb.model.Schedule"/>
 
 </beans>

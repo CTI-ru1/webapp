@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Maven: org.openjena:fuseki:0.1.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/fuseki-0.1.0-server.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

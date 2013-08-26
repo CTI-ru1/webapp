@@ -10,6 +10,8 @@ import eu.wisebed.wisedb.model.Position;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +26,7 @@ import java.util.Map;
  * Controller class that returns a list of testbed in HTML format.
  */
 @Controller
-@RequestMapping(value={"/","/testbed"})
+@RequestMapping(value = {"/", "/testbed"})
 public final class ListTestbedsController {
 
     /**
@@ -62,6 +64,14 @@ public final class ListTestbedsController {
     @Loggable
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listTestbeds() {
+        Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (user instanceof User) {
+            username = ((User) user).getUsername();
+        } else {
+            username = null;
+        }
+        LOGGER.info("username:" + username);
         try {
 
 
@@ -94,6 +104,7 @@ public final class ListTestbedsController {
             refData.put("links", linksCount);
             refData.put("origins", origins);
             refData.put("nodePositions", nodePositions);
+            refData.put("username", username);
 
             refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
             return new ModelAndView("testbed/list.html", refData);

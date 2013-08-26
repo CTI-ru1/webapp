@@ -55,3 +55,75 @@ Blockly.JavaScript.virtual_node = function () {
     var code = '<virtual_node><name>' + virtual_node_name.substring(2, virtual_node_name.length - 2) + '</name><nodes>' + statements_nodes + '</nodes></virtual_node>';
     return code;
 };
+
+Blockly.Language.schedule = {
+    helpUrl: 'http://www.example.com/',
+    init: function () {
+        this.setColour(290);
+        this.appendDummyInput()
+            .appendTitle("Minute")
+            .appendTitle(new Blockly.FieldTextInput("*"), "minute");
+        this.appendDummyInput()
+            .appendTitle("Hour")
+            .appendTitle(new Blockly.FieldTextInput("*"), "hour");
+        this.appendDummyInput()
+            .appendTitle("Day of Month")
+            .appendTitle(new Blockly.FieldTextInput("*"), "dom");
+        this.appendDummyInput()
+            .appendTitle("Month")
+            .appendTitle(new Blockly.FieldTextInput("*"), "month");
+        this.appendDummyInput()
+            .appendTitle("Day of Week")
+            .appendTitle(new Blockly.FieldTextInput("*"), "dow");
+        this.appendValueInput("command")
+            .setCheck("String")
+            .appendTitle("Command");
+        this.setTooltip('');
+    }
+};
+
+Blockly.JavaScript.schedule = function () {
+    var text_minute = this.getTitleValue('minute');
+    var text_hour = this.getTitleValue('hour');
+    var text_dom = this.getTitleValue('dom');
+    var text_month = this.getTitleValue('month');
+    var text_dow = this.getTitleValue('dow');
+    var value_command = Blockly.JavaScript.valueToCode(this, 'command', Blockly.JavaScript.ORDER_ATOMIC);
+    // TODO: Assemble JavaScript into code variable.
+    var code = "{"
+        + "'minute':'" + text_minute + "',"
+        + "'hour':'" + text_hour + "',"
+        + "'dom':'" + text_dom + "',"
+        + "'month':'" + text_month + "',"
+        + "'dow':'" + text_dow + "',"
+        + "'command':'" + value_command + "'" +
+        "}";
+    return code;
+};
+
+Blockly.Language.command = {
+    helpUrl: 'http://www.example.com/',
+    init: function () {
+        this.setColour(210);
+        this.appendDummyInput()
+            .appendTitle("Node")
+            .appendTitle(new Blockly.FieldDropdown(window.nodes_arr), "node");
+        this.appendDummyInput()
+            .appendTitle("Capability")
+            .appendTitle(new Blockly.FieldDropdown(window.capabilities_arr), "capability");
+        this.appendDummyInput()
+            .appendTitle("Message")
+            .appendTitle(new Blockly.FieldTextInput("0"), "message");
+        this.setOutput(true, "String");
+        this.setTooltip('');
+    }
+};
+Blockly.JavaScript.command = function () {
+    var dropdown_node = this.getTitleValue('node');
+    var dropdown_capability = this.getTitleValue('capability');
+    var text_message = this.getTitleValue('message');
+    // TODO: Assemble JavaScript into code variable.
+    var code = "{'node':'" + dropdown_node + "','capability':'" + dropdown_capability + "','payload':'" + text_message + "'}";
+    // TODO: Change ORDER_NONE to the correct strength.
+    return [code, Blockly.JavaScript.ORDER_NONE];
+};

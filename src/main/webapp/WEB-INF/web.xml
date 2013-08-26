@@ -12,6 +12,7 @@
         <param-value>
             classpath:spring/spring-data.xml
             classpath:spring/spring-model.xml
+            classpath:spring/spring-security.xml
         </param-value>
     </context-param>
 
@@ -52,7 +53,7 @@
 
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:spring/spring-servlet.xml</param-value>
+            <param-value>classpath:spring/spring-servlet.xml,classpath:spring/spring-security.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -60,6 +61,10 @@
     <servlet-mapping>
         <servlet-name>uberdust</servlet-name>
         <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>uberdust</servlet-name>
+        <url-pattern>/j_spring_security_check</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -85,6 +90,16 @@
 
     <filter-mapping>
         <filter-name>openSessionInViewFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 

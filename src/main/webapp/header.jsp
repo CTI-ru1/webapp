@@ -6,6 +6,8 @@
 <spring:message code="uberdust.hudson.jobname" var="hudsonJobName" scope="application" text=""/>
 <spring:message code="uberdust.webapp.version" var="uberdustWebappVersion" scope="application" text=""/>
 
+<jsp:useBean id="username" scope="request" class="java.lang.String"/>
+
 
 <c:set var="req" value="${pageContext.request}"/>
 <c:set var="baseURL"
@@ -34,6 +36,34 @@
                 <li><a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode"/>">virtual</a></li>
                 <li><a href="<c:url value="/rest/testbed/${testbed.id}/status"/>">status</a></li>
             </c:if>
+        </ul>
+        <ul class="nav pull-right">
+            <c:choose>
+                <c:when test="${username!=''}">
+                    <li>
+                        <a href="<c:url value="/rest/user/${username}"/>">${username}</a>
+                    </li>
+                    <li>
+                        <a href="<c:url value="/j_spring_security_logout"/>">Logout</a>
+                    </li>
+
+                </c:when>
+                <c:otherwise>
+                    <li>
+                        <form name='f' class="navbar-search pull-left"
+                              action="<c:url value='/j_spring_security_check'/>"
+                              method='POST'>
+                            <input type='text' name='j_username' class="input-small" placeholder="username"
+                                   value=''>
+                            <input type='password' name='j_password' class="input-small" placeholder="password"/>
+                            <input name="submit" type="submit" value="submit" class="btn"/>
+                        </form>
+                    </li>
+                    <li>
+                        <a href="<c:url value="/rest/register"/>">Register</a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
         </ul>
     </div>
 </div>

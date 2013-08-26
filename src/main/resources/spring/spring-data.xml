@@ -41,6 +41,7 @@
                 <value>eu/wisebed/wisedb/model/NodeReading.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/LastNodeReading.hbm.xml</value>
                 <value>eu/wisebed/wisedb/model/LastLinkReading.hbm.xml</value>
+                <value>eu/wisebed/wisedb/model/Schedule.hbm.xml</value>
             </list>
         </property>
         <!-- Also set of hibernate properties -->
@@ -161,6 +162,10 @@
     <bean id="lastLinkReadingManager" parent="proxyTemplate">
         <property name="target" ref="lastLinkReadingManagerTarget"/>
     </bean>
+    <bean id="scheduleManager" parent="proxyTemplate">
+        <property name="target" ref="scheduleManagerTarget"/>
+    </bean>
+
 
     <!-- TARGETS -->
 
@@ -196,6 +201,9 @@
           parent="abstractManager" factory-method="getInstance"/>
 
     <bean id="lastLinkReadingManagerTarget" class="eu.wisebed.wisedb.controller.LastLinkReadingControllerImpl"
+          parent="abstractManager" factory-method="getInstance"/>
+
+    <bean id="scheduleManagerTarget" class="eu.wisebed.wisedb.controller.ScheduleControllerImpl"
           parent="abstractManager" factory-method="getInstance"/>
 
     <!-- lastNodeReadingConsumer bean -->
