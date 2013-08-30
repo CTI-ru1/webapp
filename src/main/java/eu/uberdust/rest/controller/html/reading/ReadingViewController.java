@@ -2,6 +2,7 @@ package eu.uberdust.rest.controller.html.reading;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.HtmlFormatter;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.*;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
@@ -13,6 +14,7 @@ import eu.wisebed.wisedb.model.NodeReading;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +29,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/html")
-public final class ReadingViewController {
+public final class ReadingViewController extends UberdustSpringController{
 
     /**
      * Logger.
@@ -113,6 +115,7 @@ public final class ReadingViewController {
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
 
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -138,7 +141,7 @@ public final class ReadingViewController {
         nodeReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
 
         // Prepare data to pass to jsp
-        final Map<String, Object> refData = new HashMap<String, Object>();
+
 
         // else put thisNode instance in refData and return index view
         refData.put("testbedId", testbedId);
@@ -178,6 +181,7 @@ public final class ReadingViewController {
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
 
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -206,7 +210,7 @@ public final class ReadingViewController {
         nodeReadings = nodeReadingManager.listNodeReadings(node, capability, from, to);
 
         // Prepare data to pass to jsp
-        final Map<String, Object> refData = new HashMap<String, Object>();
+
 
         // else put thisNode instance in refData and return index view
         refData.put("testbedId", testbedId);

@@ -3,6 +3,7 @@ package eu.uberdust.rest.controller.tab;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.*;
 import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +31,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capabilities")
-public final class NodeCapabilitiesTabDelimitedViewController {
+public final class NodeCapabilitiesTabDelimitedViewController extends UberdustSpringController{
 
     /**
      * Logger.
@@ -89,6 +91,8 @@ public final class NodeCapabilitiesTabDelimitedViewController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName) throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException, NotImplementedException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);

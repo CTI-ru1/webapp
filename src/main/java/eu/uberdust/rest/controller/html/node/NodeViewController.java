@@ -2,6 +2,7 @@ package eu.uberdust.rest.controller.html.node;
 
 import eu.uberdust.caching.Cachable;
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -14,6 +15,7 @@ import eu.wisebed.wisedb.model.Position;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +36,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node")
-public final class NodeViewController {
+public final class NodeViewController extends UberdustSpringController{
     /**
      * Logger.
      */
@@ -90,6 +92,7 @@ public final class NodeViewController {
     public ModelAndView getNode(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName) throws TestbedNotFoundException, NodeNotFoundException {
 
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
 
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -113,7 +116,7 @@ public final class NodeViewController {
 
 
         // Prepare data to pass to jsp
-        final Map<String, Object> refData = new HashMap<String, Object>();
+
 
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
@@ -134,6 +137,7 @@ public final class NodeViewController {
     public String putNode(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, HttpServletResponse response)
             throws InvalidTestbedIdException, TestbedNotFoundException, NodeNotFoundException, IOException {
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
@@ -174,6 +178,7 @@ public final class NodeViewController {
 
 
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
@@ -190,7 +195,7 @@ public final class NodeViewController {
         }
 
         // Prepare data to pass to jsp
-        final Map<String, Object> refData = new HashMap<String, Object>();
+
 
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);

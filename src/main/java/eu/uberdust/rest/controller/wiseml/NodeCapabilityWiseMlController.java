@@ -2,6 +2,7 @@ package eu.uberdust.rest.controller.wiseml;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.*;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
@@ -9,6 +10,7 @@ import eu.wisebed.wisedb.controller.NodeReadingController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Controller class that returns the readings of a node capability pair in WiseML format.
  */
 @Controller
-public final class NodeCapabilityWiseMlController {
+public final class NodeCapabilityWiseMlController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -96,6 +98,8 @@ public final class NodeCapabilityWiseMlController {
     @Loggable
     @RequestMapping(value = "/testbed/{testbedId}/wiseml", method = RequestMethod.GET)
     public ModelAndView getTestbedWiseML(@PathVariable("testbedId") int testbedId) throws NotImplementedException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         LOGGER.info("showTestbedWiseMLController(...)");
         throw new NotImplementedException();
     }
@@ -117,6 +121,8 @@ public final class NodeCapabilityWiseMlController {
     public ModelAndView getNodeWiseML(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
             TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException, InvalidLimitException, NotImplementedException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
 //        // look up testbed
 //        final Testbed testbed = testbedManager.getByID(testbedId);

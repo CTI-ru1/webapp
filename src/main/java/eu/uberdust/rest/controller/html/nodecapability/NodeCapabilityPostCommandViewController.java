@@ -5,6 +5,7 @@ import ch.ethz.inf.vs.californium.coap.Option;
 import ch.ethz.inf.vs.californium.coap.OptionNumberRegistry;
 import ch.ethz.inf.vs.californium.coap.Request;
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.*;
 import eu.uberdust.util.CommandDispatcher;
 import eu.wisebed.wisedb.controller.CapabilityController;
@@ -15,6 +16,7 @@ import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +32,7 @@ import java.util.Random;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/{payload}/")
-public final class NodeCapabilityPostCommandViewController {
+public final class NodeCapabilityPostCommandViewController extends UberdustSpringController{
 
     /**
      * Logger.
@@ -112,6 +114,7 @@ public final class NodeCapabilityPostCommandViewController {
     public String handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("payload") String payload, HttpServletResponse response)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException, IOException {
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);

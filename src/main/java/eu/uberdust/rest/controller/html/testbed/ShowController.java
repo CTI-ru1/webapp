@@ -2,24 +2,20 @@ package eu.uberdust.rest.controller.html.testbed;
 
 import eu.uberdust.caching.Cachable;
 import eu.uberdust.caching.Loggable;
-import eu.uberdust.command.TestbedCommand;
-import eu.uberdust.formatter.HtmlFormatter;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.Coordinate;
 import eu.wisebed.wisedb.controller.*;
 import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +26,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}")
-public final class ShowController {
+public final class ShowController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -119,8 +115,9 @@ public final class ShowController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView showTestbed(@PathVariable("testbedId") int testbedId)
             throws TestbedNotFoundException, InvalidTestbedIdException {
-
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -151,7 +148,7 @@ public final class ShowController {
         final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
 
         // Prepare data to pass to jsp
-        final Map<String, Object> refData = new HashMap<String, Object>();
+
 
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);

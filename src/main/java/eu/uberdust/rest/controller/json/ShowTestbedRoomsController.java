@@ -3,6 +3,7 @@ package eu.uberdust.rest.controller.json;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.JsonFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/rooms/json")
-public final class ShowTestbedRoomsController {
+public final class ShowTestbedRoomsController extends UberdustSpringController{
 
     /**
      * Logger.
@@ -89,6 +91,8 @@ public final class ShowTestbedRoomsController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId)
             throws InvalidTestbedIdException, TestbedNotFoundException, NotImplementedException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);

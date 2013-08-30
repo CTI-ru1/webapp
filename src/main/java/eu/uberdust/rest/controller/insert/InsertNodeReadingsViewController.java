@@ -1,6 +1,7 @@
 package eu.uberdust.rest.controller.insert;
 
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeReadingController;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,7 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/insert/timestamp/{timestampLONG}")
-public final class InsertNodeReadingsViewController {
+public final class InsertNodeReadingsViewController extends UberdustSpringController {
 
     /**
      * Looger.
@@ -75,6 +77,9 @@ public final class InsertNodeReadingsViewController {
     @RequestMapping(value = "/reading/{readingSTR}", method = RequestMethod.GET)
     public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("timestampLONG") long timestampLONG, @PathVariable("readingSTR") String readingSTR)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
@@ -118,6 +123,8 @@ public final class InsertNodeReadingsViewController {
     @RequestMapping(value = "/reading/{readingDOUBLE}/stringreading/{readingSTR}", method = RequestMethod.GET)
     public ResponseEntity<String> handles(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("timestampLONG") long timestampLONG, @PathVariable("readingDOUBLE") double readingDOUBLE, @PathVariable("readingSTR") String readingSTR) throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
 
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -158,6 +165,8 @@ public final class InsertNodeReadingsViewController {
     @Loggable
     @RequestMapping(value = "/stringreading/{readingSTR}", method = RequestMethod.GET)
     public ResponseEntity<String> handles(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("timestampLONG") long timestampLONG, @PathVariable("readingSTR") String readingSTR) throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);

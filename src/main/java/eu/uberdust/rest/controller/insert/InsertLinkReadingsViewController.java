@@ -1,6 +1,7 @@
 package eu.uberdust.rest.controller.insert;
 
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.LinkReadingController;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,7 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/link/{sourceName}/{targetName}/capability/{capabilityName}/insert/timestamp/{timestampLONG}")
-public final class InsertLinkReadingsViewController {
+public final class InsertLinkReadingsViewController extends UberdustSpringController{
 
     /**
      * LinkReading persistence manager.
@@ -73,6 +75,8 @@ public final class InsertLinkReadingsViewController {
     @RequestMapping("/reading/{readingDOUBLE}")
     public ResponseEntity<String> insertDoubleReading(@PathVariable("testbedId") int testbedId, @PathVariable("sourceName") String sourceName, @PathVariable("targetName") String targetName, @PathVariable("capabilityName") String capabilityName, @PathVariable("timestampLONG") long timestampLONG, @PathVariable("readingSTR") String readingSTR)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // parse reading and timestamp
         final Date timestamp = new Date(timestampLONG);
@@ -110,6 +114,8 @@ public final class InsertLinkReadingsViewController {
     @Loggable
     @RequestMapping(value = "/reading/{readingDOUBLE}/stringreading/{readingSTR}", method = RequestMethod.GET)
     public ResponseEntity<String> handles(@PathVariable("testbedId") int testbedId, @PathVariable("sourceName") String sourceName, @PathVariable("targetName") String targetName, @PathVariable("capabilityName") String capabilityName, @PathVariable("timestampLONG") long timestampLONG, @PathVariable("readingDOUBLE") double readingDOUBLE, @PathVariable("readingSTR") String readingSTR) throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // parse reading and timestamp
         final Date timestamp = new Date(timestampLONG);
@@ -144,6 +150,8 @@ public final class InsertLinkReadingsViewController {
     @Loggable
     @RequestMapping(value = "/stringreading/{readingSTR}", method = RequestMethod.GET)
     public ResponseEntity<String> handles(@PathVariable("testbedId") int testbedId, @PathVariable("sourceName") String sourceName, @PathVariable("targetName") String targetName, @PathVariable("capabilityName") String capabilityName, @PathVariable("timestampLONG") long timestampLONG, @PathVariable("readingSTR") String readingSTR) throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // parse reading and timestamp
         final Date timestamp = new Date(timestampLONG);

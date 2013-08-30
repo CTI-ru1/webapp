@@ -2,6 +2,7 @@ package eu.uberdust.rest.controller.rdf;
 
 import com.sun.syndication.io.FeedException;
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.TestbedController;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +25,7 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/rdf/{rdfEncoding}")
-public final class ShowTestbedRdfController {
+public final class ShowTestbedRdfController extends UberdustSpringController{
 
     /**
      * Logger.
@@ -63,6 +65,8 @@ public final class ShowTestbedRdfController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("rdfEncoding") String rdfEncoding)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);

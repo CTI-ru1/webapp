@@ -3,6 +3,7 @@ package eu.uberdust.rest.controller.tab;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.NodeController;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +30,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/raw")
-public final class NodeTabDelimitedViewController {
+public final class NodeTabDelimitedViewController extends UberdustSpringController {
 
     /**
      * Logger persistence manager.
@@ -76,6 +78,8 @@ public final class NodeTabDelimitedViewController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException, NotImplementedException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {

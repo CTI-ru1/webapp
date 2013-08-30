@@ -1,6 +1,7 @@
 package eu.uberdust.rest.controller.html.virtualnode;
 
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
@@ -11,6 +12,7 @@ import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +29,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/virtualnode")
-public final class VirtualNodeViewController {
+public final class VirtualNodeViewController extends UberdustSpringController {
 
     /**
      * Logger persistence manager.
@@ -95,6 +97,7 @@ public final class VirtualNodeViewController {
             throws TestbedNotFoundException, InvalidTestbedIdException {
 
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
@@ -111,7 +114,7 @@ public final class VirtualNodeViewController {
         }
 
         // Prepare data to pass to jsp
-        final Map<String, Object> refData = new HashMap<String, Object>();
+
 
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
@@ -129,6 +132,7 @@ public final class VirtualNodeViewController {
             throws TestbedNotFoundException, InvalidTestbedIdException {
 
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
@@ -140,7 +144,7 @@ public final class VirtualNodeViewController {
         final List<Node> nodes = nodeManager.list(testbed.getSetup());
         final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
         // Prepare data to pass to jsp
-        final Map<String, Object> refData = new HashMap<String, Object>();
+
 
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
@@ -149,7 +153,7 @@ public final class VirtualNodeViewController {
         refData.put("capabilities", capabilities);
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
-        return new ModelAndView("blockly/create.html", refData);
+        return new ModelAndView("blockly/virtualnode/create.html", refData);
 
     }
 }

@@ -3,9 +3,9 @@ package eu.uberdust.rest.controller;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.rest.exception.*;
 import org.apache.log4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,7 +19,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/live")
-public final class LiveNodeCapabilityController {
+public final class LiveNodeCapabilityController extends UberdustSpringController {
     /**
      * Logger.
      */
@@ -46,17 +46,18 @@ public final class LiveNodeCapabilityController {
      */
     @Loggable
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView getLiveWSReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName,HttpServletRequest request)
+    public ModelAndView getLiveWSReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, HttpServletRequest request)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException {
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         String hostname = request.getRequestURL().substring(0, request.getRequestURL().indexOf("/rest"));
         hostname = hostname.replace("http://", "");
 
 
         // Prepare data to pass to jsp
-        final Map<String, Object> refData = new HashMap<String, Object>();
+
 
         // else put thisNode instance in refData and return index view
         refData.put("testbedId", testbedId);

@@ -2,8 +2,8 @@ package eu.uberdust.rest.controller.geojson;
 
 import com.sun.syndication.io.FeedException;
 import eu.uberdust.caching.Loggable;
-import eu.uberdust.formatter.GeoRssFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,16 +29,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Controller class that returns the position of a node in GeoRSS format.
  */
 @Controller
-public final class GeoJsonViewController {
+public final class GeoJsonViewController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -102,6 +100,7 @@ public final class GeoJsonViewController {
     public ResponseEntity<String> showNodeGeoJSONFeed(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, HttpServletRequest request, HttpServletResponse response)
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, NotImplementedException {
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
         if (testbed == null) {
@@ -169,6 +168,7 @@ public final class GeoJsonViewController {
     @ResponseBody
     public ResponseEntity<String> showTestbedGeoJSON(@PathVariable("testbedId") int testbedId, HttpServletRequest request, HttpServletResponse response)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException, NotImplementedException {
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -237,6 +237,7 @@ public final class GeoJsonViewController {
     @ResponseBody
     public ResponseEntity<String> showTestbedsGeoJSON(HttpServletRequest request, HttpServletResponse response)
             throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException, NotImplementedException {
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up node
         final List<Testbed> testbeds = testbedManager.list();

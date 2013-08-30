@@ -22,7 +22,7 @@ public final class RobotsController {
 
     @Loggable
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<String> getHelp() {
+    public ResponseEntity<String> getRobots() {
         final String robotsTXT = "User-agent: *\n" +
                 "Disallow: /rest/testbed/*";
         HttpHeaders responseHeaders = new HttpHeaders();

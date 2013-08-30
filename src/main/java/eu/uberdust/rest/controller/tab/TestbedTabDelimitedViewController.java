@@ -3,6 +3,7 @@ package eu.uberdust.rest.controller.tab;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +33,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}")
-public final class TestbedTabDelimitedViewController {
+public final class TestbedTabDelimitedViewController extends UberdustSpringController{
 
     /**
      * Logger.
@@ -101,6 +103,8 @@ public final class TestbedTabDelimitedViewController {
     @RequestMapping(value = "/rooms", method = RequestMethod.GET)
     public ResponseEntity<String> getTestbedRooms(@PathVariable("testbedId") int testbedId)
             throws InvalidTestbedIdException, TestbedNotFoundException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -137,6 +141,8 @@ public final class TestbedTabDelimitedViewController {
     @RequestMapping(value = "/timezone", method = RequestMethod.GET)
     public ResponseEntity<String> getTestbedTimezone(@PathVariable("testbedId") int testbedId)
             throws InvalidTestbedIdException, TestbedNotFoundException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -163,6 +169,8 @@ public final class TestbedTabDelimitedViewController {
     @RequestMapping(value = "/timezone/offset", method = RequestMethod.GET)
     public ResponseEntity<String> getTestbedTimezoneOffset(@PathVariable("testbedId") int testbedId)
             throws InvalidTestbedIdException, TestbedNotFoundException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -192,8 +200,9 @@ public final class TestbedTabDelimitedViewController {
     @RequestMapping(value = "/status/raw", method = RequestMethod.GET)
     public ResponseEntity<String> getTestbedStatus(@PathVariable("testbedId") int testbedId)
             throws InvalidTestbedIdException, TestbedNotFoundException {
-
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -232,6 +241,8 @@ public final class TestbedTabDelimitedViewController {
     @RequestMapping(value = "/timeout", method = RequestMethod.GET)
     public ResponseEntity<String> getTestbedTimeouts(@PathVariable("testbedId") int testbedId)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         LOGGER.info("showTestbedAdminStatusController(...)");
 
@@ -315,6 +326,7 @@ public final class TestbedTabDelimitedViewController {
         LOGGER.info("showTestbedAdminStatusController(...)");
 
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed                                              nodeCapabilityManager
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -328,7 +340,7 @@ public final class TestbedTabDelimitedViewController {
         final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
 
         // Prepare data to pass to jsp
-        final Map<String, Object> refData = new HashMap<String, Object>();
+
 
         Map<Node, List<NodeCapability>> nodeCapabilityMap = new HashMap<Node, List<NodeCapability>>();
 

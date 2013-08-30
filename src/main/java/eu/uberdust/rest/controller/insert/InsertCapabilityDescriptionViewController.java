@@ -1,6 +1,7 @@
 package eu.uberdust.rest.controller.insert;
 
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.CapabilityController;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +25,7 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/capability/{capabilityName}/insert/description/{description}/")
-public final class InsertCapabilityDescriptionViewController {
+public final class InsertCapabilityDescriptionViewController extends UberdustSpringController{
 
     /**
      * Logger persistence manager.
@@ -70,6 +72,8 @@ public final class InsertCapabilityDescriptionViewController {
     @Loggable
     @RequestMapping("/reading/{readingDOUBLE}")
     public ResponseEntity<String> insertDoubleReading(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, @PathVariable("description") String description) throws TestbedNotFoundException, IOException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);

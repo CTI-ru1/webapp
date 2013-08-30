@@ -4,6 +4,7 @@ package eu.uberdust.rest.controller.tab;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.*;
 import eu.wisebed.wisedb.controller.CapabilityController;
 import eu.wisebed.wisedb.controller.LinkController;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +33,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/link")
-public final class LinkTabDelimitedViewController {
+public final class LinkTabDelimitedViewController extends UberdustSpringController{
 
 
     /**
@@ -111,6 +113,8 @@ public final class LinkTabDelimitedViewController {
     @Loggable
     @RequestMapping(value = "/raw", method = RequestMethod.GET)
     public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId) throws InvalidTestbedIdException, TestbedNotFoundException, IOException, NotImplementedException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
@@ -154,6 +158,7 @@ public final class LinkTabDelimitedViewController {
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException, NotImplementedException {
 
         final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
         final Testbed testbed = testbedManager.getByID(testbedId);
