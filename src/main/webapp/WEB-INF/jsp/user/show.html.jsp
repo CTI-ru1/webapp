@@ -4,40 +4,38 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@taglib uri="/WEB-INF/tag/custom.tld" prefix="util" %>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+
+<jsp:useBean id="user" scope="request" class="eu.wisebed.wisedb.model.User"/>
+<jsp:useBean id="roles" scope="request" class="java.util.ArrayList"/>
 
 <html>
 <head>
     <META NAME="Description" CONTENT="ÜberDust"/>
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>ÜberDust - Login page</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <title>ÜberDust - User: <c:out value="${user.username}"/></title>
     <%@include file="/head.jsp" %>
 
 </head>
-<body onload='document.f.j_username.focus();'>
+<body>
 <%@include file="/header.jsp" %>
+
 <div class="container">
-    <h3>Login with Username and Password (Authentication with Database)</h3>
-
-    <c:choose>
-        <c:when test="${not empty error}">
-            <div class="errorblock">
-                Your login attempt was not successful, try again.
-                <br/>
-                Caused :
-                    ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
-            </div>
-        </c:when>
-        <c:otherwise>
-            <jsp:forward page="/rest/testbed"/>
-        </c:otherwise>
-    </c:choose>
-
+    <div class="span12">
+        <h2><a href="<c:url value="/rest/user/${user.username}"/>">${user.username}</a></h2>
+    </div>
+    <div class="span12">
+        <table class="table table-hover">
+            <tr>
+                <td>Email</td>
+                <td>${user.email}</td>
+            </tr>
+        </table>
+    </div>
 
 </div>
 <%@include file="/footer.jsp" %>
 </body>
 </html>
-

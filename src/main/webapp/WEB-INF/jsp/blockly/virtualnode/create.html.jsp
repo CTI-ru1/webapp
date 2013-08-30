@@ -61,8 +61,6 @@
     </script>
 
 </head>
-<body>
-<%@include file="/header.jsp" %>
 <body onload="init()">
 <%@include file="/header.jsp" %>
 
@@ -78,14 +76,13 @@
             <block type="virtual_node"></block>
             <block type="node"></block>
             <block type="text"></block>
-            <block type="schedule"></block>
-            <block type="command"></block>
             <!--<block type="controls_repeat_ext"></block>
             <block type="math_number"></block>
             <block type="math_arithmetic"></block>
             <block type="text_print"></block>-->
         </xml>
     </div>
-    <%@include file="/footer.jsp" %>
+</div>
+<%@include file="/footer.jsp" %>
 </body>
 </html>

@@ -59,14 +59,31 @@
             // Let the top-level application know that Blockly is ready.
             window.parent.blocklyLoaded(Blockly);
         }
-        function uploadRule() {
-
-        }
     </script>
 
 </head>
 <body onload="init()">
 <%@include file="/header.jsp" %>
+
+<script>
+    function uploadRule() {
+        $("#output").text("Generating Schedule...");
+        try {
+            jcode = JSON.parse(Blockly.Generator.workspaceToCode('JavaScript'));
+            jcode.username = "${username}";
+            $("#output").text("Planning...");
+            $.post("add", jcode,function (data) {
+                $("#output").text("Planned! Please Wait...");
+                window.location = "<c:url value="/rest/testbed/${testbed.id}/schedule"/>";
+            }).error(function (jqXHR, status, error) {
+                        $("#output").text("An error occured: " + jqXHR.responseText);
+                    });
+        } catch (err) {
+            $("#output").text("Rule is not complete.");
+        }
+
+    }
+</script>
 
 <div class="container">
     <div class="span12">
@@ -74,10 +91,11 @@
             <button class="btn btn-large btn-primary" onclick="uploadRule();">Add Schdedule</button>
         </div>
         <div class="span8" style="text-align: left;">
-            <div class="span6" style="text-align: left;">Schedule Description:</div>
-            <div class="span6" style="text-align: center;">
+            <div class="span6" style="text-align: left;visibility: hidden">Schedule Description:</div>
+            <div class="span6" style="text-align: center;visibility: hidden">
                 <pre id="generated"></pre>
             </div>
+            <span id="output" class="span6"></span>
         </div>
     </div>
     <div id="blocklyDiv">
