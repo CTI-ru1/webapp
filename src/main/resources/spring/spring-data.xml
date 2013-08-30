@@ -24,26 +24,9 @@
     </bean>
 
     <!-- Session Factory setup with hbm mappings in place -->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
 
-
-        <property name="mappingResources">
-            <list>
-                <value>eu/wisebed/wisedb/model/Testbed.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/Setup.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/Node.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/Link.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/Capability.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/NodeCapability.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/LinkCapability.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/LinkReading.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/NodeReading.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/LastNodeReading.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/LastLinkReading.hbm.xml</value>
-                <value>eu/wisebed/wisedb/model/Schedule.hbm.xml</value>
-            </list>
-        </property>
         <!-- Also set of hibernate properties -->
         <property name="hibernateProperties">
             <props>
@@ -60,7 +43,6 @@
 
             </props>
         </property>
-        <!--
         <property name="annotatedClasses">
             <list>
                 <value>eu.wisebed.wisedb.model.Testbed</value>
@@ -74,8 +56,11 @@
                 <value>eu.wisebed.wisedb.model.LinkReading</value>
                 <value>eu.wisebed.wisedb.model.LastNodeReading</value>
                 <value>eu.wisebed.wisedb.model.LastLinkReading</value>
+                <value>eu.wisebed.wisedb.model.Schedule</value>
+                <value>eu.wisebed.wisedb.model.User</value>
+                <value>eu.wisebed.wisedb.model.UserRole</value>
             </list>
-        </property>-->
+        </property>
 
         <property name="eventListeners">
             <map>
@@ -165,6 +150,12 @@
     <bean id="scheduleManager" parent="proxyTemplate">
         <property name="target" ref="scheduleManagerTarget"/>
     </bean>
+    <bean id="userManager" parent="proxyTemplate">
+        <property name="target" ref="userManagerTarget"/>
+    </bean>
+    <bean id="userRoleManager" parent="proxyTemplate">
+        <property name="target" ref="userRoleManagerTarget"/>
+    </bean>
 
 
     <!-- TARGETS -->
@@ -205,12 +196,19 @@
 
     <bean id="scheduleManagerTarget" class="eu.wisebed.wisedb.controller.ScheduleControllerImpl"
           parent="abstractManager" factory-method="getInstance"/>
+    <bean id="userManagerTarget" class="eu.wisebed.wisedb.controller.UserControllerImpl"
+          parent="abstractManager" factory-method="getInstance"/>
+    <bean id="userRoleManagerTarget" class="eu.wisebed.wisedb.controller.UserRoleControllerImpl"
+          parent="abstractManager" factory-method="getInstance"/>
 
     <!-- lastNodeReadingConsumer bean -->
     <bean id="lastNodeReadingConsumer" class="eu.wisebed.wisedb.listeners.LastNodeReadingConsumer"
           factory-method="getInstance"/>
 
     <bean id="InsertReadingWSListener" class="eu.uberdust.websockets.readings.InsertReadingWSListener"
+          factory-method="getInstance"/>
+
+    <bean id="quartzJobScheduler" class="eu.uberdust.util.QuartzJobScheduler"
           factory-method="getInstance"/>
 
 </beans>

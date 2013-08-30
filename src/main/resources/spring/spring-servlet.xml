@@ -33,5 +33,6 @@
 
     <context:component-scan base-package="eu.uberdust.rest.controller"/>
     <context:component-scan base-package="eu.uberdust.websockets"/>
+    <context:component-scan base-package="eu.uberdust.util"/>
 
 </beans>

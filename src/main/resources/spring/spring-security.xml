@@ -8,7 +8,7 @@
 
     <http auto-config="true">
         <intercept-url pattern="/rest/welcome*" access="ROLE_USER"/>
-        <form-login login-page="/rest/login" default-target-url="/"
+        <form-login login-page="/rest/login" default-target-url="/rest/login"
                     authentication-failure-url="/rest/loginfailed"/>
         <logout logout-success-url="/"/>
     </http>
