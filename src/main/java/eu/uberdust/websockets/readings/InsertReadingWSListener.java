@@ -71,7 +71,6 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
      */
     @Autowired
     public void setNodeReadingManager(final NodeReadingController nodeReadingManager) {
-        System.out.println("SET setNodeReadingManager");
         this.nodeReadingManager = nodeReadingManager;
     }
 
