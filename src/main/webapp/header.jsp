@@ -34,6 +34,7 @@
                 <li><a href="<c:url value="/rest/testbed/${testbed.id}/link"/>">links</a></li>
                 <li><a href="<c:url value="/rest/testbed/${testbed.id}/capability"/>">capabilies</a></li>
                 <li><a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode"/>">virtual</a></li>
+                <li><a href="<c:url value="/rest/testbed/${testbed.id}/schedule"/>">schedules</a></li>
                 <li><a href="<c:url value="/rest/testbed/${testbed.id}/status"/>">status</a></li>
             </c:if>
         </ul>
@@ -54,8 +55,9 @@
                               action="<c:url value='/j_spring_security_check'/>"
                               method='POST'>
                             <input type='text' name='j_username' class="input-small" placeholder="username"
-                                   value=''>
-                            <input type='password' name='j_password' class="input-small" placeholder="password"/>
+                                   value='' style='margin-bottom: 0px;'>
+                            <input type='password' name='j_password' class="input-small" placeholder="password"
+                                   style='margin-bottom: 0px;'/>
                             <input name="submit" type="submit" value="submit" class="btn"/>
                         </form>
                     </li>
