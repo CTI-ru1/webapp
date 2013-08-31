@@ -10,11 +10,9 @@
 <jsp:useBean id="node" scope="request" class="eu.wisebed.wisedb.model.Node"/>
 <jsp:useBean id="capability" scope="request" class="eu.wisebed.wisedb.model.Capability"/>
 <jsp:useBean id="readings" scope="request" class="java.lang.String"/>
-<jsp:useBean id="myrequest" scope="request" class="java.lang.String"/>
 
 <html>
 <head>
-    <%@include file="/googleAnalytics.jsp" %>
     <%@include file="/head.jsp" %>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
     <script type="text/javascript" src="<c:url value="/js/highcharts.js"/>"></script>
@@ -80,18 +78,6 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>
 </head>
 <body onload="displayChart()">
-
-<%@include file="/header.jsp" %>
-<div class="container" style="width:80%">
-    <div id="chartcontainer" style="width: 100%; height: 400px"></div>
-    <div id="embed" style="text-align: center">
-        Embed this graph easily to your blog or website by copying the following code:<br/>
-        <textarea style="height: 150px; width: 100%; resize: none;" disabled="disabled">
-            <iframe style="width:100%; height:400px; margin: 10px 0 10px;" allowTransparency="true"
-                    src="${myrequest}/bare"></iframe>
-        </textarea>
-    </div>
-</div>
-<%@include file="/footer.jsp" %>
+<div id="chartcontainer" style="width: 100%; height: 400px"></div>
 </body>
 </html>
