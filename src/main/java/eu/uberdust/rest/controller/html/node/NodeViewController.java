@@ -27,16 +27,14 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Controller class that returns the a web page for a node.
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node")
-public final class NodeViewController extends UberdustSpringController{
+public final class NodeViewController extends UberdustSpringController {
     /**
      * Logger.
      */
@@ -164,6 +162,7 @@ public final class NodeViewController extends UberdustSpringController{
 
         return "Node added to the system";
     }
+
 
     /**
      * Handle Request and return the appropriate response.
