@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -32,7 +33,7 @@ import java.util.Random;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/{payload}/")
-public final class NodeCapabilityPostCommandViewController extends UberdustSpringController{
+public final class NodeCapabilityPostCommandViewController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -134,8 +135,27 @@ public final class NodeCapabilityPostCommandViewController extends UberdustSprin
         if (capability == null) {
             throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
         }
+        String payloadString = "";
+        if (node.getName().contains("virtual")) {
+            List<Node> nodes = nodeManager.getRealNodes(node);
+            for (Node node1 : nodes) {
+                if (capabilityManager.hasCapability(node1, capability)) {
+                    coapSend(node1, capability, payload);
+                }
+            }
+        } else {
+            coapSend(node, capability, payload);
+        }
 
 
+        response.setStatus(200);
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+
+        return "OK . Destination : " + node.getName() + "\nPayload : " + payloadString;
+    }
+
+    public String coapSend(Node node, Capability capability, String payload) {
         Request coapReq = new Request(CodeRegistry.METHOD_POST, false);
         if (rand != null) {
             coapReq.setMID(rand.nextInt() % 60000);
@@ -161,11 +181,6 @@ public final class NodeCapabilityPostCommandViewController extends UberdustSprin
         final String payloadString = "33," + payloadStringBuilder.toString().substring(1).replaceAll("ffffff", "");
 
         CommandDispatcher.getInstance().sendCommand(node.getSetup().getId(), node.getName(), payloadString);
-
-        response.setStatus(200);
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-
-        return "OK . Destination : " + node.getName() + "\nPayload : " + payloadString;
+        return payloadString;
     }
 }
