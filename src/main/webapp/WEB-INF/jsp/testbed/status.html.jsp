@@ -38,6 +38,7 @@
 </div>
 </div>
 </div>
+</div>
 </c:when>
 </c:choose>
 <div class="accordion" id="accordion<c:out value="${lnr.node.id}"/>">
@@ -60,6 +61,8 @@
             </c:when>
             </c:choose>
         </div>
+            <%--<c:choose>--%>
+            <%--<c:when test="${!lnr.node.name.contains('virtual')}">--%>
         <c:choose>
         <c:when test="${!updated.contains(lnr.node.name)}">
         <div id="collapseOne<c:out value="${lnr.node.id}"/>" class="accordion-body collapse ">
@@ -122,12 +125,16 @@
                                 </c:choose>
                                     <%--</c:when>--%>
                                     <%--</c:choose>--%>
-                                    <c:set var="prevnode" value="${lnr.node.name}"/>
-                                </c:forEach>
-
-                                <%--<c:out value="${lastNodeReadings}" escapeXml="false"/>--%>
-                                <%--<c:out value="${lastLinkReadings}" escapeXml="false"/>--%>
                 </div>
-                <%@include file="/footer.jsp" %>
+            </div>
+                <c:set var="prevnode" value="${lnr.node.name}"/>
+            </c:forEach>
+
+            <%--<c:out value="${lastNodeReadings}" escapeXml="false"/>--%>
+            <%--<c:out value="${lastLinkReadings}" escapeXml="false"/>--%>
+
+            <%--</c:when>--%>
+            <%--</c:choose>--%>
+            <%@include file="/footer.jsp" %>
 </body>
 </html>
