@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -111,7 +112,7 @@ public final class CapabilityRdfDescriptionController extends UberdustSpringCont
     @Loggable
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, @PathVariable("rdfEncoding") String rdfEncoding)
+    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, @PathVariable("rdfEncoding") String rdfEncoding, HttpServletRequest request)
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
         final long start = System.currentTimeMillis();
@@ -131,16 +132,26 @@ public final class CapabilityRdfDescriptionController extends UberdustSpringCont
 
         // current host base URL
 
-        String retVal = "";
-//        try {
-//            retVal = ((String) RdfFormatter.getInstance().formatNodeReading(readings.get(0)));
-//        } catch (NotImplementedException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//        }
+        StringBuilder rdfDescription = new StringBuilder("");
 
+        rdfDescription.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+                .append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n")
+                .append("  xmlns:ns0=\"http://www.w3.org/2000/01/rdf-schema#\"\n")
+                .append("  xmlns:ns1=\"http://purl.oclc.org/NET/ssnx/ssn#\"\n")
+                .append("  xmlns:ns2=\"http://spitfire-project.eu/cc/spitfireCC_n3.owl#\"\n")
+                .append("  xmlns:ns3=\"http://www.loa-cnr.it/ontologies/DUL.owl#\"\n")
+                .append("  xmlns:owl=\"http://www.w3.org/2002/07/owl#Class#\"\n")
+                .append("  xmlns:ns4=\"http://purl.org/dc/terms/\">\n").append("\n");
+        rdfDescription.append("<rdf:Description rdf:about=\"" + request.getRequestURL() + "\">\n")
+                .append("\t<owl:sameAs rdf:resource=\"" + capability.getSemanticUrl() + "\"/>\n")
+                .append("</rdf:Description>\n");
+
+
+        rdfDescription.append("\n")
+                .append("</rdf:RDF>");
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("Content-Type", "application/rdf+xml; charset=UTF-8");
-        return new ResponseEntity<String>(retVal, responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<String>(rdfDescription.toString(), responseHeaders, HttpStatus.OK);
     }
 }

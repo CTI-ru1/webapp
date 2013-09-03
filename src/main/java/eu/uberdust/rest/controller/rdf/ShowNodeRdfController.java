@@ -7,9 +7,11 @@ import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.LastNodeReadingController;
+import eu.wisebed.wisedb.controller.NodeCapabilityController;
 import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
+import eu.wisebed.wisedb.model.NodeCapability;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +24,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Controller class that returns the position of a node in GeoRSS format.
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/rdf/{rdfEncoding}")
-public final class ShowNodeRdfController extends UberdustSpringController{
+public final class ShowNodeRdfController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -47,6 +53,13 @@ public final class ShowNodeRdfController extends UberdustSpringController{
     private transient NodeController nodeManager;
 
     private transient LastNodeReadingController lastNodeReadingManager;
+
+    @Autowired
+    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+        this.nodeCapabilityManager = nodeCapabilityManager;
+    }
+
+    private transient NodeCapabilityController nodeCapabilityManager;
 
     /**
      * Sets testbed persistence manager.
@@ -86,7 +99,7 @@ public final class ShowNodeRdfController extends UberdustSpringController{
     @Loggable
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("rdfEncoding") String rdfEncoding)
+    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("rdfEncoding") String rdfEncoding, HttpServletRequest request)
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
         final long start = System.currentTimeMillis();
@@ -111,31 +124,48 @@ public final class ShowNodeRdfController extends UberdustSpringController{
 
         // current host base URL
 
-        String retVal = "";
-//        try {
-//            Model model = (Model) RdfFormatter.getInstance().formatNode(node);
-//
-//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//            if (command.getFormat().toLowerCase().equals("turtle")) {
-//                response.setContentType("text/turtle");
-//                model.write(bos, "TURTLE");
-//            } else if (command.getFormat().toLowerCase().equals("n-triple")) {
-//                response.setContentType("text/plain");
-//                model.write(bos, "N-TRIPLE");
-//            } else {
-//                response.setContentType("application/rdf+xml");
-//                model.write(bos, "RDF/XML");
-//            }
-//
-//            retVal = bos.toString();
-//
-//        } catch (NotImplementedException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//        }
+        StringBuilder rdfDescription = new StringBuilder("");
+
+        rdfDescription.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+                .append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n")
+                .append("  xmlns:ns0=\"http://www.w3.org/2000/01/rdf-schema#\"\n")
+                .append("  xmlns:ns1=\"http://purl.oclc.org/NET/ssnx/ssn#\"\n")
+                .append("  xmlns:ns2=\"http://spitfire-project.eu/cc/spitfireCC_n3.owl#\"\n")
+                .append("  xmlns:ns3=\"http://www.loa-cnr.it/ontologies/DUL.owl#\"\n")
+                .append("  xmlns:ns4=\"http://purl.org/dc/terms/\">\n").append("\n");
+
+        String localname = request.getRequestURL().substring(0, request.getRequestURL().indexOf("/rest/"));
+
+        List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(node);
+        rdfDescription.append("  <rdf:Description rdf:about=\"" + localname + "/rest/testbed/" + node.getSetup().getId() + "/node/" + node.getName() + "/rdf/rdf+xml/\">\n")
+                .append("    <ns0:type rdf:resource=\"http://purl.oclc.org/NET/ssnx/ssn#Sensor\"/>\n");
+        int count = 0;
+        for (NodeCapability capability : nodeCapabilities) {
+            if (!capability.getCapability().getName().startsWith("urn")) continue;
+            rdfDescription.append("    <ns1:observedProperty rdf:resource=\"" + localname + "/rest/testbed/" + node.getSetup().getId() + "/capability/" + capability.getCapability().getName() + "/rdf/rdf+xml/\"/>\n");
+            if ((capability.getLastNodeReading().getStringReading() != null) && !"".equals(capability.getLastNodeReading().getStringReading())) {
+                rdfDescription.append("    <ns2:hasValue>" + capability.getLastNodeReading().getStringReading() + "</ns2:hasValue>\n");
+            } else {
+                rdfDescription.append("    <ns3:hasValue>" + capability.getLastNodeReading().getReading() + "</ns3:hasValue>\n");
+            }
+            SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yy-MM-dd'T'HH:mm:ss'Z'");
+            dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+            rdfDescription.append("    <ns4:date>" + dateFormatGmt.format(capability.getLastNodeReading().getTimestamp()) + "</ns4:date>\n");
+
+        }
+        rdfDescription.append("  </rdf:Description>\n");
+
+
+//        List<NodeReading> roomReading = nodeReadingManager.listNodeReadings(node, capabilityRoom, 1);
+//        nodeCapabilities.add(1, roomReading.get(0));
+
+        rdfDescription.append("\n")
+                .append("</rdf:RDF>");
+        // current host base URL
 
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("Content-Type", "application/rdf+xml; charset=UTF-8");
-        return new ResponseEntity<String>(retVal, responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<String>(rdfDescription.toString(), responseHeaders, HttpStatus.OK);
     }
 }

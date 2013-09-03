@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -37,7 +36,7 @@ import java.util.TimeZone;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/rdf/{rdfEncoding}/limit/{limit}")
-public final class NodeCapabilityRdfController extends UberdustSpringController{
+public final class NodeCapabilityRdfController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -118,7 +117,7 @@ public final class NodeCapabilityRdfController extends UberdustSpringController{
     @Loggable
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("rdfEncoding") String rdfEncoding, @PathVariable("limit") int limit, @RequestBody HttpServletRequest request)
+    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("rdfEncoding") String rdfEncoding, @PathVariable("limit") int limit, HttpServletRequest request)
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
         final long start = System.currentTimeMillis();
@@ -151,12 +150,14 @@ public final class NodeCapabilityRdfController extends UberdustSpringController{
                 .append("  xmlns:ns3=\"http://www.loa-cnr.it/ontologies/DUL.owl#\"\n")
                 .append("  xmlns:ns4=\"http://purl.org/dc/terms/\">\n").append("\n");
 
+        String localname = request.getRequestURL().substring(0, request.getRequestURL().indexOf("/rest/"));
+
         List<NodeReading> readings = nodeReadingManager.listNodeReadings(node, capability, limit);
         for (NodeReading reading : readings) {
-            rdfDescription.append("  <rdf:Description rdf:about=\"http://spitfire-project.eu/sensor/" + reading.getCapability().getNode().getName() + "\">\n")
+            rdfDescription.append("  <rdf:Description rdf:about=\"" + localname + "/rest/testbed/" + node.getSetup().getId() + "/node/" + reading.getCapability().getNode().getName() + "/rdf/rdf+xml/\">\n")
                     .append("    <ns0:type rdf:resource=\"http://purl.oclc.org/NET/ssnx/ssn#Sensor\"/>\n")
-                    .append("    <ns1:observedProperty rdf:resource=\"http://spitfire-project.eu/property/" + reading.getCapability().getCapability().getName() + "\"/>\n");
-            if (reading.getStringReading() != null) {
+                    .append("    <ns1:observedProperty rdf:resource=\"" + localname + "/rest/testbed/" + node.getSetup().getId() + "/capability/" + reading.getCapability().getCapability().getName() + "/rdf/rdf+xml/\"/>\n");
+            if ((reading.getStringReading() != null) && !"".equals(reading.getStringReading())) {
                 rdfDescription.append("    <ns3:hasValue>" + reading.getStringReading() + "</ns3:hasValue>\n");
             } else {
                 rdfDescription.append("    <ns3:hasValue>" + reading.getReading() + "</ns3:hasValue>\n");
