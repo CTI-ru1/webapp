@@ -25,7 +25,7 @@
 
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-        <a class="brand" href="<c:url value="/"/>">Überdust</a>
+        <a class="brand" href="<c:url value="/rest/testbed/"/>">Überdust</a>
         <ul class="nav">
             <li><a href="<c:url value="/rest/testbed"/>">testbeds</a></li>
             <c:if test="${testbed != null}">
