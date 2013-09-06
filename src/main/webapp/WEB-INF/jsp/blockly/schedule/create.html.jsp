@@ -101,7 +101,8 @@
     <div id="blocklyDiv">
         <xml id="toolbox" style="display: none">
             <block type="schedule"></block>
-            <block type="command"></block>
+            <block type="cronschedule"></block>
+            <block type="oneoffschedule"></block>
         </xml>
     </div>
 </div>

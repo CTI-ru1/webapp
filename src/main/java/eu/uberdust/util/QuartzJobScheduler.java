@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
+import org.quartz.impl.triggers.SimpleTriggerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -100,20 +101,60 @@ public final class QuartzJobScheduler {
                 .usingJobData("payload", schedule.getPayload())
                 .build();
 
-        // Trigger the job to run now, and then every 40 seconds
-        Trigger trigger = newTrigger()
-                .withIdentity("myTrigger" + schedule.getId())
-                .startNow()
-                .withSchedule(cronSchedule(schedule.getSecond() + " "
-                        + schedule.getMinute() + " "
-                        + schedule.getHour() + " "
-                        + schedule.getDom() + " "
-                        + schedule.getMonth() + " "
-                        + schedule.getDow()
-                )).build();
+        if (schedule.getType().equals("cron")) {
+            // Trigger the job to run now, and then every 40 seconds
+            Trigger trigger = newTrigger()
+                    .withIdentity("myTrigger" + schedule.getId())
+                    .startNow()
+                    .withSchedule(cronSchedule(schedule.getSecond() + " "
+                            + schedule.getMinute() + " "
+                            + schedule.getHour() + " "
+                            + schedule.getDom() + " "
+                            + schedule.getMonth() + " "
+                            + schedule.getDow()
+                    )).build();
 
-        // Tell quartz to schedule the job using our trigger
-        sched.scheduleJob(job, trigger);
+            // Tell quartz to schedule the job using our trigger
+            sched.scheduleJob(job, trigger);
+        } else {
+
+            java.util.Calendar cal = new java.util.GregorianCalendar(
+                    Integer.parseInt(schedule.getDow()),
+                    Integer.parseInt(schedule.getMonth()),
+                    Integer.parseInt(schedule.getDom()));
+            cal.set(cal.HOUR, Integer.parseInt(schedule.getHour()));
+            cal.set(cal.MINUTE, Integer.parseInt(schedule.getMinute()));
+            cal.set(cal.SECOND, Integer.parseInt(schedule.getSecond()));
+            cal.set(cal.MILLISECOND, 0);
+
+            Date startTime = cal.getTime();
+
+            SimpleTrigger trigger = new SimpleTriggerImpl("myTrigger" + schedule.getId(),
+                    null,
+                    startTime,
+                    null,
+                    0,
+                    0L);
+
+
+//            // Trigger the job to run now, and then every 40 seconds
+//            Trigger trigger = newTrigger()
+//                    .withIdentity("myTrigger" + schedule.getId())
+//                    .startNow()
+//                    .withSchedule(
+//
+//
+//                            simpleSchedule(schedule.getSecond() + " "
+//                                    + schedule.getMinute() + " "
+//                                    + schedule.getHour() + " "
+//                                    + schedule.getDom() + " "
+//                                    + schedule.getMonth() + " "
+//                                    + schedule.getDow()              //year
+//                            )).build();
+
+            // Tell quartz to schedule the job using our trigger
+            sched.scheduleJob(job, trigger);
+        }
 
         listAllJobs();
     }

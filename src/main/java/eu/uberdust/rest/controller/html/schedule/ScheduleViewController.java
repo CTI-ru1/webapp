@@ -163,6 +163,7 @@ public final class ScheduleViewController extends UberdustSpringController {
     @Loggable
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<String> addSchedule(@PathVariable("testbedId") int testbedId,
+                                              @RequestParam("type") String type,
                                               @RequestParam("username") String username,
                                               @RequestParam("second") String second,
                                               @RequestParam("minute") String minute,
@@ -186,6 +187,7 @@ public final class ScheduleViewController extends UberdustSpringController {
                     return new ResponseEntity<String>("Rules cannot be scheduled for execution every second.", responseHeaders, HttpStatus.NOT_ACCEPTABLE);
                 }
                 Schedule shed = new Schedule();
+                shed.setType(type);
                 shed.setUsername(username);
                 shed.setSecond(second);
                 shed.setMinute(minute);
@@ -203,6 +205,7 @@ public final class ScheduleViewController extends UberdustSpringController {
                 HttpHeaders responseHeaders = new HttpHeaders();
                 responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
                 return new ResponseEntity<String>("ok:" + username + " "
+                        + type + " "
                         + second + " "
                         + minute + " "
                         + hour + " "
