@@ -9,6 +9,7 @@ import eu.wisebed.wisedb.exception.UnknownTestbedException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,6 +104,7 @@ public final class InsertReadingWSListener extends AbstractWebSocketListener {
      * @param inputStream InputStream instance.
      * @throws IOException IOException exception.
      */
+    @Transactional
     public void onReadBinary(final WebSocketContext context, final InputStream inputStream) throws IOException {
         LOGGER.debug("New Message Reveived");
 
