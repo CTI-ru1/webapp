@@ -16,6 +16,10 @@
         </param-value>
     </context-param>
 
+    <session-config>
+        <session-timeout>0</session-timeout>
+    </session-config>
+
     <!-- Set listener class -->
     <listener>
         <listener-class>
