@@ -3,9 +3,7 @@ package eu.uberdust.rest.controller;
 import eu.uberdust.caching.EvictCache;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.exception.NotImplementedException;
-import eu.uberdust.util.QuartzJobScheduler;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Controller class that returns an HTML page containing a list of the readings for a node/capability.
@@ -29,13 +25,6 @@ public final class UtilitiesViewController extends UberdustSpringController {
      * Logger.
      */
     private static final Logger LOGGER = Logger.getLogger(UtilitiesViewController.class);
-
-    private transient QuartzJobScheduler quartzJobScheduler;
-
-    @Autowired
-    public void setQuartzJobScheduler(QuartzJobScheduler quartzJobScheduler) {
-        this.quartzJobScheduler = quartzJobScheduler;
-    }
 
     @Loggable
     @RequestMapping(value = "/help", method = RequestMethod.GET)

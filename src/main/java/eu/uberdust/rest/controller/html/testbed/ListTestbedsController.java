@@ -3,14 +3,11 @@ package eu.uberdust.rest.controller.html.testbed;
 import eu.uberdust.caching.Cachable;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.rest.controller.UberdustSpringController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Origin;
 import eu.wisebed.wisedb.model.Position;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,12 +26,6 @@ import java.util.Map;
 @RequestMapping(value = {"/", "/testbed"})
 public final class ListTestbedsController extends UberdustSpringController {
 
-    /**
-     * Testbed persistence manager.
-     */
-
-    private transient TestbedController testbedManager;
-    private transient NodeController nodeManager;
 
     /**
      * Logger.
@@ -42,21 +33,6 @@ public final class ListTestbedsController extends UberdustSpringController {
     private static final Logger LOGGER = Logger.getLogger(ListTestbedsController.class);
     // Prepare data to pass to jsp
 
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    @Autowired
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
 
     /**
      * Handle Request and return the appropriate response.
