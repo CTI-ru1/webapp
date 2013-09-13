@@ -50,9 +50,11 @@ Blockly.JavaScript.node = function () {
 };
 Blockly.JavaScript.virtual_node = function () {
     var virtual_node_name = Blockly.JavaScript.valueToCode(this, 'name', Blockly.JavaScript.ORDER_ATOMIC);
-    var statements_nodes = Blockly.JavaScript.statementToCode(this, 'nodes');
+    //var statements_nodes = Blockly.JavaScript.statementToCode(this, 'nodes');
+    var statements_nodes = Blockly.JavaScript.statementToCode(this,'nodes');//, Blockly.JavaScript.ORDER_ATOMIC).replace("(", "").replace(")", "");
+
     // TODO: Assemble JavaScript into code variable.
-    var code = '<virtual_node><name>' + virtual_node_name.substring(2, virtual_node_name.length - 2) + '</name><nodes>' + statements_nodes + '</nodes></virtual_node>';
+    var code = "{\"name\":\"" + virtual_node_name.substring(2, virtual_node_name.length - 2) + "\", \"conditions\":\"[" + statements_nodes.substring(0,statements_nodes.length-1) + "]\"}";
     return code;
 };
 
@@ -183,8 +185,29 @@ Blockly.JavaScript.oneoffschedule = function () {
         + "\"hour\":\"" + text_hour + "\","
         + "\"dom\":\"" + text_dom + "\","
         + "\"month\":\"" + text_month + "\","
-        + "\"year\":\"" + text_dow + "\","
+        + "\"dow\":\"" + text_dow + "\","
         + "\"payload\":\"" + text_payload + "\"";
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
+Blockly.Language.condition = {
+    helpUrl: 'http://www.example.com/',
+    init: function() {
+        this.setColour(230);
+        this.appendDummyInput()
+            .appendTitle("condition:")
+            .appendTitle(new Blockly.FieldDropdown(window.capabilities_arr), "capability")
+            .appendTitle(new Blockly.FieldTextInput("value"), "value");
+        this.setPreviousStatement(true, "String");
+        this.setNextStatement(true, "String");
+        this.setTooltip('');
+    }
+};
+
+Blockly.JavaScript.condition = function() {
+    var dropdown_capability = this.getTitleValue('capability');
+    var text_value = this.getTitleValue('value');
+    // TODO: Assemble JavaScript into code variable.
+    var code = "{\"capability\":\""+dropdown_capability +"\","+"\"value\":\""+text_value+"\"},";
+    return code;//[code, Blockly.JavaScript.ORDER_NONE];
+};

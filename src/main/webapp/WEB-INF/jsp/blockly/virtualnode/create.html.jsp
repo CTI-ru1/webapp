@@ -64,6 +64,27 @@
 <body onload="init()">
 <%@include file="/header.jsp" %>
 
+
+<script>
+    function uploadRule() {
+        $("#output").text("Generating description...");
+        try {
+            jcode = JSON.parse(Blockly.Generator.workspaceToCode('JavaScript'));
+            jcode.username = "${username}";
+            $("#output").text("Planning...");
+            $.post("add", jcode,function (data) {
+                $("#output").text("Planned! Please Wait...");
+                window.location = "<c:url value="/rest/testbed/${testbed.id}/virtualnode/"/>";
+            }).error(function (jqXHR, status, error) {
+                        $("#output").text("An error occured: " + jqXHR.responseText);
+                    });
+        } catch (err) {
+            $("#output").text("Rule is not complete.");
+        }
+
+    }
+</script>
+
 <div class="container">
     <div class="span2">
         <button class="btn btn-large btn-primary" onclick="generateCode();">Create Node!</button>
@@ -76,8 +97,8 @@
             <block type="virtual_node"></block>
             <block type="node"></block>
             <block type="text"></block>
-            <!--<block type="controls_repeat_ext"></block>
-            <block type="math_number"></block>
+            <block type="condition"></block>
+            <!--<block type="math_number"></block>
             <block type="math_arithmetic"></block>
             <block type="text_print"></block>-->
         </xml>
