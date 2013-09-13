@@ -59,6 +59,7 @@
                 <value>eu.wisebed.wisedb.model.Schedule</value>
                 <value>eu.wisebed.wisedb.model.User</value>
                 <value>eu.wisebed.wisedb.model.UserRole</value>
+                <value>eu.wisebed.wisedb.model.VirtualNodeDescription</value>
             </list>
         </property>
 
@@ -156,6 +157,9 @@
     <bean id="userRoleManager" parent="proxyTemplate">
         <property name="target" ref="userRoleManagerTarget"/>
     </bean>
+    <bean id="virtualNodeDescriptionManager" parent="proxyTemplate">
+        <property name="target" ref="virtualNodeDescriptionManagerTarget"/>
+    </bean>
 
 
     <!-- TARGETS -->
@@ -199,6 +203,8 @@
     <bean id="userManagerTarget" class="eu.wisebed.wisedb.controller.UserControllerImpl"
           parent="abstractManager" factory-method="getInstance"/>
     <bean id="userRoleManagerTarget" class="eu.wisebed.wisedb.controller.UserRoleControllerImpl"
+          parent="abstractManager" factory-method="getInstance"/>
+    <bean id="virtualNodeDescriptionManagerTarget" class="eu.wisebed.wisedb.controller.VirtualNodeDescriptionControllerImpl"
           parent="abstractManager" factory-method="getInstance"/>
 
     <!-- lastNodeReadingConsumer bean -->
