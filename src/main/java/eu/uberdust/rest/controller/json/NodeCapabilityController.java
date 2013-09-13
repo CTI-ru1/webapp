@@ -26,7 +26,7 @@ import java.util.List;
  * Controller class for returning a list of readings for a node/capability pair in JSON format.
  */
 @Controller
-@RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/json/limit/{limit}")
+@RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}")
 public final class NodeCapabilityController extends UberdustSpringController{
 
     /**
@@ -118,7 +118,7 @@ public final class NodeCapabilityController extends UberdustSpringController{
      * @throws InvalidLimitException          invalid limit exception.
      */
     @Loggable
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value = "/json/limit/{limit}")
     public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
             TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException,
@@ -164,5 +164,68 @@ public final class NodeCapabilityController extends UberdustSpringController{
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("Content-Type", "application/json; charset=utf-8");
         return new ResponseEntity<String>((String) JsonFormatter.getInstance().formatNodeReadings(nodeReadings), responseHeaders, HttpStatus.OK);
+    }
+
+
+
+    /**
+     * Handle Request and return the appropriate response.
+     *
+     * @return response http servlet response.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
+     *          invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
+     *          invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *          invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *          testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException
+     *          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
+     *          capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException
+     *          invalid limit exception.
+     */
+    @Loggable
+    @RequestMapping(value = "/json/from/{from}/to/{to}/", method = RequestMethod.GET)
+    public ResponseEntity<String> getReadingsByDate(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("from") long from, @PathVariable("to") long to)
+            throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
+            InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException, IOException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+
+        // retrieve node
+        final Node node = nodeManager.getByName(nodeName);
+        if (node == null) {
+            throw new NodeNotFoundException("Cannot find node [" + nodeName + "]");
+        }
+
+        // retrieve capability
+        final Capability capability = capabilityManager.getByID(capabilityName);
+        if (capability == null) {
+            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
+        }
+
+        // retrieve readings based on node/capability
+        final List<NodeReading> nodeReadings;
+
+        // no limit is provided
+        nodeReadings = nodeReadingManager.listNodeReadings(node, capability, from, to);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        try {
+            return new ResponseEntity<String>((String) JsonFormatter.getInstance().formatNodeReadings(nodeReadings), responseHeaders, HttpStatus.OK);
+        } catch (NotImplementedException e) {
+            return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
