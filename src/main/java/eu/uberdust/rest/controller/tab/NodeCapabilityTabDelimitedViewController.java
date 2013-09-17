@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}")
-public final class NodeCapabilityTabDelimitedViewController extends UberdustSpringController{
+public final class NodeCapabilityTabDelimitedViewController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -139,15 +139,20 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         if (capability == null) {
             throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
         }
-        // retrieve last node rading for this node/capability
-        final LastNodeReading lnr = lastNodeReadingManager.getByNodeCapability(node, capability);
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
         try {
-            return new ResponseEntity<String>(TextFormatter.getInstance().formatNodeReading(lnr), responseHeaders, HttpStatus.OK);
-        } catch (NotImplementedException e) {
-            return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+            // retrieve last node rading for this node/capability
+            final LastNodeReading lnr = lastNodeReadingManager.getByNodeCapability(node, capability);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+            try {
+                return new ResponseEntity<String>(TextFormatter.getInstance().formatNodeReading(lnr), responseHeaders, HttpStatus.OK);
+            } catch (NotImplementedException e) {
+                return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (Exception e) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+            return new ResponseEntity<String>("NodeCapabilitiy Not Found!", responseHeaders, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -572,12 +577,6 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
     }
 
 
-
-
-
-
-
-
     /**
      * Handle Request and return the appropriate response.
      *
@@ -628,7 +627,7 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         final List<NodeReading> nodeReadings;
 
         final Long to = System.currentTimeMillis();
-        final Long from = to-millis;
+        final Long from = to - millis;
         // no limit is provided
         nodeReadings = nodeReadingManager.listNodeReadings(node, capability, from, to);
 
@@ -688,7 +687,7 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         }
 
         final Long to = System.currentTimeMillis();
-        final Long from = to-millis;
+        final Long from = to - millis;
 
         // retrieve readings based on node/capability
         final Double value = nodeReadingManager.minByDate(node, capability, from, to);
@@ -745,7 +744,7 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         }
 
         final Long to = System.currentTimeMillis();
-        final Long from = to-millis;
+        final Long from = to - millis;
 
         // retrieve readings based on node/capability
         final Double value = nodeReadingManager.maxByDate(node, capability, from, to);
@@ -802,7 +801,7 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         }
 
         final Long to = System.currentTimeMillis();
-        final Long from = to-millis;
+        final Long from = to - millis;
 
         // retrieve readings based on node/capability
         final Double value = nodeReadingManager.avgByDate(node, capability, from, to);
