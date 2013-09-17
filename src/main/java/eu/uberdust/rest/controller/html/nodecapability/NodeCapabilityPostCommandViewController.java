@@ -54,7 +54,7 @@ public final class NodeCapabilityPostCommandViewController extends UberdustSprin
      * Testbed peristence manager.
      */
     private transient TestbedController testbedManager;
-    private final Random rand;
+    private Random rand;
 
     public NodeCapabilityPostCommandViewController() {
         rand = new Random();
@@ -157,11 +157,12 @@ public final class NodeCapabilityPostCommandViewController extends UberdustSprin
 
     public String coapSend(Node node, Capability capability, String payload) {
         Request coapReq = new Request(CodeRegistry.METHOD_POST, false);
-        if (rand != null) {
-            coapReq.setMID(rand.nextInt() % 60000);
-        } else {
-            coapReq.setMID(0);
+        if (rand == null) {
+            rand = new Random();
+            rand.setSeed(node.getId() + capability.getName().hashCode() + payload.hashCode());
         }
+        coapReq.setMID(rand.nextInt() % 60000);
+
         if (node.getName().contains("0x")) {
             Option uriHost = new Option(OptionNumberRegistry.URI_HOST);
             uriHost.setStringValue(node.getName().split("0x")[1]);
