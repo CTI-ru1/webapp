@@ -165,7 +165,7 @@ public final class CapabilityRdfDescriptionController extends UberdustSpringCont
                 .append("  xmlns:ns1=\"http://purl.oclc.org/NET/ssnx/ssn#\"\n")
                 .append("  xmlns:ns2=\"http://spitfire-project.eu/cc/spitfireCC_n3.owl#\"\n")
                 .append("  xmlns:ns3=\"http://www.loa-cnr.it/ontologies/DUL.owl#\"\n")
-                .append("  xmlns:owl=\"http://www.w3.org/2002/07/owl#Class#\"\n")
+                .append("  xmlns:owl=\"http://www.w3.org/2002/07/owl#\"\n")
                 .append("  xmlns:ns4=\"http://purl.org/dc/terms/\">\n").append("\n");
         rdfDescription.append("<rdf:Description rdf:about=\"" + request.getRequestURL() + "\">\n")
                 .append("\t<owl:sameAs rdf:resource=\"" + capability.getSemanticUrl() + "\"/>\n")
