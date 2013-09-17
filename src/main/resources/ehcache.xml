@@ -127,7 +127,7 @@
            memoryStoreEvictionPolicy="LRU"
             />
     <cache name="eu.uberdust.rest.controller.html.node.GetController.getNodePosition"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="10000"
            overflowToDisk="false"
            diskPersistent="false"
@@ -137,7 +137,7 @@
             />
 
     <cache name="eu.wisebed.wisedb.controller.NodeReadingControllerImpl.getAbsolutePosition"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="10000"
            overflowToDisk="false"
            diskPersistent="false"
@@ -146,7 +146,7 @@
            memoryStoreEvictionPolicy="LRU"
             />
     <cache name="eu.uberdust.rest.controller.html.testbed.ShowController.getNodeType"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="10000"
            overflowToDisk="false"
            diskPersistent="false"
@@ -155,7 +155,7 @@
            memoryStoreEvictionPolicy="LRU"
             />
     <cache name="eu.uberdust.rest.controller.html.testbed.ShowController.getNodePositions"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="30"
            overflowToDisk="false"
            diskPersistent="false"
@@ -164,7 +164,7 @@
            memoryStoreEvictionPolicy="LRU"
             />
     <cache name="eu.uberdust.rest.controller.html.testbed.ListController.getNodePositions"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="30"
            overflowToDisk="false"
            diskPersistent="false"
@@ -174,7 +174,7 @@
             />
 
     <cache name="eu.uberdust.rest.controller.html.testbed.ShowController.getNodeTypes"
-           eternal="false"
+           eternal="true"
            maxElementsInMemory="30"
            overflowToDisk="false"
            diskPersistent="false"
