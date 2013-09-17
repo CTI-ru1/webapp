@@ -112,7 +112,7 @@ public final class CapabilityRdfDescriptionController extends UberdustSpringCont
      */
     @Loggable
     @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.GET, value = "/{rdfEncoding}")
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> handleDefault(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, HttpServletRequest request)
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
