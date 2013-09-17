@@ -30,7 +30,8 @@ import java.io.IOException;
  * Controller class that returns the position of a node in GeoRSS format.
  */
 @Controller
-@RequestMapping("/testbed/{testbedId}/capability/{capabilityName}/rdf/{rdfEncoding}")
+@RequestMapping("/testbed/{testbedId}/capability/{capabilityName}/rdf")
+
 public final class CapabilityRdfDescriptionController extends UberdustSpringController {
 
     /**
@@ -111,7 +112,31 @@ public final class CapabilityRdfDescriptionController extends UberdustSpringCont
      */
     @Loggable
     @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value = "/{rdfEncoding}")
+    public ResponseEntity<String> handleDefault(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, HttpServletRequest request)
+            throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
+            InvalidTestbedIdException {
+        return handle(testbedId, capabilityName, "rdf+xml", request);
+    }
+
+
+    /**
+     * Handle request and return the appropriate response.
+     *
+     * @return http servlet response.
+     * @throws java.io.IOException an IOException exception.
+     * @throws com.sun.syndication.io.FeedException
+     *                             a FeedException exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException
+     *                             NodeNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *                             TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *                             InvalidTestbedIdException exception.
+     */
+    @Loggable
+    @SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.GET, value = "/{rdfEncoding}")
     public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, @PathVariable("rdfEncoding") String rdfEncoding, HttpServletRequest request)
             throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
