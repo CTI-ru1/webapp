@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
-import org.quartz.impl.triggers.SimpleTriggerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -16,6 +15,7 @@ import java.util.List;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
@@ -83,8 +83,27 @@ public final class QuartzJobScheduler {
                     LOGGER.error(e, e);
                 }
             }
+
+
+            try {
+                addVirtualNodeChecker();
+            } catch (SchedulerException e) {
+                LOGGER.error(e, e);
+            }
+
             initialized = true;
         }
+    }
+
+    private void addVirtualNodeChecker() throws SchedulerException {
+        JobDetail job = newJob(RebuildEntitiesJob.class)
+                .withIdentity("virtualNodeChecker")
+                .build();
+        Trigger trigger = newTrigger().withIdentity("virtualNodeCheckerTrigger").startNow().withSchedule(simpleSchedule()
+                .withIntervalInMinutes(1)
+                .repeatForever())
+                .build();
+        sched.scheduleJob(job, trigger);
     }
 
     public Date getLastFiredTime(final Schedule schedule) throws SchedulerException {
@@ -129,12 +148,20 @@ public final class QuartzJobScheduler {
 
             Date startTime = cal.getTime();
 
-            SimpleTrigger trigger = new SimpleTriggerImpl("myTrigger" + schedule.getId(),
-                    null,
-                    startTime,
-                    null,
-                    0,
-                    0L);
+            Trigger trigger = TriggerBuilder.newTrigger()
+                    .withIdentity("myTrigger" + schedule.getId())
+                    .startAt(startTime)
+                    .endAt(null)
+                    .withSchedule(
+                            simpleSchedule()
+                                    .repeatSecondlyForTotalCount(1))
+                    .build();
+//            SimpleTrigger trigger = new SimpleTriggerImpl(,
+//                    null,
+//                    startTime,
+//                    null,
+//                    0,
+//                    0L);
 
 
 //            // Trigger the job to run now, and then every 40 seconds
