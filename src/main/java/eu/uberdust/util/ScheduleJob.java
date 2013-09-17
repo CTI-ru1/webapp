@@ -42,7 +42,7 @@ public class ScheduleJob implements Job {
 
 
         Request coapReq = new Request(CodeRegistry.METHOD_POST, false);
-
+        rand.setSeed(( node.hashCode() + capability.hashCode() + payload.hashCode() ));
         coapReq.setMID(rand.nextInt() % 60000);
 
         if (node.contains("0x")) {
