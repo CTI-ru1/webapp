@@ -125,11 +125,10 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
 
     @Override
     public final void update(final NodeReading lastReading) {
-        LOGGER.info("updating for " + lastReading);
+//        LOGGER.info("updating for " + lastReading);
         final String nodeName = lastReading.getCapability().getNode().getName();
         final String capabilityName = lastReading.getCapability().getCapability().getName();
-        LOGGER.info(nodeName
-                + "--" + capabilityName);
+//        LOGGER.info(nodeName + "--" + capabilityName);
         String testbedUrnPrefix = "";
         if (nodeName.contains(":")) {
             testbedUrnPrefix = nodeName.substring(0, nodeName.lastIndexOf(":") + 1);
@@ -151,10 +150,10 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
                                 || capabilityID.equals(capabilityUrnPrefix + "*")
                 )
                 ) {
-            LOGGER.info("is for me");
+//            LOGGER.info("is for me");
             //create the protobuf
             final Message.NodeReadings.Reading.Builder reading = Message.NodeReadings.Reading.newBuilder();
-            LOGGER.error("initialized?: " + reading.isInitialized());
+//            LOGGER.error("initialized?: " + reading.isInitialized());
             reading.setNode(lastReading.getCapability().getNode().getName())
                     .setCapability(lastReading.getCapability().getCapability().getName())
                     .setTimestamp(lastReading.getTimestamp().getTime());
@@ -168,7 +167,7 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
                     .setType(Message.Envelope.Type.NODE_READINGS)
                     .setNodeReadings(readings)
                     .build();
-            LOGGER.info("envelope built");
+//            LOGGER.info("envelope built");
 
             String readingToString = "";
             try {
@@ -177,7 +176,7 @@ public class LastReadingWSListener extends AbstractWebSocketListener implements 
                 LOGGER.error(e, e);
             }
 
-            LOGGER.info("Updating " + users.size() + " listeners");
+//            LOGGER.info("Updating " + users.size() + " listeners");
 
             for (final WebSocketContext user : users) {
                 try {
