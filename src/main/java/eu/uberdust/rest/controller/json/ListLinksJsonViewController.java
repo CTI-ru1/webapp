@@ -37,36 +37,6 @@ public final class ListLinksJsonViewController extends UberdustSpringController 
     private static final Logger LOGGER = Logger.getLogger(ListLinksJsonViewController.class);
 
     /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Link persistence manager.
-     */
-    private transient LinkController linkManager;
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
-     * Sets link persistence manager.
-     *
-     * @param linkManager link persistence manager.
-     */
-    @Autowired
-    public void setLinkManager(final LinkController linkManager) {
-        this.linkManager = linkManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.

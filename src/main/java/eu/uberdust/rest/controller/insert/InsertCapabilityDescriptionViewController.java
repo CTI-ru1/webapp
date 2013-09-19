@@ -33,35 +33,6 @@ public final class InsertCapabilityDescriptionViewController extends UberdustSpr
     private static final Logger LOGGER = Logger.getLogger(InsertCapabilityDescriptionViewController.class);
 
     /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-    /**
-     * Capability persistence manager.
-     */
-    private transient CapabilityController capabilityManager;
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
-     * Sets capability persistence manager.
-     *
-     * @param capabilityManager capability persistence manager.
-     */
-    @Autowired
-    public void setCapabilityManager(final CapabilityController capabilityManager) {
-        this.capabilityManager = capabilityManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.

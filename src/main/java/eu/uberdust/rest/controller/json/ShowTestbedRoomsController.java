@@ -38,47 +38,6 @@ public final class ShowTestbedRoomsController extends UberdustSpringController{
     private static final Logger LOGGER = Logger.getLogger(ShowTestbedRoomsController.class);
 
     /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Last node reading persistence manager.
-     */
-    private transient NodeCapabilityController nodeCapabilityManager;
-
-    /**
-     * Last link reading persistence manager.
-     */
-    private transient CapabilityController capabilityManager;
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
-     * @param nodeCapabilityManager
-     */
-    @Autowired
-    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
-        this.nodeCapabilityManager = nodeCapabilityManager;
-    }
-
-    /**
-     * @param capabilityManager
-     */
-    @Autowired
-    public void setCapabilityManager(final CapabilityController capabilityManager) {
-        this.capabilityManager = capabilityManager;
-    }
-
-    /**
      * Handle request and return the appropriate response.
      *
      * @return http servlet response.

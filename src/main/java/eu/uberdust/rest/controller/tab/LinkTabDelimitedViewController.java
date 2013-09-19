@@ -42,65 +42,6 @@ public final class LinkTabDelimitedViewController extends UberdustSpringControll
     private static final Logger LOGGER = Logger.getLogger(LinkTabDelimitedViewController.class);
 
     /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Link persistence manager.
-     */
-    private transient LinkController linkManager;
-    /**
-     * Capability persistence manager.
-     */
-    private transient CapabilityController capabilityManager;
-
-    /**
-     * NodeReading persistence manager.
-     */
-    private transient LinkReadingController linkReadingManager;
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
-     * Sets link persistence manager.
-     *
-     * @param linkManager link persistence manager.
-     */
-    @Autowired
-    public void setLinkManager(final LinkController linkManager) {
-        this.linkManager = linkManager;
-    }
-
-    /**
-     * Sets capability persistence manager.
-     *
-     * @param capabilityManager capability persistence manager.
-     */
-    @Autowired
-    public void setCapabilityManager(final CapabilityController capabilityManager) {
-        this.capabilityManager = capabilityManager;
-    }
-
-    /**
-     * Sets NodeReading persistence manager.
-     *
-     * @param linkReadingManager NodeReading persistence manager.
-     */
-    @Autowired
-    public void setLinkReadingManager(final LinkReadingController linkReadingManager) {
-        this.linkReadingManager = linkReadingManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.

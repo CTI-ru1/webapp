@@ -38,36 +38,6 @@ public final class ListVirtualNodeJsonViewController extends UberdustSpringContr
     private static final Logger LOGGER = Logger.getLogger(ListVirtualNodeJsonViewController.class);
 
     /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Node persistence manager.
-     */
-    private transient NodeController nodeManager;
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
-     * Sets node persistence manager.
-     *
-     * @param nodeManager node persistence manager.
-     */
-    @Autowired
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.

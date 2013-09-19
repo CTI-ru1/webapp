@@ -35,66 +35,6 @@ public final class HtmlNodeReadingController extends UberdustSpringController{
     private static final Logger LOGGER = Logger.getLogger(HtmlNodeReadingController.class);
 
     /**
-     * Node peristence manager.
-     */
-    private transient NodeController nodeManager;
-
-    /**
-     * Capability persistence manager.
-     */
-    private transient CapabilityController capabilityManager;
-
-    /**
-     * NodeReading persistence manager.
-     */
-    private transient NodeReadingController nodeReadingManager;
-
-    /**
-     * Testbed peristence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Sets node persistence manager.
-     *
-     * @param nodeManager node persistence manager.
-     */
-    @Autowired
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
-
-    /**
-     * Sets capability persistence manager.
-     *
-     * @param capabilityManager capability persistence manager.
-     */
-    @Autowired
-    public void setCapabilityManager(final CapabilityController capabilityManager) {
-        this.capabilityManager = capabilityManager;
-    }
-
-    /**
-     * Sets NodeReading persistence manager.
-     *
-     * @param nodeReadingManager NodeReading persistence manager.
-     */
-    @Autowired
-    public void setNodeReadingManager(final NodeReadingController nodeReadingManager) {
-        this.nodeReadingManager = nodeReadingManager;
-    }
-
-    /**
-     * Sets Testbed persistence manager.
-     *
-     * @param testbedManager Testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.

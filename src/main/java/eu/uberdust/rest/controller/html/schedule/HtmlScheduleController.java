@@ -44,64 +44,6 @@ public final class HtmlScheduleController extends UberdustSpringController {
     private static final Logger LOGGER = Logger.getLogger(HtmlScheduleController.class);
 
     /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Node persistence manager.
-     */
-    private transient NodeController nodeManager;
-
-    /**
-     * Capability persistence manager.
-     */
-    private transient CapabilityController capabilityManager;
-    private transient ScheduleController scheduleManager;
-    private transient QuartzJobScheduler quartzJobScheduler;
-
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
-     * Sets node persistence manager.
-     *
-     * @param nodeManager node persistence manager.
-     */
-    @Autowired
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
-
-    @Autowired
-    public void setQuartzJobScheduler(QuartzJobScheduler quartzJobScheduler) {
-        this.quartzJobScheduler = quartzJobScheduler;
-    }
-
-    /**
-     * Sets capability persistence manager.
-     *
-     * @param capabilityManager capability persistence manager.
-     */
-    @Autowired
-    public void setCapabilityManager(final CapabilityController capabilityManager) {
-        this.capabilityManager = capabilityManager;
-    }
-
-    @Autowired
-    public void setScheduleManager(final ScheduleController scheduleManager) {
-        this.scheduleManager = scheduleManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.

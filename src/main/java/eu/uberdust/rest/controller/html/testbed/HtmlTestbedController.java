@@ -29,7 +29,6 @@ public final class HtmlTestbedController extends UberdustSpringController {
      * Logger.
      */
     private static final Logger LOGGER = Logger.getLogger(HtmlTestbedController.class);
-    // Prepare data to pass to jsp
 
 
     /**
@@ -95,50 +94,54 @@ public final class HtmlTestbedController extends UberdustSpringController {
         final long start = System.currentTimeMillis();
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
+        try {
 
-        // look up testbed
-        final Testbed testbed = testbedManager.getByID(testbedId);
-        if (testbed == null) {
-            // if no testbed is found throw exception
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
-        }
-
-
-        // get testbed nodes
-        final List<Node> allNodes = nodeManager.list(testbed.getSetup());
-        final List<Node> nodes = new ArrayList<Node>();
-        final List<Node> virtual = new ArrayList<Node>();
-        for (Node node : allNodes) {
-            if (node.getName().contains("virtual")) {
-                virtual.add(node);
-            } else {
-                nodes.add(node);
+            // look up testbed
+            final Testbed testbed = testbedManager.getByID(testbedId);
+            if (testbed == null) {
+                // if no testbed is found throw exception
+                throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
             }
+
+
+            // get testbed nodes
+            final List<Node> allNodes = nodeManager.list(testbed.getSetup());
+            final List<Node> nodes = new ArrayList<Node>();
+            final List<Node> virtual = new ArrayList<Node>();
+            for (Node node : allNodes) {
+                if (node.getName().contains("virtual")) {
+                    virtual.add(node);
+                } else {
+                    nodes.add(node);
+                }
+            }
+
+            Map<String, Position> nodePositions = getNodePositions(testbed);
+            Map<String, String> nodeTypes = getNodeTypes(testbed);
+
+            // get testbed links
+
+            final List<Link> links = linkManager.list(setupManager.getByID(testbed.getId()));
+            // get testbed capabilities
+            final List<Capability> capabilities = capabilityManager.list(setupManager.getByID(testbed.getId()));
+
+            // Prepare data to pass to jsp
+
+
+            // else put thisNode instance in refData and return index view
+            refData.put("testbed", testbed);
+            refData.put("setup", testbed.getSetup());
+            refData.put("testbed", testbed);
+            refData.put("nodes", nodes);
+            refData.put("links", links);
+            refData.put("virtual", virtual);
+            refData.put("capabilities", capabilities);
+            refData.put("nodePositions", nodePositions);
+            refData.put("nodeTypes", nodeTypes);
+            refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+        } catch (Exception e) {
+            LOGGER.error(e, e);
         }
-
-        Map<String, Position> nodePositions = getNodePositions(testbed);
-        Map<String, String> nodeTypes = getNodeTypes(testbed);
-
-        // get testbed links
-        final List<Link> links = linkManager.list(testbed.getSetup());
-        // get testbed capabilities
-        final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
-
-        // Prepare data to pass to jsp
-
-
-        // else put thisNode instance in refData and return index view
-        refData.put("testbed", testbed);
-        refData.put("setup", testbed.getSetup());
-        refData.put("testbed", testbed);
-        refData.put("nodes", nodes);
-        refData.put("links", links);
-        refData.put("virtual", virtual);
-        refData.put("capabilities", capabilities);
-        refData.put("nodePositions", nodePositions);
-        refData.put("nodeTypes", nodeTypes);
-        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
-
         return new ModelAndView("testbed/show.html", refData);
     }
 

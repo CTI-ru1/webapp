@@ -43,50 +43,6 @@ public final class ShowNodeRdfController extends UberdustSpringController {
     private static final Logger LOGGER = Logger.getLogger(ShowNodeRdfController.class);
 
     /**
-     * Tested persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Node persistence manager.
-     */
-    private transient NodeController nodeManager;
-
-    private transient LastNodeReadingController lastNodeReadingManager;
-
-    @Autowired
-    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
-        this.nodeCapabilityManager = nodeCapabilityManager;
-    }
-
-    private transient NodeCapabilityController nodeCapabilityManager;
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
-     * Sets node persistence manager.
-     *
-     * @param nodeManager node persistence manager.
-     */
-    @Autowired
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
-
-    @Autowired
-    public void setLastNodeReadingManager(final LastNodeReadingController lastNodeReadingManager) {
-        this.lastNodeReadingManager = lastNodeReadingManager;
-    }
-
-    /**
      * Handle request and return the appropriate response.
      *
      * @return http servlet response.

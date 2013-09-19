@@ -37,36 +37,6 @@ public final class ListCapabilitiesController extends UberdustSpringController {
     private static final Logger LOGGER = Logger.getLogger(ListCapabilitiesController.class);
 
     /**
-     * {@link Testbed} persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * {@link Capability} persistence manager.
-     */
-    private transient CapabilityController capabilityManager;
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed peristence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
-     * Sets capability peristence manager.
-     *
-     * @param capabilityManager capability persistence manager.
-     */
-    @Autowired
-    public void setCapabilityManager(final CapabilityController capabilityManager) {
-        this.capabilityManager = capabilityManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      * System.out.println(request.getRemoteUser());
      *

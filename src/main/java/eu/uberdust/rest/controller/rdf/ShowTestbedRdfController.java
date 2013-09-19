@@ -33,22 +33,6 @@ public final class ShowTestbedRdfController extends UberdustSpringController{
     private static final Logger LOGGER = Logger.getLogger(ShowTestbedRdfController.class);
 
     /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
      * Handle request and return the appropriate response.
      *
      * @return http servlet response.

@@ -42,66 +42,6 @@ public final class CapabilityTabDelimitedController extends UberdustSpringContro
     private static final Logger LOGGER = Logger.getLogger(CapabilityTabDelimitedController.class);
 
     /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Capability persistence manager.
-     */
-    private transient CapabilityController capabilityManager;
-
-    /**
-     * Last node reading persistence manager.
-     */
-    private transient LastNodeReadingController lastNodeReadingManager;
-
-    /**
-     * Last link reading persistence manager.
-     */
-    private transient LastLinkReadingController lastLinkReadingManager;
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
-     * Sets capability persistence manager.
-     *
-     * @param capabilityManager capability persistence manager.
-     */
-    @Autowired
-    public void setCapabilityManager(final CapabilityController capabilityManager) {
-        this.capabilityManager = capabilityManager;
-    }
-
-    /**
-     * Sets last node reading persistence manager.
-     *
-     * @param lastNodeReadingManager last node reading persistence manager.
-     */
-    @Autowired
-    public void setLastNodeReadingManager(final LastNodeReadingController lastNodeReadingManager) {
-        this.lastNodeReadingManager = lastNodeReadingManager;
-    }
-
-    /**
-     * Sets last link reading persistence manager.
-     *
-     * @param lastLinkReadingManager last link reading persistence manager.
-     */
-    @Autowired
-    public void setLastLinkReadingManager(final LastLinkReadingController lastLinkReadingManager) {
-        this.lastLinkReadingManager = lastLinkReadingManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      * System.out.println(request.getRemoteUser());
      *

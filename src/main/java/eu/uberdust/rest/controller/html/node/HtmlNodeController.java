@@ -41,43 +41,6 @@ public final class HtmlNodeController extends UberdustSpringController {
     private static final Logger LOGGER = Logger.getLogger(HtmlNodeController.class);
 
     /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Node persistence manager.
-     */
-    private transient NodeController nodeManager;
-
-    private transient NodeCapabilityController nodeCapabilityManager;
-
-    @Autowired
-    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
-        this.nodeCapabilityManager = nodeCapabilityManager;
-    }
-
-    /**
-     * Sets node persistence manager.
-     *
-     * @param nodeManager node persistence manager.
-     */
-    @Autowired
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
      * Handle req and return the appropriate response.
      *
      * @return http servlet response.

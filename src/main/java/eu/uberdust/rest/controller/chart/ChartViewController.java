@@ -37,65 +37,6 @@ public final class ChartViewController extends UberdustSpringController {
      * Logger.
      */
     private static final Logger LOGGER = Logger.getLogger(ChartViewController.class);
-    /**
-     * NodeReadings persistence manager.
-     */
-    private transient NodeReadingController nodeReadingManager;
-
-    /**
-     * Node persistence manager.
-     */
-    private transient NodeController nodeManager;
-
-    /**
-     * Capability persistence manager.
-     */
-    private transient CapabilityController capabilityManager;
-
-    /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Sets nodeReadings persistence manager.
-     *
-     * @param nodeReadingManager nodeReadings persistence manager.
-     */
-    @Autowired
-    public void setNodeReadingManager(final NodeReadingController nodeReadingManager) {
-        this.nodeReadingManager = nodeReadingManager;
-    }
-
-    /**
-     * Sets node persistence manager.
-     *
-     * @param nodeManager node persistence manager.
-     */
-    @Autowired
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
-
-    /**
-     * Sets capability persistence manager.
-     *
-     * @param capabilityManager capability persistence manager.
-     */
-    @Autowired
-    public void setCapabilityManager(final CapabilityController capabilityManager) {
-        this.capabilityManager = capabilityManager;
-    }
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
 
     /**
      * Handle Request and return the appropriate response.

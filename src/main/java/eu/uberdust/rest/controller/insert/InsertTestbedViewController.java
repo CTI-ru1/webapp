@@ -4,8 +4,6 @@ import eu.uberdust.caching.Loggable;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.SetupController;
-import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Origin;
 import eu.wisebed.wisedb.model.Setup;
 import eu.wisebed.wisedb.model.Testbed;
@@ -34,28 +32,6 @@ public final class InsertTestbedViewController extends UberdustSpringController 
      * Looger.
      */
     private static final Logger LOGGER = Logger.getLogger(InsertTestbedViewController.class);
-    /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Testbed persistence manager.
-     */
-    private transient SetupController setupManager;
-
-    /**
-     * Sets Testbed persistence manager.
-     *
-     * @param testbedManager Testbed persistence manager.
-     */
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    public void setSetupManager(final SetupController setupManager) {
-        this.setupManager = setupManager;
-    }
 
     /**
      * Handle Request and return the appropriate response.

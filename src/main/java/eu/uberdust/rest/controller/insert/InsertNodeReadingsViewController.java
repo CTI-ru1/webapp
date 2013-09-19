@@ -36,36 +36,6 @@ public final class InsertNodeReadingsViewController extends UberdustSpringContro
     private static final Logger LOGGER = Logger.getLogger(InsertNodeReadingsViewController.class);
 
     /**
-     * NodeReading persistence manager.
-     */
-    private transient NodeReadingController nodeReadingManager;
-
-    /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Sets NodeReading persistence manager.
-     *
-     * @param nodeReadingManager NodeReading persistence manager.
-     */
-    @Autowired
-    public void setNodeReadingManager(final NodeReadingController nodeReadingManager) {
-        this.nodeReadingManager = nodeReadingManager;
-    }
-
-    /**
-     * Sets Testbed persistence manager.
-     *
-     * @param testbedManager Testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.

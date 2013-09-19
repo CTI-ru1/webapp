@@ -40,55 +40,7 @@ public final class NodeCapabilityPostCommandViewController extends UberdustSprin
      */
     private static final Logger LOGGER = Logger.getLogger(NodeCapabilityPostCommandViewController.class);
 
-    /**
-     * Node peristence manager.
-     */
-    private transient NodeController nodeManager;
-
-    /**
-     * Capability persistence manager.
-     */
-    private transient CapabilityController capabilityManager;
-
-    /**
-     * Testbed peristence manager.
-     */
-    private transient TestbedController testbedManager;
     private Random rand;
-
-    public NodeCapabilityPostCommandViewController() {
-        rand = new Random();
-    }
-
-    /**
-     * Sets node persistence manager.
-     *
-     * @param nodeManager node persistence manager.
-     */
-    @Autowired
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
-
-    /**
-     * Sets capability persistence manager.
-     *
-     * @param capabilityManager capability persistence manager.
-     */
-    @Autowired
-    public void setCapabilityManager(final CapabilityController capabilityManager) {
-        this.capabilityManager = capabilityManager;
-    }
-
-    /**
-     * Sets Testbed persistence manager.
-     *
-     * @param testbedManager Testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
 
     /**
      * Handle Request and return the appropriate response.

@@ -29,41 +29,6 @@ import java.util.Date;
 public final class InsertLinkReadingsViewController extends UberdustSpringController{
 
     /**
-     * LinkReading persistence manager.
-     */
-    private transient LinkReadingController linkReadingManager;
-
-    /**
-     * Looger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(InsertLinkReadingsViewController.class);
-
-    /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
-     * Sets link persistence manager.
-     *
-     * @param linkReadingManager LinkReading persistence manager.
-     */
-    @Autowired
-    public void setLinkReadingManager(final LinkReadingController linkReadingManager) {
-        this.linkReadingManager = linkReadingManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.

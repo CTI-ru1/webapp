@@ -38,43 +38,6 @@ public final class ListNodeCapabilitiesJsonViewController extends UberdustSpring
     private static final Logger LOGGER = Logger.getLogger(ListNodeCapabilitiesJsonViewController.class);
 
     /**
-     * Node peristence manager.
-     */
-    private transient NodeController nodeManager;
-
-    /**
-     * Testbed peristence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    private transient eu.wisebed.wisedb.controller.NodeCapabilityController nodeCapabilityManager;
-
-    @Autowired
-    public void setNodeCapabilityManager(final eu.wisebed.wisedb.controller.NodeCapabilityController nodeCapabilityManager) {
-        this.nodeCapabilityManager = nodeCapabilityManager;
-    }
-
-    /**
-     * Sets node persistence manager.
-     *
-     * @param nodeManager node persistence manager.
-     */
-    @Autowired
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
-
-    /**
-     * Sets Testbed persistence manager.
-     *
-     * @param testbedManager Testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.

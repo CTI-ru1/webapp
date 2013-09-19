@@ -33,21 +33,6 @@ public final class ListTestbedsTabDelimitedViewController extends UberdustSpring
     private static final Logger LOGGER = Logger.getLogger(ListTestbedsTabDelimitedViewController.class);
 
     /**
-     * Testbed persistence manager.
-     */
-    private transient TestbedController testbedManager;
-
-    /**
-     * Sets testbed persistence manager.
-     *
-     * @param testbedManager testbed persistence manager.
-     */
-    @Autowired
-    public void setTestbedManager(final TestbedController testbedManager) {
-        this.testbedManager = testbedManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.

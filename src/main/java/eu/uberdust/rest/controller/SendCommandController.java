@@ -31,21 +31,6 @@ public final class SendCommandController extends UberdustSpringController {
     private static final Logger LOGGER = Logger.getLogger(SendCommandController.class);
 
     /**
-     * Node persistence manager.
-     */
-    private transient NodeController nodeManager;
-
-    /**
-     * Sets node persistence manager.
-     *
-     * @param nodeManager node persistence manager.
-     */
-    @Autowired
-    public void setNodeManager(final NodeController nodeManager) {
-        this.nodeManager = nodeManager;
-    }
-
-    /**
      * Handle Request and return the appropriate response.
      *
      * @return http servlet response.

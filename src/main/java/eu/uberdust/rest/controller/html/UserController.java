@@ -21,13 +21,6 @@ import java.util.List;
 @RequestMapping(value = "/user")
 public class UserController extends UberdustSpringController {
 
-    eu.wisebed.wisedb.controller.UserController userManager;
-
-    @Autowired
-    public void setUserManager(eu.wisebed.wisedb.controller.UserController userManager) {
-        this.userManager = userManager;
-    }
-
     @RequestMapping(value = "/{username}/{email}/{password}/{uuid}/", method = RequestMethod.POST)
     public ResponseEntity<String> showReadings(@PathVariable("username") String username, @PathVariable("email") String email, @PathVariable("password") String password, @PathVariable("uuid") Integer uuid) {
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());

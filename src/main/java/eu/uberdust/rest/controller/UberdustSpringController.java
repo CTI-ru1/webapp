@@ -36,82 +36,82 @@ public class UberdustSpringController {
     protected transient QuartzJobScheduler quartzJobScheduler;
 
     @Autowired
-    public void setTestbedManager(TestbedController testbedManager) {
+    public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
     }
 
     @Autowired
-    public void setSetupManager(SetupController setupManager) {
+    public void setSetupManager(final SetupController setupManager) {
         this.setupManager = setupManager;
     }
 
     @Autowired
-    public void setNodeManager(NodeController nodeManager) {
+    public void setNodeManager(final NodeController nodeManager) {
         this.nodeManager = nodeManager;
     }
 
     @Autowired
-    public void setLinkManager(LinkController linkManager) {
-        this.linkManager = this.linkManager;
+    public void setLinkManager(final LinkController linkManager) {
+        this.linkManager = linkManager;
     }
 
     @Autowired
-    public void setCapabilityManager(CapabilityController capabilityManager) {
+    public void setCapabilityManager(final CapabilityController capabilityManager) {
         this.capabilityManager = capabilityManager;
     }
 
     @Autowired
-    public void setNodeCapabilityManager(NodeCapabilityController nodeCapabilityManager) {
+    public void setNodeCapabilityManager(final NodeCapabilityController nodeCapabilityManager) {
         this.nodeCapabilityManager = nodeCapabilityManager;
     }
 
     @Autowired
-    public void setLinkCapabilityManager(LinkCapabilityController linkCapabilityManager) {
+    public void setLinkCapabilityManager(final LinkCapabilityController linkCapabilityManager) {
         this.linkCapabilityManager = linkCapabilityManager;
     }
 
     @Autowired
-    public void setNodeReadingManager(NodeReadingController nodeReadingManager) {
+    public void setNodeReadingManager(final NodeReadingController nodeReadingManager) {
         this.nodeReadingManager = nodeReadingManager;
     }
 
     @Autowired
-    public void setLinkReadingManager(LinkReadingController linkReadingManager) {
+    public void setLinkReadingManager(final LinkReadingController linkReadingManager) {
         this.linkReadingManager = linkReadingManager;
     }
 
     @Autowired
-    public void setLastNodeReadingManager(LastNodeReadingController lastNodeReadingManager) {
+    public void setLastNodeReadingManager(final LastNodeReadingController lastNodeReadingManager) {
         this.lastNodeReadingManager = lastNodeReadingManager;
     }
 
     @Autowired
-    public void setLastLinkReadingManager(LastLinkReadingController lastLinkReadingManager) {
+    public void setLastLinkReadingManager(final LastLinkReadingController lastLinkReadingManager) {
         this.lastLinkReadingManager = lastLinkReadingManager;
     }
 
     @Autowired
-    public void setScheduleManager(ScheduleController scheduleManager) {
+    public void setScheduleManager(final ScheduleController scheduleManager) {
         this.scheduleManager = scheduleManager;
     }
 
     @Autowired
-    public void setVirtualNodeDescriptionManager(VirtualNodeDescriptionController virtualNodeDescriptionManager) {
+    public void setVirtualNodeDescriptionManager(final VirtualNodeDescriptionController virtualNodeDescriptionManager) {
         this.virtualNodeDescriptionManager = virtualNodeDescriptionManager;
     }
 
     @Autowired
-    public void setUserManager(UserController userManager) {
+    public void setUserManager(final UserController userManager) {
         this.userManager = userManager;
     }
 
     @Autowired
-    public void setUserRoleManager(UserRoleController userRoleManager) {
+    public void setUserRoleManager(final UserRoleController userRoleManager) {
         this.userRoleManager = userRoleManager;
     }
 
     @Autowired
-    public void setQuartzJobScheduler(QuartzJobScheduler quartzJobScheduler) {
+    public void setQuartzJobScheduler(final QuartzJobScheduler quartzJobScheduler) {
         this.quartzJobScheduler = quartzJobScheduler;
     }
 
