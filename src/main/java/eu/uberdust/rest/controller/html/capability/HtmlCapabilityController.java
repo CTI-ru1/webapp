@@ -23,21 +23,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Controller class that returns the a web page for a capability.
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/capability")
-public final class CapabilityViewController extends UberdustSpringController {
+public final class HtmlCapabilityController extends UberdustSpringController {
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(CapabilityViewController.class);
+    private static final Logger LOGGER = Logger.getLogger(HtmlCapabilityController.class);
 
     /**
      * Testbed persistence manager.

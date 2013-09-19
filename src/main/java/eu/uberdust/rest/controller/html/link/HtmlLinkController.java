@@ -29,12 +29,12 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/link")
-public final class LinkViewController extends UberdustSpringController{
+public final class HtmlLinkController extends UberdustSpringController{
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(LinkViewController.class);
+    private static final Logger LOGGER = Logger.getLogger(HtmlLinkController.class);
 
     /**
      * Link persistence manager.

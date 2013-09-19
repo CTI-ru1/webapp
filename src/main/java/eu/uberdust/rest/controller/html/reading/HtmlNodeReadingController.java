@@ -20,21 +20,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Controller class that returns an HTML page containing a list of the readings for a node/capability.
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/html")
-public final class ReadingViewController extends UberdustSpringController{
+public final class HtmlNodeReadingController extends UberdustSpringController{
 
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(ReadingViewController.class);
+    private static final Logger LOGGER = Logger.getLogger(HtmlNodeReadingController.class);
 
     /**
      * Node peristence manager.

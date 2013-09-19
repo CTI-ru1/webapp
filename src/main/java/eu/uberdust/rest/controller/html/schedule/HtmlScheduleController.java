@@ -36,12 +36,12 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/schedule")
-public final class ScheduleViewController extends UberdustSpringController {
+public final class HtmlScheduleController extends UberdustSpringController {
 
     /**
      * Logger persistence manager.
      */
-    private static final Logger LOGGER = Logger.getLogger(ScheduleViewController.class);
+    private static final Logger LOGGER = Logger.getLogger(HtmlScheduleController.class);
 
     /**
      * Testbed persistence manager.

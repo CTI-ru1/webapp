@@ -34,11 +34,11 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node")
-public final class NodeViewController extends UberdustSpringController {
+public final class HtmlNodeController extends UberdustSpringController {
     /**
      * Logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(NodeViewController.class);
+    private static final Logger LOGGER = Logger.getLogger(HtmlNodeController.class);
 
     /**
      * Testbed persistence manager.

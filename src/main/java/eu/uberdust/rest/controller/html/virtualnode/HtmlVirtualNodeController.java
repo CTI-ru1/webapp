@@ -6,7 +6,6 @@ import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.controller.*;
-import eu.wisebed.wisedb.exception.UnknownTestbedException;
 import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -32,12 +31,12 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/virtualnode")
-public final class VirtualNodeViewController extends UberdustSpringController {
+public final class HtmlVirtualNodeController extends UberdustSpringController {
 
     /**
      * Logger persistence manager.
      */
-    private static final Logger LOGGER = Logger.getLogger(VirtualNodeViewController.class);
+    private static final Logger LOGGER = Logger.getLogger(HtmlVirtualNodeController.class);
 
     /**
      * Testbed persistence manager.
