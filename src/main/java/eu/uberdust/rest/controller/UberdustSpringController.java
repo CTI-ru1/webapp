@@ -19,20 +19,20 @@ public class UberdustSpringController {
     protected Map<String, Object> refData;
     protected String current_user;
     protected transient TestbedController testbedManager;
-    private transient SetupController setupManager;
+    protected transient SetupController setupManager;
     protected transient NodeController nodeManager;
-    private transient LinkController linkManger;
-    private transient CapabilityController capabilityManager;
-    private transient NodeCapabilityController nodeCapabilityManager;
-    private transient LinkCapabilityController linkCapabilityManager;
-    private transient NodeReadingController nodeReadingManager;
-    private transient LinkReadingController linkReadingManager;
-    private transient LastNodeReadingController lastNodeReadingManager;
-    private transient LastLinkReadingController lastLinkReadingManager;
-    private transient ScheduleController scheduleManager;
-    private transient VirtualNodeDescriptionController virtualNodeDescriptionManager;
-    private transient UserController userManager;
-    private transient UserRoleController userRoleManager;
+    protected transient LinkController linkManager;
+    protected transient CapabilityController capabilityManager;
+    protected transient NodeCapabilityController nodeCapabilityManager;
+    protected transient LinkCapabilityController linkCapabilityManager;
+    protected transient NodeReadingController nodeReadingManager;
+    protected transient LinkReadingController linkReadingManager;
+    protected transient LastNodeReadingController lastNodeReadingManager;
+    protected transient LastLinkReadingController lastLinkReadingManager;
+    protected transient ScheduleController scheduleManager;
+    protected transient VirtualNodeDescriptionController virtualNodeDescriptionManager;
+    protected transient UserController userManager;
+    protected transient UserRoleController userRoleManager;
     protected transient QuartzJobScheduler quartzJobScheduler;
 
     @Autowired
@@ -51,8 +51,8 @@ public class UberdustSpringController {
     }
 
     @Autowired
-    public void setLinkManger(LinkController linkManager) {
-        this.linkManger = linkManger;
+    public void setLinkManager(LinkController linkManager) {
+        this.linkManager = this.linkManager;
     }
 
     @Autowired
