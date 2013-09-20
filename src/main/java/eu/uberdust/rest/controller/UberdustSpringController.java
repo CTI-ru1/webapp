@@ -35,6 +35,8 @@ public class UberdustSpringController {
     protected transient UserRoleController userRoleManager;
     protected transient QuartzJobScheduler quartzJobScheduler;
 
+    protected transient StatisticsController statisticsManager;
+
     @Autowired
     public void setTestbedManager(final TestbedController testbedManager) {
         this.testbedManager = testbedManager;
@@ -113,6 +115,11 @@ public class UberdustSpringController {
     @Autowired
     public void setQuartzJobScheduler(final QuartzJobScheduler quartzJobScheduler) {
         this.quartzJobScheduler = quartzJobScheduler;
+    }
+
+    @Autowired
+    public void setStatisticsManager(StatisticsController statisticsManager) {
+        this.statisticsManager = statisticsManager;
     }
 
     public void initialize(Object user) {

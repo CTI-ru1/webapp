@@ -72,6 +72,7 @@ public final class HtmlTestbedController extends UberdustSpringController {
             refData.put("nodePositions", nodePositions);
 
             refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+            statisticsManager.add(new Statistics("/testbed/", System.currentTimeMillis() - start));
             return new ModelAndView("testbed/list.html", refData);
         } catch (Exception e) {
             LOGGER.error("e", e);
@@ -142,6 +143,7 @@ public final class HtmlTestbedController extends UberdustSpringController {
         } catch (Exception e) {
             LOGGER.error(e, e);
         }
+        statisticsManager.add(new Statistics("/testbed/" + testbedId, System.currentTimeMillis() - start));
         return new ModelAndView("testbed/show.html", refData);
     }
 
@@ -225,6 +227,7 @@ public final class HtmlTestbedController extends UberdustSpringController {
         } catch (Exception e) {
             LOGGER.error(e, e);
         }
+        statisticsManager.add(new Statistics("/testbed/" + testbedId+"/status", System.currentTimeMillis() - start));
         return new ModelAndView("testbed/status.html", refData);
 
     }
