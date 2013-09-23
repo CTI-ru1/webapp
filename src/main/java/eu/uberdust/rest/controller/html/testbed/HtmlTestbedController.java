@@ -4,6 +4,7 @@ import eu.uberdust.caching.Cachable;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.HtmlFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.annotation.WiseLog;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -37,6 +38,7 @@ public final class HtmlTestbedController extends UberdustSpringController {
      * @return response http servlet response.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/")
     @RequestMapping(value = {"/", "/testbed"}, method = RequestMethod.GET)
     public ModelAndView listTestbeds() {
         final long start = System.currentTimeMillis();
@@ -72,7 +74,6 @@ public final class HtmlTestbedController extends UberdustSpringController {
             refData.put("nodePositions", nodePositions);
 
             refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
-            statisticsManager.add(new Statistics("/testbed/", System.currentTimeMillis() - start));
             return new ModelAndView("testbed/list.html", refData);
         } catch (Exception e) {
             LOGGER.error("e", e);
@@ -89,6 +90,7 @@ public final class HtmlTestbedController extends UberdustSpringController {
      *          a InvalidTestbedException exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/id/")
     @RequestMapping(value = "/testbed/{testbedId}", method = RequestMethod.GET)
     public ModelAndView showTestbed(@PathVariable("testbedId") int testbedId)
             throws TestbedNotFoundException, InvalidTestbedIdException {
@@ -143,7 +145,6 @@ public final class HtmlTestbedController extends UberdustSpringController {
         } catch (Exception e) {
             LOGGER.error(e, e);
         }
-        statisticsManager.add(new Statistics("/testbed/" + testbedId, System.currentTimeMillis() - start));
         return new ModelAndView("testbed/show.html", refData);
     }
 
@@ -155,6 +156,7 @@ public final class HtmlTestbedController extends UberdustSpringController {
      * @throws TestbedNotFoundException  a TestbedNotFoundException exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/status/")
     @RequestMapping(value = "/testbed/{testbedId}/status", method = RequestMethod.GET)
     public ModelAndView showTestbedStatus(@PathVariable("testbedId") int testbedId) throws TestbedNotFoundException {
         final long start = System.currentTimeMillis();
@@ -227,7 +229,6 @@ public final class HtmlTestbedController extends UberdustSpringController {
         } catch (Exception e) {
             LOGGER.error(e, e);
         }
-        statisticsManager.add(new Statistics("/testbed/" + testbedId+"/status", System.currentTimeMillis() - start));
         return new ModelAndView("testbed/status.html", refData);
 
     }

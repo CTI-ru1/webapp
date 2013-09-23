@@ -1,6 +1,7 @@
 package eu.uberdust.rest.controller.html.link;
 
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.rest.annotation.WiseLog;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.LinkNotFoundException;
@@ -29,7 +30,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/link")
-public final class HtmlLinkController extends UberdustSpringController{
+public final class HtmlLinkController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -44,6 +45,7 @@ public final class HtmlLinkController extends UberdustSpringController{
      * @throws TestbedNotFoundException  an TestbedNotFoundException exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/link/")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listLinks(@PathVariable("testbedId") int testbedId) throws TestbedNotFoundException, InvalidTestbedIdException {
 
@@ -79,6 +81,7 @@ public final class HtmlLinkController extends UberdustSpringController{
      * @throws LinkNotFoundException     LinkNotFoundException exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/link/show/")
     @RequestMapping(value = "{sourceName}/{targetName}", method = RequestMethod.GET)
     public ModelAndView getLink(@PathVariable("testbedId") int testbedId, @PathVariable("sourceName") String sourceName, @PathVariable("targetName") String targetName) throws InvalidTestbedIdException, TestbedNotFoundException, LinkNotFoundException {
 

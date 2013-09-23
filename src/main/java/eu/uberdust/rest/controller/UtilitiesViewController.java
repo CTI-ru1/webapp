@@ -3,6 +3,7 @@ package eu.uberdust.rest.controller;
 import eu.uberdust.caching.EvictCache;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.annotation.WiseLog;
 import eu.wisebed.wisedb.model.Statistics;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
@@ -108,6 +109,7 @@ public final class UtilitiesViewController extends UberdustSpringController {
      * @throws java.io.IOException IO exception.
      */
     @Loggable
+    @WiseLog(logName = "/ping/")
     @RequestMapping(value = "/ping", method = RequestMethod.GET)
     public ResponseEntity<String> listTestbeds() throws IOException, NotImplementedException {
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
@@ -117,7 +119,6 @@ public final class UtilitiesViewController extends UberdustSpringController {
         responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
 
         quartzJobScheduler.init();
-        statisticsManager.add(new Statistics("/ping/", System.currentTimeMillis() - start));
         return new ResponseEntity<String>("pong", responseHeaders, HttpStatus.OK);
     }
 }

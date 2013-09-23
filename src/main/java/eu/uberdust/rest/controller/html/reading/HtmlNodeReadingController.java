@@ -2,6 +2,7 @@ package eu.uberdust.rest.controller.html.reading;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.HtmlFormatter;
+import eu.uberdust.rest.annotation.WiseLog;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.*;
 import eu.wisebed.wisedb.controller.CapabilityController;
@@ -27,7 +28,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/html")
-public final class HtmlNodeReadingController extends UberdustSpringController{
+public final class HtmlNodeReadingController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -47,6 +48,7 @@ public final class HtmlNodeReadingController extends UberdustSpringController{
      * @throws InvalidLimitException          invalid limit exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/readings/list/limit/count/")
     @RequestMapping("/limit/{limit}")
     public ModelAndView showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
@@ -113,6 +115,7 @@ public final class HtmlNodeReadingController extends UberdustSpringController{
      *          invalid limit exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/readings/list/limit/time/")
     @RequestMapping("/from/{from}/to/{to}/")
     public ModelAndView showReadingsByDate(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("from") long from, @PathVariable("to") long to)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,

@@ -122,6 +122,10 @@ public class UberdustSpringController {
         this.statisticsManager = statisticsManager;
     }
 
+    public StatisticsController getStatisticsManager() {
+        return statisticsManager;
+    }
+
     public void initialize(Object user) {
         refData = new HashMap<String, Object>();
         String username;

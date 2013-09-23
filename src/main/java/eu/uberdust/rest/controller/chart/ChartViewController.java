@@ -51,7 +51,7 @@ public final class ChartViewController extends UberdustSpringController {
      */
     @Loggable
     @RequestMapping("/limit/{limit}")
-    public ModelAndView showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit, final HttpServletRequest servletRequest) throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
+    public ModelAndView showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit, final  HttpServletRequest servletRequest) throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
             TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException {
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 

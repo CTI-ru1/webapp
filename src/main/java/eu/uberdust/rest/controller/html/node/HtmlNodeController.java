@@ -2,6 +2,7 @@ package eu.uberdust.rest.controller.html.node;
 
 import eu.uberdust.caching.Cachable;
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.rest.annotation.WiseLog;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
@@ -49,6 +50,7 @@ public final class HtmlNodeController extends UberdustSpringController {
      * @throws NodeNotFoundException     NodeNotFoundException exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/node/show/")
     @RequestMapping(value = "/{nodeName}", method = RequestMethod.GET)
     public ModelAndView getNode(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName) throws TestbedNotFoundException, NodeNotFoundException {
 
@@ -77,8 +79,6 @@ public final class HtmlNodeController extends UberdustSpringController {
 
 
         // Prepare data to pass to jsp
-
-
         // else put thisNode instance in refData and return index view
         refData.put("testbed", testbed);
         refData.put("setup", testbed.getSetup());
@@ -135,6 +135,7 @@ public final class HtmlNodeController extends UberdustSpringController {
      * @throws TestbedNotFoundException  an TestbedNotFoundException exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/node/")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listNodes(@PathVariable("testbedId") int testbedId) throws TestbedNotFoundException {
 

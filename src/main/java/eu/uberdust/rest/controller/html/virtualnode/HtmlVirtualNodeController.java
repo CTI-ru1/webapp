@@ -2,6 +2,7 @@ package eu.uberdust.rest.controller.html.virtualnode;
 
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.annotation.WiseLog;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
@@ -48,6 +49,7 @@ public final class HtmlVirtualNodeController extends UberdustSpringController {
      *          an TestbedNotFoundException exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/virtualnode/")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listVirtualNodes(@PathVariable("testbedId") int testbedId)
             throws TestbedNotFoundException, InvalidTestbedIdException {
@@ -92,6 +94,7 @@ public final class HtmlVirtualNodeController extends UberdustSpringController {
      *          an TestbedNotFoundException exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/virtualnode/add/")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ModelAndView add(@PathVariable("testbedId") int testbedId,
                             @RequestParam("name") String name,
@@ -171,6 +174,7 @@ public final class HtmlVirtualNodeController extends UberdustSpringController {
 
 
     @Loggable
+    @WiseLog(logName = "/testbed/virtualnode/create/")
     @RequestMapping(method = RequestMethod.GET, value = "/create")
     public ModelAndView createVirtualNode(@PathVariable("testbedId") int testbedId)
             throws TestbedNotFoundException, InvalidTestbedIdException {
@@ -208,6 +212,7 @@ public final class HtmlVirtualNodeController extends UberdustSpringController {
      * @throws java.io.IOException IO exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/virtualnode/rebuild/")
     @RequestMapping(value = "/rebuild", method = RequestMethod.GET)
     public ResponseEntity<String> rebuild(@PathVariable("testbedId") int testbedId) throws IOException, NotImplementedException {
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());

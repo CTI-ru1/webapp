@@ -1,6 +1,7 @@
 package eu.uberdust.rest.controller.html.capability;
 
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.rest.annotation.WiseLog;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.CapabilityNotFoundException;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
@@ -46,6 +47,7 @@ public final class HtmlCapabilityController extends UberdustSpringController {
      * @throws TestbedNotFoundException  an TestbedNotFoundException exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/capability/")
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView listCapabilities(@PathVariable("testbedId") int testbedId) throws InvalidTestbedIdException, TestbedNotFoundException {
 
@@ -83,6 +85,7 @@ public final class HtmlCapabilityController extends UberdustSpringController {
      * @throws CapabilityNotFoundException CapabilityNotFoundExcetion.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/capability/show/")
     @RequestMapping(value = "/{capabilityName}", method = RequestMethod.GET)
     public ModelAndView listCapabilities(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName) throws TestbedNotFoundException, CapabilityNotFoundException {
 

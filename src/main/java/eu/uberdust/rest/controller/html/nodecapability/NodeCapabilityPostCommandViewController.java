@@ -5,6 +5,7 @@ import ch.ethz.inf.vs.californium.coap.Option;
 import ch.ethz.inf.vs.californium.coap.OptionNumberRegistry;
 import ch.ethz.inf.vs.californium.coap.Request;
 import eu.uberdust.caching.Loggable;
+import eu.uberdust.rest.annotation.WiseLog;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.*;
 import eu.uberdust.util.CommandDispatcher;
@@ -63,6 +64,7 @@ public final class NodeCapabilityPostCommandViewController extends UberdustSprin
      */
     @Loggable
     @RequestMapping(method = RequestMethod.POST)
+    @WiseLog(logName = "/testbed/command/send/")
     @ResponseBody
     public String handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("payload") String payload, HttpServletResponse response)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
