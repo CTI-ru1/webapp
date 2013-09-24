@@ -83,7 +83,7 @@ public final class UtilitiesViewController extends UberdustSpringController {
             } else {
                 readingsPing.append(",[");
             }
-            readingsPing.append(statsHome.get(i).getDate().getTime()).append(",").append(statsHome.get(i).getMillis()).append("]");
+            readingsPing.append(statsPing.get(i).getDate().getTime()).append(",").append(statsPing.get(i).getMillis()).append("]");
         }
         refData.put("readingsPing", readingsPing.toString());
         return new ModelAndView("statistics/stats.html", refData);

@@ -87,7 +87,7 @@
 
 <div class="container">
     <div class="span2">
-        <button class="btn btn-large btn-primary" onclick="generateCode();">Create Node!</button>
+        <button class="btn btn-large btn-primary" onclick="uploadRule();">Create Node!</button>
     </div>
     <div class="span6">
         <pre id="generated"></pre>

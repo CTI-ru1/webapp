@@ -208,6 +208,6 @@ Blockly.JavaScript.condition = function() {
     var dropdown_capability = this.getTitleValue('capability');
     var text_value = this.getTitleValue('value');
     // TODO: Assemble JavaScript into code variable.
-    var code = "{\"capability\":\""+dropdown_capability +"\","+"\"value\":\""+text_value+"\"},";
+    var code = "{'capability':'"+dropdown_capability +"','value':'"+text_value+"'},";
     return code;//[code, Blockly.JavaScript.ORDER_NONE];
 };
