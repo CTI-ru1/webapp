@@ -3,12 +3,11 @@ package eu.uberdust.rest.controller.tab;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
+import eu.uberdust.rest.annotation.WiseLog;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.*;
-import eu.wisebed.wisedb.controller.*;
 import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -101,6 +100,7 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
      * @throws InvalidLimitException          invalid limit exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/readings/list/limit/count/raw")
     @RequestMapping(value = "/tabdelimited/limit/{limit}", method = RequestMethod.GET)
     public ResponseEntity<String> getReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit)
             throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
@@ -304,6 +304,7 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
      *          invalid limit exception.
      */
     @Loggable
+    @WiseLog(logName = "/testbed/readings/list/limit/time/raw")
     @RequestMapping(value = "/tabdelimited/from/{from}/to/{to}/", method = RequestMethod.GET)
     public ResponseEntity<String> getReadingsByDate(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("from") long from, @PathVariable("to") long to)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
