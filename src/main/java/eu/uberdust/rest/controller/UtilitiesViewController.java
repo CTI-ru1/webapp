@@ -60,9 +60,15 @@ public final class UtilitiesViewController extends UberdustSpringController {
         final long start = System.currentTimeMillis();
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
+
         // Prepare data to pass to jsp
         Date now = new Date(System.currentTimeMillis());
         Date yesterday = new Date(System.currentTimeMillis() - 12 * 60 * 60 * 1000);
+
+        final List<Statistics> statsNodes = statisticsManager.list("/testbed/node/", yesterday, now);
+        final List<Statistics> statsNode = statisticsManager.list("/testbed/node/show/", yesterday, now);
+        final List<Statistics> statsLink = statisticsManager.list("/testbed/link/show/", yesterday, now);
+        final List<Statistics> statsLinks = statisticsManager.list("/testbed/link/", yesterday, now);
         final List<Statistics> statsHome = statisticsManager.list("/testbed/", yesterday, now);
         final List<Statistics> statsPing = statisticsManager.list("/ping/", yesterday, now);
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
