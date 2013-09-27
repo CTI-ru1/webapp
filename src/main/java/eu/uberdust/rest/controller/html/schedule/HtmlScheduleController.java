@@ -4,17 +4,11 @@ import eu.uberdust.caching.Loggable;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.uberdust.util.QuartzJobScheduler;
-import eu.wisebed.wisedb.controller.CapabilityController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.ScheduleController;
-import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Schedule;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -269,7 +263,7 @@ public final class HtmlScheduleController extends UberdustSpringController {
         final List<Node> nodes = new ArrayList<Node>();
         for (Node node : allnodes) {
             for (Capability capability : capabilityManager.list(node)) {
-                if (capability.getName().contains(":lz")) {
+                if (capability.getName().contains(":lz") || capability.getName().contains(":ac")) {
                     nodes.add(node);
                     break;
                 } else if (capability.getName().matches(".*:.r")) {
@@ -281,7 +275,7 @@ public final class HtmlScheduleController extends UberdustSpringController {
         final List<Capability> allcapabilities = capabilityManager.list(testbed.getSetup());
         final List<Capability> capabilities = new ArrayList<Capability>();
         for (Capability capability : allcapabilities) {
-            if (capability.getName().contains(":lz")) {
+            if (capability.getName().contains(":lz") || capability.getName().contains(":ac")) {
                 capabilities.add(capability);
             } else if (capability.getName().matches(".*:.r")) {
                 capabilities.add(capability);

@@ -12,6 +12,7 @@
 <jsp:useBean id="nodePosition" scope="request" class="eu.wisebed.wisedb.model.Position"/>
 <jsp:useBean id="nodeCapabilities" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="nodeType" scope="request" class="java.lang.String"/>
+<jsp:useBean id="admin" scope="request" class="java.lang.Boolean"/>
 
 <html>
 <head>
@@ -140,11 +141,29 @@
                         <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/rdf/rdf+xml/limit/1"/>">RDF_XML</a>
                     </td>
                     <td>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/chart/limit/10"/>"><img src="<c:url value="/img/graph.png"/>"> Chart</a>
+                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/chart/limit/10"/>"><img
+                                src="<c:url value="/img/graph.png"/>"> Chart</a>
                     </td>
                     <td>
                         <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/live"/>">Live</a>
                     </td>
+                    <c:choose>
+                        <c:when test="${admin}">
+                            <td>
+                                <button onclick="
+                                        if (confirm('Delete Capability?')){
+                                        $.ajax({
+                                        url: '<c:url
+                                        value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/"/>',
+                                        type: 'DELETE',
+                                        success: function(result) {
+                                        location.reload();
+                                        }
+                                        });}" class="btn btn-danger">Delete
+                                </button>
+                            </td>
+                        </c:when>
+                    </c:choose>
                 </tr>
             </c:if>
         </c:forEach>

@@ -7,15 +7,11 @@ import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.NodeCapabilityController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.TestbedController;
-import eu.wisebed.wisedb.model.Node;
-import eu.wisebed.wisedb.model.NodeCapability;
-import eu.wisebed.wisedb.model.Position;
-import eu.wisebed.wisedb.model.Testbed;
+import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,6 +81,10 @@ public final class HtmlNodeController extends UberdustSpringController {
         refData.put("node", node);
         refData.put("nodePosition", nodePosition);
         refData.put("nodeType", nodeType);
+        refData.put("nodeCapabilities", nodeCapabilities);
+
+        refData.put("admin", userRoleManager.isAdmin(userManager.getByUsername(current_user)));
+
         refData.put("nodeCapabilities", nodeCapabilities);
 
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
@@ -170,6 +170,30 @@ public final class HtmlNodeController extends UberdustSpringController {
 
     }
 
+    @Loggable
+    @RequestMapping(value = "/{nodeName}/capability/{capabilityName}/", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteNodeCapability(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, HttpServletResponse response) throws TestbedNotFoundException {
+        if (userRoleManager.isAdmin(userManager.getByUsername(current_user))) {
+            try {
+                final Node node = nodeManager.getByName(nodeName);
+                final Capability capability = capabilityManager.getByID(capabilityName);
+                final NodeCapability nodeCapability = nodeCapabilityManager.getByID(node, capability);
+//        lastNodeReadingManager.delete(nodeCapability.getLastNodeReading().getId());
+                nodeCapabilityManager.delete(nodeCapability.getId());
+            } catch (Exception e) {
+                LOGGER.error(e, e);
+            }
+
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+            return new ResponseEntity<String>("NodeCapability removed from the system", responseHeaders, HttpStatus.OK);
+        } else {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+            return new ResponseEntity<String>("Not Authorized.", responseHeaders, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     @Cachable
     String getNodeType(Node node) {
         String nodeType = "default";
@@ -179,5 +203,6 @@ public final class HtmlNodeController extends UberdustSpringController {
         }
         return nodeType;
     }
+
 
 }
