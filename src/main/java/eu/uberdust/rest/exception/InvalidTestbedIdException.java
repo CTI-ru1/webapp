@@ -1,9 +1,11 @@
 package eu.uberdust.rest.exception;
 
+import java.io.Serializable;
+
 /**
  * Invalid Testbed Id exception class.
  */
-public final class InvalidTestbedIdException extends Exception {
+public final class InvalidTestbedIdException extends Exception implements Serializable {
 
     /**
      * Serial Unique Version ID.
@@ -19,6 +21,7 @@ public final class InvalidTestbedIdException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param throwable throwable.
      */
     public InvalidTestbedIdException(final Throwable throwable) {
@@ -27,6 +30,7 @@ public final class InvalidTestbedIdException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param message message.
      */
     public InvalidTestbedIdException(final String message) {
@@ -35,7 +39,8 @@ public final class InvalidTestbedIdException extends Exception {
 
     /**
      * Constructor.
-     * @param message message.
+     *
+     * @param message   message.
      * @param throwable thrwoable.
      */
     public InvalidTestbedIdException(final String message, final Throwable throwable) {
