@@ -24,13 +24,67 @@
 <div class="container">
     <h1>ÜberDust Applications and Utils</h1>
 
-    <h3>Android Application:</h3>
-    <h3>Google Chrome Extension:</h3>
-    <h3>Google Chrome Application:</h3>
-    <h3>Firefox Os Application:</h3>
-    <h3>Windows 8 Application:</h3>
+    <ul class="media-list">
+        <li class="media">
+            <a class="pull-left" href="<c:url value="/files/uclient-debug.apk"/>">
+                <img class="media-object" data-src="holder.js/64x64" src="<c:url value="/img/logos/android.png"/>"
+                     style="width: 64px"/>
+            </a>
 
+            <div class="media-body">
+                <h4 class="media-heading">Android Application</h4>
+                Android Application to identify and interact with Überdust connected devices and virtual nodes.
+                Available <a href="<c:url value="/files/uclient-debug.apk"/>">here</a>.
+            </div>
+        </li>
+        <li class="media">
+            <a class="pull-left" href="https://chrome.google.com/webstore/detail/uberdust-controller/mpmpapplnfgkgbljalnpokocikkpmlli">
+                <img class="media-object" data-src="holder.js/64x64" src="<c:url value="/img/logos/chrome.png"/>"
+                     style="width: 64px"/>
+            </a>
 
+            <div class="media-body">
+                <h4 class="media-heading">Google Chrome Extension</h4>
+                Used to interact with a specific NodeCapability via a simple switch in the Google Chrome Toolbar.
+                Available <a href="https://chrome.google.com/webstore/detail/uberdust-controller/mpmpapplnfgkgbljalnpokocikkpmlli">here</a>.
+            </div>
+        </li>
+        <li class="media">
+            <a class="pull-left" href="https://chrome.google.com/webstore/detail/uberdust/oeabnighppapiggpgpnoiamhiilgjeck">
+                <img class="media-object" data-src="holder.js/64x64" src="<c:url value="/img/logos/chrome.png"/>"
+                     style="width: 64px"/>
+            </a>
+
+            <div class="media-body">
+                <h4 class="media-heading">Google Chrome Application</h4>
+                Offers more advanced features in comparisson to the Google Chrome Extension and the ability to control
+                multiple NodeCapabilities from different Devices and Testbeds at the same time.
+                Available <a href="https://chrome.google.com/webstore/detail/uberdust/oeabnighppapiggpgpnoiamhiilgjeck">here</a>.
+            </div>
+        </li>
+        <li class="media">
+            <a class="pull-left" href="#">
+                <img class="media-object" data-src="holder.js/64x64" src="<c:url value="/img/logos/firefoxos.png"/>"
+                     style="width: 64px"/>
+            </a>
+
+            <div class="media-body">
+                <h4 class="media-heading">Firefox Os Application</h4>
+                WIP
+            </div>
+        </li>
+        <li class="media">
+            <a class="pull-left" href="#">
+                <img class="media-object" data-src="holder.js/64x64" src="<c:url value="/img/logos/metro.png"/>"
+                     style="width: 64px"/>
+            </a>
+
+            <div class="media-body">
+                <h4 class="media-heading">Windows 8 Application</h4>
+                WIP
+            </div>
+        </li>
+    </ul>
 </div>
 
 <%@include file="/footer.jsp" %>

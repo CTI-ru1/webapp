@@ -15,6 +15,7 @@
                 Ru1 </a>
             </li>
             <li><a href="<c:url value="/rest/help/"/>"> Help </a></li>
+            <li><a href="<c:url value="/rest/apps/"/>"> Apps </a></li>
             <li><a> v${uberdustWebappVersion}b${hudsonBuild} </a></li>
         </ul>
 
