@@ -86,16 +86,16 @@
 </script>
 
 <div class="container">
-    <div class="span12">
-        <div class="span2" style="text-align: center;vertical-align: middle;">
+    <div class="col-md-12">
+        <div class="col-md-2" style="text-align: center;vertical-align: middle;">
             <button class="btn btn-large btn-primary" onclick="uploadRule();">Add Schdedule</button>
         </div>
-        <div class="span8" style="text-align: left;">
-            <div class="span6" style="text-align: left;visibility: hidden">Schedule Description:</div>
-            <div class="span6" style="text-align: center;visibility: hidden">
+        <div class="col-md-8" style="text-align: left;">
+            <div class="col-md-6" style="text-align: left;visibility: hidden">Schedule Description:</div>
+            <div class="col-md-6" style="text-align: center;visibility: hidden">
                 <pre id="generated"></pre>
             </div>
-            <span id="output" class="span6"></span>
+            <span id="output" class="col-md-6"></span>
         </div>
     </div>
     <div id="blocklyDiv">

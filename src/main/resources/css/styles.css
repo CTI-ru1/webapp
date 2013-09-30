@@ -32,15 +32,15 @@ table.readings th {
     color: #ff6666;
 }
 
-.footer {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    color: grey;
-    text-align: right;
-    text-decoration: none;
-    text-transform: lowercase;
-}
+/*.footer {*/
+    /*position: absolute;*/
+    /*top: 0px;*/
+    /*right: 0px;*/
+    /*color: grey;*/
+    /*text-align: right;*/
+    /*text-decoration: none;*/
+    /*text-transform: lowercase;*/
+/*}*/
 
 .realheader {
     position: fixed;
@@ -53,16 +53,16 @@ table.readings th {
     padding: 0px;
 }
 
-.realfooter {
-    position: fixed;
-    bottom: 0px;
-    height: 25px;
-    right: 0px;
-    text-align: right;
-    background: rgb(199, 199, 199);
-    width: 100%;
-    padding: 0px;
-}
+/*.realfooter {*/
+    /*position: fixed;*/
+    /*bottom: 0px;*/
+    /*height: 25px;*/
+    /*right: 0px;*/
+    /*text-align: right;*/
+    /*background: rgb(199, 199, 199);*/
+    /*width: 100%;*/
+    /*padding: 0px;*/
+/*}*/
 
 .container {
     margin-top: 50px;

@@ -1,9 +1,11 @@
 package eu.uberdust.rest.exception;
 
+import java.io.Serializable;
+
 /**
  * Invalid node id class exception.
  */
-public final class InvalidNodeIdException extends Exception {
+public final class InvalidNodeIdException extends Exception implements Serializable {
 
     /**
      * Serial Version Unique ID.
@@ -19,6 +21,7 @@ public final class InvalidNodeIdException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param throwable throwable.
      */
     public InvalidNodeIdException(final Throwable throwable) {
@@ -27,6 +30,7 @@ public final class InvalidNodeIdException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param message message.
      */
     public InvalidNodeIdException(final String message) {
@@ -35,7 +39,8 @@ public final class InvalidNodeIdException extends Exception {
 
     /**
      * Constructor.
-     * @param message message.
+     *
+     * @param message   message.
      * @param throwable throwable.
      */
     public InvalidNodeIdException(final String message, final Throwable throwable) {

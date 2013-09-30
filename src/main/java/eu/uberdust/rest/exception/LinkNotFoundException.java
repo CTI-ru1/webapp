@@ -1,9 +1,11 @@
 package eu.uberdust.rest.exception;
 
+import java.io.Serializable;
+
 /**
  * Link not found exception class.
  */
-public final class LinkNotFoundException extends Exception {
+public final class LinkNotFoundException extends Exception implements Serializable {
     /**
      * Serial Version Unique ID.
      */
@@ -18,6 +20,7 @@ public final class LinkNotFoundException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param throwable throwable.
      */
     public LinkNotFoundException(final Throwable throwable) {
@@ -26,6 +29,7 @@ public final class LinkNotFoundException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param message message.
      */
     public LinkNotFoundException(final String message) {
@@ -34,7 +38,8 @@ public final class LinkNotFoundException extends Exception {
 
     /**
      * Constructor.
-     * @param message message.
+     *
+     * @param message   message.
      * @param throwable throwable.
      */
     public LinkNotFoundException(final String message, final Throwable throwable) {

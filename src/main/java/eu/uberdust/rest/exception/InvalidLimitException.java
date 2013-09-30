@@ -1,9 +1,11 @@
 package eu.uberdust.rest.exception;
 
+import java.io.Serializable;
+
 /**
  * Invalid limit class exception.
  */
-public final class InvalidLimitException extends Exception {
+public final class InvalidLimitException extends Exception implements Serializable {
 
     /**
      * Serial Version Unique ID.
@@ -12,7 +14,8 @@ public final class InvalidLimitException extends Exception {
 
     /**
      * Constructor.
-     * @param message message.
+     *
+     * @param message   message.
      * @param throwable throwable.
      */
     public InvalidLimitException(final String message, final Throwable throwable) {

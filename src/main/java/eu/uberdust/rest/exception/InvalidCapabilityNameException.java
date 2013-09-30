@@ -1,9 +1,11 @@
 package eu.uberdust.rest.exception;
 
+import java.io.Serializable;
+
 /**
  * Invalid capability name exception.
  */
-public final class InvalidCapabilityNameException extends Exception {
+public final class InvalidCapabilityNameException extends Exception implements Serializable {
 
     /**
      * Serial Version Unique ID.

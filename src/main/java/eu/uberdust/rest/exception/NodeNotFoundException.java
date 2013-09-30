@@ -1,9 +1,11 @@
 package eu.uberdust.rest.exception;
 
+import java.io.Serializable;
+
 /**
  * Node not found exception class.
  */
-public final class NodeNotFoundException extends Exception {
+public final class NodeNotFoundException extends Exception implements Serializable {
 
     /**
      * Serial Version Unique ID.
@@ -19,6 +21,7 @@ public final class NodeNotFoundException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param throwable throwable.
      */
     public NodeNotFoundException(final Throwable throwable) {
@@ -27,6 +30,7 @@ public final class NodeNotFoundException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param message message,
      */
     public NodeNotFoundException(final String message) {
@@ -35,7 +39,8 @@ public final class NodeNotFoundException extends Exception {
 
     /**
      * Constructor.
-     * @param message message.
+     *
+     * @param message   message.
      * @param throwable throwable.
      */
     public NodeNotFoundException(final String message, final Throwable throwable) {

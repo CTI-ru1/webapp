@@ -22,7 +22,7 @@
 <body>
 <%@include file="/header.jsp" %>
 <div class="container">
-    <div class="span12">
+    <div class="col-md-12">
         <h3>
             <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>">${capability.name}</a>
         </h3>

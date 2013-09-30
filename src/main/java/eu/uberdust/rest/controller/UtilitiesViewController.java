@@ -43,6 +43,18 @@ public final class UtilitiesViewController extends UberdustSpringController {
     }
 
     @Loggable
+    @RequestMapping(value = "/apps", method = RequestMethod.GET)
+    public ModelAndView getApps() {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        // Prepare data to pass to jsp
+
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+        return new ModelAndView("help/apps.html", refData);
+    }
+
+    @Loggable
     @RequestMapping(value = "/help/websockets", method = RequestMethod.GET)
     public ModelAndView getHelpWebsockets() {
         final long start = System.currentTimeMillis();

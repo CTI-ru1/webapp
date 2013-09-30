@@ -50,14 +50,14 @@
 </script>
 
 <div class="container">
-<div class="span12">
+<div class="col-md-12">
     <h2>
         <a href="<c:url value="/rest/testbed/${testbed.id}"/>"><c:out value="${testbed.name}"/></a>
     </h2>
 </div>
 
 
-<div id="testbed_info" class="span6">
+<div id="testbed_info" class="col-md-6">
 
     <table class="table-hover">
         <tbody>
@@ -143,7 +143,7 @@
         </tbody>
     </table>
 </div>
-<div class="span6" id="map-canvas" style="height: 400px;">
+<div class="col-md-6" id="map-canvas" style="height: 400px;">
 
 </div>
 

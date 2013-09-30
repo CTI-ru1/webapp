@@ -1,9 +1,11 @@
 package eu.uberdust.rest.exception;
 
+import java.io.Serializable;
+
 /**
  * Testbed not found exception class.
  */
-public final class TestbedNotFoundException extends Exception {
+public final class TestbedNotFoundException extends Exception implements Serializable {
 
     /**
      * Serial Version Unique ID.
@@ -19,6 +21,7 @@ public final class TestbedNotFoundException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param throwable throwable.
      */
     public TestbedNotFoundException(final Throwable throwable) {
@@ -27,6 +30,7 @@ public final class TestbedNotFoundException extends Exception {
 
     /**
      * Constructor.
+     *
      * @param message message.
      */
     public TestbedNotFoundException(final String message) {
@@ -35,7 +39,8 @@ public final class TestbedNotFoundException extends Exception {
 
     /**
      * Constructor.
-     * @param message message.
+     *
+     * @param message   message.
      * @param throwable throwable.
      */
     public TestbedNotFoundException(final String message, final Throwable throwable) {

@@ -99,7 +99,7 @@
 
 
 <div class="container">
-    <div class="span12">
+    <div class="col-md-12">
         <h3>
             <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>">
                 <c:out value="${node.name}"/>
@@ -107,7 +107,7 @@
         </h3>
     </div>
 
-    <div class="span12" id="map-canvas" style="height:400px">
+    <div class="col-md-12" id="map-canvas" style="height:400px">
         <!--- MAP GOES HERE-->
     </div>
 

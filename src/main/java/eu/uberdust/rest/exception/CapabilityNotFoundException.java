@@ -1,9 +1,11 @@
 package eu.uberdust.rest.exception;
 
+import java.io.Serializable;
+
 /**
  * Capability not found exception class.
  */
-public final class CapabilityNotFoundException extends Exception {
+public final class CapabilityNotFoundException extends Exception implements Serializable{
     /**
      * Serial Version Unique ID.
      */

@@ -23,7 +23,9 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-    <div class="span12">
+    <h2>User Manager </h2>
+
+    <div class="col-md-12">
         <ul class="media-list">
             <c:forEach items="${roles}" var="entry">
                 <li class="media">
@@ -53,10 +55,9 @@
                                     </form>
                                 </th>
                                 <th>
-                                    <form class="form-inline">
-                                        Roles
-                                        <input class="input-medium" type="text" placeholder="ROLE_NEW"
-                                               style="height:100%">
+                                    <form class="form-inline" role="form">Roles:
+                                        <div class="form-group"><input type="text" class="form-control"
+                                                                       placeholder="ROLE_NEW" style="height:100%"></div>
                                         <button type="submit" class="btn">Add</button>
                                     </form>
                                 </th>
@@ -67,13 +68,13 @@
                                         <tr>
                                             <th>Id</th>
                                             <td>
-                                                ${entry.key.id}
+                                                    ${entry.key.id}
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>Email</th>
                                             <td>
-                                                ${entry.key.email}
+                                                    ${entry.key.email}
                                             </td>
                                         </tr>
                                     </table>

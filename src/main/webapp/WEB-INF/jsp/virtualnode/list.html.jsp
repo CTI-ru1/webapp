@@ -23,7 +23,7 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-    <div class="span12">
+    <div class="col-md-12">
         <h3>Virtual Nodes (view also as :
             <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/raw"/>">raw</a>,
             <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/json"/>">json</a>
