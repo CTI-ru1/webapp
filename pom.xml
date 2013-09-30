@@ -623,6 +623,10 @@
                             <directory>${project.basedir}/src/main/resources/img</directory>
                             <targetPath>img</targetPath>
                         </resource>
+                        <resource>
+                            <directory>${project.basedir}/src/main/resources/files</directory>
+                            <targetPath>files</targetPath>
+                        </resource>
                     </webResources>
                     <archive>
                         <manifestEntries>

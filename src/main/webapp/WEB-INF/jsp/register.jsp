@@ -71,17 +71,42 @@
         <c:when test="${username==''}">
 
             <div style="text-align: center; padding-top: 40px;">
-                <form action="">
-
-                    <input type="text" id="username" placeholder="username" class="col-md-8" style="height:50px"/>
+                <form class="form-horizontal" role="form" action="">
                     <input type="hidden" id="uuid" value="${uuid}"/>
-                    <input type="text" id="email" name="email" placeholder="email" class="col-md-8" style="height:50px"/>
-                    <br/>
 
-                    <input type="password" id="password1" placeholder="password" class="col-md-4" style="height:50px"/>
-                    <input type="password" id="password2" placeholder="retypepassword" class="col-md-4"
-                           style="height:50px"/>
-                    <br/>
+                    <div class="form-group">
+                        <label for="username" class="col-lg-2 control-label">Username</label>
+
+                        <div class="col-lg-10">
+                            <input type="text" id="username" placeholder="username" class="form-control"
+                                   style="height:50px"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-lg-2 control-label">Email</label>
+
+                        <div class="col-lg-10">
+                            <input type="text" id="email" name="email" placeholder="email" class="form-control"
+                                   style="height:50px"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password1" class="col-lg-2 control-label">Password</label>
+
+                        <div class="col-lg-10">
+                            <input type="password" id="password1" placeholder="password" class="form-control"
+                                   style="height:50px"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password2" class="col-lg-2 control-label">Confirm Password</label>
+
+                        <div class="col-lg-10">
+                            <input type="password" id="password2" placeholder="retypepassword" class="form-control"
+                                   style="height:50px"/>
+                        </div>
+                    </div>
+
 
                 </form>
                 <div id="error" style="color: red;"></div>

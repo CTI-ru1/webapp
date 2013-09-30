@@ -53,14 +53,16 @@
                 </c:when>
                 <c:otherwise>
                     <li>
-                        <form name='f' class="navbar-search pull-left"
+                        <form class="navbar-form navbar-right"
                               action="<c:url value='/j_spring_security_check'/>"
                               method='POST'>
-                            <input type='text' name='j_username' class="input-small" placeholder="username"
-                                   value='' style='margin-bottom: 0px;'>
-                            <input type='password' name='j_password' class="input-small" placeholder="password"
-                                   style='margin-bottom: 0px;'/>
-                            <input name="submit" type="submit" value="submit" class="btn"/>
+                            <div class="form-group">
+                                <input type='text' name='j_username' class="form-control" placeholder="username"
+                                       value='' style='width:100px'>
+                                <input type='password' name='j_password' class="form-control" placeholder="password"
+                                       style='width:100px'/>
+                                <input name="submit" type="submit" value="submit" class="btn"/>
+                            </div>
                         </form>
                     </li>
                     <li>

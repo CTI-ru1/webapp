@@ -80,7 +80,7 @@
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
                                id="clickable<c:out value="${testbed.id}"/>"
                                href="#collapse<c:out value="${testbed.id}"/>">
-                                <img src="<c:url value="/img/wsn.jpg"/>">
+                                <img src="<c:url value="/img/wsn.png"/>">
                                 <c:out value="${testbed.name}"/>
                             </a>
                         </h4>

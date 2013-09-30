@@ -47,7 +47,7 @@
             <h4 class="panel-title">
                 <c:choose>
                 <c:when test="${!updated.contains(lnr.node.name)}">
-                <div class="alert">
+                <%--<div class="alert">--%>
                     </c:when>
                     </c:choose>
 
@@ -58,7 +58,7 @@
                     </a>
                     <c:choose>
                     <c:when test="${!updated.contains(lnr.node.name)}">
-                </div>
+                <%--</div>--%>
                 </c:when>
                 </c:choose>
             </h4>
