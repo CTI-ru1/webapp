@@ -126,17 +126,8 @@
            timeToLiveSeconds="36000"
            memoryStoreEvictionPolicy="LRU"
             />
-    <cache name="eu.uberdust.rest.controller.html.node.GetController.getNodePosition"
-           eternal="true"
-           maxElementsInMemory="10000"
-           overflowToDisk="false"
-           diskPersistent="false"
-           timeToIdleSeconds="0"
-           timeToLiveSeconds="0"
-           memoryStoreEvictionPolicy="LRU"
-            />
 
-    <cache name="eu.wisebed.wisedb.controller.NodeReadingControllerImpl.getAbsolutePosition"
+    <cache name="eu.wisebed.wisedb.controller.NodeControllerImpl.getAbsolutePosition"
            eternal="true"
            maxElementsInMemory="10000"
            overflowToDisk="false"
@@ -145,7 +136,7 @@
            timeToLiveSeconds="0"
            memoryStoreEvictionPolicy="LRU"
             />
-    <cache name="eu.uberdust.rest.controller.html.testbed.ShowController.getNodeType"
+    <cache name="eu.uberdust.rest.controller.html.node.HtmlNodeController.getNodeType"
            eternal="true"
            maxElementsInMemory="10000"
            overflowToDisk="false"
@@ -154,16 +145,7 @@
            timeToLiveSeconds="0"
            memoryStoreEvictionPolicy="LRU"
             />
-    <cache name="eu.uberdust.rest.controller.html.testbed.ShowController.getNodePositions"
-           eternal="true"
-           maxElementsInMemory="30"
-           overflowToDisk="false"
-           diskPersistent="false"
-           timeToIdleSeconds="0"
-           timeToLiveSeconds="0"
-           memoryStoreEvictionPolicy="LRU"
-            />
-    <cache name="eu.uberdust.rest.controller.html.testbed.ListController.getNodePositions"
+    <cache name="eu.uberdust.rest.controller.html.testbed.HtmlTestbedController.getNodePositions"
            eternal="true"
            maxElementsInMemory="30"
            overflowToDisk="false"
@@ -173,7 +155,7 @@
            memoryStoreEvictionPolicy="LRU"
             />
 
-    <cache name="eu.uberdust.rest.controller.html.testbed.ShowController.getNodeTypes"
+    <cache name="eu.uberdust.rest.controller.html.testbed.HtmlTestbedController.getNodeTypes"
            eternal="true"
            maxElementsInMemory="30"
            overflowToDisk="false"
