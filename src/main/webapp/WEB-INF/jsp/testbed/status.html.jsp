@@ -41,38 +41,41 @@
 </div>
 </c:when>
 </c:choose>
-<div class="accordion" id="accordion<c:out value="${lnr.node.id}"/>">
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <c:choose>
-            <c:when test="${!updated.contains(lnr.node.name)}">
-            <div class="alert">
-                </c:when>
-                </c:choose>
-
-                <a class="accordion-toggle" data-toggle="collapse"
-                   data-parent="#accordion"
-                   href="#collapseOne<c:out value="${lnr.node.id}"/>">
-                    <c:out value="${lnr.node.name}"/>
-                </a>
+<div class="panel-group" id="accordion<c:out value="${lnr.node.id}"/>">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
                 <c:choose>
                 <c:when test="${!updated.contains(lnr.node.name)}">
-            </div>
-            </c:when>
-            </c:choose>
+                <div class="alert">
+                    </c:when>
+                    </c:choose>
+
+                    <a class="accordion-toggle" data-toggle="collapse"
+                       data-parent="#accordion"
+                       href="#collapseOne<c:out value="${lnr.node.id}"/>">
+                        <c:out value="${lnr.node.name}"/>
+                    </a>
+                    <c:choose>
+                    <c:when test="${!updated.contains(lnr.node.name)}">
+                </div>
+                </c:when>
+                </c:choose>
+            </h4>
         </div>
             <%--<c:choose>--%>
             <%--<c:when test="${!lnr.node.name.contains('virtual')}">--%>
+
         <c:choose>
         <c:when test="${!updated.contains(lnr.node.name)}">
-        <div id="collapseOne<c:out value="${lnr.node.id}"/>" class="accordion-body collapse ">
+        <div id="collapseOne<c:out value="${lnr.node.id}"/>" class="panel-collapse collapse">
             </c:when>
             <c:otherwise>
-            <div id="collapseOne<c:out value="${lnr.node.id}"/>" class="accordion-body collapse in">
+            <div id="collapseOne<c:out value="${lnr.node.id}"/>" class="panel-collapse collapse in">
                 </c:otherwise>
                 </c:choose>
 
-                <div class="accordion-inner">
+                <div class="panel-body">
                     <a href="<c:url value="/rest/testbed/${testbed.id}/node/${lnr.node.name}/"/>"> View Node</a>
                     <table class="table-hover table table-condensed table-striped">
                         <c:choose>

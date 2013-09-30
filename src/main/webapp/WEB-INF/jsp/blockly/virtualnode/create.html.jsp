@@ -86,10 +86,10 @@
 </script>
 
 <div class="container">
-    <div class="span2">
+    <div class="col-md-2">
         <button class="btn btn-large btn-primary" onclick="uploadRule();">Create Node!</button>
     </div>
-    <div class="span6">
+    <div class="col-md-6">
         <pre id="generated"></pre>
     </div>
     <div id="blocklyDiv">

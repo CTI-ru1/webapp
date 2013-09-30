@@ -23,14 +23,14 @@
 
 <div class="container">
     <c:out value="${text}" escapeXml="false"/>
-    <div class="span4">
+    <div class="col-md-4">
         <h3>
             <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>">
                 <c:out value="${node.name}"/>
             </a>
         </h3>
     </div>
-    <div class="span4">
+    <div class="col-md-4">
         <h3>
             <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>">${capability.name}</a>
         </h3>

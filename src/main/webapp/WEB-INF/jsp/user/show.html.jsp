@@ -23,10 +23,10 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-    <div class="span12">
+    <div class="col-md-12">
         <h2><a href="<c:url value="/rest/user/${user.username}"/>">${user.username}</a></h2>
     </div>
-    <div class="span12">
+    <div class="col-md-12">
         <table class="table table-hover">
             <tr>
                 <td>Email</td>

@@ -4,15 +4,21 @@
 <spring:message code="uberdust.webapp.version" var="uberdustWebappVersion" scope="application" text=""/>
 
 
-<div class="navbar navbar-fixed-bottom">
-    <div class="navbar-inner">
-        <ul class="nav">
+<header class="navbar navbar-fixed-bottom" style="margin-bottom: -25px">
+    <nav class="navbar navbar-default navbar-static-bottom" role="navigation">
+        <div class="navbar-header">
+        </div>
+        <ul class="nav navbar-nav navbar-left">
+
             <li><a href="https://github.com/Uberdust/webapp/wiki"> Github Project</a></li>
             <li><a href="http://ru1.cti.gr/index.php/software-a-systems/5-general-software/158-uberdust"> CTI -
                 Ru1 </a>
             </li>
             <li><a href="<c:url value="/rest/help/"/>"> Help </a></li>
-            <li> <a> v${uberdustWebappVersion}b${hudsonBuild} </a> </li>
+            <li><a> v${uberdustWebappVersion}b${hudsonBuild} </a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
             <jsp:useBean id="time" scope="request" class="String"/>
             <c:if test="${time != ''}">
                 <li><a href="<c:url value="/rest/statistics"/>"> page loaded in <c:out value="${time}"/>
@@ -20,21 +26,10 @@
             </c:if>
 
         </ul>
-    </div>
-</div>
+    </nav>
+</header>
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="<c:url value="/js/jquery.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-transition.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-alert.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-modal.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-dropdown.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-scrollspy.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-tab.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-tooltip.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-popover.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-button.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-collapse.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-carousel.js"/>"></script>
-<script src="<c:url value="/js/bootstrap-typeahead.js"/>"></script>
+<script src="<c:url value="/js/bootstrap.js"/>"></script>

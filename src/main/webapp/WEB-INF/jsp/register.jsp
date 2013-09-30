@@ -73,13 +73,13 @@
             <div style="text-align: center; padding-top: 40px;">
                 <form action="">
 
-                    <input type="text" id="username" placeholder="username" class="span8" style="height:50px"/>
+                    <input type="text" id="username" placeholder="username" class="col-md-8" style="height:50px"/>
                     <input type="hidden" id="uuid" value="${uuid}"/>
-                    <input type="text" id="email" name="email" placeholder="email" class="span8" style="height:50px"/>
+                    <input type="text" id="email" name="email" placeholder="email" class="col-md-8" style="height:50px"/>
                     <br/>
 
-                    <input type="password" id="password1" placeholder="password" class="span4" style="height:50px"/>
-                    <input type="password" id="password2" placeholder="retypepassword" class="span4"
+                    <input type="password" id="password1" placeholder="password" class="col-md-4" style="height:50px"/>
+                    <input type="password" id="password2" placeholder="retypepassword" class="col-md-4"
                            style="height:50px"/>
                     <br/>
 

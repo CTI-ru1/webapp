@@ -65,30 +65,41 @@
 <div class="container">
     <h1>Welcome to Überdust</h1>
 
-    <div id="map-canvas" style="height: 100%;" class="span8">
+    <div id="map-canvas" style="height: 100%;" class="col-md-8">
     </div>
-    <div class="span4">
+    <div class="col-md-4">
         <h4>Available Testbeds:</h4>
-        <c:forEach items="${testbeds}" var="testbed">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
-                   id="clickable<c:out value="${testbed.id}"/>"
-                   href="#collapse<c:out value="${testbed.id}"/>">
-                    <img src="<c:url value="/img/wsn.jpg"/>">
-                    <c:out value="${testbed.name}"/>
-                </a>
-            </div>
-            <div id="collapse<c:out value="${testbed.id}"/>" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    <a href="<c:url value="/rest/testbed/${testbed.id}"/>">View More</a> <br/>
-                    uid: <c:out value="${testbed.id}"/> <br/>
-                    urnPrefix: <c:out value="${testbed.urnPrefix}"/> <br/>
-                    urnCapabilityPrefix: <c:out value="${testbed.urnCapabilityPrefix}"/> <br/>
-                    <c:out value="${nodes[testbed.name]}"/> Nodes , <c:out value="${links[testbed.name]}"/> Links
 
+        <div class="panel-group" id="accordion">
+            <c:forEach items="${testbeds}" var="testbed">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+
+
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+                               id="clickable<c:out value="${testbed.id}"/>"
+                               href="#collapse<c:out value="${testbed.id}"/>">
+                                <img src="<c:url value="/img/wsn.jpg"/>">
+                                <c:out value="${testbed.name}"/>
+                            </a>
+                        </h4>
+                    </div>
+
+                    <div id="collapse<c:out value="${testbed.id}"/>" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <a href="<c:url value="/rest/testbed/${testbed.id}"/>">View More</a> <br/>
+                            uid: <c:out value="${testbed.id}"/> <br/>
+                            urnPrefix: <c:out value="${testbed.urnPrefix}"/> <br/>
+                            urnCapabilityPrefix: <c:out value="${testbed.urnCapabilityPrefix}"/> <br/>
+                            <c:out value="${nodes[testbed.name]}"/> Nodes , <c:out value="${links[testbed.name]}"/>
+                            Links
+
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </c:forEach>
+            </c:forEach>
+        </div>
     </div>
 </div>
 <%@include file="/footer.jsp" %>

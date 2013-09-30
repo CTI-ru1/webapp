@@ -23,10 +23,12 @@
 </div>
 
 
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <a class="brand" href="<c:url value="/rest/testbed/"/>">Überdust</a>
-        <ul class="nav">
+<header class="navbar navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="<c:url value="/rest/testbed/"/>">Überdust</a>
+        </div>
+        <ul class="nav navbar-nav navbar-left">
             <li><a href="<c:url value="/rest/testbed"/>">testbeds</a></li>
             <c:if test="${testbed != null}">
                 <li><a href="<c:url value="/rest/testbed/${testbed.id}"/>">testbed</a></li>
@@ -38,7 +40,7 @@
                 <li><a href="<c:url value="/rest/testbed/${testbed.id}/status"/>">status</a></li>
             </c:if>
         </ul>
-        <ul class="nav pull-right">
+        <ul class="nav navbar-nav navbar-right">
             <c:choose>
                 <c:when test="${username!=''}">
                     <li>
@@ -67,8 +69,8 @@
                 </c:otherwise>
             </c:choose>
         </ul>
-    </div>
-</div>
+    </nav>
+</header>
 
 
 
