@@ -67,6 +67,8 @@ public final class ShowTestbedController extends UberdustSpringController{
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("Content-Type", "application/json; charset=utf-8");
+        responseHeaders.add("Access-Control-Allow-Origin", "*");
+        responseHeaders.add("Access-Control-Allow-Methods", "GET, POST");
         return new ResponseEntity<String>(jobj.toString(), responseHeaders, HttpStatus.OK);
     }
 
