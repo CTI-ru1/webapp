@@ -50,10 +50,7 @@ public final class ListTestbedsTabDelimitedViewController extends UberdustSpring
         final Map<String, Long> linksCount = testbedManager.countLinks();
 
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-
-        return new ResponseEntity<String>(TextFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount), responseHeaders, HttpStatus.OK);
+        return rawResponse(TextFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount));
 
     }
 }

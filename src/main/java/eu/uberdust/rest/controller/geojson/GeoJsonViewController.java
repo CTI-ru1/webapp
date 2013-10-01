@@ -107,9 +107,7 @@ public final class GeoJsonViewController extends UberdustSpringController {
 
         String output = geoJsonObject.toString();
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
-        return new ResponseEntity<String>(output, responseHeaders, HttpStatus.OK);
+        return jsonResponse(output);
     }
 
     /**
@@ -176,9 +174,7 @@ public final class GeoJsonViewController extends UberdustSpringController {
 
         String output = geoJsonObject.toString();
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
-        return new ResponseEntity<String>(output, responseHeaders, HttpStatus.OK);
+        return jsonResponse(output);
     }
 
     /**
@@ -230,8 +226,6 @@ public final class GeoJsonViewController extends UberdustSpringController {
 
         String output = geoJsonObject.toString();
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
-        return new ResponseEntity<String>(output, responseHeaders, HttpStatus.OK);
+        return jsonResponse(output);
     }
 }

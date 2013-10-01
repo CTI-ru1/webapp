@@ -60,9 +60,7 @@ public final class ListLinksJsonViewController extends UberdustSpringController 
 
         final List<Link> links = linkManager.list(testbed.getSetup());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(JsonFormatter.getInstance().formatLinks(links), responseHeaders, HttpStatus.OK);
+        return jsonResponse(JsonFormatter.getInstance().formatLinks(links));
 
     }
 }

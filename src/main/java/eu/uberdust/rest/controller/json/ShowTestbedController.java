@@ -65,11 +65,7 @@ public final class ShowTestbedController extends UberdustSpringController{
         jobj.put("urnPrefix", testbed.getUrnPrefix());
         jobj.put("urnCapabilityPrefix", testbed.getUrnCapabilityPrefix());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=utf-8");
-        responseHeaders.add("Access-Control-Allow-Origin", "*");
-        responseHeaders.add("Access-Control-Allow-Methods", "GET, POST");
-        return new ResponseEntity<String>(jobj.toString(), responseHeaders, HttpStatus.OK);
+        return jsonResponse(jobj.toString());
     }
 
 

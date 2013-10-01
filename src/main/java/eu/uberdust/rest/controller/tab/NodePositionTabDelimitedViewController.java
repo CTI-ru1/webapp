@@ -72,9 +72,7 @@ public final class NodePositionTabDelimitedViewController extends UberdustSpring
 
         Position nodePosition = nodeManager.getAbsolutePosition(node);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(nodePosition.getX().toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(nodePosition.getX().toString());
     }
 
     /**
@@ -117,9 +115,7 @@ public final class NodePositionTabDelimitedViewController extends UberdustSpring
 
         Position nodePosition = nodeManager.getAbsolutePosition(node);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(nodePosition.getY().toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(nodePosition.getY().toString());
     }
 
     /**
@@ -162,8 +158,6 @@ public final class NodePositionTabDelimitedViewController extends UberdustSpring
 
         Position nodePosition = nodeManager.getAbsolutePosition(node);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(nodePosition.getZ().toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(nodePosition.getZ().toString());
     }
 }

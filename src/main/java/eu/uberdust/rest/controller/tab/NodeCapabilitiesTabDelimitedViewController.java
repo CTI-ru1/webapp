@@ -76,9 +76,6 @@ public final class NodeCapabilitiesTabDelimitedViewController extends UberdustSp
             capabilities.add(capability.getCapability());
         }
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-
-        return new ResponseEntity<String>(TextFormatter.getInstance().formatCapabilities(testbed, capabilities), responseHeaders, HttpStatus.OK);
+        return rawResponse(TextFormatter.getInstance().formatCapabilities(testbed, capabilities));
     }
 }

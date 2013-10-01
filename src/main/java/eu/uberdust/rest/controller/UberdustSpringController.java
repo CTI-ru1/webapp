@@ -1,8 +1,13 @@
 package eu.uberdust.rest.controller;
 
+import eu.uberdust.formatter.JsonFormatter;
+import eu.uberdust.formatter.TextFormatter;
 import eu.uberdust.util.QuartzJobScheduler;
 import eu.wisebed.wisedb.controller.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.HashMap;
@@ -136,5 +141,28 @@ public class UberdustSpringController {
         }
         current_user = username;
         refData.put("username", username);
+    }
+
+    protected ResponseEntity<String> jsonResponse(final String jsonString) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "application/json; charset=utf-8");
+        responseHeaders.add("Access-Control-Allow-Origin", "*");
+        responseHeaders.add("Access-Control-Allow-Methods", "GET, POST");
+        return new ResponseEntity<String>(jsonString, responseHeaders, HttpStatus.OK);
+    }
+
+    protected ResponseEntity<String> rawResponse(final String rawString) {
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        responseHeaders.add("Access-Control-Allow-Origin", "*");
+        responseHeaders.add("Access-Control-Allow-Methods", "GET, POST");
+        return new ResponseEntity<String>(rawString, responseHeaders, HttpStatus.OK);
+    }
+
+    protected ResponseEntity<String> xmlResponse(final String rawString) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+        return new ResponseEntity<String>(rawString, responseHeaders, HttpStatus.OK);
     }
 }

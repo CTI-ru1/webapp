@@ -65,8 +65,6 @@ public final class NodeTabDelimitedViewController extends UberdustSpringControll
             }
         }
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(TextFormatter.getInstance().formatNodes(nodes), responseHeaders, HttpStatus.OK);
+        return rawResponse(TextFormatter.getInstance().formatNodes(nodes));
     }
 }

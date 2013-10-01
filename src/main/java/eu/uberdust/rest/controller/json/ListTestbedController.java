@@ -47,8 +47,6 @@ public final class ListTestbedController extends UberdustSpringController {
         final Map<String, Long> nodesCount = testbedManager.countNodes();
         final Map<String, Long> linksCount = testbedManager.countLinks();
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(JsonFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount), responseHeaders, HttpStatus.OK);
+        return jsonResponse(JsonFormatter.getInstance().formatTestbeds(testbeds, nodesCount, linksCount));
     }
 }

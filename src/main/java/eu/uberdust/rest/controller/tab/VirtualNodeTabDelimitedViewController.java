@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/virtualnode/raw")
-public final class VirtualNodeTabDelimitedViewController extends UberdustSpringController{
+public final class VirtualNodeTabDelimitedViewController extends UberdustSpringController {
 
     /**
      * Logger persistence manager.
@@ -41,10 +41,8 @@ public final class VirtualNodeTabDelimitedViewController extends UberdustSpringC
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          an InvalidTestbedIdException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          an TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException an InvalidTestbedIdException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  an TestbedNotFoundException exception.
      */
     @Loggable
     @RequestMapping(method = RequestMethod.GET)
@@ -66,9 +64,7 @@ public final class VirtualNodeTabDelimitedViewController extends UberdustSpringC
             }
         }
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(TextFormatter.getInstance().formatNodes(nodes), responseHeaders, HttpStatus.OK);
+        return rawResponse(TextFormatter.getInstance().formatNodes(nodes));
 
     }
 }

@@ -85,9 +85,7 @@ public final class GeoRssViewController extends UberdustSpringController {
                 request.getRequestURL().toString(),
                 request.getRequestURI().toString(),
                 description, nodePos);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/xml; charset=UTF-8");
-        return new ResponseEntity<String>(output, responseHeaders, HttpStatus.OK);
+        return xmlResponse(output);
     }
 
     /**
@@ -146,8 +144,6 @@ public final class GeoRssViewController extends UberdustSpringController {
                 request.getRequestURI(),
                 nodesList, descriptionMap, capabilityMap, originMap);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/xml; charset=UTF-8");
-        return new ResponseEntity<String>(output, responseHeaders, HttpStatus.OK);
+        return xmlResponse(output);
     }
 }

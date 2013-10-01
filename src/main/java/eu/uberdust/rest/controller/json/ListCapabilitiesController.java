@@ -63,9 +63,7 @@ public final class ListCapabilitiesController extends UberdustSpringController {
         // get Testbed capabilities
         final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(JsonFormatter.getInstance().formatCapabilities(testbed, capabilities), responseHeaders, HttpStatus.OK);
+        return jsonResponse(JsonFormatter.getInstance().formatCapabilities(testbed, capabilities));
     }
 
 }

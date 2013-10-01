@@ -72,11 +72,11 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         try {
             // retrieve last node rading for this node/capability
             final LastNodeReading lnr = lastNodeReadingManager.getByNodeCapability(node, capability);
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
             try {
-                return new ResponseEntity<String>(TextFormatter.getInstance().formatNodeReading(lnr), responseHeaders, HttpStatus.OK);
+                return rawResponse(TextFormatter.getInstance().formatNodeReading(lnr));
             } catch (NotImplementedException e) {
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
                 return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception e) {
@@ -130,11 +130,11 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
 
         List<NodeReading> nodeReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
         try {
-            return new ResponseEntity<String>((String) TextFormatter.getInstance().formatNodeReadings(nodeReadings), responseHeaders, HttpStatus.OK);
+            return rawResponse((String) TextFormatter.getInstance().formatNodeReadings(nodeReadings));
         } catch (NotImplementedException e) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
             return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -182,9 +182,7 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
 
         Double value = nodeReadingManager.minIn(node, capability, limit);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(value.toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(value.toString());
     }
 
     /**
@@ -230,9 +228,7 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
 
         Double value = nodeReadingManager.maxIn(node, capability, limit);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(value.toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(value.toString());
     }
 
     /**
@@ -278,9 +274,7 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
 
         Double value = nodeReadingManager.avgIn(node, capability, limit);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(value.toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(value.toString());
     }
 
 
@@ -288,20 +282,13 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
-     *          invalid node id exception.
-     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
-     *          invalid capability name exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          testbed not found exception.
-     * @throws eu.uberdust.rest.exception.NodeNotFoundException
-     *          node not found exception.
-     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
-     *          capability not found exception.
-     * @throws eu.uberdust.rest.exception.InvalidLimitException
-     *          invalid limit exception.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException         invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException      invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException       testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException    capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException          invalid limit exception.
      */
     @Loggable
     @WiseLog(logName = "/testbed/readings/list/limit/time/raw")
@@ -337,11 +324,11 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         // no limit is provided
         nodeReadings = nodeReadingManager.listNodeReadings(node, capability, from, to);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
         try {
-            return new ResponseEntity<String>((String) TextFormatter.getInstance().formatNodeReadings(nodeReadings), responseHeaders, HttpStatus.OK);
+            return rawResponse((String) TextFormatter.getInstance().formatNodeReadings(nodeReadings));
         } catch (NotImplementedException e) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
             return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -350,20 +337,13 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
-     *          invalid node id exception.
-     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
-     *          invalid capability name exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          testbed not found exception.
-     * @throws eu.uberdust.rest.exception.NodeNotFoundException
-     *          node not found exception.
-     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
-     *          capability not found exception.
-     * @throws eu.uberdust.rest.exception.InvalidLimitException
-     *          invalid limit exception.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException         invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException      invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException       testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException    capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException          invalid limit exception.
      */
     @Loggable
     @RequestMapping(value = "/tabdelimited/from/{from}/to/{to}/min", method = RequestMethod.GET)
@@ -395,29 +375,20 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         // retrieve readings based on node/capability
         final Double value = nodeReadingManager.minByDate(node, capability, from, to);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(value.toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(value.toString());
     }
 
     /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
-     *          invalid node id exception.
-     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
-     *          invalid capability name exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          testbed not found exception.
-     * @throws eu.uberdust.rest.exception.NodeNotFoundException
-     *          node not found exception.
-     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
-     *          capability not found exception.
-     * @throws eu.uberdust.rest.exception.InvalidLimitException
-     *          invalid limit exception.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException         invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException      invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException       testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException    capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException          invalid limit exception.
      */
     @Loggable
     @RequestMapping(value = "/tabdelimited/from/{from}/to/{to}/max", method = RequestMethod.GET)
@@ -449,29 +420,20 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         // retrieve readings based on node/capability
         final Double value = nodeReadingManager.maxByDate(node, capability, from, to);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(value.toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(value.toString());
     }
 
     /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
-     *          invalid node id exception.
-     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
-     *          invalid capability name exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          testbed not found exception.
-     * @throws eu.uberdust.rest.exception.NodeNotFoundException
-     *          node not found exception.
-     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
-     *          capability not found exception.
-     * @throws eu.uberdust.rest.exception.InvalidLimitException
-     *          invalid limit exception.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException         invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException      invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException       testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException    capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException          invalid limit exception.
      */
     @Loggable
     @RequestMapping(value = "/tabdelimited/from/{from}/to/{to}/avg", method = RequestMethod.GET)
@@ -503,9 +465,7 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         // retrieve readings based on node/capability
         final Double value = nodeReadingManager.avgByDate(node, capability, from, to);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(value.toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(value.toString());
     }
 
 
@@ -513,20 +473,13 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
-     *          invalid node id exception.
-     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
-     *          invalid capability name exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          testbed not found exception.
-     * @throws eu.uberdust.rest.exception.NodeNotFoundException
-     *          node not found exception.
-     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
-     *          capability not found exception.
-     * @throws eu.uberdust.rest.exception.InvalidLimitException
-     *          invalid limit exception.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException         invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException      invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException       testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException    capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException          invalid limit exception.
      */
     @Loggable
     @RequestMapping(value = "/tabdelimited/past/{millis}/", method = RequestMethod.GET)
@@ -563,11 +516,11 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         // no limit is provided
         nodeReadings = nodeReadingManager.listNodeReadings(node, capability, from, to);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
         try {
-            return new ResponseEntity<String>((String) TextFormatter.getInstance().formatNodeReadings(nodeReadings), responseHeaders, HttpStatus.OK);
+            return rawResponse((String) TextFormatter.getInstance().formatNodeReadings(nodeReadings));
         } catch (NotImplementedException e) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
             return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -576,20 +529,13 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
-     *          invalid node id exception.
-     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
-     *          invalid capability name exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          testbed not found exception.
-     * @throws eu.uberdust.rest.exception.NodeNotFoundException
-     *          node not found exception.
-     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
-     *          capability not found exception.
-     * @throws eu.uberdust.rest.exception.InvalidLimitException
-     *          invalid limit exception.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException         invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException      invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException       testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException    capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException          invalid limit exception.
      */
     @Loggable
     @RequestMapping(value = "/tabdelimited/past/{millis}/min", method = RequestMethod.GET)
@@ -624,29 +570,20 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         // retrieve readings based on node/capability
         final Double value = nodeReadingManager.minByDate(node, capability, from, to);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(value.toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(value.toString());
     }
 
     /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
-     *          invalid node id exception.
-     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
-     *          invalid capability name exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          testbed not found exception.
-     * @throws eu.uberdust.rest.exception.NodeNotFoundException
-     *          node not found exception.
-     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
-     *          capability not found exception.
-     * @throws eu.uberdust.rest.exception.InvalidLimitException
-     *          invalid limit exception.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException         invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException      invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException       testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException    capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException          invalid limit exception.
      */
     @Loggable
     @RequestMapping(value = "/tabdelimited/past/{millis}/max", method = RequestMethod.GET)
@@ -681,29 +618,20 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         // retrieve readings based on node/capability
         final Double value = nodeReadingManager.maxByDate(node, capability, from, to);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(value.toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(value.toString());
     }
 
     /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
-     *          invalid node id exception.
-     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
-     *          invalid capability name exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          testbed not found exception.
-     * @throws eu.uberdust.rest.exception.NodeNotFoundException
-     *          node not found exception.
-     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
-     *          capability not found exception.
-     * @throws eu.uberdust.rest.exception.InvalidLimitException
-     *          invalid limit exception.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException         invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException      invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException       testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException    capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException          invalid limit exception.
      */
     @Loggable
     @RequestMapping(value = "/tabdelimited/past/{millis}/avg", method = RequestMethod.GET)
@@ -738,9 +666,7 @@ public final class NodeCapabilityTabDelimitedViewController extends UberdustSpri
         // retrieve readings based on node/capability
         final Double value = nodeReadingManager.avgByDate(node, capability, from, to);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(value.toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(value.toString());
     }
 
 }

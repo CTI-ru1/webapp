@@ -29,7 +29,7 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/latestreading/json")
-public final class NodeCapabilityLastReadingController extends UberdustSpringController{
+public final class NodeCapabilityLastReadingController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -79,9 +79,7 @@ public final class NodeCapabilityLastReadingController extends UberdustSpringCon
 
         System.out.println("Reached here " + lnr.toString());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(JsonFormatter.getInstance().formatNodeReading(lnr), responseHeaders, HttpStatus.OK);
+        return jsonResponse(JsonFormatter.getInstance().formatNodeReading(lnr));
 
     }
 }

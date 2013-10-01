@@ -68,9 +68,7 @@ public final class ShowTestbedStatusController extends UberdustSpringController{
         // get a list of node last readings from testbed
         final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(JsonFormatter.getInstance().formatLastNodeReadings(nodeCapabilities), responseHeaders, HttpStatus.OK);
+        return jsonResponse(JsonFormatter.getInstance().formatLastNodeReadings(nodeCapabilities));
 
     }
 }

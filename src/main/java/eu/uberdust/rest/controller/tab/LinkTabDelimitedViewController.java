@@ -65,10 +65,7 @@ public final class LinkTabDelimitedViewController extends UberdustSpringControll
         }
         final List<Link> links = linkManager.list(testbed.getSetup());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-
-        return new ResponseEntity<String>(TextFormatter.getInstance().formatLinks(links), responseHeaders, HttpStatus.OK);
+        return rawResponse(TextFormatter.getInstance().formatLinks(links));
 
     }
 
@@ -125,9 +122,7 @@ public final class LinkTabDelimitedViewController extends UberdustSpringControll
 
         linkReadings = linkReadingManager.list(link, capability, limit);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(TextFormatter.getInstance().formatLinkReadings(linkReadings), responseHeaders, HttpStatus.OK);
+        return rawResponse(TextFormatter.getInstance().formatLinkReadings(linkReadings));
 
     }
 }

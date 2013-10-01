@@ -34,7 +34,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/capability")
-public final class CapabilityTabDelimitedController extends UberdustSpringController{
+public final class CapabilityTabDelimitedController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -46,11 +46,9 @@ public final class CapabilityTabDelimitedController extends UberdustSpringContro
      * System.out.println(request.getRemoteUser());
      *
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *                     an InvalidTestbedIdException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *                     an TestbedNotFoundException exception.
-     * @throws IOException IO exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException an InvalidTestbedIdException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  an TestbedNotFoundException exception.
+     * @throws IOException                                          IO exception.
      */
     @Loggable
     @RequestMapping(value = {"/raw", "/tabdelimited"}, method = RequestMethod.GET)
@@ -69,9 +67,8 @@ public final class CapabilityTabDelimitedController extends UberdustSpringContro
         // get testbed's capabilities
         final List<Capability> capabilities = capabilityManager.list(testbed.getSetup());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(TextFormatter.getInstance().formatCapabilities(testbed, capabilities), responseHeaders, HttpStatus.OK);
+
+        return rawResponse(TextFormatter.getInstance().formatCapabilities(testbed, capabilities));
 
     }
 
@@ -86,7 +83,7 @@ public final class CapabilityTabDelimitedController extends UberdustSpringContro
      * @throws CapabilityNotFoundException a CapabilityNotFoundException exception.
      */
     @Loggable
-    @RequestMapping(value = {"/{capabilityName}/tabdelimited","/{capabilityName}/raw"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{capabilityName}/tabdelimited", "/{capabilityName}/raw"}, method = RequestMethod.GET)
     public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException, NotImplementedException {
         final long start = System.currentTimeMillis();
@@ -109,9 +106,7 @@ public final class CapabilityTabDelimitedController extends UberdustSpringContro
         final List<LastNodeReading> lnrs = lastNodeReadingManager.getByCapability(testbed.getSetup(), capability);
         final List<LastLinkReading> llrs = lastLinkReadingManager.getByCapability(testbed.getSetup(), capability);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(TextFormatter.getInstance().formatLastReadings(lnrs, llrs), responseHeaders, HttpStatus.OK);
+        return rawResponse(TextFormatter.getInstance().formatLastReadings(lnrs, llrs));
     }
 
     /**
@@ -124,7 +119,7 @@ public final class CapabilityTabDelimitedController extends UberdustSpringContro
      * @throws CapabilityNotFoundException a CapabilityNotFoundException exception.
      */
     @Loggable
-    @RequestMapping(value = {"/{capabilityName}/uom/tabdelimited","/{capabilityName}/uom/raw"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{capabilityName}/uom/tabdelimited", "/{capabilityName}/uom/raw"}, method = RequestMethod.GET)
     public ResponseEntity<String> showUOM(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException, NotImplementedException {
         final long start = System.currentTimeMillis();
@@ -144,9 +139,7 @@ public final class CapabilityTabDelimitedController extends UberdustSpringContro
             throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "].");
         }
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(capability.getUnit(), responseHeaders, HttpStatus.OK);
+        return rawResponse(capability.getUnit());
     }
 
     /**
@@ -159,7 +152,7 @@ public final class CapabilityTabDelimitedController extends UberdustSpringContro
      * @throws CapabilityNotFoundException a CapabilityNotFoundException exception.
      */
     @Loggable
-    @RequestMapping(value = {"/{capabilityName}/minvalue/tabdelimited","/{capabilityName}/minvalue/raw"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{capabilityName}/minvalue/tabdelimited", "/{capabilityName}/minvalue/raw"}, method = RequestMethod.GET)
     public ResponseEntity<String> showMinvalue(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException, NotImplementedException {
         final long start = System.currentTimeMillis();
@@ -179,9 +172,7 @@ public final class CapabilityTabDelimitedController extends UberdustSpringContro
             throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "].");
         }
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(capability.getMinvalue().toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(capability.getMinvalue().toString());
     }
 
     /**
@@ -194,7 +185,7 @@ public final class CapabilityTabDelimitedController extends UberdustSpringContro
      * @throws CapabilityNotFoundException a CapabilityNotFoundException exception.
      */
     @Loggable
-    @RequestMapping(value = {"/{capabilityName}/maxvalue/tabdelimited","/{capabilityName}/maxvalue/raw"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/{capabilityName}/maxvalue/tabdelimited", "/{capabilityName}/maxvalue/raw"}, method = RequestMethod.GET)
     public ResponseEntity<String> showMaxvalue(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName)
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException, CapabilityNotFoundException, NotImplementedException {
         final long start = System.currentTimeMillis();
@@ -214,8 +205,6 @@ public final class CapabilityTabDelimitedController extends UberdustSpringContro
             throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "].");
         }
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(capability.getMaxvalue().toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(capability.getMaxvalue().toString());
     }
 }

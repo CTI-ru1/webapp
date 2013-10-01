@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}")
-public final class NodeCapabilityController extends UberdustSpringController{
+public final class NodeCapabilityController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -91,31 +91,21 @@ public final class NodeCapabilityController extends UberdustSpringController{
             nodeReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
         }
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>((String) JsonFormatter.getInstance().formatNodeReadings(nodeReadings), responseHeaders, HttpStatus.OK);
+        return jsonResponse((String) JsonFormatter.getInstance().formatNodeReadings(nodeReadings));
     }
-
 
 
     /**
      * Handle Request and return the appropriate response.
      *
      * @return response http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidNodeIdException
-     *          invalid node id exception.
-     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException
-     *          invalid capability name exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          invalid testbed id exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          testbed not found exception.
-     * @throws eu.uberdust.rest.exception.NodeNotFoundException
-     *          node not found exception.
-     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException
-     *          capability not found exception.
-     * @throws eu.uberdust.rest.exception.InvalidLimitException
-     *          invalid limit exception.
+     * @throws eu.uberdust.rest.exception.InvalidNodeIdException         invalid node id exception.
+     * @throws eu.uberdust.rest.exception.InvalidCapabilityNameException invalid capability name exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException      invalid testbed id exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException       testbed not found exception.
+     * @throws eu.uberdust.rest.exception.NodeNotFoundException          node not found exception.
+     * @throws eu.uberdust.rest.exception.CapabilityNotFoundException    capability not found exception.
+     * @throws eu.uberdust.rest.exception.InvalidLimitException          invalid limit exception.
      */
     @Loggable
     @RequestMapping(value = "/json/from/{from}/to/{to}/", method = RequestMethod.GET)
@@ -150,11 +140,11 @@ public final class NodeCapabilityController extends UberdustSpringController{
         // no limit is provided
         nodeReadings = nodeReadingManager.listNodeReadings(node, capability, from, to);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
         try {
-            return new ResponseEntity<String>((String) JsonFormatter.getInstance().formatNodeReadings(nodeReadings), responseHeaders, HttpStatus.OK);
+            return jsonResponse((String) JsonFormatter.getInstance().formatNodeReadings(nodeReadings));
         } catch (NotImplementedException e) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
             return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

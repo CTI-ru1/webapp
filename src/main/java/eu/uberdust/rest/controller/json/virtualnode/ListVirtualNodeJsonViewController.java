@@ -68,8 +68,6 @@ public final class ListVirtualNodeJsonViewController extends UberdustSpringContr
             }
         }
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=utf-8");
-        return new ResponseEntity<String>(JsonFormatter.getInstance().formatNodes(nodes), responseHeaders, HttpStatus.OK);
+        return jsonResponse(JsonFormatter.getInstance().formatNodes(nodes));
     }
 }

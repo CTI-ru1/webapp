@@ -33,7 +33,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/testbed/{testbedId}")
-public final class TestbedTabDelimitedViewController extends UberdustSpringController{
+public final class TestbedTabDelimitedViewController extends UberdustSpringController {
 
     /**
      * Logger.
@@ -44,10 +44,8 @@ public final class TestbedTabDelimitedViewController extends UberdustSpringContr
      * Handle request and return the appropriate response.
      *
      * @return http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          a InvalidTestbedIDException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          a TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException a InvalidTestbedIDException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  a TestbedNotFoundException exception.
      */
     @Loggable
     @RequestMapping(value = "/rooms", method = RequestMethod.GET)
@@ -69,11 +67,11 @@ public final class TestbedTabDelimitedViewController extends UberdustSpringContr
         // get a list of node last readings from testbed
         final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup(), capability);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
         try {
-            return new ResponseEntity<String>(TextFormatter.getInstance().formatUniqueLastNodeReadings(nodeCapabilities), responseHeaders, HttpStatus.OK);
+            return rawResponse(TextFormatter.getInstance().formatUniqueLastNodeReadings(nodeCapabilities));
         } catch (NotImplementedException e) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
             return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -82,10 +80,8 @@ public final class TestbedTabDelimitedViewController extends UberdustSpringContr
      * Handle request and return the appropriate response.
      *
      * @return http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          a InvalidTestbedIDException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          a TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException a InvalidTestbedIDException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  a TestbedNotFoundException exception.
      */
     @Loggable
     @RequestMapping(value = "/timezone", method = RequestMethod.GET)
@@ -101,19 +97,15 @@ public final class TestbedTabDelimitedViewController extends UberdustSpringContr
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(testbed.getTimeZone().getDisplayName(Locale.getDefault()), responseHeaders, HttpStatus.OK);
+        return rawResponse(testbed.getTimeZone().getDisplayName(Locale.getDefault()));
     }
 
     /**
      * Handle request and return the appropriate response.
      *
      * @return http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          a InvalidTestbedIDException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          a TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException a InvalidTestbedIDException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  a TestbedNotFoundException exception.
      */
     @Loggable
     @RequestMapping(value = "/timezone/offset", method = RequestMethod.GET)
@@ -129,11 +121,9 @@ public final class TestbedTabDelimitedViewController extends UberdustSpringContr
             throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
         }
 
-        int offset = testbed.getTimeZone().getRawOffset()+testbed.getTimeZone().getDSTSavings();
+        int offset = testbed.getTimeZone().getRawOffset() + testbed.getTimeZone().getDSTSavings();
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>("" + offset, responseHeaders, HttpStatus.OK);
+        return rawResponse("" + offset);
     }
 
 
@@ -141,10 +131,8 @@ public final class TestbedTabDelimitedViewController extends UberdustSpringContr
      * Handle request and return the appropriate response.
      *
      * @return http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          a InvalidTestbedIDException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          a TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException a InvalidTestbedIDException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  a TestbedNotFoundException exception.
      */
     @Loggable
     @RequestMapping(value = "/status/raw", method = RequestMethod.GET)
@@ -169,11 +157,11 @@ public final class TestbedTabDelimitedViewController extends UberdustSpringContr
         // get a list of node last readings from testbed
         final List<NodeCapability> nodeCapabilities = nodeCapabilityManager.list(testbed.getSetup());
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
         try {
-            return new ResponseEntity<String>(TextFormatter.getInstance().formatLastNodeReadings(nodeCapabilities), responseHeaders, HttpStatus.OK);
+            return rawResponse(TextFormatter.getInstance().formatLastNodeReadings(nodeCapabilities));
         } catch (NotImplementedException e) {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
             return new ResponseEntity<String>(e.getMessage(), responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -182,10 +170,8 @@ public final class TestbedTabDelimitedViewController extends UberdustSpringContr
      * Handle request and return the appropriate response.
      *
      * @return http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          a InvalidTestbedIDException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          a TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException a InvalidTestbedIDException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  a TestbedNotFoundException exception.
      */
     @Loggable
     @RequestMapping(value = "/timeout", method = RequestMethod.GET)
@@ -254,19 +240,15 @@ public final class TestbedTabDelimitedViewController extends UberdustSpringContr
         responseSB.insert(0, "Late Nodes :\n");
         responseSB.insert(0, "Total Nodes: " + nodes.size() + "\n");
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(responseSB.toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(responseSB.toString());
     }
 
     /**
      * Handle request and return the appropriate response.
      *
      * @return http servlet response.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          a InvalidTestbedIDException exception.
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          a TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException a InvalidTestbedIDException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  a TestbedNotFoundException exception.
      */
     @Loggable
     @RequestMapping(value = "/adminstatus", method = RequestMethod.GET)
@@ -325,9 +307,7 @@ public final class TestbedTabDelimitedViewController extends UberdustSpringContr
         }
 
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-        return new ResponseEntity<String>(output.toString(), responseHeaders, HttpStatus.OK);
+        return rawResponse(output.toString());
     }
 
     private boolean isOutdated(NodeCapability capability) {
