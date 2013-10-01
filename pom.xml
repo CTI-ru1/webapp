@@ -139,7 +139,7 @@
         <dependency>
             <groupId>uberdust</groupId>
             <artifactId>Cache</artifactId>
-            <version>1.0</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -156,7 +156,13 @@
         <dependency>
             <groupId>uberdust</groupId>
             <artifactId>wisedb</artifactId>
-            <version>1.0</version>
+            <version>1.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>uberdust</groupId>
+                    <artifactId>Cache</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>uberdust</groupId>
@@ -166,6 +172,10 @@
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>uberdust</groupId>
+                    <artifactId>Cache</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -178,6 +188,10 @@
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>uberdust</groupId>
+                    <artifactId>Cache</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
