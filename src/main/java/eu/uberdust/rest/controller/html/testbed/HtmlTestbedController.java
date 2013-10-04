@@ -10,13 +10,17 @@ import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
 import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.*;
 
 /**
@@ -54,7 +58,7 @@ public final class HtmlTestbedController extends UberdustSpringController {
             if (testbeds.size() == 0) {
                 return new ModelAndView("testbed/add.html", refData);
             }
-
+            LOGGER.info("Got Testbed " + String.valueOf((System.currentTimeMillis() - start)));
             Map<Integer, Origin> origins = new HashMap<Integer, Origin>();
             List<Position> nodePositions = new ArrayList<Position>();
             for (Testbed testbed : testbeds) {
@@ -62,10 +66,13 @@ public final class HtmlTestbedController extends UberdustSpringController {
                 Map<String, Position> testbedNodePositions = getNodePositions(testbed);
                 nodePositions.addAll(testbedNodePositions.values());
             }
+            LOGGER.info("Got Positions " + String.valueOf((System.currentTimeMillis() - start)));
 
 
             final Map<String, Long> nodesCount = testbedManager.countNodes();
+            LOGGER.info("Got nodeCount " + String.valueOf((System.currentTimeMillis() - start)));
             final Map<String, Long> linksCount = testbedManager.countLinks();
+            LOGGER.info("Got linkCount" + String.valueOf((System.currentTimeMillis() - start)));
 
             refData.put("testbeds", testbeds);
             refData.put("nodes", nodesCount);
@@ -106,9 +113,11 @@ public final class HtmlTestbedController extends UberdustSpringController {
                 throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
             }
 
+            LOGGER.info("Got Testbed" + String.valueOf((System.currentTimeMillis() - start)));
 
             // get testbed nodes
             final List<Node> allNodes = nodeManager.list(testbed.getSetup());
+            LOGGER.info("Got Testbed" + String.valueOf((System.currentTimeMillis() - start)));
             final List<Node> nodes = new ArrayList<Node>();
             final List<Node> virtual = new ArrayList<Node>();
             for (Node node : allNodes) {
@@ -147,6 +156,43 @@ public final class HtmlTestbedController extends UberdustSpringController {
         }
         return new ModelAndView("testbed/show.html", refData);
     }
+
+
+    @RequestMapping(value = "/testbed/{testbedId}/name", method = RequestMethod.GET)
+    public ResponseEntity<String> showTestbedName(@PathVariable("testbedId") int testbedId)
+            throws TestbedNotFoundException, InvalidTestbedIdException {
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+        return rawResponse(testbed.getName());
+    }
+
+    @RequestMapping(value = "/testbed/{testbedId}/name", method = RequestMethod.POST)
+    public ResponseEntity<String> changeTestbedName(@PathVariable("testbedId") int testbedId, @RequestBody String body)
+            throws TestbedNotFoundException, InvalidTestbedIdException {
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        // look up testbed
+        final Testbed testbed = testbedManager.getByID(testbedId);
+        try {
+            body = URLDecoder.decode(body, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        testbed.setName(body);
+        testbedManager.update(testbed);
+        if (testbed == null) {
+            // if no testbed is found throw exception
+            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+        }
+        return rawResponse("Name Changed to '" + body + "'");
+    }
+
 
     /**
      * Handle request and return the appropriate response.

@@ -9,14 +9,11 @@ import eu.uberdust.rest.annotation.WiseLog;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.*;
 import eu.uberdust.util.CommandDispatcher;
-import eu.wisebed.wisedb.controller.CapabilityController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Capability;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,7 +63,7 @@ public final class NodeCapabilityPostCommandViewController extends UberdustSprin
     @RequestMapping(method = RequestMethod.POST)
     @WiseLog(logName = "/testbed/command/send/")
     @ResponseBody
-    public String handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("payload") String payload, HttpServletResponse response)
+    public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("payload") String payload, HttpServletResponse response)
             throws CapabilityNotFoundException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, InvalidCapabilityNameException, InvalidNodeIdException, InvalidLimitException, IOException {
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
@@ -101,12 +98,7 @@ public final class NodeCapabilityPostCommandViewController extends UberdustSprin
             coapSend(node, capability, payload);
         }
 
-
-        response.setStatus(200);
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-
-        return "OK . Destination : " + node.getName() + "\nPayload : " + payloadString;
+        return rawResponse("OK . Destination : " + node.getName() + "\nPayload : " + payloadString);
     }
 
     public String coapSend(Node node, Capability capability, String payload) {

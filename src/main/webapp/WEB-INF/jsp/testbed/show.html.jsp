@@ -49,250 +49,216 @@
     google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
+<script type="text/javascript">
+    function updateTestbedInfo(){
+        $.post("<c:url value="/rest/testbed/${testbed.id}/name"/>",encodeURIComponent($("#aboutName").val()),function (){window.location.reload();})
+    }
+</script>
+<div style="float:right; margin-top:100px;">
+    <div class="panel panel-default" >
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a class="accordion-toggle" data-parent="#accordion2" id="clickable1">
+                    About:Testbed
+                </a>
+            </h4>
+        </div>
+
+        <div id="collapse1" class="panel-collapse in" style="height: auto;">
+            <div class="panel-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="aboutId" class="col-lg-2 control-label">ID</label>
+                        <label for="aboutId" class="col-lg-10 control-label"><c:out value="${testbed.id}"/></label>
+                    </div>
+                    <div class="form-group">
+                        <label for="aboutFeeds" class="col-lg-2 control-label">Feeds
+                        </label>
+                        <label for="aboutFeeds" class="col-lg-10 control-label">
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/georss"/>">GeoRSS</a>,
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/geojson"/>">GeoJSON</a>,
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/kml"/>">KML</a>,
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/wiseml"/>">WiseML</a>
+                        </label>
+                    </div>  <div class="form-group">
+                    <label for="aboutName" class="col-lg-6 control-label">Name</label>
+                    <input type="text" class="form-control" id="aboutName" value="<c:out value="${testbed.name}"/>">
+                </div>
+                    <div class="form-group">
+                        <label for="aboutNodePrefix" class="col-lg-6 control-label">Node prefix</label>
+                        <input disabled type="text" class="form-control" id="aboutNodePrefix" value="<c:out value="${testbed.urnPrefix}"/>">
+                    </div>
+                    <div class="form-group">
+                        <label for="aboutCapabilityPrefix" class="col-lg-6 control-label">Capability prefix</label>
+                        <input disabled type="text" class="form-control" id="aboutCapabilityPrefix" value="<c:out value="${testbed.urnCapabilityPrefix}"/>">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" onclick="updateTestbedInfo()">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container">
-<div class="col-md-12">
-    <h2>
-        <a href="<c:url value="/rest/testbed/${testbed.id}"/>"><c:out value="${testbed.name}"/></a>
-    </h2>
-</div>
-
-
-<div id="testbed_info" class="col-md-6">
-
-    <table class="table-hover">
-        <tbody>
-        <tr>
-            <td>Testbed ID</td>
-            <td><c:out value="${testbed.id}"/></td>
-        </tr>
-        <tr>
-            <td colspan="2"><c:out value="${testbed.description}"/></td>
-        </tr>
-        <tr>
-            <td>Testbed Name</td>
-            <td><c:out value="${testbed.name}"/></td>
-        </tr>
-        <tr>
-            <td>Testbed URN prefix</td>
-            <td><c:out value="${testbed.urnPrefix}"/></td>
-        </tr>
-        <tr>
-            <td>Testbed Timezone</td>
-            <c:set var="testbedZone" value="<%= testbed.getTimeZone().getDisplayName() %>"/>
-            <td><c:out value="${testbedZone}"/></td>
-        </tr>
-        <tr>
-            <td>Testbed URL</td>
-            <td><a href="<c:out value="${testbed.url}"/>"><c:out value="${testbed.url}"/></a></td>
-        </tr>
-        <tr>
-            <td>Testbed SNAA URL</td>
-            <td><a href="<c:out value="${testbed.snaaUrl}"/>"><c:out value="${testbed.snaaUrl}"/></a></td>
-        </tr>
-        <tr>
-            <td>Testbed RS URL</td>
-            <td><a href="<c:out value="${testbed.rsUrl}"/>"><c:out value="${testbed.rsUrl}"/></a></td>
-        </tr>
-        <tr>
-            <td>Testbed Session Management URL</td>
-            <td><a href="<c:out value="${testbed.sessionUrl}"/>"><c:out value="${testbed.sessionUrl}"/></a></td>
-        </tr>
-        <tr>
-            <td>Federated Testbed</td>
-            <td><c:out value="${testbed.federated}"/></td>
-        </tr>
-        <tr>
-            <td>Testbed Status Page</td>
-            <td>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/status"/>">Status
-                    page</a></td>
-        </tr>
-        <tr>
-            <td>Testbed GeoRSS feed</td>
-            <td>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/georss"/>">GeoRSS feed</a>
-                (<a href="http://maps.google.com/maps?q=<c:url value="${baseURL}/rest/testbed/${testbed.id}/georss"/>">View
-                On Google
-                Maps</a>)
-            </td>
-        </tr>
-        <tr>
-            <td>Testbed GeoJSON</td>
-            <td>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/geojson"/>">GeoJSON</a>
-            </td>
-        </tr>
-        <tr>
-            <td>Testbed KML feed</td>
-            <td>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/kml"/>">KML feed</a>
-                (<a href="http://maps.google.com/maps?q=<c:url value="${baseURL}/rest/testbed/${testbed.id}/kml"/>">View
-                On Google
-                Maps</a>)
-                <span style="color : red">not implemented yet</span>
-            </td>
-
-        </tr>
-        <tr>
-            <td>Testbed WiseML</td>
-            <td>
-                <a href="<c:url value="/rest/testbed/${testbed.id}/wiseml"/>">WiseML</a>
-                <span style="color : red">not implemented yet</span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-<div class="col-md-6" id="map-canvas" style="height: 400px;">
-
-</div>
-
-<ul class="nav nav-tabs">
-    <li class="active"><a href="#nodestab" data-toggle="tab">Nodes</a></li>
-    <li><a href="#virtualnodestab" data-toggle="tab">Virtual Nodes</a></li>
-    <li><a href="#capabilitiestab" data-toggle="tab">Capabilities</a></li>
-    <li><a href="#linkstab" data-toggle="tab">Links</a></li>
-</ul>
-
-<div class="tab-content">
-    <div class="tab-pane active" id="nodestab">
-        <table class="table-hover table table-condensed">
-            <thead>
-            <tr>
-                <th>
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/node"/>">Nodes</a>
-                    (
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/raw"/>">raw</a>,
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/node/json"/>">json</a>
-                    )
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:choose>
-                <c:when test="${nodes == null || fn:length(nodes) == 0}">
-                    <tr>
-                        <td style="color : red">No nodes found for testbed <c:out value="${testbed.name}"/></td>
-                    </tr>
-                </c:when>
-                <c:otherwise>
-                    <c:forEach items="${nodes}" var="node">
-                        <tr>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>"><c:out
-                                        value="${node.name}"/></a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </c:otherwise>
-            </c:choose>
-            </tbody>
-        </table>
+    <div class="col-md-12">
+        <h2>
+            You are looking at: <a href="<c:url value="/rest/testbed/${testbed.id}"/>"><c:out value="${testbed.name}"/></a>
+        </h2>
     </div>
-    <div class="tab-pane" id="virtualnodestab">
-        <table class="table-hover table table-condensed">
-            <thead>
-            <tr>
-                <th>
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode"/>">Virtual Nodes</a>
-                    (
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/raw"/>">raw</a>,
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/json"/>">json</a>
-                    )
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:choose>
-                <c:when test="${virtual == null || fn:length(virtual) == 0}">
-                    <tr>
-                        <td style="color : red">No virtual nodes found for testbed <c:out
-                                value="${testbed.name}"/></td>
-                    </tr>
-                </c:when>
-                <c:otherwise>
-                    <c:forEach items="${virtual}" var="node">
-                        <tr>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>"><c:out
-                                        value="${node.name}"/></a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </c:otherwise>
-            </c:choose>
-            </tbody>
-        </table>
+
+
+    <div class="col-md-12" id="map-canvas" style="height: 500px;">
+
     </div>
-    <div class="tab-pane" id="capabilitiestab">
-        <table class="table-hover table table-condensed">
-            <thead>
-            <tr>
-                <th>
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/capability"/>">Capabilities</a>
-                    (
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/capability/raw"/>">raw</a>,
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/capability/json"/>">json</a>
-                    )
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:choose>
-                <c:when test="${capabilities == null || fn:length(capabilities) == 0 }">
+    <div class="col-md-12">
+        <br/>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#nodestab" data-toggle="tab">Nodes</a></li>
+            <li><a href="#virtualnodestab" data-toggle="tab">Virtual Nodes</a></li>
+            <li><a href="#capabilitiestab" data-toggle="tab">Capabilities</a></li>
+            <li><a href="#linkstab" data-toggle="tab">Links</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="nodestab">
+                <table class="table-hover table table-condensed">
+                    <thead>
                     <tr>
-                        <td style="color : red">No capabilities found for <c:out value="${testbed.name}"/></td>
+                        <th>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/node"/>">Nodes</a>
+                            (
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/raw"/>">raw</a>,
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/node/json"/>">json</a>
+                            )
+                        </th>
                     </tr>
-                </c:when>
-                <c:otherwise>
-                    <c:forEach items="${capabilities}" var="capability">
-                        <tr>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>"><c:out
-                                        value="${capability.name}"/></a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </c:otherwise>
-            </c:choose>
-            </tbody>
-        </table>
-    </div>
-    <div class="tab-pane" id="linkstab">
-        <table class="table-hover table table-condensed">
-            <thead>
-            <tr>
-                <th>
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/link"/>">Links</a>
-                    (
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/link/raw"/>">raw</a>,
-                    <a href="<c:url value="/rest/testbed/${testbed.id}/link/json"/>">json</a>
-                    )
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:choose>
-                <c:when test="${links == null || fn:length(links) == 0 }">
+                    </thead>
+                    <tbody>
+                    <c:choose>
+                        <c:when test="${nodes == null || fn:length(nodes) == 0}">
+                            <tr>
+                                <td style="color : red">No nodes found for testbed <c:out value="${testbed.name}"/></td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach items="${nodes}" var="node">
+                                <tr>
+                                    <td>
+                                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>"><c:out
+                                                value="${node.name}"/></a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="virtualnodestab">
+                <table class="table-hover table table-condensed">
+                    <thead>
                     <tr>
-                        <td style="color : red">No links found for <c:out value="${testbed.name}"/></td>
+                        <th>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode"/>">Virtual Nodes</a>
+                            (
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/raw"/>">raw</a>,
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/virtualnode/json"/>">json</a>
+                            )
+                        </th>
                     </tr>
-                </c:when>
-                <c:otherwise>
-                    <c:forEach items="${links}" var="link">
-                        <tr>
-                            <td>
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>"><c:out
-                                        value="${link.source.name},${link.target.name}"/></a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </c:otherwise>
-            </c:choose>
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                    <c:choose>
+                        <c:when test="${virtual == null || fn:length(virtual) == 0}">
+                            <tr>
+                                <td style="color : red">No virtual nodes found for testbed <c:out
+                                        value="${testbed.name}"/></td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach items="${virtual}" var="node">
+                                <tr>
+                                    <td>
+                                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/"/>"><c:out
+                                                value="${node.name}"/></a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="capabilitiestab">
+                <table class="table-hover table table-condensed">
+                    <thead>
+                    <tr>
+                        <th>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/capability"/>">Capabilities</a>
+                            (
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/capability/raw"/>">raw</a>,
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/capability/json"/>">json</a>
+                            )
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:choose>
+                        <c:when test="${capabilities == null || fn:length(capabilities) == 0 }">
+                            <tr>
+                                <td style="color : red">No capabilities found for <c:out value="${testbed.name}"/></td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach items="${capabilities}" var="capability">
+                                <tr>
+                                    <td>
+                                        <a href="<c:url value="/rest/testbed/${testbed.id}/capability/${capability.name}"/>"><c:out
+                                                value="${capability.name}"/></a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="linkstab">
+                <table class="table-hover table table-condensed">
+                    <thead>
+                    <tr>
+                        <th>
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/link"/>">Links</a>
+                            (
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/link/raw"/>">raw</a>,
+                            <a href="<c:url value="/rest/testbed/${testbed.id}/link/json"/>">json</a>
+                            )
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:choose>
+                        <c:when test="${links == null || fn:length(links) == 0 }">
+                            <tr>
+                                <td style="color : red">No links found for <c:out value="${testbed.name}"/></td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach items="${links}" var="link">
+                                <tr>
+                                    <td>
+                                        <a href="<c:url value="/rest/testbed/${testbed.id}/link/${link.source.name}/${link.target.name}"/>"><c:out
+                                                value="${link.source.name},${link.target.name}"/></a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
 
 </div>
 <%@include file="/footer.jsp" %>
