@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.PostConstruct;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
@@ -35,6 +36,14 @@ public final class HtmlTestbedController extends UberdustSpringController {
      */
     private static final Logger LOGGER = Logger.getLogger(HtmlTestbedController.class);
 
+    @PostConstruct
+    public void initfun() {
+        LOGGER.info("running initfun---");
+        for (Node n : nodeManager.list()) {
+            nodeManager.getAbsolutePosition(n);
+        }
+        LOGGER.info("finished init---");
+    }
 
     /**
      * Handle Request and return the appropriate response.
@@ -91,8 +100,10 @@ public final class HtmlTestbedController extends UberdustSpringController {
     /**
      * Handle req and return the appropriate response.
      *
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  a TestbedNotFoundException exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException a InvalidTestbedException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *          a TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *          a InvalidTestbedException exception.
      */
     @Loggable
     @WiseLog(logName = "/testbed/id/")
@@ -146,7 +157,7 @@ public final class HtmlTestbedController extends UberdustSpringController {
             refData.put("links", links);
             refData.put("virtual", virtual);
             refData.put("capabilities", capabilities);
-//            refData.put("nodePositions", nodePositions);
+            refData.put("nodePositions", nodePositions);
             refData.put("nodeTypes", nodeTypes);
             refData.put("admin", userRoleManager.isAdmin(userManager.getByUsername(current_user)));
             refData.put("time", String.valueOf((System.currentTimeMillis() - start)));

@@ -67,8 +67,6 @@ public final class InsertTestbedViewController extends UberdustSpringController 
         Testbed testbed = new Testbed();
         testbed.setName(testbedName);
         testbed.setDescription(description);
-        testbed.setFederated(federated);
-        testbed.setUrl(url);
         testbed.setTimeZone(TimeZone.getTimeZone(timezone));
 
         testbed.setUrnPrefix(prefix);

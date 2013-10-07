@@ -11,7 +11,7 @@
 <jsp:useBean id="virtual" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="links" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="capabilities" scope="request" class="java.util.ArrayList"/>
-<%--<jsp:useBean id="nodePositions" scope="request" class="java.util.HashMap"/>--%>
+<jsp:useBean id="nodePositions" scope="request" class="java.util.HashMap"/>
 <jsp:useBean id="nodeTypes" scope="request" class="java.util.HashMap"/>
 
 
@@ -39,19 +39,19 @@
 
         var infoWindow = new google.maps.InfoWindow({
             content: "${testbed.description}",
-            disableAutoPan: false,
+            disableAutoPan: false
         });
         infoWindow.open(map, marker);
 
 
-        <%--<c:forEach items="${nodes}" var="node">--%>
-        <%--<c:if test="${nodePositions[node.name].x!=0}">--%>
-        <%--var iconLink = '<c:url value="/img/markers/${nodeTypes[node.name]}.png"/>';--%>
-        <%--var myLatlng<c:out value="${node.id}"/> = new google.maps.LatLng(<c:out value="${nodePositions[node.name].x}"/>, <c:out value="${nodePositions[node.name].y}"/>);--%>
-        <%--var marker<c:out value="${node.id}"/> = new google.maps.Marker({position: myLatlng<c:out value="${node.id}"/>, map: map, title: "<c:out value="${node.name}"/>", icon: iconLink});--%>
-        <%--bounds.extend(marker<c:out value="${node.id}"/>.getPosition());--%>
-        <%--</c:if>--%>
-        <%--</c:forEach>--%>
+        <c:forEach items="${nodes}" var="node">
+        <c:if test="${nodePositions[node.name].x!=0}">
+        var iconLink = '<c:url value="/img/markers/${nodeTypes[node.name]}.png"/>';
+        var myLatlng<c:out value="${node.id}"/> = new google.maps.LatLng(<c:out value="${nodePositions[node.name].x}"/>, <c:out value="${nodePositions[node.name].y}"/>);
+        var marker<c:out value="${node.id}"/> = new google.maps.Marker({position: myLatlng<c:out value="${node.id}"/>, map: map, title: "<c:out value="${node.name}"/>", icon: iconLink});
+        bounds.extend(marker<c:out value="${node.id}"/>.getPosition());
+        </c:if>
+        </c:forEach>
         map.fitBounds(bounds);
     }
     google.maps.event.addDomListener(window, 'load', initialize);
@@ -84,6 +84,14 @@
                     <a class="accordion-toggle" data-parent="#accordion2" id="clickable1">
                         About:Testbed
                     </a>
+                    <c:choose>
+                        <c:when test="${admin}">
+                            <button type="submit" class="btn btn-xs btn-primary pull-right"
+                                    onclick="updateTestbedInfo()">Save Changes
+                            </button>
+                        </c:when>
+                    </c:choose>
+
                 </h4>
             </div>
 
@@ -91,25 +99,15 @@
                 <div class="panel-body">
                     <form role="form">
                         <div class="form-group">
-                            <label for="aboutId" class="col-lg-2 control-label">ID</label>
-                            <label for="aboutId" class="col-lg-10 control-label"><c:out value="${testbed.id}"/></label>
-                        </div>
-                        <div class="form-group">
-                            <label for="aboutFeeds" class="col-lg-2 control-label">Feeds
-                            </label>
-                            <label for="aboutFeeds" class="col-lg-10 control-label">
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/georss"/>">GeoRSS</a>,
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/geojson"/>">GeoJSON</a>,
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/kml"/>">KML</a>,
-                                <a href="<c:url value="/rest/testbed/${testbed.id}/wiseml"/>">WiseML</a>
-                            </label>
+                            <label class="col-lg-2 control-label">ID</label>
+                            <label class="col-lg-10 control-label"><c:out value="${testbed.id}"/></label>
                         </div>
                         <div class="form-group">
                             <label for="aboutName" class="col-lg-6 control-label">Name</label>
                             <input type="text" class="col-lg-6 form-control" id="aboutName"
                             <c:choose>
-                            <c:when test="!${admin}">
-                                    disabled
+                            <c:when test="${not admin}">
+                                   disabled
                             </c:when>
                             </c:choose>
                                    value="<c:out value="${testbed.name}"/>">
@@ -124,20 +122,39 @@
                             <input disabled type="text" class="col-lg-6 form-control" id="aboutCapabilityPrefix"
                                    value="<c:out value="${testbed.urnCapabilityPrefix}"/>">
                         </div>
-
-                        <c:choose>
-                            <c:when test="${admin}">
-                                <button type="submit" class="btn btn-primary" onclick="updateTestbedInfo()">Update
-                                </button>
+                        <div class="form-group">
+                            <label for="aboutLong" class="col-lg-6 control-label">Long</label>
+                            <label for="aboutLat" class="col-lg-6 control-label">Lat</label>
+                            <input type="text" class="col-lg-6 form-control" id="aboutLong"
+                            <c:choose>
+                            <c:when test="${not admin}">
+                                   disabled
                             </c:when>
-                        </c:choose>
+                            </c:choose>
+                                   value="<c:out value="${testbed.setup.origin.x}"/>" style="width: 50%">
+                            <input type="text" class="col-lg-6 form-control" id="aboutLat"
+                            <c:choose>
+                            <c:when test="${not admin}">
+                                   disabled
+                            </c:when>
+                            </c:choose>
+                                   value="<c:out value="${testbed.setup.origin.y}"/>" style="width: 50%">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-12 control-label">
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/georss"/>">GeoRSS</a>,
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/geojson"/>">GeoJSON</a>,
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/wiseml"/>">WiseML,</a>
+                                <a href="<c:url value="/rest/testbed/${testbed.id}/kml"/>">KML</a>
+                            </label>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-8" id="map-canvas" style="height: 400px;">
+    <div class="col-md-8" id="map-canvas" style="height: 500px;">
 
     </div>
 </div>
