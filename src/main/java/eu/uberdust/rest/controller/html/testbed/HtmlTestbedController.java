@@ -60,11 +60,11 @@ public final class HtmlTestbedController extends UberdustSpringController {
             }
             LOGGER.info("Got Testbed " + String.valueOf((System.currentTimeMillis() - start)));
             Map<Integer, Origin> origins = new HashMap<Integer, Origin>();
-            List<Position> nodePositions = new ArrayList<Position>();
+//            List<Position> nodePositions = new ArrayList<Position>();
             for (Testbed testbed : testbeds) {
                 origins.put(testbed.getId(), testbed.getSetup().getOrigin());
-                Map<String, Position> testbedNodePositions = getNodePositions(testbed);
-                nodePositions.addAll(testbedNodePositions.values());
+//                Map<String, Position> testbedNodePositions = getNodePositions(testbed);
+//                nodePositions.addAll(testbedNodePositions.values());
             }
             LOGGER.info("Got Positions " + String.valueOf((System.currentTimeMillis() - start)));
 
@@ -78,7 +78,7 @@ public final class HtmlTestbedController extends UberdustSpringController {
             refData.put("nodes", nodesCount);
             refData.put("links", linksCount);
             refData.put("origins", origins);
-            refData.put("nodePositions", nodePositions);
+//            refData.put("nodePositions", nodePositions);
 
             refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
             return new ModelAndView("testbed/list.html", refData);
@@ -91,10 +91,8 @@ public final class HtmlTestbedController extends UberdustSpringController {
     /**
      * Handle req and return the appropriate response.
      *
-     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
-     *          a TestbedNotFoundException exception.
-     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
-     *          a InvalidTestbedException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException  a TestbedNotFoundException exception.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException a InvalidTestbedException exception.
      */
     @Loggable
     @WiseLog(logName = "/testbed/id/")
@@ -148,8 +146,9 @@ public final class HtmlTestbedController extends UberdustSpringController {
             refData.put("links", links);
             refData.put("virtual", virtual);
             refData.put("capabilities", capabilities);
-            refData.put("nodePositions", nodePositions);
+//            refData.put("nodePositions", nodePositions);
             refData.put("nodeTypes", nodeTypes);
+            refData.put("admin", userRoleManager.isAdmin(userManager.getByUsername(current_user)));
             refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         } catch (Exception e) {
             LOGGER.error(e, e);

@@ -21,7 +21,7 @@
 <jsp:useBean id="nodes" scope="request" class="java.util.HashMap"/>
 <jsp:useBean id="links" scope="request" class="java.util.HashMap"/>
 <jsp:useBean id="origins" scope="request" class="java.util.HashMap"/>
-<jsp:useBean id="nodePositions" scope="request" class="java.util.ArrayList"/>
+<%--<jsp:useBean id="nodePositions" scope="request" class="java.util.ArrayList"/>--%>
 
 <body>
 <%@include file="/header.jsp" %>
@@ -35,15 +35,15 @@
 
         <c:set var="count" value="0" scope="page" />
         var iconLink = '<c:url value="/img/markers/default.png"/>';
-        <c:forEach items="${nodePositions}" var="entry" >
-        <c:set var="count" value="${count+1}" />
-        <c:out value="${count}" />
-        <c:if test="${entry.x!=0}">
-        var myLatlng<c:out value="${count}"/> = new google.maps.LatLng(<c:out value="${entry.x}"/>, <c:out value="${entry.y}"/>);
-        var marker<c:out value="${count}"/> = new google.maps.Marker({position: myLatlng<c:out value="${count}"/>, map: map, icon: iconLink, zIndex: 0});
-        bounds.extend(marker<c:out value="${count}"/>.getPosition());
-        </c:if>
-        </c:forEach>
+        <%--<c:forEach items="${nodePositions}" var="entry" >--%>
+        <%--<c:set var="count" value="${count+1}" />--%>
+        <%--<c:out value="${count}" />--%>
+        <%--<c:if test="${entry.x!=0}">--%>
+        <%--var myLatlng<c:out value="${count}"/> = new google.maps.LatLng(<c:out value="${entry.x}"/>, <c:out value="${entry.y}"/>);--%>
+        <%--var marker<c:out value="${count}"/> = new google.maps.Marker({position: myLatlng<c:out value="${count}"/>, map: map, icon: iconLink, zIndex: 0});--%>
+        <%--bounds.extend(marker<c:out value="${count}"/>.getPosition());--%>
+        <%--</c:if>--%>
+        <%--</c:forEach>--%>
 
 
         <c:forEach items="${testbeds}" var="testbed">
