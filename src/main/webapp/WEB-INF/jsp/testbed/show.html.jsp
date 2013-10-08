@@ -17,10 +17,10 @@
 
 <html>
 <head>
-    <META NAME="Description" CONTENT="ÜberDust"/>
+    <META NAME="Description" CONTENT="Überdust"/>
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>ÜberDust - Show testbed : <c:out value="${testbed.name}"/></title>
+    <title>Überdust - Show testbed : <c:out value="${testbed.name}"/></title>
     <%@include file="/head.jsp" %>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 </head>

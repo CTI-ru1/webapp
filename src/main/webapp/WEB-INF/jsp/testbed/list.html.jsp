@@ -9,9 +9,9 @@
 
 <html>
 <head>
-    <META NAME="Description" CONTENT="ÜberDust"/>
+    <META NAME="Description" CONTENT="Überdust"/>
     <META http-equiv="Content-Language" content="en"/>
-    <title>ÜberDust - List Testbeds</title>
+    <title>Überdust - List Testbeds</title>
     <%@include file="/head.jsp" %>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 </head>

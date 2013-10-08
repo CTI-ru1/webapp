@@ -8,9 +8,9 @@
 
 <html>
 <head>
-    <META NAME="Description" CONTENT="ÜberDust"/>
+    <META NAME="Description" CONTENT="Überdust"/>
     <META http-equiv="Content-Language" content="en"/>
-    <title>ÜberDust Man Page</title>
+    <title>Überdust Man Page</title>
     <%@include file="/head.jsp" %>
 </head>
 
@@ -20,7 +20,7 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-    <h1>ÜberDust Websockets Man Page</h1>
+    <h1>Überdust Websockets Man Page</h1>
 
     <p>
         To receive continous flow of node readings you should use th WebSockets protocol.

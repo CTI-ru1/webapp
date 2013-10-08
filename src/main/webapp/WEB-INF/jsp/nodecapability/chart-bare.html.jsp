@@ -72,7 +72,7 @@
         }
     </script>
 
-    <title>ÜberDust - Readings Chart Testbed: <c:out value="${testbed.name}"/> <c:out value="${node.name}"/> ,
+    <title>Überdust - Readings Chart Testbed: <c:out value="${testbed.name}"/> <c:out value="${node.name}"/> ,
         Capability
         : <c:out value="${capability.name}"/></title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/styles.css"/>"/>

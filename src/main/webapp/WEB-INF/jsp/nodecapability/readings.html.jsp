@@ -10,10 +10,10 @@
 <jsp:useBean id="capability" scope="request" class="eu.wisebed.wisedb.model.Capability"/>
 <html>
 <head>
-    <META NAME="Description" CONTENT="ÜberDust"/>
+    <META NAME="Description" CONTENT="Überdust"/>
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>ÜberDust - Show Readings</title>
+    <title>Überdust - Show Readings</title>
     <%@include file="/head.jsp" %>
 
 </head>

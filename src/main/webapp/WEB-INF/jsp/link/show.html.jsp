@@ -13,10 +13,10 @@
 
 <html>
 <head>
-    <META NAME="Description" CONTENT="ÜberDust"/>
+    <META NAME="Description" CONTENT="Überdust"/>
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>ÜberDust - Show Link [<c:out value="${link.source.name}"/>,<c:out value="${link.target.name}"/>]</title>
+    <title>Überdust - Show Link [<c:out value="${link.source.name}"/>,<c:out value="${link.target.name}"/>]</title>
     <%@include file="/head.jsp" %>
 
 </head>

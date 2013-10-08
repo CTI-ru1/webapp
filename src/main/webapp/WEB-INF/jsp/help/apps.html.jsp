@@ -10,9 +10,9 @@
 
 <html>
 <head>
-    <META NAME="Description" CONTENT="ÜberDust"/>
+    <META NAME="Description" CONTENT="Überdust"/>
     <META http-equiv="Content-Language" content="en"/>
-    <title>ÜberDust Man Page</title>
+    <title>Überdust Man Page</title>
     <%@include file="/head.jsp" %>
 </head>
 
@@ -22,7 +22,7 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-    <h1>ÜberDust Applications and Utils</h1>
+    <h1>Überdust Applications and Utils</h1>
 
     <ul class="media-list">
         <li class="media">

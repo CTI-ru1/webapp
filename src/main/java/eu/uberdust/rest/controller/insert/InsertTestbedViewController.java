@@ -9,6 +9,7 @@ import eu.wisebed.wisedb.model.Setup;
 import eu.wisebed.wisedb.model.Testbed;
 import eu.wisebed.wisedb.model.TimeInfo;
 import org.apache.log4j.Logger;
+import org.apache.taglibs.standard.tag.common.fmt.TimeZoneSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ import java.util.TimeZone;
  * Controller class for inserting readings for a node capability pair.
  */
 @Controller
-@RequestMapping("/testbed/insert/name/{testbedName}/prefix/{prefix}/federated/{federated}/timezone/{timezone}/description/{description}/url/{url}/x/{x}/y/{y}/z/{z}/phi/{phi}/theta/{theta}/ctype/{ctype}/")
+@RequestMapping("/testbed/insert/name/{testbedName}/nodeprefix/{prefix}/capabilityprefix/{capabilityPrefix}")
 public final class InsertTestbedViewController extends UberdustSpringController {
 
     /**
@@ -49,16 +50,7 @@ public final class InsertTestbedViewController extends UberdustSpringController 
     public ResponseEntity<String> handle(
             @PathVariable("testbedName") String testbedName,
             @PathVariable("prefix") String prefix,
-            @PathVariable("federated") Boolean federated,
-            @PathVariable("timezone") String timezone,
-            @PathVariable("description") String description,
-            @PathVariable("url") String url,
-            @PathVariable("x") float x,
-            @PathVariable("y") float y,
-            @PathVariable("z") float z,
-            @PathVariable("phi") float phi,
-            @PathVariable("theta") float theta,
-            @PathVariable("ctype") String ctype
+            @PathVariable("capabilityPrefix") String capabilityPrefix
     )
             throws InvalidTestbedIdException, TestbedNotFoundException, IOException {
         final long start = System.currentTimeMillis();
@@ -66,26 +58,24 @@ public final class InsertTestbedViewController extends UberdustSpringController 
 
         Testbed testbed = new Testbed();
         testbed.setName(testbedName);
-        testbed.setDescription(description);
-        testbed.setTimeZone(TimeZone.getTimeZone(timezone));
+        testbed.setDescription("");
+        testbed.setTimeZone(TimeZone.getTimeZone(TimeZone.getAvailableIDs()[0]));
 
         testbed.setUrnPrefix(prefix);
+        testbed.setUrnCapabilityPrefix(capabilityPrefix);
         // set the testbed of the setup to be imported
         Setup setup = new Setup();
-
         testbed.setSetup(setup);
-
-
         Origin origin = new Origin();
-        origin.setPhi(phi);
-        origin.setTheta(theta);
-        origin.setX(x);
-        origin.setY(y);
-        origin.setZ(z);
+        origin.setPhi(Float.valueOf(0));
+        origin.setTheta(Float.valueOf(0));
+        origin.setX(Float.valueOf(0));
+        origin.setY(Float.valueOf(0));
+        origin.setZ(Float.valueOf(0));
         setup.setOrigin(origin);
         setup.setTimeinfo(new TimeInfo());
-        setup.setCoordinateType(ctype);
-        setup.setDescription(description);
+        setup.setCoordinateType("Absolute");
+        setup.setDescription("description");
 
         testbedManager.add(testbed);
 

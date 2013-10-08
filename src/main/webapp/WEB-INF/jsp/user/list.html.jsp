@@ -11,11 +11,11 @@
 
 <html>
 <head>
-    <META NAME="Description" CONTENT="ÜberDust"/>
+    <META NAME="Description" CONTENT="Überdust"/>
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <title>ÜberDust - Users</title>
+    <title>Überdust - Users</title>
     <%@include file="/head.jsp" %>
 
 </head>

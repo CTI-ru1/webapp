@@ -10,9 +10,9 @@
 
 <html>
 <head>
-    <META NAME="Description" CONTENT="ÜberDust"/>
+    <META NAME="Description" CONTENT="Überdust"/>
     <META http-equiv="Content-Language" content="en"/>
-    <title>ÜberDust Man Page</title>
+    <title>Überdust Man Page</title>
     <%@include file="/head.jsp" %>
 </head>
 
@@ -22,7 +22,7 @@
 <%@include file="/header.jsp" %>
 
 <div class="container">
-    <h1>ÜberDust Man Page</h1>
+    <h1>Überdust Man Page</h1>
     <h3>Data Encodings:</h3>
     <table class="table table-condensed">
         <tr><th>Type</th><th>Url keyword</th></tr>

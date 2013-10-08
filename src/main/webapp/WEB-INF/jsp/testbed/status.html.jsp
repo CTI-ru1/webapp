@@ -14,10 +14,10 @@
 
 <html>
 <head>
-    <META NAME="Description" CONTENT="ÜberDust"/>
+    <META NAME="Description" CONTENT="Überdust"/>
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>ÜberDust - Testbed <c:out value="${testbed.name}"/> status page</title>
+    <title>Überdust - Testbed <c:out value="${testbed.name}"/> status page</title>
     <%@include file="/head.jsp" %>
 
 </head>

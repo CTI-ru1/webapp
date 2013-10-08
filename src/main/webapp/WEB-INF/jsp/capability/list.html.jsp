@@ -11,10 +11,10 @@
 
 <html>
 <head>
-    <META NAME="Description" CONTENT="ÜberDust"/>
+    <META NAME="Description" CONTENT="Überdust"/>
     <META http-equiv="Content-Language" content="en"/>
     <META http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>ÜberDust - List Capabilities</title>
+    <title>Überdust - List Capabilities</title>
     <%@include file="/head.jsp" %>
 
 </head>
