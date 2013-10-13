@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -77,12 +78,14 @@ public final class UtilitiesViewController extends UberdustSpringController {
         Date now = new Date(System.currentTimeMillis());
         Date yesterday = new Date(System.currentTimeMillis() - 12 * 60 * 60 * 1000);
 
+
         final List<Statistics> statsNodes = statisticsManager.list("/testbed/node/", yesterday, now);
         final List<Statistics> statsNode = statisticsManager.list("/testbed/node/show/", yesterday, now);
         final List<Statistics> statsLink = statisticsManager.list("/testbed/link/show/", yesterday, now);
         final List<Statistics> statsLinks = statisticsManager.list("/testbed/link/", yesterday, now);
         final List<Statistics> statsHome = statisticsManager.list("/testbed/", yesterday, now);
         final List<Statistics> statsPing = statisticsManager.list("/ping/", yesterday, now);
+
         refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
         StringBuilder readingsHome = new StringBuilder();
         for (int i = 0; i < statsHome.size(); i++) {
@@ -136,7 +139,11 @@ public final class UtilitiesViewController extends UberdustSpringController {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
 
-        quartzJobScheduler.init();
         return new ResponseEntity<String>("pong", responseHeaders, HttpStatus.OK);
+    }
+
+    @PostConstruct
+    public void initQuartz() {
+        quartzJobScheduler.init();
     }
 }
