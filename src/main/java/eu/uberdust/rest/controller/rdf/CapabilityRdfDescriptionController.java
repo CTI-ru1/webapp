@@ -1,6 +1,5 @@
 package eu.uberdust.rest.controller.rdf;
 
-import com.sun.syndication.io.FeedException;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
@@ -44,7 +43,6 @@ public final class CapabilityRdfDescriptionController extends UberdustSpringCont
      *
      * @return http servlet response.
      * @throws java.io.IOException an IOException exception.
-     * @throws com.sun.syndication.io.FeedException
      *                             a FeedException exception.
      * @throws eu.uberdust.rest.exception.NodeNotFoundException
      *                             NodeNotFoundException exception.
@@ -57,7 +55,7 @@ public final class CapabilityRdfDescriptionController extends UberdustSpringCont
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> handleDefault(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, HttpServletRequest request)
-            throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
+            throws IOException,NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
         return handle(testbedId, capabilityName, "rdf+xml", request);
     }
@@ -68,7 +66,6 @@ public final class CapabilityRdfDescriptionController extends UberdustSpringCont
      *
      * @return http servlet response.
      * @throws java.io.IOException an IOException exception.
-     * @throws com.sun.syndication.io.FeedException
      *                             a FeedException exception.
      * @throws eu.uberdust.rest.exception.NodeNotFoundException
      *                             NodeNotFoundException exception.
@@ -81,7 +78,7 @@ public final class CapabilityRdfDescriptionController extends UberdustSpringCont
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET, value = "/{rdfEncoding}")
     public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("capabilityName") String capabilityName, @PathVariable("rdfEncoding") String rdfEncoding, HttpServletRequest request)
-            throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
+            throws IOException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
         final long start = System.currentTimeMillis();
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
