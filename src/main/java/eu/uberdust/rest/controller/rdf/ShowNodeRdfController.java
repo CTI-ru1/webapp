@@ -1,6 +1,5 @@
 package eu.uberdust.rest.controller.rdf;
 
-import com.sun.syndication.io.FeedException;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
@@ -47,7 +46,6 @@ public final class ShowNodeRdfController extends UberdustSpringController {
      *
      * @return http servlet response.
      * @throws IOException               an IOException exception.
-     * @throws FeedException             a FeedException exception.
      * @throws NodeNotFoundException     NodeNotFoundException exception.
      * @throws TestbedNotFoundException  TestbedNotFoundException exception.
      * @throws InvalidTestbedIdException InvalidTestbedIdException exception.
@@ -56,7 +54,7 @@ public final class ShowNodeRdfController extends UberdustSpringController {
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("rdfEncoding") String rdfEncoding, HttpServletRequest request)
-            throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
+            throws IOException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException {
         final long start = System.currentTimeMillis();
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());

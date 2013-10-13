@@ -1,6 +1,5 @@
 package eu.uberdust.rest.controller.geojson;
 
-import com.sun.syndication.io.FeedException;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.exception.NotImplementedException;
 import eu.uberdust.rest.controller.UberdustSpringController;
@@ -12,9 +11,9 @@ import eu.wisebed.wisedb.controller.NodeController;
 import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.*;
 import org.apache.log4j.Logger;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,7 +46,6 @@ public final class GeoJsonViewController extends UberdustSpringController {
      *
      * @return http servlet response.
      * @throws java.io.IOException an IOException exception.
-     * @throws com.sun.syndication.io.FeedException
      *                             a FeedException exception.
      * @throws eu.uberdust.rest.exception.NodeNotFoundException
      *                             NodeNotFoundException exception.
@@ -60,7 +58,7 @@ public final class GeoJsonViewController extends UberdustSpringController {
     @RequestMapping(value = "/testbed/{testbedId}/node/{nodeName}/geojson", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> showNodeGeoJSONFeed(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, HttpServletRequest request, HttpServletResponse response)
-            throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
+            throws IOException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, NotImplementedException {
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         // look up testbed
@@ -119,7 +117,6 @@ public final class GeoJsonViewController extends UberdustSpringController {
      * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
      *                             a InvalidTestbedIdException exception.
      * @throws java.io.IOException a IOException exception.
-     * @throws com.sun.syndication.io.FeedException
      *                             a FeedException exception.
      */
     @SuppressWarnings("unchecked")
@@ -127,7 +124,7 @@ public final class GeoJsonViewController extends UberdustSpringController {
     @RequestMapping(value = "/testbed/{testbedId}/geojson", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> showTestbedGeoJSON(@PathVariable("testbedId") int testbedId, HttpServletRequest request, HttpServletResponse response)
-            throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException, NotImplementedException {
+            throws TestbedNotFoundException, InvalidTestbedIdException, IOException,NotImplementedException {
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
@@ -186,7 +183,6 @@ public final class GeoJsonViewController extends UberdustSpringController {
      * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
      *                             a InvalidTestbedIdException exception.
      * @throws java.io.IOException a IOException exception.
-     * @throws com.sun.syndication.io.FeedException
      *                             a FeedException exception.
      */
     @SuppressWarnings("unchecked")
@@ -194,7 +190,7 @@ public final class GeoJsonViewController extends UberdustSpringController {
     @RequestMapping(value = "/testbed/geojson", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> showTestbedsGeoJSON(HttpServletRequest request, HttpServletResponse response)
-            throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException, NotImplementedException {
+            throws TestbedNotFoundException, InvalidTestbedIdException, IOException,NotImplementedException {
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up node

@@ -1,6 +1,5 @@
 package eu.uberdust.rest.controller.rdf;
 
-import com.sun.syndication.io.FeedException;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
@@ -41,14 +40,13 @@ public final class ShowTestbedRdfController extends UberdustSpringController{
      * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
      *                             a InvalidTestbedIdException exception.
      * @throws java.io.IOException a IOException exception.
-     * @throws com.sun.syndication.io.FeedException
      *                             a FeedException exception.
      */
     @Loggable
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> handle(@PathVariable("testbedId") int testbedId, @PathVariable("rdfEncoding") String rdfEncoding)
-            throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException {
+            throws TestbedNotFoundException, InvalidTestbedIdException, IOException{
         final long start = System.currentTimeMillis();
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 

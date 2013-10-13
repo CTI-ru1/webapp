@@ -1,6 +1,5 @@
 package eu.uberdust.rest.controller.georss;
 
-import com.sun.syndication.io.FeedException;
 import eu.uberdust.caching.Loggable;
 import eu.uberdust.formatter.GeoRssFormatter;
 import eu.uberdust.formatter.exception.NotImplementedException;
@@ -8,17 +7,11 @@ import eu.uberdust.rest.controller.UberdustSpringController;
 import eu.uberdust.rest.exception.InvalidTestbedIdException;
 import eu.uberdust.rest.exception.NodeNotFoundException;
 import eu.uberdust.rest.exception.TestbedNotFoundException;
-import eu.wisebed.wisedb.controller.NodeCapabilityController;
-import eu.wisebed.wisedb.controller.NodeController;
-import eu.wisebed.wisedb.controller.TestbedController;
 import eu.wisebed.wisedb.model.Node;
 import eu.wisebed.wisedb.model.NodeCapability;
 import eu.wisebed.wisedb.model.Position;
 import eu.wisebed.wisedb.model.Testbed;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -51,7 +44,6 @@ public final class GeoRssViewController extends UberdustSpringController {
      *
      * @return http servlet response.
      * @throws IOException               an IOException exception.
-     * @throws FeedException             a FeedException exception.
      * @throws NodeNotFoundException     NodeNotFoundException exception.
      * @throws TestbedNotFoundException  TestbedNotFoundException exception.
      * @throws InvalidTestbedIdException InvalidTestbedIdException exception.
@@ -60,7 +52,7 @@ public final class GeoRssViewController extends UberdustSpringController {
     @RequestMapping(value = "/testbed/{testbedId}/node/{nodeName}/georss", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> showNodeGeorssFeed(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, HttpServletRequest request, HttpServletResponse response)
-            throws IOException, FeedException, NodeNotFoundException, TestbedNotFoundException,
+            throws IOException, NodeNotFoundException, TestbedNotFoundException,
             InvalidTestbedIdException, NotImplementedException {
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         // look up testbed
@@ -95,14 +87,13 @@ public final class GeoRssViewController extends UberdustSpringController {
      * @throws TestbedNotFoundException  a TestbedNotFoundException exception.
      * @throws InvalidTestbedIdException a InvalidTestbedIdException exception.
      * @throws IOException               a IOException exception.
-     * @throws FeedException             a FeedException exception.
      */
     @SuppressWarnings("unchecked")
     @Loggable
     @RequestMapping(value = "/testbed/{testbedId}/georss", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> showTestbedGeorssFeed(@PathVariable("testbedId") int testbedId, HttpServletRequest request, HttpServletResponse response)
-            throws TestbedNotFoundException, InvalidTestbedIdException, IOException, FeedException, NotImplementedException {
+            throws TestbedNotFoundException, InvalidTestbedIdException, IOException, NotImplementedException {
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         Testbed testbed = testbedManager.getByID(testbedId);
