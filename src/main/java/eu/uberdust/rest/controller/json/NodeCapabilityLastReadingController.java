@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.List;
 
 /**
  *
@@ -53,7 +55,6 @@ public final class NodeCapabilityLastReadingController extends UberdustSpringCon
     public ResponseEntity<String> showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName)
             throws InvalidTestbedIdException, TestbedNotFoundException, NodeNotFoundException,
             CapabilityNotFoundException, InvalidCapabilityNameException, InvalidNodeIdException, IOException, NotImplementedException {
-        final long start = System.currentTimeMillis();
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         // look up testbed
@@ -80,6 +81,25 @@ public final class NodeCapabilityLastReadingController extends UberdustSpringCon
         System.out.println("Reached here " + lnr.toString());
 
         return jsonResponse(JsonFormatter.getInstance().formatNodeReading(lnr));
+    }
 
+    @PostConstruct
+    public void initializeCaching() {
+        LOGGER.info("initializeCaching--lastnodereadingcontroller");
+        final List<Testbed> testbeds = testbedManager.list();
+        for (Testbed testbed : testbeds) {
+            if (testbed.getId() == 2) continue;
+            final List<Node> allNodes = nodeManager.list();
+            final Capability roomCapability = capabilityManager.getByID("room");
+            final Capability workstationCapability = capabilityManager.getByID("workstation");
+            final Capability nameCapability = capabilityManager.getByID("name");
+            for (Node node : allNodes) {
+                if (node.getName().contains("virtual")) continue;
+                lastNodeReadingManager.getByNodeCapability(node, roomCapability);
+                lastNodeReadingManager.getByNodeCapability(node, workstationCapability);
+//                lastNodeReadingManager.getByNodeCapability(node, nameCapability);
+            }
+        }
+        LOGGER.info("done--initializeCaching--lastnodereadingcontroller");
     }
 }

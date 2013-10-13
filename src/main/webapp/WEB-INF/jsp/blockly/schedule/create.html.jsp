@@ -70,9 +70,8 @@
         $("#output").text("Generating Schedule...");
         try {
             jcode = JSON.parse(Blockly.Generator.workspaceToCode('JavaScript'));
-            jcode.username = "${username}";
             $("#output").text("Planning...");
-            $.post("add", jcode,function (data) {
+            $.post("<c:url value="/rest/schedule/add"/>", jcode,function (data) {
                 $("#output").text("Planned! Please Wait...");
                 window.location = "<c:url value="/rest/testbed/${testbed.id}/schedule"/>";
             }).error(function (jqXHR, status, error) {
@@ -91,10 +90,6 @@
             <button class="btn btn-large btn-primary" onclick="uploadRule();">Add Schdedule</button>
         </div>
         <div class="col-md-8" style="text-align: left;">
-            <div class="col-md-6" style="text-align: left;visibility: hidden">Schedule Description:</div>
-            <div class="col-md-6" style="text-align: center;visibility: hidden">
-                <pre id="generated"></pre>
-            </div>
             <span id="output" class="col-md-6"></span>
         </div>
     </div>
@@ -104,6 +99,12 @@
             <block type="cronschedule"></block>
             <block type="oneoffschedule"></block>
         </xml>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-6" style="text-align: left;visibility: hidden">Schedule Description:</div>
+        <div class="col-md-6" style="text-align: center;visibility: hidden">
+            <pre id="generated"></pre>
+        </div>
     </div>
 </div>
 <%@include file="/footer.jsp" %>

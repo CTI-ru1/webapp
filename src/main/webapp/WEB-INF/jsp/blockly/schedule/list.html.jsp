@@ -11,7 +11,7 @@
 <head>
     <META NAME="Description" CONTENT="Überdust"/>
     <META http-equiv="Content-Language" content="en"/>
-    <title>Überdust - List Testbeds</title>
+    <title>Überdust - List Schedules</title>
     <%@include file="/head.jsp" %>
 </head>
 

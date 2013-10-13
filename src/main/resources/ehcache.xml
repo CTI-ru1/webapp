@@ -152,6 +152,13 @@
            diskPersistent="false"
            memoryStoreEvictionPolicy="LRU"
             />
+    <cache name="eu.wisebed.wisedb.controller.LastNodeReadingControllerImpl.getByNodeCapability"
+           eternal="true"
+           maxElementsInMemory="10000"
+           overflowToDisk="false"
+           diskPersistent="false"
+           memoryStoreEvictionPolicy="LRU"
+            />
 
 
 </ehcache>

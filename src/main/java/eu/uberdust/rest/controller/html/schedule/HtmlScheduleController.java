@@ -29,7 +29,6 @@ import java.util.List;
  * Controller class that returns a list of links for a given testbed in HTML format.
  */
 @Controller
-@RequestMapping("/testbed/{testbedId}/schedule")
 public final class HtmlScheduleController extends UberdustSpringController {
 
     /**
@@ -47,7 +46,7 @@ public final class HtmlScheduleController extends UberdustSpringController {
      *          an TestbedNotFoundException exception.
      */
     @Loggable
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/testbed/{testbedId}/schedule", method = RequestMethod.GET)
     public ModelAndView listSchedules(@PathVariable("testbedId") int testbedId)
             throws TestbedNotFoundException, InvalidTestbedIdException {
         final long start = System.currentTimeMillis();
@@ -68,9 +67,13 @@ public final class HtmlScheduleController extends UberdustSpringController {
         LOGGER.info("HERE");
         if (scheduleManager != null) {
             try {
-                final List<Schedule> schedules = scheduleManager.list(testbed.getSetup(), current_user);
-                for (Schedule schedule : schedules) {
-                    schedule.setLast(quartzJobScheduler.getLastFiredTime(schedule));
+                final List<Schedule> allSchedules = scheduleManager.list(testbed.getSetup(), current_user);
+                final List<Schedule> schedules = new ArrayList<Schedule>();
+                for (Schedule schedule : allSchedules) {
+                    if (nodeManager.getByName(schedule.getNode()).getSetup().getId() == testbedId) {
+                        schedule.setLast(quartzJobScheduler.getLastFiredTime(schedule));
+                        schedules.add(schedule);
+                    }
                 }
                 refData.put("schedules", schedules);
             } catch (Exception e) {
@@ -97,10 +100,43 @@ public final class HtmlScheduleController extends UberdustSpringController {
      *          an TestbedNotFoundException exception.
      */
     @Loggable
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity<String> addSchedule(@PathVariable("testbedId") int testbedId,
-                                              @RequestParam("type") String type,
-                                              @RequestParam("username") String username,
+    @RequestMapping(value = "/schedule", method = RequestMethod.GET)
+    public ModelAndView listAllSchedules()
+            throws TestbedNotFoundException, InvalidTestbedIdException {
+        final long start = System.currentTimeMillis();
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        // Prepare data to pass to jsp
+
+        if (scheduleManager != null) {
+            try {
+                final List<Schedule> schedules = scheduleManager.list(current_user);
+                for (Schedule schedule : schedules) {
+                    schedule.setLast(quartzJobScheduler.getLastFiredTime(schedule));
+                }
+                refData.put("schedules", schedules);
+            } catch (Exception e) {
+                LOGGER.error(e, e);
+            }
+        }
+
+        refData.put("time", String.valueOf((System.currentTimeMillis() - start)));
+        return new ModelAndView("blockly/schedule/list.html", refData);
+
+    }
+
+    /**
+     * Handle Request and return the appropriate response.
+     *
+     * @return response http servlet response.
+     * @throws eu.uberdust.rest.exception.InvalidTestbedIdException
+     *          an InvalidTestbedIdException exception.
+     * @throws eu.uberdust.rest.exception.TestbedNotFoundException
+     *          an TestbedNotFoundException exception.
+     */
+    @Loggable
+    @RequestMapping(value = "/schedule/add", method = RequestMethod.POST)
+    public ResponseEntity<String> addSchedule(@RequestParam("type") String type,
                                               @RequestParam("second") String second,
                                               @RequestParam("minute") String minute,
                                               @RequestParam("hour") String hour,
@@ -114,9 +150,14 @@ public final class HtmlScheduleController extends UberdustSpringController {
             throws TestbedNotFoundException, InvalidTestbedIdException {
         final long start = System.currentTimeMillis();
         initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
         Exception exception;
         try {
-            if (username.equals(current_user)) {
+            if ("".equals(current_user)) {
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
+                return new ResponseEntity<String>("Unauthorized User. Only logged in users can publish rules.", responseHeaders, HttpStatus.UNAUTHORIZED);
+            } else {
                 if (second.equals("*")) {
                     HttpHeaders responseHeaders = new HttpHeaders();
                     responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
@@ -124,7 +165,7 @@ public final class HtmlScheduleController extends UberdustSpringController {
                 }
                 Schedule shed = new Schedule();
                 shed.setType(type);
-                shed.setUsername(username);
+                shed.setUsername(current_user);
                 shed.setSecond(second);
                 shed.setMinute(minute);
                 shed.setHour(hour);
@@ -140,7 +181,7 @@ public final class HtmlScheduleController extends UberdustSpringController {
 
                 HttpHeaders responseHeaders = new HttpHeaders();
                 responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-                return new ResponseEntity<String>("ok:" + username + " "
+                return new ResponseEntity<String>("ok:" + current_user + " "
                         + type + " "
                         + second + " "
                         + minute + " "
@@ -152,10 +193,6 @@ public final class HtmlScheduleController extends UberdustSpringController {
                         + capability + ","
                         + payload
                         , responseHeaders, HttpStatus.OK);
-            } else {
-                HttpHeaders responseHeaders = new HttpHeaders();
-                responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-                return new ResponseEntity<String>("Unauthorized User. Only logged in users can publish rules.", responseHeaders, HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
             quartzJobScheduler.init();
@@ -176,7 +213,7 @@ public final class HtmlScheduleController extends UberdustSpringController {
      *          an TestbedNotFoundException exception.
      */
     @Loggable
-    @RequestMapping(value = "/{ruleId}/{username}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/testbed/{testbedId}/schedule/{ruleId}/{username}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteSchedule(
             @PathVariable("testbedId") int testbedId,
             @PathVariable("ruleId") int ruleId,
@@ -215,7 +252,7 @@ public final class HtmlScheduleController extends UberdustSpringController {
      *          an TestbedNotFoundException exception.
      */
     @Loggable
-    @RequestMapping(value = "/{ruleId}/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "/testbed/{testbedId}/schedule/{ruleId}/{username}", method = RequestMethod.GET)
     public ResponseEntity<String> runSchedule(
             @PathVariable("testbedId") int testbedId,
             @PathVariable("ruleId") int ruleId,
@@ -245,7 +282,7 @@ public final class HtmlScheduleController extends UberdustSpringController {
 
 
     @Loggable
-    @RequestMapping(method = RequestMethod.GET, value = "/create")
+    @RequestMapping(method = RequestMethod.GET, value = "/testbed/{testbedId}/schedule/create")
     public ModelAndView createVirtualNode(@PathVariable("testbedId") int testbedId)
             throws TestbedNotFoundException, InvalidTestbedIdException {
         final long start = System.currentTimeMillis();

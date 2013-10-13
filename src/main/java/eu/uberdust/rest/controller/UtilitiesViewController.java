@@ -142,6 +142,13 @@ public final class UtilitiesViewController extends UberdustSpringController {
         return new ResponseEntity<String>("pong", responseHeaders, HttpStatus.OK);
     }
 
+    @Loggable
+    @RequestMapping(value = "/username", method = RequestMethod.GET)
+    public ResponseEntity<String> showUsername() throws IOException, NotImplementedException {
+        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        return rawResponse(current_user);
+    }
+
     @PostConstruct
     public void initQuartz() {
         quartzJobScheduler.init();
