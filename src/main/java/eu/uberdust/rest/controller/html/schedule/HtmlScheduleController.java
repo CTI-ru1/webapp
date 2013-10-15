@@ -179,9 +179,7 @@ public final class HtmlScheduleController extends UberdustSpringController {
                 scheduleManager.add(shed);
                 quartzJobScheduler.addJob(shed);
 
-                HttpHeaders responseHeaders = new HttpHeaders();
-                responseHeaders.add("Content-Type", "text/plain; charset=utf-8");
-                return new ResponseEntity<String>("ok:" + current_user + " "
+                return rawResponse("ok:" + current_user + " "
                         + type + " "
                         + second + " "
                         + minute + " "
@@ -191,8 +189,7 @@ public final class HtmlScheduleController extends UberdustSpringController {
                         + dow + " = "
                         + node + ","
                         + capability + ","
-                        + payload
-                        , responseHeaders, HttpStatus.OK);
+                        + payload);
             }
         } catch (Exception e) {
             quartzJobScheduler.init();
