@@ -13,6 +13,8 @@
 <jsp:useBean id="nodeCapabilities" scope="request" class="java.util.ArrayList"/>
 <jsp:useBean id="nodeType" scope="request" class="java.lang.String"/>
 <jsp:useBean id="admin" scope="request" class="java.lang.Boolean"/>
+<jsp:useBean id="nowtime" scope="request" class="java.lang.Long"/>
+<jsp:useBean id="thentime" scope="request" class="java.lang.Long"/>
 
 <html>
 <head>
@@ -141,7 +143,7 @@
                         <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/rdf/rdf+xml/limit/1"/>">RDF_XML</a>
                     </td>
                     <td>
-                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/chart/limit/10"/>"><img
+                        <a href="<c:url value="/rest/testbed/${testbed.id}/node/${node.name}/capability/${capability.capability.name}/chart/from/${thentime}/to/${nowtime}/"/>"><img
                                 src="<c:url value="/img/graph.png"/>"> Chart</a>
                     </td>
                     <td>

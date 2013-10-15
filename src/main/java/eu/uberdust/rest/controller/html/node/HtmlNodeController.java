@@ -82,7 +82,10 @@ public final class HtmlNodeController extends UberdustSpringController {
         refData.put("nodePosition", nodePosition);
         refData.put("nodeType", nodeType);
         refData.put("nodeCapabilities", nodeCapabilities);
-
+	   	Long nowtime  = System.currentTimeMillis();
+		Long thentime= nowtime-3*60*60*1000;
+		refData.put("nowtime",nowtime);
+		refData.put("thentime",thentime);
         refData.put("admin", userRoleManager.isAdmin(userManager.getByUsername(current_user)));
 
         refData.put("nodeCapabilities", nodeCapabilities);
