@@ -33,145 +33,246 @@ import java.util.Map;
 @RequestMapping("/testbed/{testbedId}/node/{nodeName}/capability/{capabilityName}/chart")
 public final class ChartViewController extends UberdustSpringController {
 
-    /**
-     * Logger.
-     */
-    private static final Logger LOGGER = Logger.getLogger(ChartViewController.class);
+	/**
+	 * Logger.
+	 */
+	private static final Logger LOGGER = Logger.getLogger(ChartViewController.class);
 
-    /**
-     * Handle Request and return the appropriate response.
-     *
-     * @return response http servlet response.
-     * @throws InvalidNodeIdException         invalid node id exception.
-     * @throws InvalidCapabilityNameException invalid capability name exception.
-     * @throws InvalidTestbedIdException      invalid testbed id exception.
-     * @throws TestbedNotFoundException       testbed not found exception.
-     * @throws NodeNotFoundException          node not found exception.
-     * @throws CapabilityNotFoundException    capability not found exception.
-     */
-    @Loggable
-    @RequestMapping("/limit/{limit}")
-    public ModelAndView showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit, final  HttpServletRequest servletRequest) throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
-            TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException {
-        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+	/**
+	 * Handle Request and return the appropriate response.
+	 *
+	 * @return response http servlet response.
+	 * @throws InvalidNodeIdException         invalid node id exception.
+	 * @throws InvalidCapabilityNameException invalid capability name exception.
+	 * @throws InvalidTestbedIdException      invalid testbed id exception.
+	 * @throws TestbedNotFoundException       testbed not found exception.
+	 * @throws NodeNotFoundException          node not found exception.
+	 * @throws CapabilityNotFoundException    capability not found exception.
+	 */
+	@Loggable
+	@RequestMapping("/limit/{limit}")
+	public ModelAndView showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit, final HttpServletRequest servletRequest) throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
+			TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException {
+		initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-        // look up testbed
-        final Testbed testbed = testbedManager.getByID(testbedId);
-        if (testbed == null) {
-            // if no testbed is found throw exception
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
-        }
+		// look up testbed
+		final Testbed testbed = testbedManager.getByID(testbedId);
+		if (testbed == null) {
+			// if no testbed is found throw exception
+			throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+		}
 
-        // retrieve node
-        final Node node = nodeManager.getByName(nodeName);
-        if (node == null) {
-            throw new NodeNotFoundException("Cannot find node [" + nodeName + "]");
-        }
+		// retrieve node
+		final Node node = nodeManager.getByName(nodeName);
+		if (node == null) {
+			throw new NodeNotFoundException("Cannot find node [" + nodeName + "]");
+		}
 
-        // retrieve capability
-        final Capability capability = capabilityManager.getByID(capabilityName);
-        if (capability == null) {
-            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
-        }
+		// retrieve capability
+		final Capability capability = capabilityManager.getByID(capabilityName);
+		if (capability == null) {
+			throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
+		}
 
-
-        List<NodeReading> readings = new ArrayList<NodeReading>();
-        List<NodeReading> unsortedReadings;
-        if (limit > 0) {
-            unsortedReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
-        } else {
-            unsortedReadings = nodeReadingManager.listNodeReadings(node, capability);
-        }
-
-        for (int i = unsortedReadings.size() - 1; i >= 0; i--) {
-            readings.add(unsortedReadings.get(i));
-        }
-        final StringBuilder data = new StringBuilder();
-        for (final NodeReading reading : readings) {
-            data.append(",[").append(reading.getTimestamp().getTime()).append(",");
-            data.append(reading.getReading()).append("]").append("\n");
-        }
-
-        // Prepare data to pass to jsp
+		// Prepare data to pass to jsp
 
 
-        // else put thisNode instance in refData and return index view
-        refData.put("testbed", testbed);
-        refData.put("node", node);
-        refData.put("capability", capability);
-        refData.put("readings", data.toString().substring(1));
-        refData.put("limit", limit);
-        refData.put("myrequest", servletRequest.getRequestURL().toString());
+		// else put thisNode instance in refData and return index view
+		refData.put("testbed", testbed);
+		refData.put("node", node);
+		refData.put("capability", capability);
+		refData.put("readings", getChartArrayString(node, capability, limit));
+		refData.put("limit", limit);
+		refData.put("myrequest", servletRequest.getRequestURL().toString());
 
-        // check type of view requested
-        return new ModelAndView("nodecapability/chart.html", refData);
-    }
+		// check type of view requested
+		return new ModelAndView("nodecapability/chart.html", refData);
+	}
 
-    /**
-     * Handle Request and return the appropriate response.
-     *
-     * @return response http servlet response.
-     * @throws InvalidNodeIdException         invalid node id exception.
-     * @throws InvalidCapabilityNameException invalid capability name exception.
-     * @throws InvalidTestbedIdException      invalid testbed id exception.
-     * @throws TestbedNotFoundException       testbed not found exception.
-     * @throws NodeNotFoundException          node not found exception.
-     * @throws CapabilityNotFoundException    capability not found exception.
-     */
-    @Loggable
-    @RequestMapping("/limit/{limit}/bare")
-    public ModelAndView showReadingsBare(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit) throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
-            TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException {
-        initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+	/**
+	 * Handle Request and return the appropriate response.
+	 *
+	 * @return response http servlet response.
+	 * @throws InvalidNodeIdException         invalid node id exception.
+	 * @throws InvalidCapabilityNameException invalid capability name exception.
+	 * @throws InvalidTestbedIdException      invalid testbed id exception.
+	 * @throws TestbedNotFoundException       testbed not found exception.
+	 * @throws NodeNotFoundException          node not found exception.
+	 * @throws CapabilityNotFoundException    capability not found exception.
+	 */
+	@Loggable
+	@RequestMapping("/from/{fromMillis}/to/{toMillis}")
+	public ModelAndView showReadings(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("fromMillis") long fromMillis, @PathVariable("toMillis") long toMillis, final HttpServletRequest servletRequest) throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
+			TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException {
+		initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-        // look up testbed
-        final Testbed testbed = testbedManager.getByID(testbedId);
-        if (testbed == null) {
-            // if no testbed is found throw exception
-            throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
-        }
+		// look up testbed
+		final Testbed testbed = testbedManager.getByID(testbedId);
+		if (testbed == null) {
+			// if no testbed is found throw exception
+			throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+		}
 
-        // retrieve node
-        final Node node = nodeManager.getByName(nodeName);
-        if (node == null) {
-            throw new NodeNotFoundException("Cannot find node [" + nodeName + "]");
-        }
+		// retrieve node
+		final Node node = nodeManager.getByName(nodeName);
+		if (node == null) {
+			throw new NodeNotFoundException("Cannot find node [" + nodeName + "]");
+		}
 
-        // retrieve capability
-        final Capability capability = capabilityManager.getByID(capabilityName);
-        if (capability == null) {
-            throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
-        }
+		// retrieve capability
+		final Capability capability = capabilityManager.getByID(capabilityName);
+		if (capability == null) {
+			throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
+		}
+
+		// Prepare data to pass to jsp
+
+		// else put thisNode instance in refData and return index view
+		refData.put("testbed", testbed);
+		refData.put("node", node);
+		refData.put("capability", capability);
+		refData.put("readings", getChartArrayString(node, capability, fromMillis, toMillis));
+		refData.put("myrequest", servletRequest.getRequestURL().toString());
+
+		// check type of view requested
+		return new ModelAndView("nodecapability/chart.html", refData);
+	}
+
+	/**
+	 * Handle Request and return the appropriate response.
+	 *
+	 * @return response http servlet response.
+	 * @throws InvalidNodeIdException         invalid node id exception.
+	 * @throws InvalidCapabilityNameException invalid capability name exception.
+	 * @throws InvalidTestbedIdException      invalid testbed id exception.
+	 * @throws TestbedNotFoundException       testbed not found exception.
+	 * @throws NodeNotFoundException          node not found exception.
+	 * @throws CapabilityNotFoundException    capability not found exception.
+	 */
+	@Loggable
+	@RequestMapping("/limit/{limit}/bare")
+	public ModelAndView showReadingsBare(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("limit") int limit) throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
+			TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException {
+		initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+		// look up testbed
+		final Testbed testbed = testbedManager.getByID(testbedId);
+		if (testbed == null) {
+			// if no testbed is found throw exception
+			throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+		}
+
+		// retrieve node
+		final Node node = nodeManager.getByName(nodeName);
+		if (node == null) {
+			throw new NodeNotFoundException("Cannot find node [" + nodeName + "]");
+		}
+
+		// retrieve capability
+		final Capability capability = capabilityManager.getByID(capabilityName);
+		if (capability == null) {
+			throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
+		}
+
+		// Prepare data to pass to jsp
 
 
-        List<NodeReading> readings = new ArrayList<NodeReading>();
-        List<NodeReading> unsortedReadings;
-        if (limit > 0) {
-            unsortedReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
-        } else {
-            unsortedReadings = nodeReadingManager.listNodeReadings(node, capability);
-        }
+		// else put thisNode instance in refData and return index view
+		refData.put("testbed", testbed);
+		refData.put("node", node);
+		refData.put("capability", capability);
+		refData.put("readings", getChartArrayString(node, capability, limit));
+		refData.put("limit", limit);
 
-        for (int i = unsortedReadings.size() - 1; i >= 0; i--) {
-            readings.add(unsortedReadings.get(i));
-        }
-        final StringBuilder data = new StringBuilder();
-        for (final NodeReading reading : readings) {
-            data.append(",[").append(reading.getTimestamp().getTime()).append(",");
-            data.append(reading.getReading()).append("]").append("\n");
-        }
+		// check type of view requested
+		return new ModelAndView("nodecapability/chart-bare.html", refData);
+	}
 
-        // Prepare data to pass to jsp
+	/**
+	 * Handle Request and return the appropriate response.
+	 *
+	 * @return response http servlet response.
+	 * @throws InvalidNodeIdException         invalid node id exception.
+	 * @throws InvalidCapabilityNameException invalid capability name exception.
+	 * @throws InvalidTestbedIdException      invalid testbed id exception.
+	 * @throws TestbedNotFoundException       testbed not found exception.
+	 * @throws NodeNotFoundException          node not found exception.
+	 * @throws CapabilityNotFoundException    capability not found exception.
+	 */
+	@Loggable
+	@RequestMapping("/from/{fromMillis}/to/{toMillis}/bare")
+	public ModelAndView showReadingsBare(@PathVariable("testbedId") int testbedId, @PathVariable("nodeName") String nodeName, @PathVariable("capabilityName") String capabilityName, @PathVariable("fromMillis") long fromMillis, @PathVariable("toMillis") long toMillis) throws InvalidNodeIdException, InvalidCapabilityNameException, InvalidTestbedIdException,
+			TestbedNotFoundException, NodeNotFoundException, CapabilityNotFoundException {
+		initialize(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+		// look up testbed
+		final Testbed testbed = testbedManager.getByID(testbedId);
+		if (testbed == null) {
+			// if no testbed is found throw exception
+			throw new TestbedNotFoundException("Cannot find testbed [" + testbedId + "].");
+		}
+
+		// retrieve node
+		final Node node = nodeManager.getByName(nodeName);
+		if (node == null) {
+			throw new NodeNotFoundException("Cannot find node [" + nodeName + "]");
+		}
+
+		// retrieve capability
+		final Capability capability = capabilityManager.getByID(capabilityName);
+		if (capability == null) {
+			throw new CapabilityNotFoundException("Cannot find capability [" + capabilityName + "]");
+		}
 
 
-        // else put thisNode instance in refData and return index view
-        refData.put("testbed", testbed);
-        refData.put("node", node);
-        refData.put("capability", capability);
-        refData.put("readings", data.toString().substring(1));
-        refData.put("limit", limit);
+		// Prepare data to pass to jsp
 
-        // check type of view requested
-        return new ModelAndView("nodecapability/chart-bare.html", refData);
-    }
+
+		// else put thisNode instance in refData and return index view
+		refData.put("testbed", testbed);
+		refData.put("node", node);
+		refData.put("capability", capability);
+		refData.put("readings", getChartArrayString(node, capability, fromMillis, toMillis));
+
+		// check type of view requested
+		return new ModelAndView("nodecapability/chart-bare.html", refData);
+	}
+
+	String getChartArrayString(Node node, Capability capability, int limit) {
+		List<NodeReading> unsortedReadings;
+		if (limit > 0) {
+			unsortedReadings = nodeReadingManager.listNodeReadings(node, capability, limit);
+		} else {
+			unsortedReadings = nodeReadingManager.listNodeReadings(node, capability);
+		}
+
+		final StringBuilder data = new StringBuilder();
+		for (int i = unsortedReadings.size() - 1; i >= 0; i--) {
+			NodeReading reading = unsortedReadings.get(i);
+			data.append(",[").append(reading.getTimestamp().getTime()).append(",");
+			data.append(reading.getReading()).append("]").append("\n");
+		}
+		if (data.toString().length() > 0) {
+			return data.toString().substring(1);
+		} else {
+			return "";
+		}
+	}
+
+	String getChartArrayString(Node node, Capability capability, long fromMillis, long toMillis) {
+		List<NodeReading> unsortedReadings;
+		unsortedReadings = nodeReadingManager.listNodeReadings(node, capability, fromMillis, toMillis);
+
+		final StringBuilder data = new StringBuilder();
+		for (int i = unsortedReadings.size() - 1; i >= 0; i--) {
+			NodeReading reading = unsortedReadings.get(i);
+			data.append(",[").append(reading.getTimestamp().getTime()).append(",");
+			data.append(reading.getReading()).append("]").append("\n");
+		}
+		if (data.toString().length() > 0) {
+			return data.toString().substring(1);
+		} else {
+			return "";
+		}
+	}
 }
