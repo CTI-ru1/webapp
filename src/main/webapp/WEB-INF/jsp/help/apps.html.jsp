@@ -56,7 +56,7 @@
             </a>
 
             <div class="media-body">
-                <h4 class="media-heading">Google Chrome Application</h4>
+                <h4 class="media-heading">Chrome Store Application</h4>
                 Offers more advanced features in comparisson to the Google Chrome Extension and the ability to control
                 multiple NodeCapabilities from different Devices and Testbeds at the same time.
                 Available <a href="https://chrome.google.com/webstore/detail/uberdust/oeabnighppapiggpgpnoiamhiilgjeck">here</a>.
@@ -69,8 +69,10 @@
             </a>
 
             <div class="media-body">
-                <h4 class="media-heading">Firefox Os Application</h4>
-                WIP
+                <h4 class="media-heading">Firefox Marketplace Application</h4>
+                Offers the same functionality as the Chrome Store Application using either the Mozilla Firefox Browser
+                Applications or the upcoming FirefoxOS Smartphone Operating System.
+                Available <a href="https://marketplace.firefox.com/app/uberdust-controller-1">here</a>.
             </div>
         </li>
         <li class="media">
